@@ -14,6 +14,7 @@
 - `edge_public/`：Lab-FSD shadow planner、Fly-MB 判决脑和 F407 动作时序的公开接口/伪代码。
 - `schemas/`：只读状态接口 schema 与示例响应。
 - `report_source/`：作品设计报告 TeX 源码、HTML 图表源码、MATLAB/Python 图表生成脚本和生成图资产。
+- `public_evidence_data/`：公网截图、报告渲染页、公开晶体结构缓存和离线演示传感器帧。
 
 ## Excluded
 
