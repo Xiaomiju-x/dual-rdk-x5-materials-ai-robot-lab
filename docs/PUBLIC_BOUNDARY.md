@@ -4,6 +4,8 @@ This repository is intentionally a public engineering boundary, not the full lab
 
 The uploaded code is sufficient to review the embedded system shape: public UI, report generation, interface contracts, workstation visualization, collision interlock, mock telemetry, and edge-facing adapters. The private project tree remains local because it contains unpublished materials data, hardware deployment details, model artifacts, and control scripts that should not be published during preliminary competition review.
 
+The uploaded non-core data is limited to public screenshots, rendered report pages, public crystal-structure cache files, status samples, and offline demo sensor frames. It is included for contest review evidence and does not expose private laboratory records or hardware access.
+
 Security checks before packaging:
 
 - No private IP address such as `192.168.*.*` is allowed in this folder.
