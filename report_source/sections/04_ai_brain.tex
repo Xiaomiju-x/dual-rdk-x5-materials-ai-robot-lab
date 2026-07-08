@@ -1,0 +1,43 @@
+\section{第二部分 系统组成及功能说明（三）：AI 脑与材料预测系统}
+
+\subsection{五服务线架构}
+AI 脑是实验室端嵌入式材料决策节点，不是网页平台。网页只是操作入口，核心能力在本地 X5 上：配方解析、材料预测、四条表征线接入、BPU/CPU 模型调度、失败规则过滤、实验记录追踪和 evidence package 输出。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{fig_xrd_dataflow_html.png}
+  \caption{AI 脑五服务线与材料数据流。}
+  \label{fig:xrd_dataflow}
+\end{figure}
+
+如图~\ref{fig:xrd_dataflow} 所示，五服务线包括总控 Dashboard、XRD 数值线、XRD 视觉线、PL 数值线和 PL 视觉线。数值线负责处理峰位、强度、带宽和结构特征；视觉线负责识别图像化谱图区域和实验状态；总控层把四条线的证据汇总到材料预测引擎。
+
+\subsection{模型栈与决策层}
+AI 脑模型栈分为三层：
+\begin{itemize}
+  \item \kw{科学物理层：} Shannon 半径、MACE 预计算缓存、Vegard fallback、Tanabe-Sugano + Huang-Rhys 光谱模型、Conformal CI 和实测类比库。
+  \item \kw{边缘模型层：} BPU 轻量分类/检测模型、BPU LLM slot、CPU 本地模型和 Fly-MB 稀疏联想判决脑。
+  \item \kw{决策回流层：} 同步 evidence package、异步 verdict、actuals 回填、failure library、Fly-MB plasticity 和 SHA-256 hash 链。
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.96\linewidth]{fig_xrd_latency.pdf}
+  \caption{不同模型能力位的延迟跨度与报告口径。}
+  \label{fig:xrd_latency}
+\end{figure}
+
+图~\ref{fig:xrd_latency} 强调两个事实。第一，BPU 上的轻量头和小模型适合做毫秒级或更低延迟的结构化判断。第二，BPU LLM slot 适合作为 verdict probe 和工程展示，不应在报告中宣传为可实时长文本生成。完整材料解释由 CPU 本地模型、规则、知识库和可联网评审器共同完成。
+
+\subsection{材料预测输出}
+AI 脑对单个候选配方输出以下信息：
+\begin{itemize}
+  \item 候选 host、掺杂离子、位点、浓度和解析结果；
+  \item 发光波段预测、可能峰位、置信区间和不确定性；
+  \item GO / REVISE / DROP / UNKNOWN 等可行性判决；
+  \item 风险来源，例如价态失配、半径失配、跨 host 外推或浓度淬灭；
+  \item 推荐烧结温度、保温时间和后续实验建议；
+  \item trace id、模型证据、规则证据和回填状态。
+\end{itemize}
+
+为了避免夸大，报告中将 MACE 写作“PC 端预计算的机器学习势能面结构弛豫缓存”，不写成 X5 端在线 DFT；将云模型写作联网增强评审器，不写成本地必需能力。

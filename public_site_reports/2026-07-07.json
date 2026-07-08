@@ -1,0 +1,34 @@
+{
+ "date": "2026-07-07",
+ "generated_ts": 1783473476,
+ "partial": false,
+ "systems": {
+  "lab": {
+   "samples": 66,
+   "availability_pct": 0.0,
+   "real_pct": 0.0,
+   "down_pct": 100.0,
+   "avg_ms": null
+  },
+  "car": {
+   "samples": 66,
+   "availability_pct": 0.0,
+   "real_pct": 0.0,
+   "down_pct": 100.0,
+   "avg_ms": null
+  },
+  "arm": {
+   "samples": 66,
+   "availability_pct": 0.0,
+   "real_pct": 0.0,
+   "down_pct": 100.0,
+   "avg_ms": null
+  }
+ },
+ "alarms_raised": {},
+ "workorders": {
+  "created": 0,
+  "closed": 0
+ },
+ "events_n": 1
+}

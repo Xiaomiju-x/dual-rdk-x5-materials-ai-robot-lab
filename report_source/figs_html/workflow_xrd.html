@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><link rel="stylesheet" href="xrd_flow.css"></head>
+<body><div class="page">
+<div class="fig t-green">
+  <div class="fig-title"><span class="mark">2</span>端到端材料实验闭环流程
+    <span class="sub">AI 预筛 -> 具身执行 -> XRD/PL 表征 -> 失败回流</span></div>
+  <div class="fig-body">
+    <div class="row">
+      <div class="solid b-green" style="width:14%"><div class="t"><span class="ico doc" style="--c:#17A65A"></span>1 研究员输入</div><div class="d">目标 host、掺杂离子、浓度、候选约束。</div><span class="tag ok">已跑通</span></div>
+      <div class="arrow-r"></div>
+      <div class="solid b-blue" style="width:14%"><div class="t"><span class="ico chip" style="--c:#2E7DF2"></span>2 AI 脑预筛</div><div class="d">规则、光谱模型、实测类比、BPU/CPU 模型联合判断。</div><span class="tag ok">已跑通</span></div>
+      <div class="arrow-r"></div>
+      <div class="solid b-purple" style="width:14%"><div class="t"><span class="ico flow" style="--c:#7C3AED"></span>3 任务分解</div><div class="d">生成 trace、推荐烧结条件、取放任务和证据记录。</div><span class="tag ok">已跑通</span></div>
+      <div class="arrow-r"></div>
+      <div class="solid b-orange" style="width:14%"><div class="t"><span class="ico radar" style="--c:#F2682A"></span>4 移动感知</div><div class="d">LiDAR、深度、里程计、SLAM 与 shadow planner 在线。</div><span class="tag shadow">安全员接管</span></div>
+      <div class="arrow-r"></div>
+      <div class="solid b-teal" style="width:14%"><div class="t"><span class="ico arm" style="--c:#0FA9A4"></span>5 工位取放</div><div class="d">机械臂视觉门控取袋；F407 瓶子吸附/释放降级演示。</div><span class="tag ok">局部闭环</span></div>
+    </div>
+    <div class="arrow-d"></div>
+    <div class="row">
+      <div class="band t-teal" style="width:31%">
+        <div class="band-head"><div class="num">6</div><div class="band-title">烧制与表征</div></div>
+        <div class="band-body grid2">
+          <div class="card" style="--c:#0FA9A4"><div class="t"><span class="ico flow" style="--c:#0FA9A4"></span>XRD</div><div class="d">数值线提取峰位/强度，视觉线检测谱图状态。</div></div>
+          <div class="card" style="--c:#0FA9A4"><div class="t"><span class="ico beaker" style="--c:#0FA9A4"></span>PL 光谱</div><div class="d">Fluoromax 数据和图像共同进入分析线。</div></div>
+        </div>
+      </div>
+      <div class="arrow-r"></div>
+      <div class="band t-purple" style="width:31%">
+        <div class="band-head"><div class="num">7</div><div class="band-title">实测回填</div></div>
+        <div class="band-body grid3">
+          <div class="card" style="--c:#7C3AED"><div class="t">actuals</div><div class="d">实测结论回填。</div></div>
+          <div class="card" style="--c:#7C3AED"><div class="t">failure library</div><div class="d">失败模式更新。</div></div>
+          <div class="card" style="--c:#7C3AED"><div class="t">SHA 链</div><div class="d">预测与实测可追溯。</div></div>
+        </div>
+      </div>
+      <div class="arrow-r"></div>
+      <div class="band t-blue" style="width:31%">
+        <div class="band-head"><div class="num">8</div><div class="band-title">下一轮候选优化</div></div>
+        <div class="band-body">
+          <div class="note"><strong>闭环价值：</strong>系统把“一个月做完一轮候选”的人工流程，压缩成先由 AI 预筛 15-20 个候选，再选择少量优质配方进入真实实验。</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid4" style="margin-top:14px">
+      <div class="card" style="--c:#17A65A"><div class="t">已实测闭环</div><div class="d">AI 预测、四条表征线、arm01 视觉门控取袋、F407 末端动作、SLAM 建图。</div></div>
+      <div class="card" style="--c:#F3A51B"><div class="t">Shadow / 降级</div><div class="d">Lab-FSD 只输出风险与候选轨迹；底盘由安全员执行。</div></div>
+      <div class="card" style="--c:#EF4444"><div class="t">待完善保护</div><div class="d">升降台顶部/底部限位、驱动隔离、Nav2 目标点和地图质量优化。</div></div>
+      <div class="card" style="--c:#2E7DF2"><div class="t">提交证据</div><div class="d">视频、设计报告、重要代码包、公网站只读证据。</div></div>
+    </div>
+  </div>
+</div></div></body></html>

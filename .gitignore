@@ -1,23 +1,18 @@
-# Local and generated files
 __pycache__/
 *.pyc
-*.log
-*.tmp
-
-# Archives generated for contest submission
-*.zip
-*.rar
-
-# Private local material that must not enter the public repository
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
 *.gguf
-*.safetensors
 *.bin
 *.onnx
 *.pt
-*.pth
-*.npy
+*.safetensors
 *.npz
-*.csv
-*.jsonl
+*.npy
+*.db
+*.sqlite
+*.pem
+*.key
 *.env
-config.ini

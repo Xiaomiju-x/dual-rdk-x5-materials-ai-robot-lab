@@ -1,0 +1,32 @@
+\section{第二部分 系统组成及功能说明（二）：总体方案}
+
+\subsection{端到端闭环}
+系统的端到端闭环如图~\ref{fig:xrd_workflow} 所示。研究员输入材料目标后，AI 脑生成候选配方评审和推荐条件；具身脑负责移动感知、SLAM 和 shadow planning；固定工位负责粉末袋取放；F407 负责瓶子末端执行；XRD/PL 结果再回流到 AI 脑形成下一轮证据。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{fig_xrd_workflow_html.png}
+  \caption{端到端材料实验闭环流程。}
+  \label{fig:xrd_workflow}
+\end{figure}
+
+图中绿色部分代表已有真机或服务证据，橙色代表初赛阶段采用安全降级或 shadow 模式，紫色代表后续扩展方向。这一分层是报告可信度的核心：有证据的写“已实测”，有算法在线但未接管执行的写“shadow/降级”，硬件保护未补齐的写“后续补齐”。
+
+\subsection{硬件组成}
+硬件系统由双 RDK X5、双 myCobot 280-Pi 固定工位、STM32F407 下位机、LD14 LiDAR、Astra 深度相机、IMX415 4K 相机、USB 相机、电推杆、舵机、步进电机和电磁铁组成。AI 脑和具身脑通过局域网和 API 协同，F407 通过串口接收动作指令，机械臂工位通过本臂控制器执行示教动作和状态回放。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{fig_xrd_hardware_html.png}
+  \caption{硬件连接、总线与执行边界。}
+  \label{fig:xrd_hardware}
+\end{figure}
+
+图~\ref{fig:xrd_hardware} 中不写具体内网地址、账号和凭据，只写模块和接口类型。这一处理同时满足竞赛匿名提交要求和项目保密要求。
+
+\subsection{软件组成}
+软件系统分为 AI 脑服务层、具身脑 ROS2 层、机械臂工位层、F407 固件层和公网证据层。AI 脑服务层负责材料预测、四条表征线和模型调度；具身脑 ROS2 层负责传感器驱动、SLAM、Lab-FSD 和诊断话题；机械臂工位层负责相机采集、示教位姿、PWM 夹爪和固定点动作；F407 固件层负责更接近实时的电机和电磁铁控制；公网证据层负责只读展示。
+
+\begin{keybox}
+系统的关键工程取舍是“高层智能与执行安全分离”。AI 脑可以给出材料建议和工位门控，具身脑可以给出风险和候选轨迹，但危险执行动作必须落到受控的本地节点、人工接管和硬件保护边界中。
+\end{keybox}

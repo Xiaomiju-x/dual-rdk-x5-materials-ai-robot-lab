@@ -1,0 +1,70 @@
+\section{第一部分 作品概述}
+
+\subsection{功能与特点}
+材料研发中的候选配方筛选通常需要多轮研磨、烧制、XRD、PL 光谱和人工判断。单个配方的真实实验耗时长、失败原因复杂，且视觉图像、数值谱图、配方记录和取放操作往往分散在不同设备上。本作品把这些环节统一到一个嵌入式系统中：先由 AI 脑完成候选配方预筛，再由具身脑和固定工位完成受控移动与取放，最后把表征结果回流到材料预测系统。
+
+系统功能可以概括为六类：
+\begin{enumerate}
+  \item \kw{材料配方 AI 预筛：} 输入 host、掺杂离子和浓度后，输出发光波段、可行性等级、风险原因和推荐烧结条件。
+  \item \kw{XRD/PL 四线分析：} 同时支持谱图图像和数值文件的检测、分类、解释和回流。
+  \item \kw{移动感知与影子规划：} 车载 X5 运行 LiDAR、深度、里程计、SLAM 和 Lab-FSD shadow planner，输出风险和候选轨迹。
+  \item \kw{固定工位取放：} 机械臂末端相机完成工位观察，AI 脑返回 \texttt{station\_ok} 后执行固定点取袋/落袋。
+  \item \kw{下位机末端执行：} STM32F407 控制电推杆、舵机、电磁铁和升降机构，完成瓶子吸附、保持和释放的动作时序。
+  \item \kw{公网只读证据平台：} 展示系统状态、演示剧场、全球对标、FSD 世界模型、机群和资产清单。
+\end{enumerate}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{fig_xrd_architecture_html.png}
+  \caption{双 RDK X5 材料合成 AI 预测与具身实验助理机器人总体架构。}
+  \label{fig:xrd_arch}
+\end{figure}
+
+图~\ref{fig:xrd_arch} 展示了本作品的核心组织方式。AI 脑处理材料预测、四条表征线和 Fly-MB 联想判决；具身脑处理移动感知、SLAM 和 Lab-FSD shadow；固定工位和 F407 执行真实取放动作；公网平台仅承担只读展示和证据汇总。这种分层可以把复杂工程拆成可验证的子系统，避免把所有能力混在一个不可解释的“大模型演示”里。
+
+\subsection{应用领域}
+作品面向材料合成实验室，尤其适合近红外荧光粉、无机功能材料、陶瓷烧结和粉末体系的候选配方预筛与实验辅助。它的价值不是替代研究员，而是把高重复、长等待、强记录需求的实验环节转化为可计算、可执行、可回放的闭环任务。
+
+该架构也可扩展到催化剂筛选、粉末冶金、陶瓷退火、半导体扩散炉监控和实验室危化品搬运等场景。只要实验流程同时具备“候选空间大、真实验证贵、动作重复、数据需要回流”这四类特征，就可以复用双边缘节点加固定工位的组织方式。
+
+\subsection{主要技术特点}
+本作品的技术特点可以概括为“边缘多模型、跨域异构、可验证执行和保密发布”。边缘多模型指 AI 脑在 RDK X5 上组合 BPU 轻量推理、CPU 本地模型、科学规则和实验知识库；跨域异构指材料预测、XRD/PL 表征、SLAM、机械臂和 F407 固件通过 API、ROS2 和串口状态机协同；可验证执行指所有真机能力均对应 evidence、日志、地图、状态矩阵或视频片段；保密发布指报告和开源包只公开接口、伪代码和非核心示例，不泄露模型权重、私有数据和危险控制入口。
+
+\subsection{主要创新点}
+\begin{enumerate}
+  \item \kw{材料 AI 与具身实验的一体化闭环：} 将配方预筛、移动感知、固定工位取放、表征分析和失败回流放在同一系统叙事内。
+  \item \kw{双 RDK X5 异构协同：} AI 脑承担科研推理和语义理解，具身脑承担传感器融合、SLAM 和安全影子规划。
+  \item \kw{嵌入式多模型栈：} 在本地边缘平台上组合 BPU 轻量模型、BPU LLM slot、CPU 本地模型、科学规则和材料知识库。
+  \item \kw{Lab-FSD shadow planner：} 将 BEV occupancy、未来占据和概率轨迹 token 映射到低速实验室机器人，并严格保持 observe-only 边界。
+  \item \kw{视觉门控固定工位：} 机械臂不是盲目执行示教点，而是在 AI 脑视觉确认工位有效后执行固定点取放。
+  \item \kw{证据链平台：} 把模型、API、演示剧场、发布记录、状态孪生和提交资产组织成可复核证据。
+\end{enumerate}
+
+\subsection{主要性能指标}
+\begin{table}[H]
+\centering
+\caption{关键工程指标摘要。}
+\begin{tabular}{p{4.0cm}p{3.1cm}p{7.0cm}}
+\toprule
+指标 & 当前结果 & 说明 \\
+\midrule
+AI 脑服务线 & 5 条 & 总控 Dashboard + XRD/PL 视觉与数值四条表征线 \\
+CPU 本地模型 & 4 路 & 用于本地科研解释和断网降级 \\
+BPU LLM slot & 5 个 & 用于 verdict probe 和工程展示，不宣传为实时长文本生成 \\
+表征轻量模型 & 5 个能力位 & XRD/PL MLP、YOLO 和相关感知模型 \\
+Qwen2 0.5B BPU forward & 约 553 ms & 手写 Transformer 分段后在 X5 BPU 上运行 \\
+Lab-FSD BPU 异常观测 & 约 1.7 ms & 车载脑异常辅助模型工程观测值 \\
+arm01 取袋闭环 & 已实测 & OBSERVE 拍照、AI 脑识别、\texttt{station\_ok} 后固定点取放 \\
+公网接口规模 & 89 OpenAPI paths & 只读证据平台和状态展示接口 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.96\linewidth]{fig_xrd_metrics.pdf}
+  \caption{XRD 嵌入式项目工程指标总览。}
+\end{figure}
+
+\subsection{设计流程}
+设计流程遵循“需求拆解 -> 系统分层 -> 单模块真机验证 -> 证据链汇总 -> 安全边界复核”的顺序。首先从材料研发周期长和实验取放重复的痛点出发，拆出 AI 预测、表征分析、移动感知、固定工位和底层执行五类任务；随后将任务分配给 AI 脑、具身脑、机械臂工位、F407 和公网证据平台；最后按已实测、shadow/降级和后续补齐三类状态整理初赛展示材料。

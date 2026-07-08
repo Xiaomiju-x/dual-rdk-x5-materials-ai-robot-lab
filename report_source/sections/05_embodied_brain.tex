@@ -1,0 +1,30 @@
+\section{第二部分 系统组成及功能说明（四）：具身脑、SLAM 与 Lab-FSD Shadow Planner}
+
+\subsection{车载嵌入式执行子系统}
+具身脑是车载嵌入式执行子系统。RDK X5 在车载侧运行 ROS2、传感器驱动、SLAM、Nav2 配置、BPU 感知和跨端桥接；STM32F407 负责更接近实时的电机、升降台、推杆、舵机和电磁铁控制。它不是遥控车，重点是端侧感知、状态机、MCU 执行和安全边界。
+
+车载传感器中，LD14 LiDAR 是 SLAM 主传感器，Astra 深度相机提供近场深度扫描，里程计提供运动上下文，AI 脑的 4K Vision-BEV 提供语义风险提示但不替代 LiDAR、深度和里程计。
+
+\subsection{Lab-FSD v2}
+Lab-FSD v2 是低速实验室机器人场景下的 BEV 世界模型、影子规划和安全解释层。它订阅雷达、深度 scan、里程计、目标点和可选视觉 BEV，发布 BEV、future BEV、shadow path、policy tokens、risk、safety gate 等诊断信息。该模块明确不发布 \texttt{cmd\_vel}，安全门也标注 \texttt{cmd\_vel\_authority=false}。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{fig_xrd_labfsd_html.png}
+  \caption{Lab-FSD v2 影子规划与安全门控。}
+  \label{fig:xrd_labfsd}
+\end{figure}
+
+图~\ref{fig:xrd_labfsd} 是报告中的标准口径：可以说“低速实验室机器人 BEV 占据、未来占据、概率 shadow planner 与安全门控”，必须说明“当前初赛视频由安全员接管底盘执行，算法在线观察和输出诊断”，不能说“复刻自动驾驶”“道路级自动驾驶”或“完整自主导航已接管底盘”。
+
+\subsection{SLAM 建图证据}
+初赛现场已经跑通实验室 SLAM 占据栅格，后续将用于导航边界和安全门控初始化。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.72\linewidth]{fig_xrd_slam_map.png}
+  \caption{实验室 SLAM 占据栅格建图结果。}
+  \label{fig:xrd_slam}
+\end{figure}
+
+该图表明移动感知链路不是只停留在 PPT 或仿真层面，而是已经产生真实地图输出。由于初赛拍摄需要可控性，底盘执行仍由安全员接管，地图质量优化、Nav2 目标点和硬件安全保护作为后续闭环升级项。

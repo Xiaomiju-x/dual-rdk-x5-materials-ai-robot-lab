@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><link rel="stylesheet" href="xrd_flow.css"></head>
+<body><div class="page">
+<div class="fig t-teal">
+  <div class="fig-title"><span class="mark">6</span>固定工位、视觉门控与 F407 末端执行
+    <span class="sub">已实测局部闭环 + 初赛安全降级</span></div>
+  <div class="fig-body">
+    <div class="row">
+      <div class="band t-teal" style="width:48%">
+        <div class="band-head"><div class="num">ARM</div><div class="band-title">arm01 视觉门控取袋闭环</div></div>
+        <div class="band-body">
+          <div class="grid5">
+            <div class="solid b-teal"><div class="t"><span class="ico camera" style="--c:#0FA9A4"></span>OBSERVE</div><div class="d">末端相机采集工位图像。</div></div>
+            <div class="solid b-blue"><div class="t"><span class="ico chip" style="--c:#2E7DF2"></span>AI 脑识别</div><div class="d">AprilTag 36h11 id=8。</div></div>
+            <div class="solid b-green"><div class="t"><span class="ico shield" style="--c:#17A65A"></span>station_ok</div><div class="d">确认粉末袋位置有效。</div></div>
+            <div class="solid b-orange"><div class="t"><span class="ico arm" style="--c:#F2682A"></span>固定点取袋</div><div class="d">张爪、到 PICK、闭合搬运。</div></div>
+            <div class="solid b-purple"><div class="t"><span class="ico flow" style="--c:#7C3AED"></span>落袋复位</div><div class="d">回 START、落入收集盒、闭合待机。</div></div>
+          </div>
+          <div class="grid3" style="margin-top:12px">
+            <div class="card" style="--c:#0FA9A4"><div class="t">图像分辨率</div><div class="d">1280 x 720 抓帧用于门控判断。</div></div>
+            <div class="card" style="--c:#0FA9A4"><div class="t">PICK 误差</div><div class="d">约 8.5-10.6 mm，满足固定槽取袋演示。</div></div>
+            <div class="card" style="--c:#0FA9A4"><div class="t">START 回位</div><div class="d">约 1.8-1.9 mm，落袋动作稳定。</div></div>
+          </div>
+          <div class="note" style="margin-top:12px"><strong>报告口径：</strong>这是视觉门控后的固定点取袋闭环，不写成泛化视觉伺服抓取。</div>
+        </div>
+      </div>
+      <div class="band t-orange" style="width:52%">
+        <div class="band-head"><div class="num">F407</div><div class="band-title">瓶子末端执行与安全降级状态机</div></div>
+        <div class="band-body">
+          <div class="grid5">
+            <div class="solid b-navy"><div class="t"><span class="ico mcu" style="--c:#1F3B57"></span>串口命令</div><div class="d">X5 / 调试端下发动作。</div></div>
+            <div class="solid b-orange"><div class="t"><span class="ico flow" style="--c:#F2682A"></span>升降轴</div><div class="d">短行程诊断链路已打通。</div></div>
+            <div class="solid b-teal"><div class="t"><span class="ico arm" style="--c:#0FA9A4"></span>电推杆</div><div class="d">伸出/缩回靠近瓶盖铁片。</div></div>
+            <div class="solid b-purple"><div class="t"><span class="ico chip" style="--c:#7C3AED"></span>电磁铁</div><div class="d">MAG ON/OFF 吸附与释放。</div></div>
+            <div class="solid b-red"><div class="t"><span class="ico shield" style="--c:#EF4444"></span>STOP</div><div class="d">停止运动，保护持瓶状态。</div></div>
+          </div>
+          <div class="grid2" style="margin-top:12px">
+            <div class="card" style="--c:#17A65A"><div class="t">已验证</div><div class="d">推杆、舵机、电磁铁、短步进升降诊断和瓶盖铁片吸附/释放动作时序。</div></div>
+            <div class="card" style="--c:#EF4444"><div class="t">安全边界</div><div class="d">长行程负载、顶部/底部限位、驱动隔离仍需补齐；初赛只演示安全降级流程。</div></div>
+          </div>
+          <div class="note" style="margin-top:12px"><strong>升级路径：</strong>补齐限位和驱动保护后，再接入车载 X5 导航到位信号，形成“到工位 -> 夹取 -> 转运 -> 放置”的完整闭环。</div>
+        </div>
+      </div>
+    </div>
+    <div class="band t-purple" style="margin-top:14px">
+      <div class="band-head"><div class="num">DUAL</div><div class="band-title">双臂 v4 蓝图中的已实测 / 剧本 / 待完善分层</div></div>
+      <div class="band-body grid3">
+        <div class="card" style="--c:#17A65A"><div class="t">已实测</div><div class="d">arm01 视觉门控取袋；固定点取袋/落袋；末端相机与 AI 脑 station_ok。</div></div>
+        <div class="card" style="--c:#F3A51B"><div class="t">初赛剧本</div><div class="d">单臂冗余接管、粉末袋转移、F407 瓶子末端执行、安全员/降级演示。</div></div>
+        <div class="card" style="--c:#7C3AED"><div class="t">后续扩展</div><div class="d">双臂研磨、承碗盘、快拆爪、车-工位对接、Nav2 导航闭环。</div></div>
+      </div>
+    </div>
+  </div>
+</div></div></body></html>

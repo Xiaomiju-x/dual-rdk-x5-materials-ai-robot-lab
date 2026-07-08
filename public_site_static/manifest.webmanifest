@@ -1,0 +1,15 @@
+{
+  "name": "荧光具身智研 · 指挥中心",
+  "short_name": "智研指挥中心",
+  "description": "三机异构协同 · 实验室具身智能统一控制台 (AI 脑 / 车载脑 / 机械臂)",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f6fc",
+  "theme_color": "#f4f6fc",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

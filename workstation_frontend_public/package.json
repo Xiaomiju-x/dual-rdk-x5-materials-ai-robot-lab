@@ -1,0 +1,44 @@
+{
+  "name": "workcockpit-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "WorkCockpit — premium real-time dashboard for the dual myCobot 280-Pi workstation, viewed on Xiaomi Pad.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "build:nocheck": "vite build",
+    "preview": "vite preview --host",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.1.0",
+    "@fontsource-variable/jetbrains-mono": "^5.1.0",
+    "@vueuse/core": "^11.2.0",
+    "@vueuse/motion": "^3.0.3",
+    "echarts": "^5.5.1",
+    "gsap": "^3.12.5",
+    "motion-v": "^2.2.1",
+    "pinia": "^2.2.6",
+    "three": "^0.168.0",
+    "vue": "^3.5.13",
+    "vue-echarts": "^7.0.3",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/three": "^0.168.0",
+    "@vitejs/plugin-vue": "^5.1.4",
+    "@vue/tsconfig": "^0.5.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "typescript": "~5.5.4",
+    "vite": "^5.4.10",
+    "vite-plugin-pwa": "^0.20.5",
+    "vue-tsc": "^2.1.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

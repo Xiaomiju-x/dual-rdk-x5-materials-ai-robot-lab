@@ -1,0 +1,11 @@
+# Workstation web cockpit — server deps.
+# Mock mode (PC dev + demo) needs only the four below.
+flask>=3.0
+flask-socketio>=5.3
+python-socketio>=5.10
+simple-websocket>=1.0
+
+# Real mode (USE_MOCK=0, on the Pi) additionally uses:
+#   pymycobot        — myCobot serial control   (preinstalled on factory image)
+#   opencv-python    — USB camera MJPEG          (preinstalled on factory image)
+# Do NOT pip-install these on the PC; they are hardware/edge deps.

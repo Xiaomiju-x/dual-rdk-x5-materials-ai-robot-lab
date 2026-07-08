@@ -1,0 +1,24 @@
+\thispagestyle{empty}
+\vspace*{0.2em}
+{\centering
+{\LARGE\bfseries 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人}\par
+\vspace{0.5em}
+{\large\bfseries ——AI 脑、具身脑、双机械臂工位与 STM32F407 执行层的材料实验闭环系统}\par
+}
+\vspace{1.1em}
+
+\begin{center}
+  \textbf{\large 摘 \quad 要}
+\end{center}
+
+本作品面向近红外荧光粉等功能材料研发中候选配方多、实验周期长、取放流程重复、XRD/PL 表征数据分散和失败经验难以回流的问题，构建了一套以 \kw{双 RDK X5 异构协同}为核心的嵌入式科研自动化系统。系统由实验室端 AI 脑、车载具身脑、双 myCobot 280-Pi 固定工位、STM32F407 下位机执行层和公网只读证据平台组成：AI 脑负责材料配方预测、XRD 与光谱分析、本地大模型推理和实验记录追溯；具身脑负责 LD14 激光雷达、Astra Pro 深度相机、里程计、SLAM 和 Lab-FSD shadow planner；固定工位负责粉末袋识别、夹取、转移与冗余接管；STM32F407 负责步进电机、电推杆、舵机和电磁铁的底层动作时序；公网平台负责状态孪生、演示剧场、OpenAPI、证据包和提交资产展示。
+
+作品的核心不是单一网页、遥控车或机械臂展示，而是把“配方设计 $\rightarrow$ AI 预筛 $\rightarrow$ 具身取放 $\rightarrow$ XRD/PL 表征 $\rightarrow$ 失败回流”的材料实验链路拆分到多个嵌入式节点上，并通过本地推理、传感器融合和安全降级形成可展示、可追溯、可继续扩展的闭环。AI 脑侧采用总控 Dashboard 加 XRD 视觉、XRD 数值、PL 视觉、PL 数值四条表征分析线，结合 Shannon 半径规则、MACE/MatterSim/CHGNet 势能面缓存、Tanabe-Sugano 与 Huang-Rhys 光谱模型、失败规则库、Conformal 置信区间、本地 Qwen 系列与 DeepSeek 蒸馏模型，以及 Fly-MB/FlyHash 果蝇联想判决脑，输出候选配方风险、推荐烧结条件和可审计推理依据。具身脑侧将自动驾驶中的 BEV occupancy、未来占据和候选轨迹思想迁移到低速实验室机器人，形成 Lab-FSD 影子规划层；该层在线输出风险、候选轨迹和安全门控结果，但初赛阶段不直接发布底盘控制指令，由安全员保持执行权。
+
+截至初赛提交前，系统已完成 AI 脑五服务线、4 个 CPU 本地模型、5 个 BPU swap-load 大模型槽、5 个轻量 BPU 感知模型、材料预测 evidence package、XRD/PL 表征分析、SLAM 占据栅格建图、Lab-FSD shadow 输出、arm01 视觉门控固定点取袋、F407 瓶子吸附/释放动作时序和公网证据平台部署。实测指标包括：Qwen2-0.5B 手写 Transformer 在 RDK X5 BPU 上完成 24 层链式推理，单次 forward 约 553 ms；Lab-FSD 影子规划毫秒级输出风险与轨迹；公网展示站提供 89 条 OpenAPI 路径；材料知识库侧完成 25228 段文献切片、67 行实测 PL 记录和多源规则/模型融合；机械臂工位完成末端相机视觉确认、AI 脑 station ok 判决、固定点取袋与落袋闭环。当前视频演示采用安全员接管底盘、末端执行安全降级和公网只读展示策略；后续补齐升降台限位、驱动隔离、地图质量优化和 Nav2 目标点后，可从 shadow mode 平滑升级到更完整的自主导航与实验执行闭环。
+
+\vspace{0.8em}
+\noindent\textbf{关键词：} RDK X5；嵌入式 AI；材料合成预测；XRD/PL 表征；具身实验机器人；Lab-FSD；SLAM；双机械臂；STM32F407
+
+\vspace{0.4em}
+\noindent\textbf{GitHub：} \url{https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab}

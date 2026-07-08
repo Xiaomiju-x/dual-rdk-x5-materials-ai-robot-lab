@@ -1,0 +1,36 @@
+\section{第三部分 完成情况与性能参数（一）：完成状态与实物运行证据}
+
+\subsection{完成状态矩阵}
+复杂项目最容易出现的问题是把蓝图、shadow、降级和真机闭环混写。为避免夸大，本报告用图~\ref{fig:xrd_completion} 将完成状态分为“已实测”“初赛降级/Shadow”和“后续补齐”。
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.96\linewidth]{fig_xrd_completion_matrix.pdf}
+  \caption{完成状态矩阵。}
+  \label{fig:xrd_completion}
+\end{figure}
+
+\subsection{已完成结果}
+\begin{table}[H]
+\centering
+\caption{初赛前已完成和可展示结果。}
+\begin{tabular}{p{4.0cm}p{4.2cm}p{6.2cm}}
+\toprule
+模块 & 状态 & 证据类型 \\
+\midrule
+AI 脑五服务线 & 已完成 & 总控、XRD/PL 视觉和数值线接口与页面 \\
+材料预测 evidence & 已完成 & 同步预测、异步 verdict、trace 和报告 \\
+XRD/PL 表征分析 & 已完成 & 数值特征、视觉检测、模型判断和解释 \\
+SLAM 占据栅格 & 已跑通 & 现场地图图像和地图文件 \\
+Lab-FSD shadow & 在线运行 & BEV、future BEV、policy token、risk、safety gate \\
+arm01 取袋闭环 & 已实测 & OBSERVE、AprilTag、\texttt{station\_ok}、固定点取袋 \\
+F407 瓶子动作 & 安全降级已跑通 & 推杆、舵机、电磁铁、短步进升降诊断 \\
+公网证据平台 & 已部署 & 页面、OpenAPI、release、演示剧场和资产页 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{视频对应实物证据}
+初赛视频对应四段实物链路：AI 脑 X5 的材料预测与表征分析界面、车载具身脑的 SLAM/LD14/Astra/Lab-FSD shadow 在线运行、arm01 的视觉门控取袋与落袋闭环、STM32F407 的瓶子吸附与释放动作时序。报告中的架构图、工作流图、完成矩阵、SLAM 地图和公网截图用于承接这些视频证据，避免只给单一画面而无法解释系统边界。
+
+\subsection{待补齐与升级项}
+后续升级项包括：升降台顶部/底部限位、驱动隔离和 ALM 输入；地图质量优化和 Nav2 目标点；双臂十阶段全闭环；更多真实实验数据回流；SmolVLA 或其他策略学习数据采集。上述内容不影响初赛展示的真实性，但不应在报告中写成已经无人值守全闭环。

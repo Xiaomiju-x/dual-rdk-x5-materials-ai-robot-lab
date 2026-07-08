@@ -1,0 +1,38 @@
+\section{第二部分 系统组成及功能说明（六）：公网展示站与证据链}
+
+\subsection{平台定位}
+公网展示站是只读证据门户，不是核心算法的替代品，也不是远程控制台。它把复杂系统中的状态、API、发布、演示剧场、全球对标、FSD 世界模型、机群和资产清单集中展示，使评审可以快速理解项目边界和工程证据。
+站点包含总览、亮点、答辩防御、全球对标、FSD 世界模型、机群和资产等页面。总览页展示现场两块 RDK X5、主机械臂、初赛单臂冗余演示和闭环路径；亮点页展示 AI 脑、具身脑、导航、取料和实验数据回流；答辩防御页用于解释技术可信度和边界；全球对标页把项目与公开顶级平台按维度对照；FSD 世界模型页展示实验室执行过程的可观察、可回放、可审计状态。
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{fig_xrd_site_home.png}
+    \caption{总览与 OS 控制面}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{fig_xrd_site_benchmark.png}
+    \caption{全球对标}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.32\linewidth}
+    \includegraphics[width=\linewidth]{fig_xrd_site_fsd.png}
+    \caption{FSD 世界模型}
+  \end{subfigure}
+  \caption{公网展示站真实页面截图。}
+  \label{fig:xrd_site}
+\end{figure}
+
+\subsection{证据链组成}
+证据链包括四类内容：
+\begin{enumerate}
+  \item \kw{算法证据：} 模型栈、BPU/CPU 能力位、预测 trace、evidence package 和报告页。
+  \item \kw{执行证据：} SLAM 地图、Lab-FSD topic、arm01 取袋记录、F407 动作时序。
+  \item \kw{工程证据：} OpenAPI paths、release、部署状态、hardening checks 和只读边界。
+  \item \kw{提交证据：} 视频脚本、报告、重要代码包、关键词和 GitHub 字段说明。
+\end{enumerate}
+
+\begin{keybox}
+公网平台的安全原则是只读展示。报告和代码包中不得包含可直接控制底盘、机械臂、升降台、电磁铁或舵机的公网入口。
+\end{keybox}
