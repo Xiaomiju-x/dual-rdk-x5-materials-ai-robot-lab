@@ -54,7 +54,7 @@
 
 仓库内提供不需要私有凭据即可检查的公开证据：
 
-- `public_evidence_data/report_rendered_pages/`：19 页报告渲染图。
+- `public_evidence_data/report_rendered_pages/`：23 页报告渲染图。
 - `public_evidence_data/site_screenshots/`：公网展示站截图。
 - `public_evidence_data/crystal_public_cache/`：公开晶体结构缓存。
 - `public_evidence_data/demo_sensor_frames/`：离线演示传感器帧。

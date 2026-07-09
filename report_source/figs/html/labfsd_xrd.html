@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><link rel="stylesheet" href="xrd_flow.css"></head>
+<body><div class="page">
+<div class="fig t-orange">
+  <div class="fig-title"><span class="mark">5</span>Lab-FSD v2 影子规划与安全门控
+    <span class="sub">低速实验室机器人 BEV 世界模型；不发布底盘速度</span></div>
+  <div class="fig-body">
+    <div class="row">
+      <div class="col" style="width:24%">
+        <div class="band t-blue">
+          <div class="band-head"><div class="num">IN</div><div class="band-title">多源输入</div></div>
+          <div class="band-body col">
+            <div class="solid b-blue"><div class="t"><span class="ico radar" style="--c:#2E7DF2"></span>LD14 LaserScan</div><div class="d">二维障碍结构。</div></div>
+            <div class="solid b-teal"><div class="t"><span class="ico camera" style="--c:#0FA9A4"></span>Astra Depth Scan</div><div class="d">近场深度扫描。</div></div>
+            <div class="solid b-purple"><div class="t"><span class="ico camera" style="--c:#7C3AED"></span>4K Vision-BEV</div><div class="d">AI 脑语义风险提示。</div></div>
+            <div class="solid b-navy"><div class="t"><span class="ico map" style="--c:#1F3B57"></span>Odom / Goal</div><div class="d">里程计、目标点和任务上下文。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-r"></div>
+      <div class="col" style="width:29%">
+        <div class="band t-orange">
+          <div class="band-head"><div class="num">BEV</div><div class="band-title">占据世界模型</div></div>
+          <div class="band-body grid2">
+            <div class="card" style="--c:#F2682A"><div class="t">local BEV</div><div class="d">48x48 局部占据栅格。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t">temporal memory</div><div class="d">最近 5 帧多源 BEV。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t">future BEV</div><div class="d">短时未来占据预测。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t">anomaly BPU</div><div class="d">BPU 异常分数辅助安全解释。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-r"></div>
+      <div class="col" style="width:27%">
+        <div class="band t-purple">
+          <div class="band-head"><div class="num">POL</div><div class="band-title">概率轨迹 token</div></div>
+          <div class="band-body">
+            <div class="grid3">
+              <div class="solid b-purple"><div class="t">左转</div><div class="d">omega &lt; 0</div></div>
+              <div class="solid b-purple"><div class="t">直行</div><div class="d">omega = 0</div></div>
+              <div class="solid b-purple"><div class="t">右转</div><div class="d">omega &gt; 0</div></div>
+            </div>
+            <div class="note" style="margin-top:12px"><strong>输出：</strong>policy token 概率、entropy、confidence、shadow path、trajectory score、risk。</div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-r"></div>
+      <div class="col" style="width:20%">
+        <div class="band t-red">
+          <div class="band-head"><div class="num">SAFE</div><div class="band-title">安全门</div></div>
+          <div class="band-body col">
+            <div class="solid b-red"><div class="t"><span class="ico shield" style="--c:#EF4444"></span>observe only</div><div class="d">只观察，不直接控制底盘。</div></div>
+            <div class="card" style="--c:#EF4444"><div class="t">Nav2 / MPPI authority</div><div class="d">控制权威不变。</div></div>
+            <div class="card" style="--c:#EF4444"><div class="t">cmd_vel_authority=false</div><div class="d">报告、视频和代码口径必须一致。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:14px">
+      <div class="card" style="--c:#17A65A"><div class="t">可以写</div><div class="d">“低速实验室机器人 BEV 占据、未来占据、概率 shadow planner 与安全门控”。</div></div>
+      <div class="card" style="--c:#F3A51B"><div class="t">必须说明</div><div class="d">当前初赛视频由安全员接管底盘执行，算法在线观察和输出诊断。</div></div>
+      <div class="card" style="--c:#EF4444"><div class="t">不能写</div><div class="d">“复刻 Tesla FSD”“道路级自动驾驶”“完整自主导航闭环已接管底盘”。</div></div>
+    </div>
+  </div>
+</div></div></body></html>

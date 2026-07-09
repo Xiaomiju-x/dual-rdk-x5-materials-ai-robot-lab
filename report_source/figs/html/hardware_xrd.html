@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><link rel="stylesheet" href="xrd_flow.css"></head>
+<body><div class="page">
+<div class="fig t-orange">
+  <div class="fig-title"><span class="mark">4</span>硬件连接、总线与执行边界
+    <span class="sub">不公开内网地址；报告只写模块和接口类型</span></div>
+  <div class="fig-body">
+    <div class="row">
+      <div class="col" style="width:28%">
+        <div class="band t-blue">
+          <div class="band-head"><div class="num">AI</div><div class="band-title">实验室端 AI 脑</div></div>
+          <div class="band-body col">
+            <div class="solid b-blue"><div class="t"><span class="ico chip" style="--c:#2E7DF2"></span>RDK X5 8G</div><div class="d">Dashboard、材料预测、四条表征线、本地模型调度。</div></div>
+            <div class="card" style="--c:#2E7DF2"><div class="t"><span class="ico camera" style="--c:#2E7DF2"></span>IMX415 4K</div><div class="d">实验画面、样品状态和 4K Vision-BEV 语义提示。</div></div>
+            <div class="card" style="--c:#2E7DF2"><div class="t">音频 / 语音</div><div class="d">语音提问和演示交互，非安全控制通道。</div></div>
+          </div>
+        </div>
+        <div class="band t-purple">
+          <div class="band-head"><div class="num">WEB</div><div class="band-title">只读展示站</div></div>
+          <div class="band-body">
+            <div class="card" style="--c:#7C3AED"><div class="t"><span class="ico web" style="--c:#7C3AED"></span>公网/VPS</div><div class="d">只读状态、证据包、OpenAPI、演示剧场。不得开放危险执行接口。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width:44%">
+        <div class="band t-orange">
+          <div class="band-head"><div class="num">CAR</div><div class="band-title">车载具身脑与下位机</div><div class="band-sub">ROS2 + MCU 实时执行</div></div>
+          <div class="band-body">
+            <div class="grid3">
+              <div class="solid b-orange"><div class="t"><span class="ico chip" style="--c:#F2682A"></span>RDK X5 8G</div><div class="d">ROS2、SLAM、Nav2 配置、Lab-FSD shadow。</div></div>
+              <div class="card" style="--c:#F2682A"><div class="t"><span class="ico radar" style="--c:#F2682A"></span>LD14 LiDAR</div><div class="d">USB/UART 数据进入 2D 障碍结构。</div></div>
+              <div class="card" style="--c:#F2682A"><div class="t"><span class="ico camera" style="--c:#F2682A"></span>Astra Pro</div><div class="d">深度流降采样为近场避障 scan。</div></div>
+              <div class="card" style="--c:#F2682A"><div class="t"><span class="ico camera" style="--c:#F2682A"></span>USB 相机</div><div class="d">瓶顶、升降台、局部观察。</div></div>
+              <div class="card" style="--c:#F2682A"><div class="t"><span class="ico mcu" style="--c:#F2682A"></span>STM32F407</div><div class="d">UART 命令、步进、电推杆、舵机、电磁铁。</div></div>
+              <div class="card" style="--c:#EF4444"><div class="t"><span class="ico shield" style="--c:#EF4444"></span>安全员接管</div><div class="d">初赛底盘执行由人工键盘/急停边界控制。</div></div>
+            </div>
+            <div class="note" style="margin-top:12px"><strong>控制权边界：</strong>Lab-FSD 只发布诊断和 shadow path；Nav2/MPPI 与安全员保持执行权威。F407 的 STOP 保护动作和电磁铁保持逻辑需在报告中说明。</div>
+          </div>
+        </div>
+        <div class="band t-red">
+          <div class="band-head"><div class="num">IO</div><div class="band-title">接口类型</div></div>
+          <div class="band-body grid4">
+            <div class="card" style="--c:#EF4444"><div class="t">USB</div><div class="d">相机、LiDAR、深度相机。</div></div>
+            <div class="card" style="--c:#EF4444"><div class="t">UART</div><div class="d">RDK X5 与 F407 命令/遥测。</div></div>
+            <div class="card" style="--c:#EF4444"><div class="t">GPIO/PWM</div><div class="d">末端舵机和电磁铁驱动。</div></div>
+            <div class="card" style="--c:#EF4444"><div class="t">HTTP/ROS2</div><div class="d">跨端任务与状态同步。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width:28%">
+        <div class="band t-teal">
+          <div class="band-head"><div class="num">ARM</div><div class="band-title">双机械臂固定工位</div></div>
+          <div class="band-body col">
+            <div class="solid b-teal"><div class="t"><span class="ico arm" style="--c:#0FA9A4"></span>myCobot 280-Pi x2</div><div class="d">固定工位取料、辅助固定、转移和异常接管。</div></div>
+            <div class="card" style="--c:#0FA9A4"><div class="t"><span class="ico camera" style="--c:#0FA9A4"></span>末端相机</div><div class="d">OBSERVE 位采集，AI 脑识别工位标记。</div></div>
+            <div class="card" style="--c:#0FA9A4"><div class="t">自研夹爪 / 快拆爪</div><div class="d">袋爪、棒爪、扶手爪、试剂瓶/漏斗模块。</div></div>
+            <div class="card" style="--c:#0FA9A4"><div class="t">WorkCockpit</div><div class="d">工位 Web 服务、互锁、状态回放和调试入口。</div></div>
+          </div>
+        </div>
+        <div class="band t-green">
+          <div class="band-head"><div class="num">SAFE</div><div class="band-title">安全边界</div></div>
+          <div class="band-body">
+            <div class="metric"><span>公网远程危险控制</span><b>禁止</b></div>
+            <div class="metric"><span>内网地址/凭据公开</span><b>禁止</b></div>
+            <div class="metric"><span>视频演示</span><b>可降级</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div></body></html>

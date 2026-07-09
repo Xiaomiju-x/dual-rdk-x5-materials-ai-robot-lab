@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><link rel="stylesheet" href="xrd_flow.css"></head>
+<body><div class="page">
+<div class="fig t-blue">
+  <div class="fig-title"><span class="mark">1</span>双 RDK X5 材料合成 AI 预测与具身实验助理机器人
+    <span class="sub">AI 决策 · 移动感知 · 固定工位 · 下位机执行 · 证据平台</span></div>
+  <div class="fig-body">
+    <div class="chips" style="margin-bottom:14px">
+      <span class="chip dark">双 RDK X5 异构协同</span><span class="chip">Bayes-e BPU</span>
+      <span class="chip">ROS2 / SLAM / Lab-FSD Shadow</span><span class="chip">STM32F407 执行层</span>
+      <span class="chip">双 myCobot 固定工位</span><span class="chip">只读公网证据平台</span>
+    </div>
+    <div class="row">
+      <div class="col" style="width:30%">
+        <div class="band t-blue">
+          <div class="band-head"><div class="num">A</div><div class="band-title">AI 脑 RDK X5</div></div>
+          <div class="band-body col">
+            <div class="solid b-blue"><div class="t"><span class="ico beaker" style="--c:#2E7DF2"></span>材料配方预测总控</div><div class="d">解析 host / dopant / 浓度，组合规则、实测类比、光谱模型和本地模型给出 verdict。</div></div>
+            <div class="grid2">
+              <div class="card" style="--c:#2E7DF2"><div class="t"><span class="ico camera" style="--c:#2E7DF2"></span>XRD 视觉/数值</div><div class="d">图像检测、峰位/强度特征、BPU 快速分类与异常峰解释。</div></div>
+              <div class="card" style="--c:#0FA9A4"><div class="t"><span class="ico flow" style="--c:#0FA9A4"></span>PL 视觉/数值</div><div class="d">光谱图识别、80D 特征、Cr/Ni/共掺模式判断。</div></div>
+            </div>
+            <div class="card" style="--c:#7C3AED"><div class="t"><span class="ico chip" style="--c:#7C3AED"></span>Fly-MB 联想判决脑</div><div class="d">稀疏编码 + Mushroom Body 记忆召回，输出 novelty / OOD / verdict。</div></div>
+          </div>
+        </div>
+        <div class="band t-purple">
+          <div class="band-head"><div class="num">E</div><div class="band-title">公网展示与证据平台</div></div>
+          <div class="band-body grid2">
+            <div class="card" style="--c:#7C3AED"><div class="t"><span class="ico web" style="--c:#7C3AED"></span>OS 首屏 / 状态孪生</div><div class="d">展示真机、镜像、发布、任务和演示剧场状态。</div></div>
+            <div class="card" style="--c:#7C3AED"><div class="t"><span class="ico db" style="--c:#7C3AED"></span>资产 / API / 审计</div><div class="d">OpenAPI、Research Passport、证据包、release 与安全边界。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width:40%">
+        <div class="band t-green">
+          <div class="band-head"><div class="num">B</div><div class="band-title">材料实验闭环主线</div><div class="band-sub">配方设计 -> 取放执行 -> 表征回流</div></div>
+          <div class="band-body">
+            <div class="grid5">
+              <div class="solid b-green"><div class="t"><span class="ico doc" style="--c:#17A65A"></span>研究员问题</div><div class="d">目标 host、掺杂离子、浓度和实验约束。</div></div>
+              <div class="solid b-blue"><div class="t"><span class="ico chip" style="--c:#2E7DF2"></span>AI 预筛</div><div class="d">30 秒级候选筛选、风险和烧结建议。</div></div>
+              <div class="solid b-orange"><div class="t"><span class="ico arm" style="--c:#F2682A"></span>具身执行</div><div class="d">移动平台、机械臂、F407 工位协同。</div></div>
+              <div class="solid b-teal"><div class="t"><span class="ico flow" style="--c:#0FA9A4"></span>XRD / PL</div><div class="d">实验表征数据进入四条分析线。</div></div>
+              <div class="solid b-purple"><div class="t"><span class="ico db" style="--c:#7C3AED"></span>失败回流</div><div class="d">actuals、failure library、hash 链。</div></div>
+            </div>
+            <div class="arrow-d"></div>
+            <div class="note"><strong>系统边界：</strong>AI 预测不替代真实烧制与表征；初赛采用安全员接管底盘执行，Lab-FSD 在线输出风险和候选轨迹但不发布底盘速度。</div>
+          </div>
+        </div>
+        <div class="band t-orange">
+          <div class="band-head"><div class="num">C</div><div class="band-title">具身脑 RDK X5</div></div>
+          <div class="band-body grid3">
+            <div class="card" style="--c:#F2682A"><div class="t"><span class="ico radar" style="--c:#F2682A"></span>LD14 LiDAR</div><div class="d">二维障碍结构与 SLAM 主输入。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t"><span class="ico camera" style="--c:#F2682A"></span>Astra 深度</div><div class="d">近距离深度扫描和局部避障辅助。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t"><span class="ico map" style="--c:#F2682A"></span>里程计 / SLAM</div><div class="d">现场占据栅格和轨迹证据。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t"><span class="ico flow" style="--c:#F2682A"></span>Lab-FSD v2</div><div class="d">BEV、future BEV、policy tokens、risk。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t"><span class="ico shield" style="--c:#F2682A"></span>Safety Gate</div><div class="d">Nav2/MPPI 保持控制权威。</div></div>
+            <div class="card" style="--c:#F2682A"><div class="t"><span class="ico camera" style="--c:#F2682A"></span>Vision-BEV</div><div class="d">AI 脑 4K 语义占据提示。</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width:30%">
+        <div class="band t-teal">
+          <div class="band-head"><div class="num">D</div><div class="band-title">固定工位与执行层</div></div>
+          <div class="band-body col">
+            <div class="solid b-teal"><div class="t"><span class="ico arm" style="--c:#0FA9A4"></span>双 myCobot 固定工位</div><div class="d">粉末袋观察、视觉门控、固定点夹取、转移、落袋和双臂冗余剧本。</div></div>
+            <div class="grid2">
+              <div class="card" style="--c:#0FA9A4"><div class="t"><span class="ico arm" style="--c:#0FA9A4"></span>arm01 取袋闭环</div><div class="d">OBSERVE 拍照，AI 脑返回 station_ok 后执行固定点取放。</div></div>
+              <div class="card" style="--c:#0FA9A4"><div class="t"><span class="ico camera" style="--c:#0FA9A4"></span>arm02 协作/冗余</div><div class="d">承碗、辅助固定、相机补盲和异常接管蓝图。</div></div>
+            </div>
+            <div class="solid b-orange"><div class="t"><span class="ico mcu" style="--c:#F2682A"></span>STM32F407 下位机</div><div class="d">步进电机、电推杆、舵机、电磁铁动作时序；当前按安全降级演示。</div></div>
+          </div>
+        </div>
+        <div class="band t-red">
+          <div class="band-head"><div class="num">S</div><div class="band-title">安全与提交边界</div></div>
+          <div class="band-body">
+            <div class="metric"><span>底盘执行</span><b>安全员接管</b></div>
+            <div class="metric"><span>Lab-FSD</span><b>Shadow only</b></div>
+            <div class="metric"><span>公网平台</span><b>只读展示</b></div>
+            <div class="metric"><span>公开代码</span><b>非核心真实代码</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot">该架构把材料研发 AI、移动机器人感知、固定工位取放、MCU 执行和证据平台组织成一个嵌入式系统，而不是单一网页、遥控车或机械臂演示。</div>
+  </div>
+</div></div></body></html>
