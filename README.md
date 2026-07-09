@@ -54,7 +54,7 @@ The preliminary contest demo keeps real hardware actions inside explicit safety 
 
 The repository includes evidence assets that can be inspected without private credentials:
 
-- 19 rendered report pages in `public_evidence_data/report_rendered_pages/`.
+- 23 rendered report pages in `public_evidence_data/report_rendered_pages/`.
 - Public evidence site screenshots in `public_evidence_data/site_screenshots/`.
 - Public crystal structure cache files in `public_evidence_data/crystal_public_cache/`.
 - Offline replay-style sensor frames in `public_evidence_data/demo_sensor_frames/`.

@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><link rel="stylesheet" href="xrd_flow.css"></head>
+<body><div class="page">
+<div class="fig t-teal">
+  <div class="fig-title"><span class="mark">3</span>AI 脑五服务线与材料数据流
+    <span class="sub">总控 Dashboard + XRD/PL 四条表征分析线</span></div>
+  <div class="fig-body">
+    <div class="grid5">
+      <div class="band t-blue">
+        <div class="band-head"><div class="num">0</div><div class="band-title">总控 Dashboard</div></div>
+        <div class="band-body col">
+          <div class="solid b-blue"><div class="t"><span class="ico chip" style="--c:#2E7DF2"></span>predict_engine</div><div class="d">化学式解析、规则、光谱模型、候选评审。</div></div>
+          <div class="card" style="--c:#2E7DF2"><div class="t">SSE / 报告</div><div class="d">同步 evidence package，异步 verdict 和报告。</div></div>
+          <div class="card" style="--c:#2E7DF2"><div class="t">审计链</div><div class="d">predictions JSONL + SHA-256。</div></div>
+        </div>
+      </div>
+      <div class="band t-green">
+        <div class="band-head"><div class="num">1</div><div class="band-title">XRD 数值线</div></div>
+        <div class="band-body col">
+          <div class="solid b-green"><div class="t"><span class="ico flow" style="--c:#17A65A"></span>raw / 峰表</div><div class="d">峰位、强度、宽度和结构特征。</div></div>
+          <div class="card" style="--c:#17A65A"><div class="t">BPU MLP</div><div class="d">190D 特征快速分类。</div></div>
+          <div class="card" style="--c:#17A65A"><div class="t">物相解释</div><div class="d">峰匹配、异常峰解释和合成原因。</div></div>
+        </div>
+      </div>
+      <div class="band t-teal">
+        <div class="band-head"><div class="num">2</div><div class="band-title">XRD 视觉线</div></div>
+        <div class="band-body col">
+          <div class="solid b-teal"><div class="t"><span class="ico camera" style="--c:#0FA9A4"></span>谱图图像</div><div class="d">相机或截图进入视觉分析。</div></div>
+          <div class="card" style="--c:#0FA9A4"><div class="t">YOLO 检测</div><div class="d">谱图区域、状态和异常结构。</div></div>
+          <div class="card" style="--c:#0FA9A4"><div class="t">视觉解释</div><div class="d">给总控提供图像侧 sanity check。</div></div>
+        </div>
+      </div>
+      <div class="band t-orange">
+        <div class="band-head"><div class="num">3</div><div class="band-title">PL 数值线</div></div>
+        <div class="band-body col">
+          <div class="solid b-orange"><div class="t"><span class="ico beaker" style="--c:#F2682A"></span>Fluoromax CSV</div><div class="d">发射谱、激发谱、峰位和带宽。</div></div>
+          <div class="card" style="--c:#F2682A"><div class="t">BPU MLP</div><div class="d">80D 特征判断 Cr/Ni/共掺模式。</div></div>
+          <div class="card" style="--c:#F2682A"><div class="t">光谱结论</div><div class="d">发光波段、异常形态和风险。</div></div>
+        </div>
+      </div>
+      <div class="band t-purple">
+        <div class="band-head"><div class="num">4</div><div class="band-title">PL 视觉线</div></div>
+        <div class="band-body col">
+          <div class="solid b-purple"><div class="t"><span class="ico camera" style="--c:#7C3AED"></span>光谱截图</div><div class="d">图像化实验界面或光谱画面。</div></div>
+          <div class="card" style="--c:#7C3AED"><div class="t">YOLO / VLM</div><div class="d">目标检测和视觉语言解释。</div></div>
+          <div class="card" style="--c:#7C3AED"><div class="t">RAG 解读</div><div class="d">结合论文块和本地模型生成建议。</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="arrow-d"></div>
+    <div class="grid3">
+      <div class="solid b-navy"><div class="t">科学物理层</div><div class="d">Shannon 半径、MACE cache、Vegard fallback、Tanabe-Sugano + Huang-Rhys、Conformal CI。</div></div>
+      <div class="solid b-purple"><div class="t">边缘模型层</div><div class="d">BPU 小模型、BPU LLM slot、CPU 本地模型、Fly-MB 联想记忆；云评审仅为联网增强。</div></div>
+      <div class="solid b-green"><div class="t">决策回流层</div><div class="d">verdict、风险、推荐烧结条件、actuals、failure library、hash 链和下一轮候选。</div></div>
+    </div>
+    <div class="note" style="margin-top:14px"><strong>报告口径：</strong>AI 脑不是网页平台。网页只是操作面；核心是 X5 本地调度的材料预测引擎、表征分析线、BPU/CPU 模型栈和可追溯实验数据闭环。</div>
+  </div>
+</div></div></body></html>

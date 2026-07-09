@@ -1,36 +1,145 @@
-\section{第三部分 完成情况与性能参数（一）：完成状态与实物运行证据}
+\section{第三部分 完成情况及性能参数}
 
-\subsection{完成状态矩阵}
-复杂项目最容易出现的问题是把蓝图、shadow、降级和真机闭环混写。为避免夸大，本报告用图~\ref{fig:xrd_completion} 将完成状态分为“已实测”“初赛降级/Shadow”和“后续补齐”。
+本部分按照“最终实现成果以图文结合说明、实物照片为主”的要求组织。项目当前已形成由双 RDK X5、车载具身平台、双 myCobot 固定工位和 STM32F407 末端执行层组成的材料实验助理机器人样机。初赛阶段采用安全员接管底盘、规划与感知在线 shadow mode、末端执行分段验证的展示方式，重点证明系统工程链路已经跑通，而不是只给出软件页面或单一传感器演示。
+
+\subsection*{3.1 整体介绍}
+\phantomsection
+\addcontentsline{toc}{subsection}{3.1 整体介绍}
+
+图~\ref{fig:actual_system_global} 为当前系统的全局实物照片。左侧为车载具身脑平台，包含 RDK X5、LD14 激光雷达、Astra 深度相机、小米云台/USB 摄像头、升降与瓶子吸附执行机构、STM32F407 底层控制板、电源与电机驱动模块；右侧为固定实验工位，布置双 myCobot 280-Pi、末端摄像头、自研夹爪、粉末袋工位、转运盘和收集区域。系统整体按“AI 脑做材料预测与语义理解、具身脑做移动感知与规划、工位机械臂做取放执行、F407 做底层闭环动作”的异构协同方式工作。
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.96\linewidth]{fig_xrd_completion_matrix.pdf}
-  \caption{完成状态矩阵。}
-  \label{fig:xrd_completion}
+  \includegraphics[width=0.98\linewidth]{fig_actual_system_global.jpg}
+  \caption{系统实物全局照片：左侧为车载具身脑平台，右侧为双机械臂固定实验工位。}
+  \label{fig:actual_system_global}
 \end{figure}
 
-\subsection{已完成结果}
+\subsection*{3.2 工程成果}
+\phantomsection
+\addcontentsline{toc}{subsection}{3.2 工程成果}
+
+\subsubsection*{3.2.1 机械成果}
+\phantomsection
+\addcontentsline{toc}{subsubsection}{3.2.1 机械成果}
+
+机械部分已经完成车载平台、升降台、瓶子吸附机构、双臂固定工位和两类实验材料末端执行器的实物搭建。车载平台采用多层板式结构承载传感器、算力板、电源与执行机构；固定工位采用桌面式双臂布局，一侧机械臂可在另一侧异常或暂不可用时执行单臂冗余接管。末端夹爪面向薄片状粉末袋设计，瓶子执行端则采用“瓶盖铁片 + 电磁铁吸附 + 电推杆伸缩”的安全降级验证流程。
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.42\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_mech_car.jpg}
+    \caption{车载平台、升降机构、传感器和执行机构。}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.54\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_mech_workstation.jpg}
+    \caption{双 myCobot 固定工位、视觉标记、夹爪与转运区域。}
+  \end{subfigure}
+  \caption{机械成果实物照片。车载端负责移动感知与末端执行，固定工位负责粉末袋识别、夹取和落袋。}
+  \label{fig:actual_mechanical_results}
+\end{figure}
+
+\subsubsection*{3.2.2 电路成果}
+\phantomsection
+\addcontentsline{toc}{subsubsection}{3.2.2 电路成果}
+
+电路与电气集成已经完成三层部署：顶层集成 LD14、云台/摄像头、显示与外设接口；中层布置升降、转运、视觉辅助和本地交互组件；底层集中放置 STM32F407、继电器/驱动板、电源模块、Astra 深度相机和电池。F407 负责舵机、电推杆、电磁铁和步进电机的动作时序，RDK X5 负责上层感知、规划、状态判断和安全门控。当前电磁铁与升降台按安全降级流程演示，后续加入顶部/底部限位、ALM 输入和驱动隔离后可接入完整自主闭环。
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_circuit_top.jpg}
+    \caption{顶层传感器、云台、显示与线束。}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_circuit_mid.jpg}
+    \caption{中层升降/转运执行与本地交互。}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.32\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_circuit_base.jpg}
+    \caption{底层 F407、电源、继电器、深度相机与驱动。}
+  \end{subfigure}
+  \caption{电路成果实物照片。系统将 RDK X5 高层决策、STM32F407 底层时序和多传感器输入集成到同一车载平台。}
+  \label{fig:actual_circuit_results}
+\end{figure}
+
+\subsubsection*{3.2.3 软件成果}
+\phantomsection
+\addcontentsline{toc}{subsubsection}{3.2.3 软件成果}
+
+软件成果包括 AI 脑材料预测平台、具身脑 Lab-FSD 世界模型、公网展示站和证据链平台。AI 脑侧接入视觉线、XRD 数值线、光谱视觉线和光谱数值线，完成配方预筛、物相/光谱解释、本地模型推理与失败回流；具身脑侧运行 SLAM、LD14、Astra 深度相机和 Lab-FSD shadow planner，输出 BEV occupancy、候选轨迹、风险等级和安全门控结果。公网展示站用于统一展示系统状态、模型能力、全球对标、FSD 世界模型、设备机群和可追溯资产。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\linewidth]{fig_actual_software_home_20260709.png}
+  \caption{软件成果界面：公网展示站总览页，集中显示双 RDK X5、双臂工位、AI 预测 API、材料证据库和状态孪生。}
+  \label{fig:actual_software_home}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_software_ai_brain_20260709.png}
+    \caption{AI 脑解释系统与 Fly-MB 材料判决界面。}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.49\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_actual_software_labfsd_20260709.png}
+    \caption{Lab-FSD v2 世界模型与安全门禁界面。}
+  \end{subfigure}
+  \caption{软件成果界面：AI 脑负责科研推理和材料判决，具身脑负责实验室世界模型与 shadow planning。}
+  \label{fig:actual_software_brain_fsd}
+\end{figure}
+
+\subsection*{3.3 特性成果}
+\phantomsection
+\addcontentsline{toc}{subsection}{3.3 特性成果}
+
+特性成果按功能完成度、量化指标和现场可展示证据列出。表~\ref{tab:feature_results} 中的“已实测”表示已在真实硬件或本地服务链路中跑通；“shadow/安全降级”表示感知、规划或动作时序在线运行，但出于初赛拍摄和硬件保护要求，不直接接管危险执行环节。
+
 \begin{table}[H]
 \centering
-\caption{初赛前已完成和可展示结果。}
-\begin{tabular}{p{4.0cm}p{4.2cm}p{6.2cm}}
+\caption{功能完成情况与性能参数汇总。}
+\label{tab:feature_results}
+\begin{tabular}{p{3.2cm}p{4.3cm}p{6.4cm}}
 \toprule
-模块 & 状态 & 证据类型 \\
+模块 & 完成状态 & 关键参数与证据 \\
 \midrule
-AI 脑五服务线 & 已完成 & 总控、XRD/PL 视觉和数值线接口与页面 \\
-材料预测 evidence & 已完成 & 同步预测、异步 verdict、trace 和报告 \\
-XRD/PL 表征分析 & 已完成 & 数值特征、视觉检测、模型判断和解释 \\
-SLAM 占据栅格 & 已跑通 & 现场地图图像和地图文件 \\
-Lab-FSD shadow & 在线运行 & BEV、future BEV、policy token、risk、safety gate \\
-arm01 取袋闭环 & 已实测 & OBSERVE、AprilTag、\texttt{station\_ok}、固定点取袋 \\
-F407 瓶子动作 & 安全降级已跑通 & 推杆、舵机、电磁铁、短步进升降诊断 \\
-公网证据平台 & 已部署 & 页面、OpenAPI、release、演示剧场和资产页 \\
+双 RDK X5 异构架构 & 已实测 & AI 脑负责材料预测、XRD/PL 分析、本地大模型推理；具身脑负责 LiDAR、深度、里程计、SLAM 与 Lab-FSD shadow planning。 \\
+AI 脑材料预测 & 已实测 & 五服务线接入；同步预测通常小于 5 s；本地 CPU LLM、BPU slot、小模型分类器和云端 R1 构成多级判决链路。 \\
+BPU 本地推理 & 已实测 & 轻量 MLP 分类器小于 2 ms；YOLO 谱图检测约 110 ms/frame；Qwen2-0.5B BPU slot forward 约 553 ms。 \\
+XRD/PL 表征分析 & 已实测 & XRD 45D/190D 数值特征、PL 80D 光谱特征、视觉检测和大模型解释可由平台统一调用并回流实验记录。 \\
+SLAM 与移动感知 & 已跑通 & LD14 提供二维障碍结构，Astra 补充近距离深度，现场 SLAM 占据栅格已生成，用于导航边界和安全门控初始化。 \\
+Lab-FSD shadow planner & 在线运行 & 输出 BEV occupancy、future BEV、policy token、候选轨迹、风险等级与 safety gate；初赛不直接接管底盘。 \\
+机械臂取袋闭环 & 已实测 & arm01 末端相机识别 AprilTag 工位标记，AI 脑返回 \texttt{station\_ok=true} 后执行固定点夹取、转运与落袋。 \\
+STM32F407 末端执行 & 安全降级已跑通 & 舵机、电推杆、电磁铁和升降机构动作时序已验证；瓶子吸附、保持、释放流程已用于初赛演示。 \\
+公网展示与证据链 & 已部署 & 展示站包含总览、亮点、答辩防御、全球对标、FSD 世界模型、机群和资产页；OpenAPI 只读证据路径 89 条。 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{视频对应实物证据}
-初赛视频对应四段实物链路：AI 脑 X5 的材料预测与表征分析界面、车载具身脑的 SLAM/LD14/Astra/Lab-FSD shadow 在线运行、arm01 的视觉门控取袋与落袋闭环、STM32F407 的瓶子吸附与释放动作时序。报告中的架构图、工作流图、完成矩阵、SLAM 地图和公网截图用于承接这些视频证据，避免只给单一画面而无法解释系统边界。
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{fig_xrd_completion_matrix.pdf}
+  \caption{完成状态矩阵：区分已实测、shadow/安全降级和后续升级项，防止把观察模式写成完全自主闭环。}
+  \label{fig:xrd_completion}
+\end{figure}
 
-\subsection{待补齐与升级项}
-后续升级项包括：升降台顶部/底部限位、驱动隔离和 ALM 输入；地图质量优化和 Nav2 目标点；双臂十阶段全闭环；更多真实实验数据回流；SmolVLA 或其他策略学习数据采集。上述内容不影响初赛展示的真实性，但不应在报告中写成已经无人值守全闭环。
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{fig_xrd_latency.pdf}
+  \caption{关键链路性能参数：材料预测、BPU/CPU 推理、机械臂视觉确认、SLAM 与公网平台接口的延迟量级。}
+  \label{fig:xrd_latency_validation}
+\end{figure}
+
+综合来看，项目已实现“材料问题输入 - AI 预测与表征解释 - 具身感知与安全规划 - 机械臂/末端执行 - 实验记录与公开证据”的端到端工程样机。当前演示采用安全员接管底盘和局部执行安全降级，核心传感、规划、材料判决、机械臂取放、F407 动作时序和证据平台均在线运行，具备继续接入限位、Nav2 目标点和更多实验回流数据的基础。

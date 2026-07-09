@@ -1,287 +1,210 @@
 {
-  "name": "public_demo_sensor_frames",
-  "description": "Non-core offline evidence data for embedded contest code package; contains no credentials, private network addresses, or hardware control endpoints.",
-  "frame_count": 40,
-  "frames": [
-    {
-      "file": "demo_sensor_frame_001.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_002.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_003.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_004.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_005.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_006.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_007.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_008.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_009.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_010.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_011.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_012.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_013.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_014.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_015.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_016.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_017.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_018.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_019.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_020.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_021.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_022.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_023.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_024.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_025.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_026.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_027.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_028.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_029.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_030.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_031.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_032.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_033.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_034.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_035.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_036.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_037.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_038.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_039.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    },
-    {
-      "file": "demo_sensor_frame_040.png",
-      "width": 900,
-      "height": 650,
-      "kind": "public_demo_sensor_frame",
-      "contains_private_endpoint": false
-    }
-  ]
+    "name":  "public_demo_sensor_frames",
+    "description":  "Non-core offline evidence data for embedded contest code package; contains no credentials, private network addresses, or hardware control endpoints.",
+    "frame_count":  29,
+    "frames":  [
+                   {
+                       "file":  "demo_sensor_frame_001.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_002.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_003.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_004.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_005.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_006.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_007.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_008.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_009.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_010.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_011.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_012.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_013.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_014.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_015.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_016.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_017.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_018.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_019.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_020.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_021.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_022.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_023.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_024.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_025.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_026.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_027.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_028.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   },
+                   {
+                       "file":  "demo_sensor_frame_029.png",
+                       "width":  900,
+                       "height":  650,
+                       "kind":  "public_demo_sensor_frame",
+                       "contains_private_endpoint":  false
+                   }
+               ]
 }
