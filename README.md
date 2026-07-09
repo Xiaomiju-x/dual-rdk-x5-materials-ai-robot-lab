@@ -1,26 +1,92 @@
-# XRD Embedded Contest Public Code Boundary
+# Material Synthesis AI Prediction and Multi-Agent Embodied Lab Assistant
 
-作品名称：基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人
+Dual RDK X5 embedded robot system for the D-Robotics embedded contest.
 
-本目录用于嵌入式竞赛初赛的重要代码提交和 GitHub 公共边界展示。它包含真实项目中的非核心代码与可审查工程资产，不包含核心材料预测引擎、模型权重、私有实验数据、部署凭据或危险硬件控制入口。
+![System architecture](report_source/generated_figures/fig_xrd_architecture_html.png)
 
-## Included
+## Overview
 
-- `public_site_static/`：公网展示站静态前端、PWA、3D 晶体展示资源和离线页面资产。
-- `public_site_tools/`：公开展示用 3D 晶体 GLB 生成脚本。
-- `public_site_reports/`：只读状态报告样例，不含账号、IP 或密钥。
-- `workstation_public/`：固定工位的碰撞互锁、mock 状态、技能记录回放和图标生成等非核心逻辑。
-- `workstation_frontend_public/`：双机械臂工位前端中的 3D 机械臂、图表、交互组件、状态 store 和部分页面源码。
-- `edge_public/`：Lab-FSD shadow planner、Fly-MB 判决脑和 F407 动作时序的公开接口/伪代码。
-- `schemas/`：只读状态接口 schema 与示例响应。
-- `report_source/`：作品设计报告 TeX 源码、HTML 图表源码、MATLAB/Python 图表生成脚本和生成图资产。
-- `public_evidence_data/`：公网截图、报告渲染页、公开晶体结构缓存和离线演示传感器帧。
+This project builds an embedded laboratory assistant for near-infrared phosphor material research. The system connects material formula screening, XRD/PL evidence analysis, embodied execution, workstation manipulation, and public evidence display into one traceable engineering loop.
 
-## Excluded
+The submitted public repository is a reviewable boundary of the real project. It shows the system design, frontend evidence platform, interface schema, report assets, non-core workstation logic, edge-facing adapters, public screenshots, public crystal cache files, and offline demo sensor frames. It does not publish private data, model weights, credentials, deployment scripts, or the core material prediction engine.
 
-- API Key、Cookie、SSH/WiFi/SSO/隧道配置、账号凭据和内网地址。
-- GGUF、LoRA、BPU bin、tokenizer、tensor 包等模型权重。
-- 私有 XRD/PL 原始数据、未发表实验记录、failure patterns 和完整训练集。
-- 核心材料预测引擎、私有规则库、部署脚本和真实硬件危险控制脚本。
+## System Design
 
-GitHub: https://github.com/Xiaomiju-x/xrd
+The complete system is organized as four cooperating layers:
+
+| Layer | Main hardware | Responsibility |
+| --- | --- | --- |
+| AI brain | RDK X5, 4K camera, audio module | Material prediction, XRD/PL analysis, local LLM reasoning, evidence logging |
+| Embodied brain | RDK X5, LD14 LiDAR, Astra depth camera, odometry | SLAM, obstacle sensing, Lab-FSD shadow planning, safety gate output |
+| Workstation | Dual myCobot 280-Pi stations, end camera, custom gripper | Visual station confirmation, bag grasping, transfer, redundant single-arm takeover |
+| Execution layer | STM32F407, servo, electric push rod, electromagnet, stepper axis | Low-level timing, bottle pickup/release, safety-degraded actuator sequence |
+
+The preliminary contest demo keeps real hardware actions inside explicit safety boundaries. The chassis is taken over by a safety operator, while SLAM, LiDAR, depth scanning, Lab-FSD shadow planning, risk output, and candidate trajectories run online. The workstation and STM32F407 layers demonstrate verified action timing and object handling without exposing uncontrolled hardware command endpoints.
+
+## Key Capabilities
+
+- Dual RDK X5 heterogeneous cooperation: one AI brain for research reasoning, one embodied brain for mobile perception and planning.
+- Four AI analysis lines: vision, XRD numerical analysis, PL vision, and PL numerical analysis.
+- Local embedded inference boundary: BPU lightweight models, CPU local LLM processes, and offline fallback paths.
+- Lab-FSD shadow planner: FSD-style BEV occupancy thinking for risk, trajectory, and safety gate output without direct chassis takeover during the preliminary demo.
+- Fixed workstation manipulation: RDK X5 visual decision, Raspberry Pi arm execution, custom end effector, and redundant single-arm pickup workflow.
+- STM32F407 actuator sequence: servo, electric push rod, electromagnet, and stepper axis timing under safety-degraded demonstration rules.
+- Public evidence platform: static frontend, OpenAPI-style schemas, report figures, rendered pages, screenshots, and reproducible review assets.
+
+## Repository Map
+
+| Path | Purpose |
+| --- | --- |
+| `public_site_static/` | Static frontend of the public evidence site, including PWA and 3D crystal display assets |
+| `public_site_reports/` | Read-only public status report samples |
+| `public_site_tools/` | Public 3D crystal asset generation scripts |
+| `workstation_public/` | Non-core workstation interlock, mock telemetry, skill replay, and icon tooling |
+| `workstation_frontend_public/` | Public workstation UI components, charts, 3D arm scenes, stores, and pages |
+| `edge_public/` | Public interface stubs for Lab-FSD shadow planning, Fly-MB decision output, and F407 timing |
+| `schemas/` | Read-only status API schema and example response |
+| `report_source/` | TeX report source, HTML figure source, MATLAB/Python figure scripts, generated figures |
+| `public_evidence_data/` | Public screenshots, rendered report pages, public crystal cache files, and offline demo sensor frames |
+| `docs/` | Public project map and open boundary notes |
+
+## Public Evidence
+
+![Evidence site](report_source/generated_figures/fig_xrd_site_home.png)
+
+The repository includes evidence assets that can be inspected without private credentials:
+
+- 19 rendered report pages in `public_evidence_data/report_rendered_pages/`.
+- Public evidence site screenshots in `public_evidence_data/site_screenshots/`.
+- Public crystal structure cache files in `public_evidence_data/crystal_public_cache/`.
+- Offline replay-style sensor frames in `public_evidence_data/demo_sensor_frames/`.
+- Static report figures generated from HTML, MATLAB, and Python sources.
+
+## How To Inspect
+
+This public repository is designed for review rather than direct robot deployment.
+
+1. Open `public_site_static/index.html` to inspect the static evidence-site UI.
+2. Read `report_source/main.tex` and `report_source/sections/` for the complete design report source.
+3. Inspect `schemas/openapi_status_schema.json` and `schemas/status_snapshot_example.json` for the public status API shape.
+4. Review `workstation_public/` and `edge_public/` for non-core logic and interface boundaries.
+5. Use the rendered pages and screenshots under `public_evidence_data/` as offline evidence.
+
+## NodeHub Information Draft
+
+- Project name: Material Synthesis AI Prediction and Multi-Agent Embodied Lab Assistant
+- Chinese project name: 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人
+- Repository: `https://github.com/Xiaomiju-x/xrd`
+- Suggested tags: RDK X5, Embedded AI, Materials AI, Laboratory Robot, SLAM, BPU, STM32F407
+- Suggested platform: RDK X5
+- Suggested category: Robot application, Embodied AI, AI vision, Research automation
+- Video: submit the Bilibili embed code after the contest video is published.
+
+## Open Boundary And License
+
+The public repository uses an Apache-2.0 open-source boundary for non-core review materials. Private laboratory assets remain excluded:
+
+- API keys, cookies, SSH/WiFi/SSO configuration, account credentials, and private network addresses.
+- GGUF, LoRA, BPU bin, tokenizer, tensor packages, and other model weights.
+- Unpublished XRD/PL raw data, private experiment logs, failure-pattern libraries, and complete training sets.
+- Core material prediction engine, private rules, deployment scripts, and executable real-hardware control scripts.
+
+See `docs/PUBLIC_BOUNDARY.md` for the detailed publication boundary.
