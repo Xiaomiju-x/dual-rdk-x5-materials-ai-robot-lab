@@ -17,19 +17,20 @@
 | 层级 | 主要硬件 | 作用 |
 | --- | --- | --- |
 | AI 脑 | RDK X5、4K 相机、音频模块 | 材料预测、XRD/PL 分析、本地大模型推理、实验证据记录 |
-| 具身脑 | RDK X5、LD14 激光雷达、Astra 深度相机、里程计 | SLAM、障碍感知、Lab-FSD shadow planning、安全门控输出 |
-| 固定工位 | 双 myCobot 280-Pi、末端相机、自研夹爪 | 工位视觉确认、粉末袋夹取转移、单臂冗余接管 |
+| 具身脑 | RDK X5、LD14 激光雷达、Astra 深度相机、里程计 | 真机取瓶/升顶/0.50m 里程计闭环/放瓶复位、SLAM 与 Lab-FSD shadow/assist |
+| 固定工位 | 双 myCobot 280-Pi、独立相机、自研夹爪 | arm01 单臂视觉冗余与投袋、arm02 并发四周期研磨 |
 | 执行层 | STM32F407、舵机、电推杆、电磁铁、步进轴 | 底层动作时序、瓶子吸附/释放、安全降级执行流程 |
 
-初赛演示把真实硬件动作限制在明确安全边界内：底盘由安全员接管，SLAM、LiDAR、深度扫描、Lab-FSD shadow 规划、风险输出和候选轨迹在线运行；固定工位和 STM32F407 层展示已验证的动作时序和物体取放能力，不暴露无约束硬件控制入口。
+截至 2026-07-20，复赛前三部分已完成真机彩排并冻结：具身脑完成取瓶、升顶、0.50m 里程计闭环直行、下降放瓶与复位；AI 脑现有 Dashboard、XRD 视觉与材料合成预测链完成平板彩排；双机械臂完成 arm01 单臂视觉冗余、投袋，以及与 arm02 并发四周期研磨。Lab-FSD 仍为 shadow/assist，不持有底盘执行权；袋状态由 X5 CPU/OpenCV 判定为权威，BPU 仅作辅助语义与真实执行证据。公网和本公开仓库均不暴露硬件控制入口。
 
 ## 核心能力
 
 - 双 RDK X5 异构协同：AI 脑负责科研推理，具身脑负责移动感知和规划。
 - 四条 AI 分析线：视觉线、XRD 数值线、光谱视觉线和光谱数值线。
 - 本地嵌入式推理边界：BPU 轻量模型、CPU 本地大模型进程和离线降级路径。
-- Lab-FSD shadow planner：借鉴 BEV occupancy 思路输出风险、候选轨迹和安全门控，初赛阶段不直接接管底盘。
-- 固定工位取放：RDK X5 做视觉判决，树莓派机械臂端做运动执行，自研末端执行器适配实验材料。
+- 具身真机闭环：取瓶、升顶、0.50m 里程计闭环直行、下降放瓶与复位已经现场验证。
+- Lab-FSD shadow planner：借鉴 BEV occupancy 思路输出风险、候选轨迹和安全门控，不直接接管底盘。
+- 双机械臂复赛协同：arm01 完成视觉冗余与投袋，arm02 完成并发四周期研磨；CPU/OpenCV 为袋状态权威，BPU 仅辅助。
 - STM32F407 动作时序：舵机、电推杆、电磁铁和步进轴在安全降级策略下完成末端执行演示。
 - 公网证据平台：静态前端、接口 schema、报告图表、渲染页、截图和可复核资料统一组织。
 
@@ -64,7 +65,7 @@
 
 该公开仓库用于设计展示和评审复核，不用于直接部署到真实机器人。
 
-1. 打开 `public_site_static/index.html` 查看静态证据站界面。
+1. 打开 `public_site_static/index.html` 查看归档的离线静态证据站；当前公网只读门户见 `https://xiaomiju.xyz`。
 2. 阅读 `report_source/main.tex` 和 `report_source/sections/` 查看完整设计报告源码。
 3. 查看 `schemas/openapi_status_schema.json` 和 `schemas/status_snapshot_example.json` 理解公开状态接口结构。
 4. 查看 `workstation_public/` 和 `edge_public/` 理解非核心逻辑与接口边界。
@@ -73,7 +74,7 @@
 ## NodeHub 填写草稿
 
 - 项目名称：基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人
-- 项目简介：面向材料研发场景的双 RDK X5 嵌入式科研自动化系统，集成材料预测、XRD/PL 分析、SLAM 与 Lab-FSD shadow 规划、固定工位取放、STM32F407 执行层和公网证据平台。
+- 项目简介：面向材料研发场景的双 RDK X5 嵌入式科研自动化系统，集成材料预测、XRD/PL 分析、具身真机闭环、Lab-FSD shadow/assist、双机械臂复赛协同、STM32F407 执行层和公网只读证据平台。
 - 代码仓库：`https://github.com/Xiaomiju-x/xrd`
 - 建议标签：RDK X5、嵌入式 AI、材料智能、实验室机器人、SLAM、BPU、STM32F407
 - 建议运行平台：RDK X5
