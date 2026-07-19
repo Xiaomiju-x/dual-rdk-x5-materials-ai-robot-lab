@@ -220,7 +220,7 @@ const accentColor = computed(() => (arm.value === 'arm01' ? '#d97706' : '#2563eb
                 <line x1="0" y1="0" x2="0" :y2="-20" stroke="#10b981" stroke-width="2" />
               </g>
             </svg>
-            <div class="cam-meta mono">/dev/video0 · 1280×720@30 · {{ telemetry.mode }}</div>
+            <div class="cam-meta mono">公开相机摘要 · {{ telemetry.mode }}</div>
           </div>
         </div>
         <div class="cal-tag-pose mono">

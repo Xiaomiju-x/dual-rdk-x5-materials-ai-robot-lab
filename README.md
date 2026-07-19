@@ -17,19 +17,20 @@ The complete system is organized as four cooperating layers:
 | Layer | Main hardware | Responsibility |
 | --- | --- | --- |
 | AI brain | RDK X5, 4K camera, audio module | Material prediction, XRD/PL analysis, local LLM reasoning, evidence logging |
-| Embodied brain | RDK X5, LD14 LiDAR, Astra depth camera, odometry | SLAM, obstacle sensing, Lab-FSD shadow planning, safety gate output |
-| Workstation | Dual myCobot 280-Pi stations, end camera, custom gripper | Visual station confirmation, bag grasping, transfer, redundant single-arm takeover |
+| Embodied brain | RDK X5, LD14 LiDAR, Astra depth camera, odometry | Verified pickup/lift/0.50 m odometry loop/release/reset, SLAM, and Lab-FSD shadow/assist |
+| Workstation | Dual myCobot 280-Pi stations, independent cameras, custom gripper | arm01 visual redundancy and bag drop, arm02 concurrent four-cycle grinding |
 | Execution layer | STM32F407, servo, electric push rod, electromagnet, stepper axis | Low-level timing, bottle pickup/release, safety-degraded actuator sequence |
 
-The preliminary contest demo keeps real hardware actions inside explicit safety boundaries. The chassis is taken over by a safety operator, while SLAM, LiDAR, depth scanning, Lab-FSD shadow planning, risk output, and candidate trajectories run online. The workstation and STM32F407 layers demonstrate verified action timing and object handling without exposing uncontrolled hardware command endpoints.
+As of July 20, 2026, the first three finals segments have been rehearsed on hardware and frozen. The embodied brain completed bottle pickup, lift, a 0.50 m odometry-closed straight drive, bottle release, and reset. The existing AI Dashboard, XRD vision, and material-synthesis prediction flow completed a tablet rehearsal. The dual-arm station completed arm01 visual redundancy and bag drop together with arm02 concurrent four-cycle grinding. Lab-FSD remains shadow/assist and has no chassis authority. X5 CPU/OpenCV is authoritative for bag state; BPU output is assist/evidence only. Neither the public portal nor this repository exposes hardware actuation.
 
 ## Key Capabilities
 
 - Dual RDK X5 heterogeneous cooperation: one AI brain for research reasoning, one embodied brain for mobile perception and planning.
 - Four AI analysis lines: vision, XRD numerical analysis, PL vision, and PL numerical analysis.
 - Local embedded inference boundary: BPU lightweight models, CPU local LLM processes, and offline fallback paths.
-- Lab-FSD shadow planner: FSD-style BEV occupancy thinking for risk, trajectory, and safety gate output without direct chassis takeover during the preliminary demo.
-- Fixed workstation manipulation: RDK X5 visual decision, Raspberry Pi arm execution, custom end effector, and redundant single-arm pickup workflow.
+- Verified embodied hardware loop: pickup, lift, 0.50 m odometry-closed drive, release, and reset.
+- Lab-FSD shadow planner: FSD-style BEV occupancy reasoning for risk, trajectory, and safety-gate output without direct chassis takeover.
+- Finals dual-arm collaboration: arm01 visual redundancy and bag drop with arm02 concurrent four-cycle grinding; CPU/OpenCV is authoritative and BPU remains assist-only.
 - STM32F407 actuator sequence: servo, electric push rod, electromagnet, and stepper axis timing under safety-degraded demonstration rules.
 - Public evidence platform: static frontend, OpenAPI-style schemas, report figures, rendered pages, screenshots, and reproducible review assets.
 
@@ -64,7 +65,7 @@ The repository includes evidence assets that can be inspected without private cr
 
 This public repository is designed for review rather than direct robot deployment.
 
-1. Open `public_site_static/index.html` to inspect the static evidence-site UI.
+1. Open `public_site_static/index.html` for the archived offline evidence-site snapshot; the current read-only portal is `https://xiaomiju.xyz`.
 2. Read `report_source/main.tex` and `report_source/sections/` for the complete design report source.
 3. Inspect `schemas/openapi_status_schema.json` and `schemas/status_snapshot_example.json` for the public status API shape.
 4. Review `workstation_public/` and `edge_public/` for non-core logic and interface boundaries.

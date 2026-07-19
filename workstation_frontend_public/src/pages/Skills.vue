@@ -1,7 +1,6 @@
 <script setup lang="ts">
-// Skills · 技能库 — 拖动示教录制 / 回放 / lerobot 导出 (第 4 期 #1)
-// 后端: /api/skills* (skills.py). 真机录制 = release_all_servos 自由拖动 10Hz 采样;
-// mock 模式合成轨迹 (note 标 synthetic), 镜像可演示.
+// Public review build: synthetic recording, replay preview, and lerobot-shaped export.
+// No physical robot command is present in this repository.
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import GlowCard from '@/components/fx/GlowCard.vue'
 import MagneticBtn from '@/components/fx/MagneticBtn.vue'
@@ -35,9 +34,9 @@ async function startRecord() {
   if (!recName.value.trim()) { msg.value = '先给技能起个名'; return }
   const r = await fetch('/api/skills/record', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: recName.value.trim(), arm: recArm.value }),
+    body: JSON.stringify({ name: recName.value.trim(), arm: recArm.value, mock: true }),
   }).then((x) => x.json())
-  msg.value = r.ok ? '🔴 录制中 — 拖动机械臂示教, 完成点停止' : `✗ ${r.error}`
+  msg.value = r.ok ? '🔴 正在生成公开合成轨迹，完成后点停止' : `✗ ${r.error}`
   poll()
 }
 async function stopRecord() {
@@ -48,7 +47,7 @@ async function stopRecord() {
 async function replay(name: string) {
   const r = await fetch(`/api/skills/${encodeURIComponent(name)}/replay`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ speed: replaySpeed.value }),
+    body: JSON.stringify({ speed: replaySpeed.value, mock: true }),
   }).then((x) => x.json())
   msg.value = r.ok ? `▶ 回放 ${name} (${r.n_waypoints} waypoint, 每点过互锁预演)` : `✗ ${r.error}`
 }
@@ -93,8 +92,8 @@ onUnmounted(() => { if (timer !== null) window.clearInterval(timer) })
       <div>
         <h1 class="page-title">🎓 Skills · 技能库</h1>
         <p class="sub">
-          拖动示教 (release_all_servos 自由拖) → 10Hz 录关节轨迹 → 命名入库 →
-          waypoint 回放 (逐点过防互撞 ghost 预演) → 一键导出 lerobot episode 给 SmolVLA 攒数据
+          公开合成轨迹 → 10Hz 关节序列 → 命名入库 →
+          waypoint 可视化回放 → 导出 lerobot 形状的离线样例
         </p>
       </div>
       <span v-if="session?.error" class="chip chip-err">{{ session.error }}</span>
@@ -119,8 +118,8 @@ onUnmounted(() => { if (timer !== null) window.clearInterval(timer) })
           </div>
         </div>
         <p class="hint">
-          真机: 录制时舵机释放 (可徒手拖动), 停止后自动 power_on 回刚体。
-          mock/镜像: 合成轨迹, note 标 synthetic — 不冒充真示教。
+          公开仓库只运行 mock：轨迹标记 synthetic，不连接串口、设备或机械臂。
+          复赛真机结果只作为已验证证据叙述，不由本页面复现控制。
         </p>
         <div v-if="msg" class="msg mono">{{ msg }}</div>
       </GlowCard>
@@ -141,8 +140,8 @@ onUnmounted(() => { if (timer !== null) window.clearInterval(timer) })
           </div>
         </div>
         <p class="hint">
-          回放安全链: 帧序列降采样 (相邻 >2° 才保留) → 每个 waypoint 下发前
-          interlock ghost 预演, 预测双臂最小距 &lt;60mm 即拒发并停回放。
+          公开回放仅驱动浏览器预览和进度条，不下发 waypoint。
+          生产互锁与真实执行代码不在公开仓库内。
         </p>
       </GlowCard>
     </div>
@@ -181,7 +180,7 @@ onUnmounted(() => { if (timer !== null) window.clearInterval(timer) })
             <div class="pv-title">🌀 末端轨迹预览 · {{ preview.name }}</div>
             <div class="pv-sub mono">
               {{ preview.arm }} · {{ preview.nWp }} waypoint ·
-              真 myCobot 280 DH 正运动学 (与互锁同表) · 单位 mm→m
+              myCobot 280 DH 几何预览 · 单位 mm→m · synthetic
             </div>
           </div>
           <button class="pv-x" @click="closePreview">✕</button>
@@ -214,8 +213,8 @@ onUnmounted(() => { if (timer !== null) window.clearInterval(timer) })
           </div>
         </div>
         <p class="pv-note">
-          轨迹由关节角 waypoint 经真实 DH 正运动学逐段插值算出末端走线 — 即真机回放时夹爪中心实际经过的路径。
-          桥/真机离线时若为 mock 技能, note 已标 synthetic。
+          轨迹由合成关节角 waypoint 经 DH 正运动学逐段插值生成，仅用于公开可视化复核。
+          note 始终标记 synthetic，不代表真机遥测或可执行命令。
         </p>
       </div>
     </div>
