@@ -11,7 +11,7 @@ import stat
 import subprocess
 import threading
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from types import MappingProxyType
@@ -327,7 +327,7 @@ class CapabilityReadResult:
     reason_code: str
     manifest: CapabilityManifest | None = None
     snapshot_sha256: str | None = None
-    details: Mapping[str, Any] = MappingProxyType({})
+    details: Mapping[str, Any] = field(default_factory=lambda: MappingProxyType({}))
     network_touched: bool = False
     hardware_touched: bool = False
     execution_authority: bool = False

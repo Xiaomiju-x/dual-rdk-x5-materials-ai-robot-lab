@@ -127,6 +127,8 @@ class ReleaseMetadataTests(unittest.TestCase):
             seen.add(relative_path)
             candidate = REPOSITORY_ROOT / relative_path
             self.assertTrue(candidate.is_file(), relative_path)
+            if candidate.suffix.lower() in {".json", ".txt", ".yml"}:
+                self.assertNotIn(b"\r\n", candidate.read_bytes(), relative_path)
             self.assertEqual(expected, hashlib.sha256(candidate.read_bytes()).hexdigest(), relative_path)
 
 

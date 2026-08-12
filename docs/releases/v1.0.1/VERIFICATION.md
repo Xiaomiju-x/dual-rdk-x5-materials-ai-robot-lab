@@ -43,7 +43,7 @@ pnpm run build
 | 奖项展示与单一事实源 | `PASS` | renderer check 退出 0 |
 | 仓内 Markdown 链接 | `PASS` | 106 个 Markdown 文件、294 个链接、0 findings |
 | 确定性 SPDX SBOM | `PASS` | SPDX 2.3；579 packages / 6 files / 1108 relationships；顶层包版本 `1.0.1` |
-| 严格公开边界审计 | `PASS` | 2681 files / 211,383,347 bytes / 0 findings |
+| 严格公开边界审计 | `PASS` | 2681 files / 211,383,411 bytes / 0 findings |
 | 媒体完整性与隐私元数据 | `PASS` | 20 个清单条目；6 张最新照片、3 段 MP4、3 个 GIF；0 findings |
 | 零硬件单元测试 | `PASS` | 56/56 tests passed |
 | 确定性离线 demo | `PASS` | `OFFLINE_SYNTHETIC_NO_ACTUATION`；全部副作用字段为 `false` |
