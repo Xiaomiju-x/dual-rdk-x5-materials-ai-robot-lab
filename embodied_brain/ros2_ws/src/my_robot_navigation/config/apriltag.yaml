@@ -1,0 +1,33 @@
+# apriltag.yaml — christianrauch/apriltag_ros 节点参数
+#
+# 调研结论 (2026-04-26):
+#   X5 4 核 ARM Cortex-A55 跑 720p decimate=2 threads=4 → 12-20ms/frame, 稳进 30Hz
+#   不上 BPU (传统 CV 算法不匹配)
+#
+# 输入: /pt_camera/image_raw (K3 USB cam) + /pt_camera/camera_info (标定文件)
+# 输出: /detections (AprilTagDetectionArray) + /tf (各 tag 6D pose)
+
+apriltag:
+  ros__parameters:
+    # 家族: tag36h11 抗遮挡 + 子像素 + 位错纠正, 工业首选
+    family: 36h11
+    size: 0.030          # 30mm tag (瓶顶贴纸)
+    z_up: true           # tag 平面法向量朝 +z (升降台俯视)
+
+    # 性能: 1080p 太重, 必须 decimate=2 降到 540p; 4 核全开
+    max_hamming: 0
+    detector:
+      threads: 4
+      decimate: 2.0
+      blur: 0.0
+      refine_edges: true   # 子像素精修角点
+      sharpening: 0.25
+      debug: false
+
+    # tag ID → 物体名称映射 (跟 lab_locations.yaml shelf 的 slot tag_id 对齐)
+    tag:
+      ids: [11, 12, 13, 21, 22, 23, 31, 32, 33]
+      frames: [shelf_1_slot_1, shelf_1_slot_2, shelf_1_slot_3,
+               shelf_1_slot_4, shelf_1_slot_5, shelf_1_slot_6,
+               shelf_2_slot_1, shelf_2_slot_2, shelf_2_slot_3]
+      sizes: [0.030, 0.030, 0.030, 0.030, 0.030, 0.030, 0.030, 0.030, 0.030]

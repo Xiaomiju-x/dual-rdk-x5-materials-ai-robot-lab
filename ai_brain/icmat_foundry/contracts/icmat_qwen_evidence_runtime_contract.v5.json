@@ -1,0 +1,91 @@
+{
+  "schema": "icmat_qwen_evidence_runtime_contract.v5",
+  "product_id": "ICMat-Qwen-0.5B",
+  "candidate_line": "X5-ICMat Foundry",
+  "base_model": {
+    "repo_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "license": "Apache-2.0",
+    "model_tree_sha256": "830d55ed5d689ce8bb42c3b214e8af8f55cb5178e671f7ae46172dc47e5443e7"
+  },
+  "training_contract": {
+    "dataset_schema": "icmat_qwen05b_evidence_sft.v5",
+    "dataset_manifest_sha256": "cfc91fc0c05af866df9c516706d59c7e81adf9b11abb9d1b9f4c53cc54830997",
+    "source_isolation_unit": "DOI/source_family",
+    "assistant_only_loss": true,
+    "ground_truth_policy": "deterministic extraction from licensed evidence; no API or teacher output is ground truth",
+    "allowed_training_splits": [
+      "train",
+      "validation",
+      "calibration"
+    ],
+    "blind_test_policy": "sealed and forbidden until checkpoint selection is frozen and separately authorized"
+  },
+  "input_contract": {
+    "message_roles_visible_to_model": [
+      "system",
+      "user"
+    ],
+    "assistant_target_visible_to_model": false,
+    "required_user_sections": [
+      "TASK",
+      "QUESTION",
+      "EVIDENCE",
+      "RESPONSE_CONTRACT"
+    ],
+    "evidence_source": "researcher-selected licensed ICMat RAG namespace",
+    "local_measurement_boundary": "published literature must remain published_literature_not_local_measurement unless a separately authenticated local instrument record is supplied",
+    "hidden_task_router": false,
+    "researcher_explicit_model_and_task_selection": true
+  },
+  "output_contract": {
+    "schema": "icmat_student_answer.v5",
+    "exact_keys": [
+      "schema",
+      "decision",
+      "task",
+      "claim",
+      "verdict",
+      "evidence_ids",
+      "provenance"
+    ],
+    "allowed_decisions": [
+      "ANSWER",
+      "REFUSE"
+    ],
+    "answer_rule": "ANSWER requires a non-empty evidence-bounded claim, SUPPORTED verdict, at least one evidence ID, and exact source provenance",
+    "refuse_rule": "REFUSE requires an empty claim, REFUSED verdict, empty evidence_ids, and preserved source provenance",
+    "provenance_keys": [
+      "source_id",
+      "doi",
+      "source_title",
+      "license_id",
+      "measurement_status"
+    ],
+    "prose_or_markdown_outside_json_allowed": false
+  },
+  "runtime_contract": {
+    "primary_x5_backend": "CPU llama.cpp GGUF Q4_K_M one-shot/manual-load candidate",
+    "bpu_claim_for_this_model": false,
+    "default_enabled": false,
+    "autostart": false,
+    "production_dependency": false,
+    "dashboard_integration": false,
+    "existing_cpu_llm_replacement": false,
+    "existing_bpu_slot_replacement": false,
+    "remote_path_template": "~/icmat_foundry_finals/releases/{content_id}",
+    "activation_policy": "inactive content-addressed deployment only"
+  },
+  "promotion_gates": {
+    "schema_valid_rate": 1.0,
+    "refusal_f1_min": 0.95,
+    "unsupported_wrong_answer_rate_max": 0.01,
+    "strict_exact_improvement_ci95_lower_gt_zero": true,
+    "x5_cpu_runtime_required": true,
+    "five_port_pid_non_regression_required": true,
+    "camera_ownership_non_regression_required": true,
+    "memory_recovery_required": true
+  },
+  "production_integration_allowed": false,
+  "claim_boundary": "This contract defines a manually selected, evidence-bounded ICMat model-bank candidate. It does not claim production integration, local experimental ground truth, BPU execution for this LLM, or replacement of the frozen competition services."
+}

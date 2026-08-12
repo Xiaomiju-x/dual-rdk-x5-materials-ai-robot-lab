@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    升降台. STM32F407 + 步进电机驱动, 带限位开关 home.
+    沿立柱 (pillar_link) 的 z 轴上下移动. 升降范围占位 0~0.6m.
+
+    lift_link 是托盘, 末端伸出去 0.20m, 上面挂 200W USB 摄像头 + 电磁铁.
+
+    关节 lift_joint 是 prismatic (沿 z 平移), Nav2 不直接控, 由 my_robot_agents/pickup_agent 控制.
+  -->
+
+  <xacro:macro name="lift_stage_xacro" params="
+      parent
+      arm_length:=0.20
+      arm_width:=0.10
+      arm_thickness:=0.02
+      max_travel:=0.60
+      mount_xyz:='0 0 0.20'">
+
+    <!-- 升降臂 link -->
+    <link name="lift_link">
+      <visual>
+        <!-- 视觉中心放在臂的伸出方向 (沿 base_link x 正方向) -->
+        <origin xyz="${arm_length/2} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${arm_length} ${arm_width} ${arm_thickness}"/>
+        </geometry>
+        <material name="aluminum"/>
+      </visual>
+      <collision>
+        <origin xyz="${arm_length/2} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${arm_length} ${arm_width} ${arm_thickness}"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="0.3" x="${arm_length}" y="${arm_width}" z="${arm_thickness}"/>
+    </link>
+
+    <!-- 沿立柱滑动 (prismatic axis z) -->
+    <joint name="lift_joint" type="prismatic">
+      <parent link="${parent}"/>
+      <child link="lift_link"/>
+      <origin xyz="${mount_xyz}" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit
+        lower="0.0"
+        upper="${max_travel}"
+        effort="50.0"
+        velocity="0.05"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

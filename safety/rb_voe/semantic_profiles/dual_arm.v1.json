@@ -1,0 +1,25 @@
+{
+  "schema_version": "xrd-rb-voe-semantic-profile-v1",
+  "profile_id": "dual_arm.v1",
+  "subsystem": "dual_arm",
+  "manifest_schema_version": "xrd-rb-voe-dual-arm-capability-v1",
+  "read_mode": "LIVE_READONLY",
+  "maturity": "SHADOW_VALIDATED",
+  "capabilities": [
+    "dual_arm.station_identity.live",
+    "dual_arm.motion_surface.closed_readonly",
+    "dual_arm.arm01.finals_artifact_bundle.readonly",
+    "dual_arm.arm02.finals_artifact_bundle.readonly",
+    "dual_arm.overhead.vision_gate.run_bound_actual"
+  ],
+  "required_backends": {
+    "dual_arm.station_identity.live": "dual_pi.strict_readonly_probe.station_identity",
+    "dual_arm.motion_surface.closed_readonly": "dual_pi.strict_readonly_probe.motion_surface_closed",
+    "dual_arm.arm01.finals_artifact_bundle.readonly": "dual_pi.finals_artifact_bundle.arm01.readonly",
+    "dual_arm.arm02.finals_artifact_bundle.readonly": "dual_pi.finals_artifact_bundle.arm02.readonly",
+    "dual_arm.overhead.vision_gate.run_bound_actual": "arm02.v4l2.capture_to_ai_x5.cpu_vision.run_bound_actual"
+  },
+  "execution_authority": false,
+  "r3_permit_ready": false,
+  "profile_sha256": "18ec8e10b9cf13bc4075f6873061d338020f39bfbb9ad0b509e6b444b657d538"
+}

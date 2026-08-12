@@ -1,0 +1,35 @@
+{
+  "schema_version": "x5-embodied-cortex-runtime-budget/1.0",
+  "values_are_design_gates_not_measurements": true,
+  "embodied_x5": {
+    "v5r1_rate_hz": 5.0,
+    "bpu_latency_p95_ms_max": 10.0,
+    "bpu_latency_p99_ms_max": 15.0,
+    "added_pss_mib_target": 200.0,
+    "added_pss_mib_hard_max": 300.0,
+    "bpu_ion_mib_target": 48.0,
+    "bpu_ion_mib_hard_max": 96.0,
+    "mem_available_mib_min": 2560.0,
+    "memory_recovery_seconds_max": 5.0,
+    "memory_recovery_delta_mib_max": 8.0,
+    "load_unload_cycles": 30,
+    "frozen_topic_regression_percent_max": 5.0,
+    "swap_growth_allowed": false,
+    "thermal_throttling_allowed": false
+  },
+  "ai_x5": {
+    "crossbev_rate_hz_target": 5.0,
+    "newest_only_queue_depth": 1,
+    "capture_to_diagnostic_p95_ms_max": 250.0,
+    "live_expiry_ms": 500.0,
+    "raw_4k_cross_machine_stream_allowed": false,
+    "camera_lease_must_release": true
+  },
+  "scheduling": {
+    "simultaneous_resident_models_default": false,
+    "single_bpu_core_is_serial": true,
+    "priority_does_not_increase_throughput": true,
+    "priority_255_allowed": false,
+    "phase_aware_manual_loading_required": true
+  }
+}

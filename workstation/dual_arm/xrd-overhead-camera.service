@@ -1,0 +1,21 @@
+[Unit]
+Description=XRD fixed overhead camera only service
+After=network-online.target
+Wants=network-online.target
+Conflicts=xrd-workcockpit-arm02.service
+
+[Service]
+Type=simple
+User=er
+WorkingDirectory=/home/rdk/dual_arm
+Environment=XRD_OVERHEAD_CAMERA=/dev/video0
+Environment=XRD_OVERHEAD_CAMERA_PORT=8892
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /home/rdk/dual_arm/overhead_camera_service.py
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

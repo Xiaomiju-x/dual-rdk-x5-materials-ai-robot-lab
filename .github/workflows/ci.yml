@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publication-and-offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+      - name: Verify generated award blocks
+        run: python -B tools/publication/render_award_status.py --check
+      - name: Verify deterministic SPDX SBOM
+        run: python -B tools/publication/generate_sbom.py --check
+      - name: Check repository-local Markdown links
+        run: python -B tools/publication/check_markdown_links.py . --format text
+      - name: Audit the public release boundary
+        run: python -B tools/publication/audit_release.py . --strict --format text
+      - name: Run hardware-free tests
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -B -m unittest discover -s tests_public -p "test_*.py" -v
+      - name: Exercise the deterministic offline demo
+        run: python -B examples/offline_demo/run_demo.py > offline-receipt.json
+      - name: Upload offline receipt
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: offline-inspection-receipt
+          path: offline-receipt.json
+          if-no-files-found: error
+
+  workstation-frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: workstation_frontend_public
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: workstation_frontend_public/package-lock.json
+      - run: npm ci
+      - run: npm run build

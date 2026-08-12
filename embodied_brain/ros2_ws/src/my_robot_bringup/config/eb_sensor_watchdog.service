@@ -1,0 +1,22 @@
+[Unit]
+Description=embodied_brain 传感器流断供自愈看门狗 (lidar/Astra 僵死 → pkill → respawn)
+After=embodied_brain.service
+Wants=embodied_brain.service
+
+[Service]
+Type=simple
+User=sunrise
+Group=sunrise
+
+ExecStart=/bin/bash -lc 'source /opt/ros/humble/setup.bash && \
+    exec python3 /home/rdk/bin/sensor_watchdog.py'
+
+Restart=always
+RestartSec=10
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=eb_sensor_watchdog
+
+[Install]
+WantedBy=multi-user.target

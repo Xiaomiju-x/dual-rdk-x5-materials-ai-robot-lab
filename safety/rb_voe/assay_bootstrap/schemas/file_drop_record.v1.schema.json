@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/assay-bootstrap/file-drop-record.v1.schema.json",
+  "title": "Supervised XRD/PL file-drop intake record v1",
+  "description": "Future intake template only. Validation does not grant instrument or execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "modality",
+    "sample",
+    "holder",
+    "acquisition",
+    "raw",
+    "qualification",
+    "execution_authority",
+    "physical_denominator_increment"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-assay-file-drop-record-v1"},
+    "profile_id": {"enum": ["HITL_FILE_DROP_XRD", "HITL_FILE_DROP_PL"]},
+    "modality": {"enum": ["XRD", "PL"]},
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sample_id", "batch_id", "aliquot_id", "parent_block_id"],
+      "properties": {
+        "sample_id": {"$ref": "#/$defs/id"},
+        "batch_id": {"$ref": "#/$defs/id"},
+        "aliquot_id": {"$ref": "#/$defs/id"},
+        "parent_block_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "holder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "holder_id",
+        "presence_evidence_sha256",
+        "orientation_evidence_sha256",
+        "load_operator_id",
+        "loaded_at_ms"
+      ],
+      "properties": {
+        "holder_id": {"$ref": "#/$defs/id"},
+        "presence_evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "orientation_evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "load_operator_id": {"$ref": "#/$defs/id"},
+        "loaded_at_ms": {"type": "integer", "minimum": 0}
+      }
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instrument_id",
+        "instrument_serial",
+        "method_id",
+        "method_sha256",
+        "calibration_id",
+        "calibration_sha256",
+        "acquisition_id",
+        "trigger_operator_id",
+        "started_at_ms",
+        "ended_at_ms"
+      ],
+      "properties": {
+        "instrument_id": {"$ref": "#/$defs/id"},
+        "instrument_serial": {"$ref": "#/$defs/id"},
+        "method_id": {"$ref": "#/$defs/id"},
+        "method_sha256": {"$ref": "#/$defs/sha256"},
+        "calibration_id": {"$ref": "#/$defs/id"},
+        "calibration_sha256": {"$ref": "#/$defs/sha256"},
+        "acquisition_id": {"$ref": "#/$defs/id"},
+        "trigger_operator_id": {"$ref": "#/$defs/id"},
+        "started_at_ms": {"type": "integer", "minimum": 0},
+        "ended_at_ms": {"type": "integer", "minimum": 0}
+      }
+    },
+    "raw": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spool_relative_path",
+        "byte_count",
+        "sha256",
+        "exported_at_ms",
+        "immutable",
+        "overwrite_detected",
+        "custody_root_sha256"
+      ],
+      "properties": {
+        "spool_relative_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^(?![A-Za-z]:)(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*:)(?!\\s)(?!.*\\s$).+$"
+        },
+        "byte_count": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "exported_at_ms": {"type": "integer", "minimum": 0},
+        "immutable": {"const": true},
+        "overwrite_detected": {"const": false},
+        "custody_root_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "analyzer_id",
+        "analyzer_release_sha256",
+        "closure_predicate",
+        "truth_uncertainty",
+        "blind_locked",
+        "qualified_at_ms"
+      ],
+      "properties": {
+        "analyzer_id": {"$ref": "#/$defs/id"},
+        "analyzer_release_sha256": {"$ref": "#/$defs/sha256"},
+        "closure_predicate": {"type": "string", "minLength": 1, "maxLength": 512},
+        "truth_uncertainty": {"type": "string", "minLength": 1, "maxLength": 512},
+        "blind_locked": {"const": true},
+        "qualified_at_ms": {"type": "integer", "minimum": 0}
+      }
+    },
+    "execution_authority": {"const": false},
+    "physical_denominator_increment": {"const": 0}
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S(?:.{0,126}\\S)?$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"profile_id": {"const": "HITL_FILE_DROP_XRD"}}},
+      "then": {"properties": {"modality": {"const": "XRD"}}},
+      "else": {"properties": {"modality": {"const": "PL"}}}
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+lab_fsd_bev_shadow_planner:
+  ros__parameters:
+    grid_size: 48
+    resolution_m: 0.10
+    max_range_m: 4.5
+    inflation_cells: 2
+    publish_rate_hz: 2.0
+    scan_topic: "/scan"
+    depth_scan_topic: "/scan_depth"
+    odom_topic: "/odom"
+    goal_topic: "/goal_pose"
+    vx_shadow_mps: 0.18
+    horizon_s: 2.4
+    # Optional learned trajectory prior. Empty means deterministic heuristic shadow model.
+    model_bin: ""
+    # Optional BPU autoencoder anomaly scorer. Publishes diagnostics only.
+    anomaly_model_bin: "/home/rdk/models/lab_fsd/lab_anomaly_autoencoder.bin"
+    # Optional AI-brain tower-camera semantic BEV. LiDAR/depth remain authoritative.
+    use_vision_bev: true
+    vision_bev_topic: "/lab_fsd/vision_bev"
+    vision_objects_topic: "/lab_fsd/vision_objects"
+    vision_bev_ttl_s: 4.0
+    # Lab-FSD v2 final FSD-inspired stack:
+    # temporal BEV memory + future occupancy + probabilistic shadow policy.
+    fsd_v2_enabled: true
+    # Lab-FSD v3 keeps the same shadow-only safety boundary, adding input
+    # freshness states, future risk, and arc-token confidence diagnostics.
+    fsd_v3_enabled: true
+    temporal_history_len: 5
+    future_horizons: 3
+    safety_min_confidence: 0.12
+    safety_max_risk: 0.82
+    sensor_stale_after_s: 1.5
+    sensor_offline_after_s: 5.0
+    odom_stale_after_s: 2.5
+    odom_offline_after_s: 8.0
+    future_risk_alert: 0.82
+    # Optional tiny occupancy-risk BPU head. When present, its 9-token prior is
+    # fused with CPU arc-token scores as tiny_waypoint_policy_prior. It remains
+    # shadow diagnostic only; CPU/Nav2/F407 are still the safety fallback.
+    use_occ_risk_bpu: true
+    occ_risk_model_bin: "/home/rdk/models/lab_fsd/lab_fsd_tiny_occ_risk.bin"
+
+lab_fsd_vision_bev_bridge:
+  ros__parameters:
+    enabled: true
+    ai_brain_url: "http://192.0.2.103:8888"
+    fetch_rate_hz: 0.35
+    timeout_s: 1.6
+    # false = reuse last/fallback semantic snapshot; true = request a fresh IMX415 frame.
+    # Keep false for continuous shadow mode so XRD/PL camera use is never blocked.
+    capture: false
+    topic_bev: "/lab_fsd/vision_bev"
+    topic_objects: "/lab_fsd/vision_objects"
+    topic_risk: "/lab_fsd/vision_risk"

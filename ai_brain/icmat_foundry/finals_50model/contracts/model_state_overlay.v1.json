@@ -1,0 +1,105 @@
+{
+  "schema": "x5_icmat_foundry.model_state_overlay.v1",
+  "status": "FAST_TRACK_MATERIAL_BANK_TRAINED",
+  "registry_path": "icmat_foundry/finals_50model/contracts/model_registry.v3.json",
+  "reuse_receipt_path": "icmat_foundry/finals_50model/evidence/phase1/reuse_acceptance.v1.json",
+  "reuse_receipt_sha256": "e33c2376eba4eae78641dee1a846fc63998a73fab5ed7395100e0dd1327dbdb0",
+  "models": [
+    {
+      "inventory_id": "F-LLM-01",
+      "state": "PC_RUNNABLE_Q4_GGUF_X5_PENDING",
+      "model_sha256": "6c0be1a47b50823dcf838951f5784932bbfbf6d7cc48c8797dbbed132d9aec9b",
+      "bpu_bin_sha256": null,
+      "gguf_sha256": "6c0be1a47b50823dcf838951f5784932bbfbf6d7cc48c8797dbbed132d9aec9b",
+      "receipt_path": "icmat_foundry/finals_50model/evidence/llm/F-LLM-01.gguf_receipt.v1.json",
+      "receipt_sha256": "7be967f4f3320922dc8ba3d3101531080c064b6721e16dbec61039ad1e219f6c"
+    },
+    {
+      "inventory_id": "F-MAT-01",
+      "state": "BPU_COMPILED_BOARD_PENDING",
+      "model_sha256": "2e32271f03c56833288628d5e5458c6b17a961b4b7004e2aa572e645c213a2ff",
+      "bpu_bin_sha256": "e71d263a9a0dbcf88268065353a17959f942f70789a2541910ca56e92bcd566f"
+    },
+    {
+      "inventory_id": "F-MAT-02",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "717d9cbc5b5beeebd13e6f7df657b4405b6212b66a707a57ef56657442dd561e",
+      "onnx_sha256": "6cf6ebceb4c4a4d31c3525dd4b2a4ef947cbca5b0550db093ce03ba660c20ac0",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-02.receipt.v1.json",
+      "receipt_sha256": "c89fe449553b6dfaed8f75056cbd333adbde77b8383b6ff752d194caab517525"
+    },
+    {
+      "inventory_id": "F-MAT-03",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "4e9c8b0319cb4bf102f8e78fbc89c0c683e5163e862fffa01d9f0be385c8f6cf",
+      "onnx_sha256": "69db50684cdbcbe4cae926858da711443c4cb2784cd49718654ebca9165ab1a3",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-03.receipt.v1.json",
+      "receipt_sha256": "5354b7dd65d9dd788add779d8c5dc7c01b9e1bb23e27286a2120225e857d88a0"
+    },
+    {
+      "inventory_id": "F-MAT-04",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "e1df57c04ffc7a3b62bae07e88b88069dfa2a1104749fec3f3d07e5c0221d1bd",
+      "onnx_sha256": "0234e12d5aa687d31e5547ea9bebc6b9e5de39e067354869dff703803f82ca69",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-04.receipt.v1.json",
+      "receipt_sha256": "1ba6794cf29ff176dbf625021ea944c440a1e7f74406321418df631524c5ac4a"
+    },
+    {
+      "inventory_id": "F-MAT-05",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "bfee25802b877d306c005b406cfd9ea2a048e1bc7b51bceaadb2ee877277ac18",
+      "onnx_sha256": "75ab90b9baba97ce62433b6d10ec68c40b401907b74e52cccca62b0536adf018",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-05.receipt.v1.json",
+      "receipt_sha256": "4a77438fffc886ff6f1184160087349e57a582dead3ad387dc5094a04fbbf540"
+    },
+    {
+      "inventory_id": "F-MAT-06",
+      "state": "PC_RUNNABLE",
+      "model_sha256": "b3fd6c24b439b4bf5921dfe59593593bca9c50b6e3fbde4a1568c9c50ebbef19",
+      "onnx_sha256": "79674721853592efaf3f0d4e5588b62bc40f95a85c465d1441e40c015abf81dd",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-06.receipt.v1.json",
+      "receipt_sha256": "b940bb3287b1e67e0a29d2a84cb05a5a9fb12ab8d4b74d7559cace7741784b16"
+    },
+    {
+      "inventory_id": "F-MAT-07",
+      "state": "PC_RUNNABLE",
+      "model_sha256": "2ae0208642c09c881e0ae2d77004f70f281509b4b3b287e000d33ce4d7bf6a72",
+      "onnx_sha256": "49bbd63003ac76e52082e7711da5a49d538e19d1a071538f3aa59063365851d4",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-07.receipt.v1.json",
+      "receipt_sha256": "5584488a6b81bc2ae326a6f13be334c458e9079845cb405ebccbe12bf5666d32"
+    },
+    {
+      "inventory_id": "F-MAT-08",
+      "state": "PC_RUNNABLE",
+      "model_sha256": "1f3256156bedd6182c17304bdc1de1084a9f2b7401cbb39af38abd4b688068f8",
+      "onnx_sha256": "34eca3a681216bc07bf11f7543655ce3d7b57c5db2bd61d640bf825ab5d09e99",
+      "bpu_bin_sha256": null,
+      "receipt_path": "icmat_foundry/finals_50model/evidence/material_bank/F-MAT-08.receipt.v1.json",
+      "receipt_sha256": "74bbd956823265859f718604bcba5e1a8f9c7844de45d009d27398751ad61b97"
+    },
+    {
+      "inventory_id": "F-PROC-04",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "8a677dd3355bceaf06e1507a510b0e89979f07b8184e0b0a42e94e6372936724",
+      "bpu_bin_sha256": null
+    },
+    {
+      "inventory_id": "F-PROC-05",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "e5a35baab151197adc17a83f2a1583ee2a6c480cb22e76ab574c86cf9f8d7855",
+      "bpu_bin_sha256": null
+    },
+    {
+      "inventory_id": "F-PROC-06",
+      "state": "PC_RUNNABLE_BPU_EXPORT_PENDING",
+      "model_sha256": "4881cac624638d610a287d9d93aee7ea0e1b5cdc4f337707af3a948a62bd8f71",
+      "bpu_bin_sha256": null
+    }
+  ]
+}

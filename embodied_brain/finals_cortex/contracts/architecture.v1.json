@@ -1,0 +1,40 @@
+{
+  "schema_version": "x5-embodied-cortex-architecture/1.0",
+  "candidate_id": "x5-embodied-cortex-pc-v1",
+  "status": "PC_FOUNDATION_IMPLEMENTED_REAL_DATA_AND_BOARD_PENDING",
+  "shadow_only": true,
+  "validated_baseline": {
+    "contract_id": "xrd-embodied-finals-repechage-freeze-v1",
+    "entry": "bash ~/tools/finals_lift_nav_demo.sh",
+    "firmware_build_id": 2026071907,
+    "distance_m": 0.5,
+    "frozen_manifest_sha256": "f62729be0099ead851c6e5430c3bff08d473b4478e849fc52e172841a0527213"
+  },
+  "authorities": {
+    "cmd_vel": false,
+    "cmd_vel_safe": false,
+    "tf": false,
+    "map_to_odom": false,
+    "ros_service": false,
+    "ros_action": false,
+    "serial": false,
+    "f407": false,
+    "firmware": false,
+    "online_weight_update": false,
+    "automatic_service_registration": false
+  },
+  "modules": {
+    "real_sensor_recorder": "read_only",
+    "skill_graph_verifier": "read_only",
+    "episodic_memory": "read_only",
+    "hard_case_miner": "read_only",
+    "crossbev_kd": "offline_training_and_shadow_inference",
+    "navteacher_15": "offline_training_and_proposal_only",
+    "trust_lab": "diagnostic_only",
+    "board_receipt": "read_only_observation"
+  },
+  "failure_behavior": "MONITOR_OFFLINE",
+  "board_contacted": false,
+  "x5_actual_bpu_execution": false,
+  "real_sensor_accuracy_claim": false
+}

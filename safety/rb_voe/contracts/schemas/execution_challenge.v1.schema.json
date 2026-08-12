@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/execution-challenge-v1",
+  "title": "ExecutionChallenge.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "challenge_id", "intent_id", "case_id", "plan_epoch", "nonce",
+    "embodied_manifest_sha256", "source_boot_id", "source_session_id", "route_plan_sha256",
+    "reserved_routes", "reserved_stations", "reserved_zones", "live_cost_ms",
+    "issued_at_ms", "expires_at_ms", "key_domain", "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-execution-challenge-v1"},
+    "challenge_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "intent_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "case_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "plan_epoch": {"type": "integer", "minimum": 0},
+    "nonce": {"type": "string", "minLength": 1, "maxLength": 512},
+    "embodied_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_boot_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "source_session_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "route_plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reserved_routes": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "ROUTE_IDENTITY", "ROUTE_GRIND", "ROUTE_XRD", "ROUTE_PL", "ROUTE_QUARANTINE"
+      ]}
+    },
+    "reserved_stations": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "STATION_IDENTITY", "STATION_GRIND", "STATION_XRD", "STATION_PL", "STATION_QUARANTINE"
+      ]}
+    },
+    "reserved_zones": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "ZONE_IDENTITY", "ZONE_TRANSIT", "ZONE_DOCK", "ZONE_GRIND",
+        "ZONE_XRD", "ZONE_PL", "ZONE_QUARANTINE"
+      ]}
+    },
+    "live_cost_ms": {"type": "integer", "minimum": 0},
+    "issued_at_ms": {"type": "integer", "minimum": 0},
+    "expires_at_ms": {"type": "integer", "minimum": 0},
+    "key_domain": {"const": "RB_VOE_EMBODIED_CHALLENGE_ED25519_V1"},
+    "signature": {"type": "string", "minLength": 1, "maxLength": 4096}
+  }
+}

@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this repository and its archived release."
+title: "XRD Smart Lab: Dual-RDK X5 Materials Intelligence and Multi-Robot Embodied Laboratory Assistant"
+type: software
+version: "1.0.0"
+date-released: "2026-08-13"
+authors:
+  - name: "荧光具身智研团队"
+repository-code: "https://github.com/Xiaomiju-x/xrd"
+url: "https://github.com/Xiaomiju-x/xrd"
+license: Apache-2.0
+keywords:
+  - RDK X5
+  - materials intelligence
+  - embedded AI
+  - embodied robotics
+  - XRD
+  - laboratory automation
+abstract: >-
+  An open engineering project that connects materials prediction, XRD and PL
+  evidence analysis, edge inference, mobile embodied assistance, dual-arm
+  workstation execution, STM32F407 control, and a read-only evidence portal.

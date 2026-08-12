@@ -1,0 +1,18 @@
+{
+  "actions": [],
+  "control_authority": false,
+  "forbidden_interfaces": [
+    "/cmd_vel",
+    "/cmd_vel_safe",
+    "TF publication",
+    "F407 serial commands",
+    "ROS services",
+    "ROS actions"
+  ],
+  "mode": "read_only_offline_recorder",
+  "publishers": [],
+  "schema_version": "x5-real-sensor-recorder-permissions.v1",
+  "serial_devices": [],
+  "services": [],
+  "tf_broadcasters": []
+}

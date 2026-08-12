@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    LD14 单线 2D 激光雷达 (LD Robot / WHEELTEC).
+    Spec: 0.3-30m, 360° 扫描, 4500Hz 测距, 8-12Hz 转速.
+    Installed at the chassis centre. The parent/offset are supplied by the top-level
+    measured robot description; current laser_link height is 0.50 m above ground.
+    frame_id="laser_link" (跟 LD14 驱动 launch 默认一致).
+  -->
+
+  <xacro:macro name="laser_xacro" params="parent xyz:='0 0 0' rpy:='0 0 0'">
+
+    <link name="laser_link">
+      <visual>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.04" length="0.04"/>
+        </geometry>
+        <material name="lidar_teal"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.04" length="0.04"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial mass="0.1" radius="0.04" length="0.04"/>
+    </link>
+
+    <joint name="${parent}_to_laser" type="fixed">
+      <parent link="${parent}"/>
+      <child link="laser_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

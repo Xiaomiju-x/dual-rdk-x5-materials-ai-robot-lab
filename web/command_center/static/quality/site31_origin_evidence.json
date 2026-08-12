@@ -1,0 +1,57 @@
+{
+  "schema_version": "site31.origin_evidence.v1",
+  "release": "site32-global-commercial-v1.13-20260720",
+  "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+  "completed_at": "2026-07-20T00:22:39.490Z",
+  "target": "Read-only pre-promotion audit of the Hong Kong VPS origin and SSO boundary for the Site32 v1.13 candidate; active predecessor is Site32 v1.12",
+  "checks": [
+    {
+      "key": "ufw_default_deny",
+      "state": "pass",
+      "evidence": "UFW reported active with low logging, default deny incoming, allow outgoing and routed traffic disabled. The only inbound allowances were SSH, HTTP and HTTPS for IPv4 and IPv6."
+    },
+    {
+      "key": "loopback_origins",
+      "state": "pass",
+      "evidence": "Socket inventory confirmed both the authentication origin and command-center application origin were loopback-only. Neither application origin was wildcard-bound; public web exposure remained behind Caddy."
+    },
+    {
+      "key": "caddy_forward_auth",
+      "state": "pass",
+      "evidence": "Boolean-only Caddyfile inspection confirmed local forward authentication, propagation of X-User and X-Role, and reverse proxy to the local command-center service. Caddy configuration validation passed and xrd-auth, xrd-cmdcenter and Caddy were active."
+    },
+    {
+      "key": "spoofed_identity_rejected",
+      "state": "pass",
+      "evidence": "A public HTTPS request to /api/public_status carrying forged X-User and administrator X-Role headers returned HTTP 401."
+    },
+    {
+      "key": "auth_service_isolation",
+      "state": "pass",
+      "evidence": "xrd-auth ran under its dedicated account with ProtectSystem=strict, ProtectHome=tmpfs, PrivateTmp=yes, PrivateDevices=yes and NoNewPrivileges=yes."
+    },
+    {
+      "key": "cmdcenter_service_isolation",
+      "state": "pass",
+      "evidence": "xrd-cmdcenter ran under its dedicated account with ProtectSystem=strict, ProtectHome=tmpfs, PrivateTmp=yes, PrivateDevices=yes and NoNewPrivileges=yes."
+    },
+    {
+      "key": "predecessor_integrity",
+      "state": "pass",
+      "evidence": "The active Site32 v1.12 predecessor manifest verified successfully before candidate upload and matched digest c77d1a2ccbcc1ec7a30a4d39a0c36276a1bcbda22e89be1a55e37f5cb7b03b7d."
+    },
+    {
+      "key": "credential_hygiene",
+      "state": "manual-check",
+      "evidence": "No credential, token, private key or secret value was read or recorded during this audit."
+    }
+  ],
+  "observations": [
+    "The active predecessor at audit time was site32-global-commercial-v1.12-20260720 and its manifest verified successfully.",
+    "The origin boundary rejected forged identity headers before application access.",
+    "Cloudflare dashboard or API evidence for managed WAF, bot controls and edge rate limiting was not available in this audit.",
+    "No Wi-Fi, VPN, proxy, route, ARP, SSH configuration, firewall rule, DNS, Cloudflare setting, Caddy configuration or SSO configuration was changed.",
+    "No X5, Pi, robot, arm or instrument endpoint was contacted."
+  ],
+  "claim_boundary": "Point-in-time operator evidence only; not a penetration test, Cloudflare WAF certification, commercial security certification or proof that every VPS process is vulnerability-free."
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "xrd-dual-arm-current-frozen-files-v1",
+  "captured_from": "current local finals baseline after 2026-07-22 field hotfixes",
+  "files": [
+    {
+      "path": "workstation/dual_arm/run_finals_part3.ps1",
+      "sha256": "44625a05bea759fef078385f5b394137107c322a279b17392b8e63fadb1cdde6",
+      "bytes": 2064
+    },
+    {
+      "path": "workstation/dual_arm/finals_part3_orchestrator.py",
+      "sha256": "64011e4423cfc415bb066b313f7f322d9749bac271ecd389ac65d26e7cb38d9c",
+      "bytes": 48467
+    },
+    {
+      "path": "workstation/dual_arm/run_dual_arm_bag_grind.ps1",
+      "sha256": "92897808a92fd9c351bd9ce8621877898b46b67e13be8bda8d2a2a089be50fff",
+      "bytes": 11698
+    },
+    {
+      "path": "workstation/dual_arm/run_dual_arm_bag_grind_edge.py",
+      "sha256": "f7a4bb0bd7fd46aa94214c32698ee641f148719323d5fcd281e381efa66f6d53",
+      "bytes": 8515
+    },
+    {
+      "path": "workstation/dual_arm/run_finals_part3_edge.sh",
+      "sha256": "0cee0d888a80cc73f33ca59276defee80a1ebb0bdb7b10a5ee459e535d5dfcc0",
+      "bytes": 1341
+    },
+    {
+      "path": "workstation/dual_arm/arm01_compact_front_transfer.py",
+      "sha256": "a52062242654db16a4061ef4d376b737dc010e5084ce5be68ca2934c0d141b8f",
+      "bytes": 25294
+    },
+    {
+      "path": "workstation/dual_arm/arm02_direct_grind_closed_loop.py",
+      "sha256": "c070db7c87455723dd43b3d4727f7968343fa0200483c68b68cd9e4ccb518619",
+      "bytes": 4552
+    },
+    {
+      "path": "workstation/dual_arm/finals_capture_frames.py",
+      "sha256": "3a5c373def2444c0fab88708993d626cab0dada31a1c4c08c020855806d5eaf2",
+      "bytes": 5791
+    },
+    {
+      "path": "workstation/dual_arm/overhead_bag_presence_x5.py",
+      "sha256": "c52ec9f49157dca85fe0ca41f29fa18f67ee3a4fc73961caa2dc1ff7d7c44845",
+      "bytes": 20412
+    },
+    {
+      "path": "workstation/dual_arm/overhead_bpu_aux_probe_x5.py",
+      "sha256": "34ee0d8a51308266506b61f69ba7a7771bc2fa40cf4725cf6ebe0d10731bc911",
+      "bytes": 8229
+    },
+    {
+      "path": "workstation/arm01/bag_station_detect_x5.py",
+      "sha256": "4469ee46f4974ea5f8f5431f8700df9ae2edb8c94c7cbb6e2e56c97ffb2e16e2",
+      "bytes": 6011
+    },
+    {
+      "path": "workstation/dual_arm/station_config.json",
+      "sha256": "e37dfeccb0d35dda8fd9938317a856072b885dd3a2c4672f39097ed0f2de205d",
+      "bytes": 6527
+    },
+    {
+      "path": "workstation/dual_arm/FINALS_PART3_HANDOFF_20260720.md",
+      "sha256": "77b8929cb09151b079af2c02e2238c1da0116af3e19781784acc481949d114d6",
+      "bytes": 9997
+    },
+    {
+      "path": "workstation/dual_arm/evidence/finals_part3_execute_20260720_052630_4956/result.json",
+      "sha256": "97cf19e150f886c44b790e3842059d352b6888e7c74a73a2063da2109af5701a",
+      "bytes": 3667
+    }
+  ]
+}

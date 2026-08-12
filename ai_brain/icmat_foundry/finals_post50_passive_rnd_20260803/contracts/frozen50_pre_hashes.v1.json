@@ -1,0 +1,17 @@
+{
+  "schema": "x5_icmat_foundry.frozen50_hash_audit.v1",
+  "phase": "PRE_TRAINING",
+  "workspace_root": "D:/xrd-smart-lab",
+  "files": [
+    {"path": "icmat_foundry/finals_50model/contracts/model_registry.v3.json", "bytes": 26363, "sha256": "a2293bce08d6de380dbbbcf8876381e946d329692bc07dc98dec88199d2f7ef2"},
+    {"path": "icmat_foundry/finals_50model/evidence/final_acceptance/final_acceptance.v1.json", "bytes": 393622, "sha256": "aa03341e9bc44c5e47e63935035cebaafa4900e18f0afb3a6af6583eb6330668"},
+    {"path": "icmat_foundry/finals_50model/releases/x5-icmat-foundry-50model-x5-staging-c5fa215a58168c0c.zip", "bytes": 3798449433, "sha256": "c5fa215a58168c0cb7274c2b1cf6d66bcd0f3c1e70d3f4cf13749e9b57dafb52"},
+    {"path": "icmat_foundry/finals_50model/releases/x5-icmat-foundry-50model-pc-c7aff501602bde2f.zip", "bytes": 3798449465, "sha256": "c7aff501602bde2f31881bdbc9d872c9570162359e6b6e8596b463c73add2a81"},
+    {"path": "AGENTS.md", "bytes": 12726, "sha256": "5b137333822133272a5c92dd6b069196fb058d3810f34944d0ae3b19e4867a40"},
+    {"path": "docs/ai_brain_finals_20260728/IMPLEMENTATION_LEDGER.md", "bytes": 5828, "sha256": "1a11bb092a29fba3f472cd3c1434d44e0fe398acd73dde709cb838db5bedfa2e"},
+    {"path": "icmat_foundry/finals_50model/README.md", "bytes": 3414, "sha256": "869e7f04832f9f79adffa1933d152b39485f4308fea47e64bc71dabcba4e1afa"},
+    {"path": "icmat_foundry/finals_50model/docs/X5_BOARD_PHASE_RUNBOOK.md", "bytes": 5150, "sha256": "719c886ce2445b8556a67ba52f35a340c9d3d076991ff08d0f5352d3e5076f9c"}
+  ],
+  "network_touched": false,
+  "x5_contacted": false
+}

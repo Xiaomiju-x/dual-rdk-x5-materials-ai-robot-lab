@@ -1,0 +1,204 @@
+{
+  "contract_id": "x5-tribev-flow-model-contracts-v1",
+  "schema_version": "1.0.0",
+  "status": "pc_trained_bayese_converted_board_validation_pending",
+  "opset_version": 11,
+  "dynamic_axes": false,
+  "deployment_scope": "shadow_only",
+  "non_interference": {
+    "validated_entry_unchanged": "bash ~/tools/finals_lift_nav_demo.sh",
+    "firmware_build_unchanged": 2026071907,
+    "forbidden_publishers": [
+      "/cmd_vel",
+      "/cmd_vel_safe",
+      "/tf",
+      "/tf_static",
+      "/f407"
+    ],
+    "candidate_failure_behavior": "mark shadow model offline; never block or replace the validated 0.50 m demonstration"
+  },
+  "operator_policy": {
+    "compute_operators": [
+      "Conv2d",
+      "DepthwiseConv2d",
+      "ReLU",
+      "Add",
+      "Concat",
+      "NearestUpsample",
+      "AdaptiveAvgPool2d",
+      "PointwiseConv2d"
+    ],
+    "shape_only_operators": [
+      "static Reshape from NxCx1x1 to NxC"
+    ],
+    "forbidden_operators": [
+      "LayerNorm",
+      "Attention",
+      "GridSample",
+      "dynamic shape",
+      "Softmax",
+      "Sigmoid"
+    ],
+    "postprocessing_owner": "CPU shadow runtime"
+  },
+  "models": {
+    "tiny_occ_flow": {
+      "public_class": "TinyOccFlowStudent",
+      "module": "embodied_brain.finals_successor.x5_tribev_flow.models",
+      "onnx_filename": "tiny_occ_flow_student_opset11.onnx",
+      "parameter_statistics": {
+        "total_parameters": 32712,
+        "trainable_parameters": 32712,
+        "fp32_weight_mib": 0.124786376953125,
+        "int8_weight_mib_estimate": 0.03119659423828125
+      },
+      "input": {
+        "name": "tribev_features",
+        "dtype": "float32",
+        "shape": [
+          1,
+          40,
+          64,
+          64
+        ]
+      },
+      "outputs": [
+        {
+          "name": "future_occupancy",
+          "dtype": "float32",
+          "shape": [
+            1,
+            3,
+            64,
+            64
+          ],
+          "semantics": "raw occupancy logits at +0.4 s, +0.8 s, and +1.2 s"
+        },
+        {
+          "name": "flow",
+          "dtype": "float32",
+          "shape": [
+            1,
+            6,
+            32,
+            32
+          ],
+          "semantics": "raw dx,dy pairs for +0.4 s, +0.8 s, and +1.2 s"
+        },
+        {
+          "name": "dynamic_uncertainty",
+          "dtype": "float32",
+          "shape": [
+            1,
+            6,
+            64,
+            64
+          ],
+          "semantics": "three dynamic logits followed by three uncertainty logits"
+        },
+        {
+          "name": "trajectory_logits",
+          "dtype": "float32",
+          "shape": [
+            1,
+            9
+          ],
+          "semantics": "raw scores for nine fixed shadow trajectory tokens"
+        }
+      ],
+      "control_authority": false,
+      "normalization_inside_model": false,
+      "lifecycle": {
+        "training_state": "synthetic_v5_episode_trained_and_independent_test_evaluated",
+        "real_sensor_validation": false,
+        "board_runtime_validation": false,
+        "default_candidate_runtime": true,
+        "trajectory_head_role": "auxiliary evidence only; CPU rectangular-footprint occupancy scoring owns the primary shadow token diagnostic",
+        "claim_scope": "synthetic v5 world-model metrics, baselines, ablations, conformal calibration, and offline Bayes-e conversion; real-session metrics pending"
+      },
+      "artifacts": {
+        "dataset_manifest_sha256": "e61e57c9ce362d6fd59b400a40dae23a80a42b7047ae8a9d7c84c5a4184656be",
+        "checkpoint_sha256": "cdc91a913616fdf00f418ba683c68c54489c8752b6c50062832ddbfde8f1116a",
+        "evaluation_report_sha256": "fd2a15a4ac05751e4c544bf737500666354d486cddb0a42a46580cc7dc0828fa",
+        "onnx_sha256": "1edf6d6ff05ec10150866d172c0715eeb1da21c22b0fb650a1f714d525e27cf7",
+        "bayes_e_bin_sha256": "90e01859991c2eabaf71147de299123c656569ef1115df049d03e25f1471fdf9",
+        "hb_mapper_version": "1.24.3",
+        "target_march": "bayes-e"
+      }
+    },
+    "cam_sem_lite": {
+      "public_class": "CamSemLite",
+      "module": "embodied_brain.finals_successor.x5_tribev_flow.models",
+      "onnx_filename": "cam_sem_lite_opset11.onnx",
+      "parameter_statistics": {
+        "total_parameters": 5498,
+        "trainable_parameters": 5498,
+        "fp32_weight_mib": 0.02097320556640625,
+        "int8_weight_mib_estimate": 0.0052433013916015625
+      },
+      "input": {
+        "name": "camera_rgb",
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          288,
+          512
+        ]
+      },
+      "outputs": [
+        {
+          "name": "semantic_logits",
+          "dtype": "float32",
+          "shape": [
+            1,
+            6,
+            72,
+            128
+          ],
+          "semantics": "six raw quarter-resolution semantic channels"
+        },
+        {
+          "name": "quality_logits",
+          "dtype": "float32",
+          "shape": [
+            1,
+            4
+          ],
+          "semantics": "four raw camera quality/OOD logits"
+        }
+      ],
+      "control_authority": false,
+      "normalization_inside_model": false,
+      "lifecycle": {
+        "training_state": "procedural_fixture_pretrained",
+        "real_camera_validation": false,
+        "board_runtime_validation": false,
+        "default_candidate_runtime": false,
+        "toolchain_runtime_probe_eligible": true,
+        "real_camera_promotion_eligible": false,
+        "claim_scope": "procedural fixture learning and offline Bayes-e conversion only"
+      },
+      "artifacts": {
+        "checkpoint_sha256": "f7a0f07fe2556d1ea66dee86ed45106e03edf8419ae6cea4da4e5b8c661e8d7b",
+        "onnx_sha256": "ba389d96d33ad8c0488a43f07e2fbca4bbe7b68816ddbbfa70d2af2cf657d8b0",
+        "bayes_e_bin_sha256": "cb582808a90ae93c46dbffdce2ddd676ceacfeab3d865a67f755c322968c6f7c",
+        "hb_mapper_version": "1.24.3",
+        "target_march": "bayes-e"
+      }
+    }
+  },
+  "export": {
+    "script": "embodied_brain/finals_successor/x5_tribev_flow/export_onnx.py",
+    "checker": "onnx.checker.check_model(full_check=true)",
+    "numerical_check": "PyTorch versus ONNX Runtime CPUExecutionProvider",
+    "parameter_statistics": [
+      "total_parameters",
+      "trainable_parameters",
+      "fp32_weight_mib",
+      "int8_weight_mib_estimate"
+    ],
+    "untrained_export_policy": "allowed for graph/toolchain validation only; not eligible for board runtime promotion",
+    "current_exports": "both current ONNX files were exported from the recorded trained checkpoints and passed ONNX Runtime comparison before Bayes-e conversion"
+  }
+}

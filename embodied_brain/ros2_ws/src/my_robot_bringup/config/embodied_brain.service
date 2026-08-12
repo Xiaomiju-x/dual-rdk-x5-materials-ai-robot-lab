@@ -1,0 +1,50 @@
+[Unit]
+Description=embodied_brain ROS2 stack (车载脑 RDK X5 主服务)
+Documentation=https://github.com/zhouLingxuan/xrd
+# ⚠ After= 不能写 multi-user.target — 本服务 WantedBy=multi-user.target 隐含
+# Before=multi-user.target, 再 After 它就成环; eb_sensor_watchdog 又 After 本服务,
+# 2026-06-10 实测 systemd 检出 ordering cycle 直接删掉看门狗的开机启动任务.
+# "等系统稳定" 由 ExecStartPre=sleep 8 承担.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sunrise
+Group=sunrise
+
+# 报警通道凭据 + AI 脑 URL (前缀 - 表示文件不存在不报错)
+# 用户编辑 /etc/embodied_brain.env 填 EB_SMTP_USER/PASS/TO + EB_WECHAT_WEBHOOK + EB_AI_BRAIN_URL
+EnvironmentFile=-/etc/embodied_brain.env
+
+# 等系统稳定 + USB 设备出现
+ExecStartPre=/bin/sleep 8
+
+# 启动命令
+# tros (地平线 TogetheROS, /opt/tros/humble) 必须 source — hobot_yolo_world /
+# mono_edgesam 等 BPU 节点依赖 libdnn_node.so / libai_msgs_* (2026-06-10 修)
+ExecStart=/bin/bash -lc 'source /opt/ros/humble/setup.bash && \
+    source /opt/tros/humble/setup.bash && \
+    source /home/rdk/ros2_ws/install/setup.bash && \
+    exec ros2 launch my_robot_bringup full.launch.py'
+
+# 进程组管理 (一键 kill 所有子进程)
+KillMode=mixed
+KillSignal=SIGINT
+TimeoutStopSec=15
+
+# 失败重启
+Restart=on-failure
+RestartSec=10
+
+# 资源限制 (X5 8GB, 限到 6.5GB 防 OOM 把系统搞挂)
+MemoryMax=6500M
+CPUQuota=380%      # 4 核 X5, 留 20% 给系统
+
+# 日志
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=embodied_brain
+
+[Install]
+WantedBy=multi-user.target

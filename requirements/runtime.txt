@@ -1,0 +1,28 @@
+# XRD 智慧实验室 — X5 运行时最小依赖 (dashboard + 4 条线 + predict_engine)
+# 对应 X5 ARM64 Ubuntu 22.04 Python 3.10 BPU runtime
+# PC 开发环境用 requirements/development.txt
+
+# --- Web 框架 ---
+flask>=3.0,<4
+requests>=2.31,<3
+
+# --- 数据处理 ---
+numpy>=1.24,<2
+scipy>=1.10,<2
+pandas>=2.0,<3
+openpyxl>=3.1,<4  # pandas read_excel 依赖 (scripts/import_excel.py)
+
+# --- 图像 / 向量 ---
+pillow>=10,<12
+opencv-python>=4.8,<5
+
+# --- RAG / 检索 ---
+rank_bm25>=0.2.2,<0.3
+
+# --- 部署 / 运维 ---
+paramiko>=3.4,<4  # 仅 PC 端 (scripts/weekly_mail.py 等)
+PyYAML>=6,<7
+
+# --- 可选: X5 推理 ---
+# onnxruntime  # X5 预装 1.23.2 ARM64, 不再从 pip 拉
+# hobot_dnn    # 地瓜 BPU runtime, apt 安装, 非 pip

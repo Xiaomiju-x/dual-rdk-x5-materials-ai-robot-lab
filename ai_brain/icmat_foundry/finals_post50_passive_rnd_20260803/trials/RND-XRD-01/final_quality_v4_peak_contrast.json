@@ -1,0 +1,74 @@
+{
+  "checkpoint": {
+    "bytes": 101434,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-XRD-01/final_quality_v4_peak_contrast.pt",
+    "sha256": "28bdb50e88dba5f478bf8cb1a132b16068baaffcada6997c8a3c0996aadadb8d"
+  },
+  "configuration": {
+    "id": "v4_peak_contrast",
+    "w_contrast": 0.08,
+    "w_diff": 0.0,
+    "w_peak": 0.12,
+    "width": 20
+  },
+  "created_at": "2026-08-02T17:34:10.637073+00:00",
+  "extra": {
+    "epochs": 5,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.6058550775051117,
+        "selection_score": 0.13200645567553385
+      },
+      {
+        "epoch": 2,
+        "loss": 0.535063661634922,
+        "selection_score": 0.07555341534783618
+      },
+      {
+        "epoch": 3,
+        "loss": 0.4586794152855873,
+        "selection_score": 0.058356413856641545
+      },
+      {
+        "epoch": 4,
+        "loss": 0.40148763731122017,
+        "selection_score": 0.062427819072695755
+      },
+      {
+        "epoch": 5,
+        "loss": 0.355851948261261,
+        "selection_score": 0.0635580394713482
+      }
+    ],
+    "test_split_observed": false
+  },
+  "family_id": "RND-XRD-01",
+  "fit_id": "final_quality_v4_peak_contrast",
+  "fit_seconds": 70.26151720000053,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 23146,
+  "receipt_sha256": "282388059a298c786f15062bb6be4387bce0450a39d02238f4824296e3203459",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267703,
+  "selection_metrics": {
+    "profile": {
+      "mae": 0.01782691664993763,
+      "mean_cosine": 0.6161230802536011,
+      "peak_f1": 0.4958100558659218,
+      "peak_precision": 0.6442831215970962,
+      "peak_recall": 0.4029511918274688,
+      "rmse": 0.06238123029470444
+    },
+    "retrieval": {
+      "median_rank": 6.0,
+      "mrr": 0.3588144980339797,
+      "top1": 0.234,
+      "top5": 0.48
+    },
+    "selection_score": 0.058356413856641545
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

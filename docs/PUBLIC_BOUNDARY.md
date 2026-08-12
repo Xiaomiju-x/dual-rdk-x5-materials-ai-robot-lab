@@ -1,14 +1,8 @@
-# Public Boundary
+# 公开边界（兼容入口）
 
-This repository is intentionally a public engineering boundary, not the full laboratory repository.
+本文件保留用于兼容旧链接。当前公开范围、凭据与隐私排除项、第三方许可、媒体审核和发布门统一见：
 
-The uploaded code is sufficient to review the embedded system shape: public UI, report generation, interface contracts, workstation visualization, collision interlock, mock telemetry, and edge-facing adapters. The private project tree remains local because it contains unpublished materials data, hardware deployment details, model artifacts, and control scripts that should not be published during preliminary competition review.
+- [docs/safety/PUBLICATION_BOUNDARY.md](safety/PUBLICATION_BOUNDARY.md)
+- [docs/safety/PHYSICAL_SAFETY.md](safety/PHYSICAL_SAFETY.md)
 
-The uploaded non-core data is limited to public screenshots, rendered report pages, public crystal-structure cache files, status samples, and offline demo sensor frames. It is included for contest review evidence and does not expose private laboratory records or hardware access.
-
-Security checks before packaging:
-
-- No private IP address such as `192.168.*.*` is allowed in this folder.
-- No API key assignment or private key block is allowed.
-- No model weight formats are included.
-- No script in this folder can directly command chassis velocity, mechanical-arm motion, electromagnet state, or lift motion against real hardware.
+仓库现在包含完整公开源码，其中包括可能与真实硬件交互的代码；旧版本“没有脚本可直接控制硬件”的描述不再成立。源码存在不代表已获得设备访问权或动作许可。

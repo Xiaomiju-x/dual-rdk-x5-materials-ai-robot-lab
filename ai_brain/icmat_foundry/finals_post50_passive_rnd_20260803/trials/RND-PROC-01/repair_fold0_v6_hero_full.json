@@ -1,0 +1,103 @@
+{
+  "checkpoint": {
+    "bytes": 168078,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/repair_fold0_v6_hero_full.pt",
+    "sha256": "355c7c39163a270d0b2d3fc9fd8fa17bfd0d48e383b9f0e16f8d64ac505bee52"
+  },
+  "configuration": {
+    "distill": true,
+    "group_dro": true,
+    "hidden": 96,
+    "id": "v6_hero_full",
+    "latent": true,
+    "rank": 6
+  },
+  "created_at": "2026-08-02T16:55:59.545858+00:00",
+  "extra": {
+    "epochs": 9,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.22126463521271944,
+        "selection_score": 0.011592432856559753
+      },
+      {
+        "epoch": 2,
+        "loss": 0.18468205444514751,
+        "selection_score": 0.01073811249807477
+      },
+      {
+        "epoch": 3,
+        "loss": 0.16429522214457393,
+        "selection_score": 0.010394366923719645
+      },
+      {
+        "epoch": 4,
+        "loss": 0.15777856297791004,
+        "selection_score": 0.010181715479120612
+      },
+      {
+        "epoch": 5,
+        "loss": 0.1508943377994001,
+        "selection_score": 0.010867776814848185
+      },
+      {
+        "epoch": 6,
+        "loss": 0.1503168335184455,
+        "selection_score": 0.010912092635408044
+      },
+      {
+        "epoch": 7,
+        "loss": 0.1343383900821209,
+        "selection_score": 0.012206135783344507
+      },
+      {
+        "epoch": 8,
+        "loss": 0.13554357830435038,
+        "selection_score": 0.010949828661978245
+      },
+      {
+        "epoch": 9,
+        "loss": 0.12627257499843836,
+        "selection_score": 0.011302371975034475
+      }
+    ],
+    "teacher_distillation": true
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "repair_fold0_v6_hero_full",
+  "fit_seconds": 2.1503399999992325,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 40326,
+  "receipt_sha256": "b42195cd9011b9334f7ef197905dd7153a91464c43599b1605205f90e268e96c",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20263809,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.006729230750352144,
+      "r2": 0.9931130718859416,
+      "rmse": 0.00904328003525734
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.006904969457536936,
+        "r2": 0.3392094398210128,
+        "rmse": 0.009052859619259834,
+        "uniformity_mae": 0.0015726406127214432,
+        "worst_point_mae": 0.010096119716763496
+      },
+      "WTi": {
+        "mae": 0.00623938487842679,
+        "r2": 0.26577204914891317,
+        "rmse": 0.00901652593165636,
+        "uniformity_mae": 0.0015324275009334087,
+        "worst_point_mae": 0.008798865601420403
+      }
+    },
+    "selection_score": 0.010181715479120612,
+    "worst_domain_mae": 0.006904969457536936
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

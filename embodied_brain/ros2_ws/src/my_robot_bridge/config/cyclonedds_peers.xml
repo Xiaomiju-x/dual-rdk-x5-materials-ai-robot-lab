@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  cyclonedds 静态 peers 配置 (ADR-EB-7).
+  作用: 让两台 X5 跨网或在多播被防火墙封时仍能 discover 对方.
+
+  使用方法 (车载脑端):
+    export CYCLONEDDS_URI=file:///path/to/cyclonedds_peers.xml
+    ros2 run my_robot_xxx ...
+
+  AI 脑端 (192.0.2.103) 也要装一份对应配置, peer 写车载脑 IP.
+  实际 IP 部署时按当前网络替换 (现在是手机热点, 后期是小米路由器).
+-->
+<CycloneDDS xmlns="https://cdds.io/config"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+  <Domain id="any">
+    <General>
+      <!-- 关掉多播, 走 unicast peer -->
+      <AllowMulticast>false</AllowMulticast>
+      <MaxMessageSize>65500B</MaxMessageSize>
+    </General>
+    <Discovery>
+      <ParticipantIndex>auto</ParticipantIndex>
+      <Peers>
+        <!-- AI 脑 (实验室) -->
+        <Peer address="192.0.2.103"/>
+        <!-- 具身脑 (车上) — 在 AI 脑端配置时填这个 -->
+        <Peer address="192.0.2.85"/>
+      </Peers>
+    </Discovery>
+    <Internal>
+      <MinimumSocketReceiveBufferSize>10MB</MinimumSocketReceiveBufferSize>
+    </Internal>
+  </Domain>
+</CycloneDDS>

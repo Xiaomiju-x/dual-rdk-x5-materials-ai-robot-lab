@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/evidence-intent-v1",
+  "title": "EvidenceIntent.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "intent_id", "case_id", "plan_epoch", "failure_core",
+    "candidate_options", "selected_option", "value_lower_bound",
+    "required_capabilities", "decision", "created_at_ms"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-evidence-intent-v1"},
+    "intent_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "case_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "plan_epoch": {"type": "integer", "minimum": 0},
+    "failure_core": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "SAMPLE_IDENTITY_UNRESOLVED", "XRD_PEAK_ALIASING",
+        "PREPARATION_HETEROGENEITY_SUSPECTED", "CORRELATED_EVIDENCE_DOUBLE_COUNTED",
+        "BPU_RUNTIME_UNQUALIFIED", "TRANSPORT_CAPABILITY_STALE", "GRIND_MACRO_NOT_ELIGIBLE"
+      ]}
+    },
+    "candidate_options": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "E_VERIFY_IDENTITY", "E_VERIFY_RUNTIME", "E_XRD_SAME_HOLDER",
+        "E_PL_CROSSCHECK", "E_REPREP_XRD", "E_BLINDED_ASSAY", "E_QUARANTINE"
+      ]}
+    },
+    "selected_option": {"type": ["string", "null"], "enum": [
+      "E_VERIFY_IDENTITY", "E_VERIFY_RUNTIME", "E_XRD_SAME_HOLDER",
+      "E_PL_CROSSCHECK", "E_REPREP_XRD", "E_BLINDED_ASSAY", "E_QUARANTINE", null
+    ]},
+    "value_lower_bound": {"type": ["number", "null"]},
+    "required_capabilities": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 128}
+    },
+    "decision": {"type": "string", "enum": [
+      "GO", "REVISE", "DROP", "NEXT_EVIDENCE", "HOLD", "QUARANTINE"
+    ]},
+    "created_at_ms": {"type": "integer", "minimum": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"decision": {"const": "NEXT_EVIDENCE"}}, "required": ["decision"]},
+      "then": {"properties": {"selected_option": {"type": "string"}}}
+    },
+    {
+      "if": {
+        "properties": {"decision": {"enum": ["HOLD", "QUARANTINE"]}},
+        "required": ["decision"]
+      },
+      "then": {"properties": {"selected_option": {"type": "null"}}}
+    },
+    {
+      "if": {
+        "properties": {"selected_option": {"type": "string"}},
+        "required": ["selected_option"]
+      },
+      "then": {"properties": {"value_lower_bound": {"type": "number", "exclusiveMinimum": 0}}},
+      "else": {"properties": {"value_lower_bound": {"type": "null"}}}
+    }
+  ]
+}

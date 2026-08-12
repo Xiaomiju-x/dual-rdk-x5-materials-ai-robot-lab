@@ -1,0 +1,26 @@
+x5_triflow_shadow_monitor:
+  ros__parameters:
+    # Model paths are supplied by start_x5_tribev_shadow.sh from the immutable
+    # content-addressed artifact directories.
+    tiny_model_bin: ""
+    cam_model_bin: ""
+    publish_rate_hz: 5.0
+    scan_topic: "/scan"
+    depth_scan_topic: "/scan_depth"
+    odom_topic: "/odom"
+    vision_bev_topic: "/lab_fsd/vision_bev"
+    vision_objects_topic: "/lab_fsd/vision_objects"
+    reference_tokens_topic: "/lab_fsd/policy_tokens"
+    # The depth camera is mounted at the front edge of the 0.50 m chassis.
+    depth_origin_x_m: 0.25
+    semantic_max_age_s: 1.5
+    # CamSemLite is procedural-pretrained and remains disabled until a real
+    # camera runtime probe is explicitly requested. TinyOccFlow still runs on
+    # BPU with LiDAR/depth/optional Vision-BEV input.
+    camera_enabled: false
+    camera_topic: "/pt_camera/image_raw"
+    camera_period_s: 1.0
+    evidence_directory: "/tmp/x5_triflow_shadow/evidence"
+    evidence_interval_s: 30.0
+    evidence_max_files: 120
+    evidence_max_bytes: 67108864

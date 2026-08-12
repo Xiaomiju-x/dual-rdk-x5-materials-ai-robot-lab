@@ -1,0 +1,16 @@
+{
+  "schema_version": "xrd-rb-voe-r1-demo-expected-v1",
+  "expected_root_option_id": "E_VERIFY_IDENTITY",
+  "expected_branches": {
+    "emission_origin_unresolved": "E_PL_CROSSCHECK",
+    "phase_identity_unresolved": "E_XRD_SAME_HOLDER",
+    "shared_reference_drift": "E_REPREP_XRD"
+  },
+  "expected_root_scenario_id": "joint_phase_mixture",
+  "expected_observed_options": [
+    "E_VERIFY_IDENTITY",
+    "E_XRD_SAME_HOLDER"
+  ],
+  "expected_plan_sha256": "2a23c3abb91b599bd5891f7535b875a88d26060c348e42da5764d06230dfd80e",
+  "expected_episode_sha256": "ff1e69a634e2320a7b2f9cec047aa0fcb53442b76eac7a5944c31aadbcf3aa9a"
+}

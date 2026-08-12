@@ -1,0 +1,99 @@
+{
+  "checkpoint": {
+    "bytes": 151634,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-MAT-01/grid_v3_role64_r1.pt",
+    "sha256": "0dd4d12d18a821958ba41fd8608ad467afeed294e7175273e44017a6f85d5cfd"
+  },
+  "configuration": {
+    "dropout": 0.0,
+    "hidden": 64,
+    "id": "v3_role64",
+    "role_aware": true
+  },
+  "created_at": "2026-08-02T18:47:54.747586+00:00",
+  "extra": {
+    "epochs": 13,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.44489406049251556,
+        "val_mae": 28.096139907836914
+      },
+      {
+        "epoch": 2,
+        "loss": 0.43003634363412857,
+        "val_mae": 27.19705581665039
+      },
+      {
+        "epoch": 3,
+        "loss": 0.42053137719631195,
+        "val_mae": 26.40158462524414
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4141586795449257,
+        "val_mae": 25.90300941467285
+      },
+      {
+        "epoch": 5,
+        "loss": 0.4053879678249359,
+        "val_mae": 25.786544799804688
+      },
+      {
+        "epoch": 6,
+        "loss": 0.4055585190653801,
+        "val_mae": 25.71361541748047
+      },
+      {
+        "epoch": 7,
+        "loss": 0.4077261611819267,
+        "val_mae": 25.666706085205078
+      },
+      {
+        "epoch": 8,
+        "loss": 0.3963053524494171,
+        "val_mae": 25.728853225708008
+      },
+      {
+        "epoch": 9,
+        "loss": 0.37682104110717773,
+        "val_mae": 25.883424758911133
+      },
+      {
+        "epoch": 10,
+        "loss": 0.37080419808626175,
+        "val_mae": 26.100149154663086
+      },
+      {
+        "epoch": 11,
+        "loss": 0.3572564423084259,
+        "val_mae": 26.141233444213867
+      },
+      {
+        "epoch": 12,
+        "loss": 0.33851461112499237,
+        "val_mae": 26.493356704711914
+      },
+      {
+        "epoch": 13,
+        "loss": 0.3277374282479286,
+        "val_mae": 26.717571258544922
+      }
+    ]
+  },
+  "family_id": "RND-MAT-01",
+  "fit_id": "grid_v3_role64_r1",
+  "fit_seconds": 0.35117560000071535,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 36801,
+  "receipt_sha256": "fefb12b2f381e5c5a79b0393fd0f39ed333456088f85727daea173c5c3a0ed00",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20269834,
+  "selection_metrics": {
+    "mae": 25.666706085205078,
+    "rmse": 29.08635902404785
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

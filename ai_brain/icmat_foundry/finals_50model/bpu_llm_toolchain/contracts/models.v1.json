@@ -1,0 +1,53 @@
+{
+  "schema": "x5_icmat_foundry.bpu_llm_models.v1",
+  "architecture_contract": {
+    "model_type": "qwen2",
+    "architectures": [
+      "Qwen2ForCausalLM"
+    ],
+    "num_hidden_layers": 24,
+    "hidden_size": 896,
+    "num_attention_heads": 14,
+    "num_key_value_heads": 2,
+    "intermediate_size": 4864,
+    "segments": [
+      {
+        "part": 1,
+        "layer_start": 0,
+        "layer_end_inclusive": 11
+      },
+      {
+        "part": 2,
+        "layer_start": 12,
+        "layer_end_inclusive": 23
+      }
+    ],
+    "batch_size": 1,
+    "sequence_length": 64,
+    "onnx_opset": 11,
+    "march": "bayes-e"
+  },
+  "models": [
+    {
+      "inventory_id": "F-LLM-03",
+      "name": "ICMat-Characterization-Qwen2.5-0.5B-BPU",
+      "domain": "characterization",
+      "merged_hf": "artifacts/bpu_llm_bank/F-LLM-03/merged_hf",
+      "calibration_jsonl": "data/llm_sft/F-LLM-03/train.jsonl"
+    },
+    {
+      "inventory_id": "F-LLM-04",
+      "name": "ICMat-Process-Qwen2.5-0.5B-BPU",
+      "domain": "process",
+      "merged_hf": "artifacts/bpu_llm_bank/F-LLM-04/merged_hf",
+      "calibration_jsonl": "data/llm_sft/F-LLM-04/train.jsonl"
+    },
+    {
+      "inventory_id": "F-LLM-05",
+      "name": "ICMat-Reliability-Qwen2.5-0.5B-BPU",
+      "domain": "reliability",
+      "merged_hf": "artifacts/bpu_llm_bank/F-LLM-05/merged_hf",
+      "calibration_jsonl": "data/llm_sft/F-LLM-05/train.jsonl"
+    }
+  ]
+}

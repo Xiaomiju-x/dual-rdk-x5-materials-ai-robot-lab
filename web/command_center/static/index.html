@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-site32-presentation-mode="vivid" data-site32-visual-mode="vivid">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f6fc" />
+<meta name="description" content="XRD 智慧实验室: 面向全球材料与近红外荧光粉科研工作者的公开只读预测与实验闭环证据库。" />
+<link rel="canonical" href="https://xiaomiju.xyz/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="XRD 智慧实验室 · 全球材料科研门户" />
+<meta property="og:description" content="检索材料、AI 预测、XRD/PL 回填和具身实验回放，并复核来源、版本、限制与公开边界。" />
+<meta property="og:url" content="https://xiaomiju.xyz/" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+<link rel="apple-touch-icon" href="/icon.svg" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="XRD Research Portal" />
+<title>XRD 智慧实验室 · 材料预测与实验闭环证据库</title>
+<script>
+  (function(){
+    var mode='vivid';
+    try{
+      var saved=localStorage.getItem('cmdcenter.visualMode.v3');
+      if(saved==='vivid'||saved==='defense'||saved==='minimal') mode=saved;
+      else {
+        var legacy=localStorage.getItem('cmdcenter.visualMode.v2');
+        if(legacy==='minimal') mode='minimal';
+      }
+    }catch(error){}
+    document.documentElement.dataset.site32PresentationMode=mode;
+    document.documentElement.dataset.site32VisualMode=mode==='minimal'?'minimal':'vivid';
+  })();
+</script>
+<link rel="stylesheet" href="/style.css?v=site32-global-commercial-v1.13-20260720">
+<link rel="stylesheet" href="/r4.css?v=site32-global-commercial-v1.13-20260720">
+<link rel="stylesheet" href="/site32.css?v=site32-global-commercial-v1.13-20260720">
+<link rel="stylesheet" href="/full-experience.css?v=site32-global-commercial-v1.13-20260720">
+<style>
+  .r4-search-combobox{position:relative;min-width:0}
+  .r4-search-list{position:absolute;z-index:48;top:calc(100% + 6px);right:0;left:0;max-height:min(360px,52vh);overflow:auto;border:1px solid var(--r4-line,#d7e3e9);border-radius:8px;background:#fff;box-shadow:0 16px 44px rgba(16,42,56,.16)}
+  .r4-search-list[hidden]{display:none}
+  .r4-search-option{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;min-height:58px;padding:9px 11px;border:0;border-bottom:1px solid #e5edf1;background:#fff;color:var(--r4-ink,#102a38);cursor:pointer;text-align:left}
+  .r4-search-option:last-child{border-bottom:0}
+  .r4-search-option:hover,.r4-search-option[aria-selected="true"]{background:#eef7fb}
+  .r4-search-option:focus-visible{position:relative;z-index:1;outline:3px solid rgba(36,87,214,.28);outline-offset:-3px}
+  .r4-search-kind,.r4-search-source{max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:1px solid #d5e1e7;border-radius:999px;padding:3px 7px;color:#405a66;background:#f5f9fb;font-size:.62rem;font-weight:800}
+  .r4-search-copy{display:grid;min-width:0;gap:2px}
+  .r4-search-copy b,.r4-search-copy span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .r4-search-copy b{font-size:.76rem;color:var(--r4-ink,#102a38)}
+  .r4-search-copy span{font-size:.66rem;color:var(--r4-muted,#536873)}
+  .r4-search-meta{display:grid;justify-items:end;gap:3px;min-width:0}
+  .r4-search-status{font-size:.6rem;font-weight:800;color:#087453}
+  .r4-search-status.stale,.r4-search-status.offline,.r4-search-status.unknown{color:#9a5600}
+  @media (max-width:680px){.r4-search-option{grid-template-columns:auto minmax(0,1fr)}.r4-search-meta{grid-column:2;grid-template-columns:auto auto;justify-content:start;justify-items:start}.r4-search-source{max-width:150px}}
+  @media (forced-colors:active){.r4-search-list,.r4-search-option{background:Canvas;color:CanvasText;border-color:CanvasText}.r4-search-option[aria-selected="true"]{background:Highlight;color:HighlightText}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">跳到主内容</a>
+<div id="routeAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="appearanceAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<!-- LG 液态玻璃背景舞台: NIR 荧光晶体 (= 官方蝴蝶) + PL 光谱丝带 + 磷光粒子 + 衍射环 -->
+<div class="aurora" aria-hidden="true">
+  <svg class="lg-stage" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lgGv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+      <linearGradient id="lgGb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+      <linearGradient id="lgGc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#67e8f9"/><stop offset="1" stop-color="#0891b2"/></linearGradient>
+      <linearGradient id="lgGa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fcd34d"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+      <linearGradient id="lgGr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fda4af"/><stop offset="1" stop-color="#e11d48"/></linearGradient>
+      <linearGradient id="lgGe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#059669"/></linearGradient>
+      <linearGradient id="lgRib1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c3aed"/><stop offset=".5" stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
+      <linearGradient id="lgRib2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e11d48"/><stop offset=".55" stop-color="#d97706"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
+    </defs>
+
+    <!-- XRD 衍射环 (Debye-Scherrer, 静态水印) -->
+    <g class="lg-rings" fill="none">
+      <circle cx="1430" cy="-40" r="190" stroke="#7c3aed" stroke-width="1.4" opacity=".10"/>
+      <circle cx="1430" cy="-40" r="300" stroke="#2563eb" stroke-width="1.2" opacity=".08"/>
+      <circle cx="1430" cy="-40" r="420" stroke="#0891b2" stroke-width="1.2" opacity=".06"/>
+      <circle cx="1430" cy="-40" r="560" stroke="#7c3aed" stroke-width="1" opacity=".05"/>
+      <circle cx="90" cy="930" r="170" stroke="#d97706" stroke-width="1.2" opacity=".08"/>
+      <circle cx="90" cy="930" r="290" stroke="#e11d48" stroke-width="1" opacity=".06"/>
+    </g>
+
+    <!-- PL 发射光谱丝带 (Cr³⁺ 700nm 宽峰 / Ni²⁺ 1100nm) -->
+    <g class="lg-ribbons rbg1">
+      <path class="rb-echo" d="M-60 560 C 180 548, 300 330, 470 460 S 780 700, 980 520 S 1330 260, 1680 420" stroke="url(#lgRib1)"/>
+      <path class="rb rb-flow" d="M-60 560 C 180 548, 300 330, 470 460 S 780 700, 980 520 S 1330 260, 1680 420" stroke="url(#lgRib1)" pathLength="100"/>
+    </g>
+    <g class="lg-ribbons rbg2">
+      <path class="rb-echo" d="M-60 750 C 260 770, 420 600, 620 690 S 980 850, 1220 700 S 1480 560, 1680 640" stroke="url(#lgRib2)"/>
+      <path class="rb rb-flow slow" d="M-60 750 C 260 770, 420 600, 620 690 S 980 850, 1220 700 S 1480 560, 1680 640" stroke="url(#lgRib2)" pathLength="100"/>
+    </g>
+
+    <!-- NIR 荧光晶体群 (garnet 多面体 = 我们的"蝴蝶") -->
+    <g class="gpos" style="transform:translate(215px,215px)">
+      <g class="gem gv">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGv)"/>
+        <polygon points="0,-60 52,-30 26,-15 0,-30" fill="#fff" opacity=".28"/>
+        <polygon points="52,-30 52,30 26,15 26,-15" fill="#fff" opacity=".13"/>
+        <polygon points="52,30 0,60 0,30 26,15" fill="#0f172a" opacity=".10"/>
+        <polygon points="0,60 -52,30 -26,15 0,30" fill="#0f172a" opacity=".15"/>
+        <polygon points="-52,30 -52,-30 -26,-15 -26,15" fill="#fff" opacity=".10"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".38"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".15"/>
+        <polygon class="glint" points="-10,-46 8,-37 -20,-27" fill="#fff"/>
+      </g>
+    </g>
+    <g class="gpos" style="transform:translate(1335px,185px) scale(.8)">
+      <g class="gem gb">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGb)"/>
+        <polygon points="0,-60 52,-30 26,-15 0,-30" fill="#fff" opacity=".28"/>
+        <polygon points="52,-30 52,30 26,15 26,-15" fill="#fff" opacity=".13"/>
+        <polygon points="52,30 0,60 0,30 26,15" fill="#0f172a" opacity=".10"/>
+        <polygon points="0,60 -52,30 -26,15 0,30" fill="#0f172a" opacity=".15"/>
+        <polygon points="-52,30 -52,-30 -26,-15 -26,15" fill="#fff" opacity=".10"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".38"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".15"/>
+        <polygon class="glint g2" points="-10,-46 8,-37 -20,-27" fill="#fff"/>
+      </g>
+    </g>
+    <g class="gpos m-hide" style="transform:translate(1465px,650px) scale(.62)">
+      <g class="gem gc">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGc)"/>
+        <polygon points="0,-60 52,-30 26,-15 0,-30" fill="#fff" opacity=".28"/>
+        <polygon points="52,30 0,60 0,30 26,15" fill="#0f172a" opacity=".12"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".38"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".15"/>
+        <polygon class="glint g3" points="-10,-46 8,-37 -20,-27" fill="#fff"/>
+      </g>
+    </g>
+    <g class="gpos m-hide" style="transform:translate(350px,715px) scale(.72)">
+      <g class="gem ga">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGa)"/>
+        <polygon points="0,-60 52,-30 26,-15 0,-30" fill="#fff" opacity=".28"/>
+        <polygon points="52,30 0,60 0,30 26,15" fill="#0f172a" opacity=".12"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".38"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".15"/>
+        <polygon class="glint g2" points="-10,-46 8,-37 -20,-27" fill="#fff"/>
+      </g>
+    </g>
+    <g class="gpos m-hide" style="transform:translate(965px,125px) scale(.5)">
+      <g class="gem gr">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGr)"/>
+        <polygon points="0,-60 52,-30 26,-15 0,-30" fill="#fff" opacity=".28"/>
+        <polygon points="52,30 0,60 0,30 26,15" fill="#0f172a" opacity=".12"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".38"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".15"/>
+        <polygon class="glint g3" points="-10,-46 8,-37 -20,-27" fill="#fff"/>
+      </g>
+    </g>
+    <g class="gpos m-hide" style="transform:translate(770px,790px) scale(.44)">
+      <g class="gem ge">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGe)"/>
+        <polygon points="0,-60 52,-30 26,-15 0,-30" fill="#fff" opacity=".28"/>
+        <polygon points="52,30 0,60 0,30 26,15" fill="#0f172a" opacity=".12"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".38"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".15"/>
+        <polygon class="glint" points="-10,-46 8,-37 -20,-27" fill="#fff"/>
+      </g>
+    </g>
+    <g class="gpos m-hide" style="transform:translate(630px,310px) scale(.3)">
+      <g class="gem gv2">
+        <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="url(#lgGv)"/>
+        <polygon points="-52,-30 0,-60 0,-30 -26,-15" fill="#fff" opacity=".4"/>
+        <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#fff" opacity=".16"/>
+      </g>
+    </g>
+
+    <!-- 磷光粒子 (荧光粉激发闪烁) -->
+    <g class="lg-sparks">
+      <circle class="spark" cx="130" cy="430" r="2.6" fill="#a78bfa" style="animation-delay:0s"/>
+      <circle class="spark" cx="420" cy="150" r="2" fill="#60a5fa" style="animation-delay:.9s"/>
+      <circle class="spark" cx="705" cy="520" r="2.8" fill="#22d3ee" style="animation-delay:1.7s"/>
+      <circle class="spark" cx="890" cy="300" r="2" fill="#f472b6" style="animation-delay:2.6s"/>
+      <circle class="spark" cx="1120" cy="620" r="2.6" fill="#fbbf24" style="animation-delay:.5s"/>
+      <circle class="spark" cx="1270" cy="420" r="2" fill="#a78bfa" style="animation-delay:3.3s"/>
+      <circle class="spark" cx="1520" cy="330" r="2.4" fill="#34d399" style="animation-delay:1.2s"/>
+      <circle class="spark" cx="240" cy="620" r="2" fill="#22d3ee" style="animation-delay:2.1s"/>
+      <circle class="spark" cx="560" cy="840" r="2.4" fill="#f472b6" style="animation-delay:3.8s"/>
+      <circle class="spark" cx="1010" cy="90" r="2" fill="#fbbf24" style="animation-delay:1.5s"/>
+      <circle class="spark" cx="1420" cy="820" r="2.6" fill="#60a5fa" style="animation-delay:2.9s"/>
+      <circle class="spark" cx="80" cy="120" r="2" fill="#34d399" style="animation-delay:4.2s"/>
+    </g>
+  </svg>
+  <div class="lg-grain"></div>
+</div>
+
+<!-- Site9 R10 living XRD background: canvas particles + route-aware spectral crystal wings. -->
+<div class="living-bg" id="livingBg" aria-hidden="true">
+  <canvas class="living-canvas" id="livingCanvas"></canvas>
+  <div class="living-wingfield" id="livingWingfield"></div>
+  <div class="living-symbolfield" id="livingSymbolfield"></div>
+  <div class="living-lens"></div>
+</div>
+
+<!-- LG7 page refraction layer: per-view objects, kept separate from business DOM. -->
+<div class="lg-refraction" aria-hidden="true">
+  <svg class="lgr lgr-mq" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lgrMqA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+      <linearGradient id="lgrMqB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0891b2"/><stop offset=".55" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    </defs>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path class="lgr-fat" d="M245 46h82M261 54v74l-50 104c-8 18 5 37 25 37h104c20 0 33-19 25-37l-50-104V54" stroke="url(#lgrMqA)"/>
+      <path d="M225 220c38 20 78-18 124 4" stroke="url(#lgrMqB)" stroke-width="18" opacity=".3"/>
+      <path d="M45 86h134M45 134h178M45 182h144M45 230h112" stroke="url(#lgrMqB)" stroke-width="9"/>
+      <path d="M394 92h102M394 140h74M394 188h126M394 236h96" stroke="url(#lgrMqB)" stroke-width="9"/>
+      <circle cx="278" cy="210" r="7" fill="#67e8f9" stroke="none"/>
+      <circle cx="315" cy="232" r="5" fill="#bfdbfe" stroke="none"/>
+    </g>
+  </svg>
+
+  <svg class="lgr lgr-lab" viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lgrLabA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+      <linearGradient id="lgrLabB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c3aed"/><stop offset=".55" stop-color="#2563eb"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
+    </defs>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polygon class="lgr-fill" points="240,46 320,92 320,184 240,230 160,184 160,92" fill="url(#lgrLabA)" stroke="url(#lgrLabA)"/>
+      <path d="M240 46v184M160 92l160 92M320 92l-160 92" stroke="#fff" stroke-width="8" opacity=".5"/>
+      <path d="M54 246h128M338 246h128M86 206h82M352 206h82" stroke="url(#lgrLabB)" stroke-width="8"/>
+      <path d="M96 116c52-46 120-52 186-18 48 25 87 27 139 2" stroke="url(#lgrLabB)" stroke-width="8"/>
+    </g>
+  </svg>
+
+  <svg class="lgr lgr-car" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lgrCarA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2563eb"/><stop offset=".5" stop-color="#06b6d4"/><stop offset="1" stop-color="#34d399"/></linearGradient>
+    </defs>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path class="lgr-route" d="M38 238C130 172 178 278 270 194s142-38 248-112" stroke="url(#lgrCarA)" stroke-width="13"/>
+      <path d="M62 84c62 26 104 68 124 126M286 76c-28 66-16 118 36 158M462 64c-54 48-74 104-62 170" stroke="url(#lgrCarA)" stroke-width="6" opacity=".55"/>
+      <circle cx="38" cy="238" r="13" fill="#2563eb" stroke="#fff" stroke-width="5"/>
+      <circle cx="270" cy="194" r="13" fill="#06b6d4" stroke="#fff" stroke-width="5"/>
+      <circle cx="518" cy="82" r="13" fill="#34d399" stroke="#fff" stroke-width="5"/>
+    </g>
+  </svg>
+
+  <svg class="lgr lgr-arm" viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lgrArmA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset=".55" stop-color="#f59e0b"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+    </defs>
+    <g fill="none" stroke="url(#lgrArmA)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M114 276h104M166 276v-64M166 212l84-56M250 156l92 38M342 194l60-72" stroke-width="17"/>
+      <circle cx="166" cy="212" r="28" stroke-width="9"/>
+      <circle cx="250" cy="156" r="25" stroke-width="9"/>
+      <circle cx="342" cy="194" r="23" stroke-width="9"/>
+      <path d="M402 122l30-30M402 122l42 12M402 122l16 44" stroke-width="10"/>
+      <path d="M62 90c78 18 137 7 177-34M74 130c70 8 130 0 180-25" stroke-width="7" opacity=".55"/>
+    </g>
+  </svg>
+</div>
+
+<div class="topbar">
+  <a class="brand" href="/" onclick="event.preventDefault();go('home')" aria-label="返回 XRD 智慧实验室总览">
+    <div class="orb"></div>
+    <div><b>荧光具身智研</b><span>XRD 智慧实验室</span></div>
+  </a>
+  <div class="nav" id="nav">
+    <div class="pill active" data-k="home" onclick="go('home')" role="button" tabindex="0"><span data-i18n="nav.home">⊞ 总览</span></div>
+    <div class="pill hl" id="navHighlight" data-k="highlight" onclick="go('highlight')" role="button" tabindex="0"><span data-i18n="nav.highlight">✨ 亮点</span></div>
+    <div class="pill k-lab" data-k="lab" onclick="go('lab')" role="button" tabindex="0"><span class="dot off" id="d-lab"></span><span data-i18n="nav.lab">🧠 AI 脑</span></div>
+    <div class="pill k-car" data-k="car" onclick="go('car')" role="button" tabindex="0"><span class="dot off" id="d-car"></span><span data-i18n="nav.car">🚗 车载脑</span></div>
+    <div class="pill k-arm" data-k="arm" onclick="go('arm')" role="button" tabindex="0"><span class="dot off" id="d-arm"></span><span data-i18n="nav.arm">🦾 机械臂</span></div>
+    <div class="pill k-mq" data-k="mq" onclick="go('mq')" role="button" tabindex="0"><span data-i18n="nav.mq">📋 队列</span></div>
+    <div class="pill k-status" data-k="status" onclick="go('status')" role="button" tabindex="0"><span data-i18n="nav.status">● 状态</span></div>
+    <div class="pill k-ops" data-k="ops" onclick="go('ops')" role="button" tabindex="0"><span data-i18n="nav.ops">🩺 运维</span></div>
+    <div class="pill k-assets" data-k="assets" onclick="go('assets')" role="button" tabindex="0"><span data-i18n="nav.assets">🗂 资产</span></div>
+    <div class="pill k-twin" data-k="twin" onclick="go('twin')" role="button" tabindex="0"><span data-i18n="nav.twin">🌐 孪生</span></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="role-badge" id="roleBadge">👁 评委视角 · 只读</div>
+  <button class="act mode-toggle" id="site32ModeToggle" type="button" onclick="site32QuickModeToggle()" title="切换完整 / 答辩 / 极简模式" aria-label="当前为完整模式，点击切换到答辩模式"><span class="mode-toggle-icon" aria-hidden="true">◐</span><span id="site32ModeLabel">完整</span></button>
+  <div class="act lang" id="btnLang" onclick="i18nToggle()" title="中文 / English" role="button" tabindex="0" aria-label="语言切换">中/EN</div>
+  <div class="act bell" id="bell" onclick="ncToggle()" title="通知中心 (告警 · 事件 · 大事记)" role="button" tabindex="0" aria-label="通知中心">🔔<span class="bcnt" id="bellCnt" style="display:none">0</span></div>
+  <div class="act primary lbl" id="btnTour" onclick="tourStart()" role="button" tabindex="0" aria-label="开始演示">▶ <span>演示</span></div>
+  <div class="more-wrap">
+    <button class="act more-btn" id="btnMore" type="button" onclick="moreToggle(event)" title="更多 (功能页 · 设置)" aria-label="更多菜单" aria-haspopup="menu" aria-expanded="false">⋯<span class="pf-pip" id="pfPip" style="display:none"></span></button>
+    <div class="more-menu" id="moreMenu" role="menu" aria-hidden="true">
+      <div class="mm-grp">演示 · 设置</div>
+      <button onclick="moreGo(()=>go('preflight'))"><span>✅ 演示就绪预检</span><i class="mm-pip" id="mmPip"></i></button>
+      <button onclick="moreGo(notifyToggle)" id="mmNotify">📣 桌面通知</button>
+      <button onclick="moreGo(kioskStart)">🖥 大屏轮播</button>
+      <button onclick="moreGo(fullscreenActive)">⛶ 全屏</button>
+      <fieldset class="site32-appearance" id="site32Appearance">
+        <legend data-i18n="appearance.legend">视觉模式</legend>
+        <label><input type="radio" name="site32-visual-mode" value="vivid" aria-label="完整液态玻璃"><span data-i18n="appearance.vivid">完整模式</span></label>
+        <label><input type="radio" name="site32-visual-mode" value="defense" aria-label="答辩静态玻璃"><span data-i18n="appearance.defense">答辩模式</span></label>
+        <label><input type="radio" name="site32-visual-mode" value="minimal" aria-label="高效极简"><span data-i18n="appearance.minimal">极简模式</span></label>
+      </fieldset>
+      <div class="mm-grp">工业级运营</div>
+      <button onclick="moreGo(()=>go('status'))">● 公共状态</button>
+      <button onclick="moreGo(()=>go('benchmark'))">🏁 全球对标</button>
+      <button onclick="moreGo(()=>go('command'))">🧭 云端指挥</button>
+      <button onclick="moreGo(()=>go('defense'))">🛡 答辩防御</button>
+      <button onclick="moreGo(()=>go('noc'))">🖥 统一运营总览 NOC</button>
+      <button onclick="moreGo(()=>go('oee'))">🏭 OEE 生产线看板</button>
+      <button onclick="moreGo(()=>go('alert'))">🔔 告警中心 (规则/值班)</button>
+      <button onclick="moreGo(()=>go('qms'))">🧪 质量中心 QMS</button>
+      <button onclick="moreGo(()=>go('cmms'))">🔧 维护管理 CMMS</button>
+      <button onclick="moreGo(()=>go('self'))">🩺 平台自监控</button>
+      <button onclick="moreGo(()=>go('logs'))">📑 日志检索</button>
+      <button onclick="moreGo(()=>go('sec'))">🛡 安全态势</button>
+      <button onclick="moreGo(()=>go('data'))">🗄 数据治理</button>
+      <button onclick="moreGo(()=>go('release'))">🚀 发布与配置</button>
+      <div class="mm-grp">观测 · 复盘</div>
+      <button onclick="moreGo(()=>go('obs'))">📈 可观测性中心</button>
+      <button onclick="moreGo(()=>go('topo'))">🕸 服务依赖拓扑</button>
+      <button onclick="moreGo(()=>go('budget'))">🎯 SLO 错误预算</button>
+      <button onclick="moreGo(()=>go('inc'))">🚨 事故复盘</button>
+      <button onclick="moreGo(()=>go('tm'))">⏳ 全局时间机器</button>
+      <button onclick="moreGo(()=>go('build'))">🧪 配方构建器</button>
+      <button onclick="moreGo(()=>go('studio'))">🧬 科研智能体工作室</button>
+      <button onclick="moreGo(()=>go('fsd'))">🧭 Lab-FSD 控制台</button>
+      <button onclick="moreGo(()=>go('replay'))">🎞 实验回放</button>
+      <button onclick="moreGo(()=>go('repro'))">🔬 实测复现台</button>
+      <button onclick="moreGo(()=>go('atlas'))">🔬 材料图鉴</button>
+      <button onclick="moreGo(()=>go('brain'))">🧠 AI 脑解释</button>
+      <button onclick="moreGo(()=>go('models'))">🧩 模型注册表</button>
+      <button onclick="moreGo(()=>go('sync'))">🔄 镜像保鲜台</button>
+      <button onclick="moreGo(()=>go('fleet'))">🛰 机群驾驶舱</button>
+      <button onclick="moreGo(()=>go('tasks'))">🧾 任务驾驶舱</button>
+      <button onclick="moreGo(()=>go('traces'))">🧬 链路追踪</button>
+      <button onclick="moreGo(()=>go('eln'))">📓 实验笔记</button>
+      <button onclick="moreGo(()=>go('importw'))">📥 实测导入</button>
+      <button onclick="moreGo(palOpen)">🔍 全部功能 (Ctrl+K)</button>
+      <button onclick="moreGo(kbdToggle)">⌨ 快捷键 (?)</button>
+      <div class="mm-sep"></div>
+      <button id="mmAdmin" style="display:none" onclick="moreGo(openAdmin)">🛡 平台管理</button>
+      <button onclick="location.href='/logout'">⎋ 登出</button>
+    </div>
+  </div>
+</div>
+
+<nav class="ia-strip" id="iaStrip" aria-label="科研门户完整工作域">
+  <div class="ia-group"><span data-i18n="ia.overview">研究发现</span>
+    <button class="ia-chip active" data-k="home" onclick="go('home')" data-i18n="ia.home">总览</button>
+    <button class="ia-chip" data-k="highlight" onclick="go('highlight')" data-i18n="ia.highlights">亮点</button>
+    <button class="ia-chip" data-k="defense" onclick="go('defense')" data-i18n="ia.defense">答辩防御</button>
+    <button class="ia-chip" data-k="benchmark" onclick="go('benchmark')" data-i18n="ia.benchmark">全球对标</button>
+  </div>
+  <div class="ia-group"><span data-i18n="ia.research">科研 / 预测</span>
+    <button class="ia-chip" data-k="brain" onclick="go('brain')" data-i18n="ia.brain">AI 脑解释</button>
+    <button class="ia-chip" data-k="lab" onclick="go('lab')" data-i18n="ia.ai">AI 脑</button>
+    <button class="ia-chip" data-k="mq" onclick="go('mq')" data-i18n="ia.queue">批次队列</button>
+    <button class="ia-chip" data-k="studio" onclick="go('studio')" data-i18n="ia.studio">科学工作室</button>
+    <button class="ia-chip" data-k="atlas" onclick="go('atlas')" data-i18n="ia.materials">材料图鉴</button>
+    <button class="ia-chip" data-k="build" onclick="go('build')" data-i18n="ia.formula">配方构建</button>
+  </div>
+  <div class="ia-group"><span data-i18n="ia.robot">机器人 / 执行</span>
+    <button class="ia-chip" data-k="fsd" onclick="go('fsd')" data-i18n="ia.fsd">FSD 世界模型</button>
+    <button class="ia-chip" data-k="replay" onclick="go('replay')" data-i18n="ia.replay">实验回放</button>
+    <button class="ia-chip" data-k="car" onclick="go('car')" data-i18n="ia.vehicle">车载脑</button>
+    <button class="ia-chip" data-k="arm" onclick="go('arm')" data-i18n="ia.arms">机械臂</button>
+    <button class="ia-chip" data-k="fleet" onclick="go('fleet')" data-i18n="ia.fleet">机群</button>
+    <button class="ia-chip" data-k="tasks" onclick="go('tasks')" data-i18n="ia.tasks">任务</button>
+    <button class="ia-chip" data-k="command" onclick="go('command')" data-i18n="ia.command">云端指挥</button>
+  </div>
+  <div class="ia-group"><span data-i18n="ia.twinGroup">实验孪生</span>
+    <button class="ia-chip" data-k="twin" onclick="go('twin')" data-i18n="ia.3dlab">3D 实验室</button>
+    <button class="ia-chip" data-k="assets" onclick="go('assets')" data-i18n="ia.assets">资产</button>
+  </div>
+  <div class="ia-group"><span data-i18n="ia.opsGroup">运维 / 状态</span>
+    <button class="ia-chip" data-k="status" onclick="go('status')" data-i18n="ia.status">状态</button>
+    <button class="ia-chip" data-k="ops" onclick="go('ops')" data-i18n="ia.ops">运维</button>
+    <button class="ia-chip" data-k="obs" onclick="go('obs')" data-i18n="ia.observability">可观测性</button>
+    <button class="ia-chip" data-k="logs" onclick="go('logs')" data-i18n="ia.logs">日志</button>
+    <button class="ia-chip" data-k="traces" onclick="go('traces')" data-i18n="ia.traces">链路</button>
+  </div>
+  <div class="ia-group"><span data-i18n="ia.securityGroup">安全 / 设置</span>
+    <button class="ia-chip" data-k="sec" onclick="go('sec')" data-i18n="ia.security">安全</button>
+    <button class="ia-chip" data-k="release" onclick="go('release')" data-i18n="ia.release">发布</button>
+  </div>
+</nav>
+
+<nav class="mobile-tabbar" id="mobileTabbar" aria-label="Mobile navigation">
+  <button class="mtab active" data-k="home" onclick="go('home')"><b>⌂</b><span data-i18n="ia.home">总览</span></button>
+  <button class="mtab" data-k="lab" onclick="go('lab')"><b>AI</b><span>AI</span></button>
+  <button class="mtab" data-k="mq" onclick="go('mq')"><b>WO</b><span data-i18n="ia.queueShort">队列</span></button>
+  <button class="mtab" data-k="status" onclick="go('status')"><b>●</b><span data-i18n="ia.status">状态</span></button>
+  <button class="mtab" data-k="more" onclick="moreToggle(event)"><b>⋯</b><span data-i18n="ia.more">更多</span></button>
+</nav>
+
+<div class="stage" id="main" role="main" tabindex="-1">
+  <!-- 剧场模式 -->
+  <div class="theater" id="theater" aria-label="端到端证据演示">
+    <div class="tcap">
+      <div class="tc-h"><span class="tc-n" id="thN">01</span><span class="tc-t" id="thT"></span><span class="tc-sys" id="thSys"></span></div>
+      <ul class="tc-b" id="thB"></ul>
+      <div class="tc-live" id="thLive" style="display:none"><span class="tcl-dot"></span><span class="tcl-tx" id="thLiveTx">读取实时数据…</span></div>
+    </div>
+    <div class="tdock">
+      <div class="tdots" id="thDots"></div>
+      <div class="tctl">
+        <button type="button" class="tb play" id="thPlay" onclick="theaterPlayPause()" aria-pressed="true">⏸ 暂停</button>
+        <button type="button" class="tb" id="thPrev" onclick="theaterPrev()" aria-label="上一幕">◀</button>
+        <button type="button" class="tb" id="thNext" onclick="theaterNext()" aria-label="下一幕">▶</button>
+        <button type="button" class="tb" onclick="tourExit()">⏹ 退出</button>
+        <div class="tnow" id="thNow">第 1 / 4 幕</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 大屏轮播控制条 (kiosk) -->
+  <div class="kioskbar" id="kioskBar">
+    <div class="kb-fill" id="kioskFill"></div>
+    <div class="kb-row">
+      <span class="kb-tag">🖥 大屏轮播</span>
+      <span class="kb-now" id="kioskNow">—</span>
+      <span class="kb-dots" id="kioskDots"></span>
+      <span class="kb-next" id="kioskNext"></span>
+      <span class="kb-sp"></span>
+      <span class="kb-btn" id="kioskPlay" onclick="kioskPause()" role="button" tabindex="0">⏸ 暂停</span>
+      <span class="kb-btn" onclick="kioskNext()" role="button" tabindex="0">▶▶ 下一站</span>
+      <span class="kb-btn exit" onclick="kioskStop()" role="button" tabindex="0">✕ 退出</span>
+    </div>
+  </div>
+
+  <!-- iframe 容器 -->
+  <div class="frames" id="frames"></div>
+
+  <!-- 总览 -->
+  <div class="page show" id="overview">
+    <div class="ovaurora" aria-hidden="true"></div>
+    <div class="hero hero-grid">
+      <div class="hero-text">
+        <div class="home-os-kicker" aria-label="实验室操作系统状态">
+          <span class="os-live-dot unknown" id="homeOsDot"></span>
+          <b data-i18n="home.kicker">XRD 智慧实验室 · 公网只读科研门户</b>
+          <i id="homeOsRelease">release site32-global-commercial-v1.13-20260720</i>
+          <button type="button" onclick="go('status')" data-i18n="home.boundary">状态与边界</button>
+        </div>
+        <div class="site31-eyebrow">MATERIALS AI · EMBODIED LAB · PUBLIC EVIDENCE</div>
+        <h1 data-i18n="home.h1">XRD 智慧实验室</h1>
+        <p class="site31-lead" data-i18n="home.sub">近红外荧光材料预测与实验闭环证据库。检索配方、AI 判决、XRD/PL 回填与具身实验回放，并复核每条结果的来源、版本、限制和下载路径。</p>
+        <div class="home-search site31-hero-search" role="search" aria-label="统一科研检索">
+          <label class="hs-copy" for="homeSearchInput">
+            <b data-i18n="home.searchTitle">统一科研检索</b>
+            <span data-i18n="home.searchSub">化学式 / 掺杂 / trace_id / evidence_id</span>
+          </label>
+          <div class="hs-box">
+            <div class="r4-search-combobox">
+              <input id="homeSearchInput" type="search" role="combobox" aria-label="统一科研检索输入" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="homeSearchResults" aria-describedby="homeSearchStatus" autocomplete="off" spellcheck="false" data-i18n-ph="home.searchPlaceholder" placeholder="YAG:Cr3+ / trace_id / evidence_id">
+              <div id="homeSearchResults" class="r4-search-list" role="listbox" aria-label="科研检索结果" hidden></div>
+            </div>
+            <button id="homeSearchSubmit" type="button" data-i18n="home.searchBtn">检索</button>
+          </div>
+          <div class="site32-search-filters" aria-label="科研检索筛选条件">
+            <label for="homeSearchKind"><span data-i18n="home.filterKind">对象</span>
+              <select id="homeSearchKind">
+                <option value="" data-i18n="home.filterAllKinds">全部对象</option>
+                <option value="material" data-i18n="home.filterMaterial">材料</option>
+                <option value="prediction" data-i18n="home.filterPrediction">预测</option>
+                <option value="evidence" data-i18n="home.filterEvidence">证据</option>
+                <option value="work_order" data-i18n="home.filterWorkOrder">工单</option>
+                <option value="page" data-i18n="home.filterPage">页面</option>
+              </select>
+            </label>
+            <label for="homeSearchStatusFilter"><span data-i18n="home.filterState">状态</span>
+              <select id="homeSearchStatusFilter">
+                <option value="" data-i18n="home.filterAllStates">全部状态</option>
+                <option value="live" data-i18n="home.stateLive">实时</option>
+                <option value="mirror" data-i18n="home.stateMirror">镜像</option>
+                <option value="replay" data-i18n="home.stateReplay">回放</option>
+                <option value="offline" data-i18n="home.stateOffline">离线</option>
+                <option value="planned" data-i18n="home.statePlanned">计划</option>
+              </select>
+            </label>
+            <label for="homeSearchSource"><span data-i18n="home.filterSource">来源</span>
+              <select id="homeSearchSource">
+                <option value="" data-i18n="home.filterAllSources">全部来源</option>
+                <option value="curated" data-i18n="home.sourceCurated">策展</option>
+                <option value="history" data-i18n="home.sourceHistory">历史实测</option>
+                <option value="mirror" data-i18n="home.sourceMirror">镜像</option>
+                <option value="live" data-i18n="home.sourceLive">实时服务</option>
+              </select>
+            </label>
+            <button id="homeSearchShare" class="site32-search-share" type="button" disabled data-i18n="home.shareSearch">复制链接</button>
+            <span id="homeSearchSummary" class="site32-search-summary" aria-live="polite" data-i18n="home.searchIdle">等待检索</span>
+          </div>
+          <div id="homeSearchStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true">输入关键词后检索材料、预测、证据与链路</div>
+          <div class="hs-chips" aria-label="示例检索">
+            <button onclick="homeSearchExample('YAG:Cr3+')">YAG:Cr3+</button>
+            <button onclick="homeSearchExample('GGG:Ni2+')">GGG:Ni2+</button>
+            <button onclick="homeSearchExample('SYGO:Cr/Ni')">SYGO:Cr/Ni</button>
+          </div>
+        </div>
+        <div class="hero-proof-rail" aria-label="系统能力证据">
+          <span class="hero-proof"><b data-i18n="home.proofFormula">配方 → 判决</b><i>TS / MLIP / Conformal / Fly-MB</i></span>
+          <span class="hero-proof"><b data-i18n="home.proofFeedback">实验 → 回流</b><i>XRD / PL · observed / computed</i></span>
+          <span class="hero-proof"><b>具身闭环 → 双臂协同</b><i data-i18n="home.proofEmbodied">真机实测 + replay · 公网不下发控制</i></span>
+        </div>
+        <div class="hero-actions site32-task-rail" id="homeTaskRail" aria-label="四项科研任务入口">
+          <button type="button" class="primary" data-site32-action="find" onclick="go('atlas')"><span>01</span><b data-i18n="home.taskFind">查材料对象</b><i data-i18n="home.taskFindSub">配方 / 掺杂 / 波段</i></button>
+          <button type="button" data-site32-action="loop" onclick="go('replay')"><span>02</span><b data-i18n="home.taskLoop">看闭环实验</b><i data-i18n="home.taskLoopSub">预测到实测回填</i></button>
+          <button type="button" data-site32-action="evidence" onclick="go('defense')"><span>03</span><b data-i18n="home.taskEvidence">核验证据</b><i data-i18n="home.taskEvidenceSub">来源 / 版本 / 限制</i></button>
+          <button type="button" data-site32-action="trust" onclick="go('sec')"><span>04</span><b data-i18n="home.taskTrust">检查边界</b><i data-i18n="home.taskTrustSub">公开只读 / 残余风险</i></button>
+        </div>
+        <div class="meta">
+          <span class="tag" data-i18n="home.tag1">AI 脑 · 预测建议不替代实测</span>
+          <span class="tag" data-i18n="home.tag2">具身脑 · SLAM + Lab-FSD shadow/assist</span>
+          <span class="tag" data-i18n="home.tag3">双臂复赛真机完成 · CPU 状态权威</span>
+          <span class="tag" id="fleetTs">— 状态加载中 —</span>
+        </div>
+      </div>
+      <div class="hero-scene">
+        <div class="hero-os-layer" aria-hidden="true">
+          <div class="diffraction-rings"><span></span><span></span><span></span></div>
+          <div class="spectrum-ribbon"></div>
+          <div class="bev-grid">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="bpu-bars"><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="crystal-tiles"><span>YAG</span><span>GGG</span><span>SYGO</span></div>
+          <div class="sample-route"></div>
+        </div>
+        <canvas id="c3d" style="display:none; width:100%; border-radius:18px; cursor:grab;"></canvas>
+        <svg id="scene2d" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三机异构动画场景">
+          <defs>
+            <linearGradient id="gBrain" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+            <linearGradient id="gCar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
+            <linearGradient id="gArm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+            <linearGradient id="gFlow" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c3aed"/><stop offset=".5" stop-color="#2563eb"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+            <radialGradient id="gFloor" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#dbe4f5"/><stop offset="1" stop-color="#eef2fb" stop-opacity="0"/></radialGradient>
+            <radialGradient id="gPulse" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#c4b5fd" stop-opacity=".1"/></radialGradient>
+          </defs>
+
+          <!-- 地面 + 阴影 -->
+          <ellipse cx="300" cy="300" rx="280" ry="46" fill="url(#gFloor)"/>
+          <ellipse cx="128" cy="276" rx="66" ry="13" fill="#0f172a" opacity=".09"/>
+          <ellipse cx="320" cy="280" rx="92" ry="16" fill="#0f172a" opacity=".11"/>
+          <ellipse cx="505" cy="274" rx="58" ry="12" fill="#0f172a" opacity=".09"/>
+
+          <!-- 数据流 -->
+          <path d="M172 158 Q 214 150 250 198" fill="none" stroke="url(#gFlow)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 9" opacity=".7">
+            <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.1s" repeatCount="indefinite"/></path>
+          <path d="M388 196 Q 446 168 492 206" fill="none" stroke="url(#gFlow)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 9" opacity=".7">
+            <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.1s" repeatCount="indefinite"/></path>
+          <circle r="3.4" fill="#2563eb"><animateMotion dur="1.8s" repeatCount="indefinite" path="M172 158 Q 214 150 250 198"/></circle>
+          <circle r="3.4" fill="#d97706"><animateMotion dur="1.8s" repeatCount="indefinite" path="M388 196 Q 446 168 492 206"/></circle>
+
+          <!-- AI 脑 服务器 -->
+          <g>
+            <rect x="82" y="118" width="88" height="150" rx="13" fill="url(#gBrain)"/>
+            <rect x="82" y="118" width="22" height="150" rx="13" fill="#fff" opacity=".13"/>
+            <rect x="100" y="140" width="52" height="7" rx="3.5" fill="#fff" opacity=".4"/>
+            <rect x="100" y="156" width="52" height="7" rx="3.5" fill="#fff" opacity=".4"/>
+            <rect x="100" y="172" width="34" height="7" rx="3.5" fill="#fff" opacity=".4"/>
+            <g transform="translate(126 210)">
+              <g><animateTransform attributeName="transform" type="scale" values="1;1.12;1" dur="2.2s" repeatCount="indefinite" additive="sum"/>
+                <circle r="24" fill="url(#gPulse)"/>
+                <polygon points="0,-15 13,-7.5 13,7.5 0,15 -13,7.5 -13,-7.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+                <circle r="5" fill="#fff"/></g>
+            </g>
+            <circle cx="104" cy="250" r="3.2" fill="#34d399"><animate attributeName="opacity" values="1;.25;1" dur="1.4s" repeatCount="indefinite"/></circle>
+            <circle cx="116" cy="250" r="3.2" fill="#60a5fa"><animate attributeName="opacity" values="1;.25;1" dur="1.4s" begin=".4s" repeatCount="indefinite"/></circle>
+            <circle cx="128" cy="250" r="3.2" fill="#fbbf24"><animate attributeName="opacity" values="1;.25;1" dur="1.4s" begin=".8s" repeatCount="indefinite"/></circle>
+          </g>
+
+          <!-- 车载脑 移动小车 -->
+          <g>
+            <rect x="252" y="214" width="136" height="40" rx="15" fill="url(#gCar)"/>
+            <rect x="278" y="190" width="84" height="30" rx="11" fill="url(#gCar)"/>
+            <rect x="288" y="196" width="64" height="18" rx="7" fill="#fff" opacity=".5"/>
+            <!-- 雷达 + 扫描 -->
+            <g opacity=".55"><animateTransform attributeName="transform" type="rotate" from="0 320 184" to="360 320 184" dur="2.6s" repeatCount="indefinite"/>
+              <path d="M320 184 L320 150 A 34 34 0 0 1 348 168 Z" fill="#06b6d4" opacity=".5"/></g>
+            <rect x="312" y="176" width="16" height="11" rx="3" fill="#1e293b"/>
+            <ellipse cx="320" cy="176" rx="9" ry="3.2" fill="#475569"/>
+            <line x1="356" y1="192" x2="362" y2="172" stroke="#1e293b" stroke-width="2"/><circle cx="362" cy="171" r="2.6" fill="#06b6d4"/>
+            <!-- 轮子 (转) -->
+            <g><animateTransform attributeName="transform" type="rotate" from="0 286 256" to="360 286 256" dur="2s" repeatCount="indefinite"/>
+              <circle cx="286" cy="256" r="17" fill="#334155"/><circle cx="286" cy="256" r="7" fill="#cbd5e1"/>
+              <line x1="286" y1="244" x2="286" y2="268" stroke="#94a3b8" stroke-width="2"/><line x1="274" y1="256" x2="298" y2="256" stroke="#94a3b8" stroke-width="2"/></g>
+            <g><animateTransform attributeName="transform" type="rotate" from="0 356 256" to="360 356 256" dur="2s" repeatCount="indefinite"/>
+              <circle cx="356" cy="256" r="17" fill="#334155"/><circle cx="356" cy="256" r="7" fill="#cbd5e1"/>
+              <line x1="356" y1="244" x2="356" y2="268" stroke="#94a3b8" stroke-width="2"/><line x1="344" y1="256" x2="368" y2="256" stroke="#94a3b8" stroke-width="2"/></g>
+          </g>
+
+          <!-- 机械臂 (6 轴, 前臂联动 + 夹爪) -->
+          <g>
+            <rect x="488" y="232" width="34" height="26" rx="6" fill="url(#gArm)"/>
+            <ellipse cx="505" cy="232" rx="18" ry="5" fill="#fb923c"/>
+            <rect x="498" y="188" width="14" height="48" rx="7" fill="url(#gArm)"/>
+            <g><animateTransform attributeName="transform" type="rotate" values="-7 505 190; 9 505 190; -7 505 190" dur="4.5s" repeatCount="indefinite"/>
+              <line x1="505" y1="190" x2="552" y2="166" stroke="url(#gArm)" stroke-width="13" stroke-linecap="round"/>
+              <circle cx="552" cy="166" r="6.5" fill="#fff" stroke="#d97706" stroke-width="3"/>
+              <!-- 夹爪 (开合) -->
+              <g transform="translate(556 162)">
+                <g><animateTransform attributeName="transform" type="translate" values="0 -3.5; 0 -6.5; 0 -3.5" dur="2.4s" repeatCount="indefinite"/><rect x="0" y="0" width="11" height="4" rx="2" fill="#b45309"/></g>
+                <g><animateTransform attributeName="transform" type="translate" values="0 3.5; 0 6.5; 0 3.5" dur="2.4s" repeatCount="indefinite"/><rect x="0" y="0" width="11" height="4" rx="2" fill="#b45309"/></g>
+              </g>
+            </g>
+            <circle cx="505" cy="190" r="9" fill="#fff" stroke="#d97706" stroke-width="3.5"/>
+          </g>
+
+          <!-- 标签 -->
+          <text x="128" y="316" text-anchor="middle" font-size="15" font-weight="800" fill="#6d28d9" font-family="-apple-system,PingFang SC,sans-serif">AI 脑</text>
+          <text x="320" y="320" text-anchor="middle" font-size="15" font-weight="800" fill="#0e7490" font-family="-apple-system,PingFang SC,sans-serif">车载脑</text>
+          <text x="505" y="316" text-anchor="middle" font-size="15" font-weight="800" fill="#b45309" font-family="-apple-system,PingFang SC,sans-serif">机械臂</text>
+        </svg>
+        <div class="hero-scene-labels" aria-hidden="true">
+          <span>材料图鉴</span>
+          <span>AI 脑</span>
+          <span>Lab-FSD</span>
+          <span>证据链</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="public-research-commons" id="researchCommons" aria-labelledby="researchCommonsTitle" aria-busy="true">
+      <div class="prc-head">
+        <div>
+          <span data-i18n="commons.eyebrow">PUBLIC RESEARCH COMMONS · RELEASE-BOUND</span>
+          <h2 id="researchCommonsTitle" data-i18n="commons.title">专题集合与科研对象发现</h2>
+          <p data-i18n="commons.lead">从策展集合进入材料、预测方法、实验回放与可引用证据；每一行都保留来源、状态、限制和稳定入口。</p>
+        </div>
+        <div class="prc-actions">
+          <a href="/atlas" data-i18n="commons.explore">发现全部材料</a>
+          <a href="/api/research_collections" target="_blank" rel="noopener" data-i18n="commons.api">集合 API</a>
+        </div>
+      </div>
+      <div class="prc-facets" role="group" aria-label="科研专题筛选">
+        <button class="active" type="button" data-prc-filter="all" aria-pressed="true" onclick="researchCommonsFilter('all',this)" data-i18n="commons.all">全部专题</button>
+        <button type="button" data-prc-filter="ai_brain" aria-pressed="false" onclick="researchCommonsFilter('ai_brain',this)" data-i18n="commons.materials">材料与预测</button>
+        <button type="button" data-prc-filter="public_site" aria-pressed="false" onclick="researchCommonsFilter('public_site',this)" data-i18n="commons.evidence">证据与复现</button>
+        <button type="button" data-prc-filter="embodied_brain" aria-pressed="false" onclick="researchCommonsFilter('embodied_brain',this)" data-i18n="commons.embodied">具身回放</button>
+        <button type="button" data-prc-filter="arm01" aria-pressed="false" onclick="researchCommonsFilter('arm01',this)">arm01</button>
+        <span id="researchCommonsSummary" role="status" aria-live="polite">正在装载公开专题...</span>
+      </div>
+      <div class="prc-object-list" id="researchCommonsList" aria-live="polite">
+        <div class="prc-object-row skeleton" aria-hidden="true"><span></span><b></b><i></i></div>
+        <div class="prc-object-row skeleton" aria-hidden="true"><span></span><b></b><i></i></div>
+        <div class="prc-object-row skeleton" aria-hidden="true"><span></span><b></b><i></i></div>
+      </div>
+      <div class="prc-detail" id="researchCommonsDetail" hidden></div>
+      <div class="prc-modality-legend" aria-label="证据来源模态">
+        <span><i class="observed"></i><b data-i18n="commons.observed">实测</b><em>observed</em></span>
+        <span><i class="curated"></i><b data-i18n="commons.curated">文献 / 策展</b><em>curated</em></span>
+        <span><i class="computed"></i><b data-i18n="commons.computed">计算</b><em>computed</em></span>
+        <span><i class="replay"></i><b data-i18n="commons.replay">回放 / shadow</b><em>replay</em></span>
+        <span class="prc-boundary" data-i18n="commons.boundary">公开只读 · 不包含工单、网络或控制数据</span>
+      </div>
+    </section>
+
+    <div class="status-strip" id="statusStripHome" onclick="go('status')" role="button" tabindex="0">
+      <span class="ss-dot unknown"></span>
+      <b id="ssTitle" data-i18n="home.statusLoading">状态加载中</b>
+      <span id="ssBody" data-i18n="home.statusChecking">正在校验在线 / 镜像 / 回放 / 离线服务状态...</span>
+      <i data-i18n="home.openStatus">打开状态页 →</i>
+    </div>
+
+    <div class="home-os-grid" aria-label="实验室 OS 首屏状态">
+      <section class="home-os-panel state">
+        <div class="home-panel-head">
+          <div><span>System State</span><b>三机 + 公网状态矩阵</b></div>
+          <button type="button" onclick="go('status')">状态页</button>
+        </div>
+        <div class="home-status-matrix" id="homeStatusMatrix">
+          <div class="home-status-row unknown"><span></span><b>AI 脑</b><i>等待公开状态</i><em>source unknown</em></div>
+          <div class="home-status-row unknown"><span></span><b>车载脑</b><i>等待公开状态</i><em>source unknown</em></div>
+          <div class="home-status-row unknown"><span></span><b>机械臂工位</b><i>等待公开状态</i><em>source unknown</em></div>
+          <div class="home-status-row unknown"><span></span><b>公网 VPS</b><i>等待公开状态</i><em>source unknown</em></div>
+        </div>
+      </section>
+      <section class="home-os-panel release">
+        <div class="home-panel-head">
+          <div><span>Release Plane</span><b>发布 / 缓存 / 回滚</b></div>
+          <button type="button" onclick="go('release')">发布页</button>
+        </div>
+        <div class="home-release-board" id="homeReleaseBoard">
+          <div><span>Release</span><b>site32-global-commercial-v1.13-20260720</b></div>
+          <div><span>SW Cache</span><b>cmdcenter-shell-v96-site32-global-commercial-v1.13</b></div>
+          <div><span>Boundary</span><b>公网只读 · SSO/RBAC 保持</b></div>
+        </div>
+      </section>
+      <section class="home-os-panel events">
+        <div class="home-panel-head">
+          <div><span>Evidence Stream</span><b>近期事件 / 影响面</b></div>
+          <button type="button" onclick="go('traces')">链路</button>
+        </div>
+        <div class="home-event-stream" id="homeEventStream">
+          <div class="home-event-row info"><span>local</span><b>公网展示站保持只读状态孪生</b><p>状态接口加载前展示本地兜底, 不下发物理控制。</p></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- KPI 指标条 -->
+    <div class="kpi-wrap">
+      <div class="kpi-head"><h2 data-i18n="home.kpiHead">📊 平台实时 KPI</h2><span class="kpi-src mirror" id="kpiSrc">— 加载中 —</span></div>
+      <div class="kpi-strip" id="kpiStrip">
+        <div class="kpi k1"><div class="kglow"></div><div class="kv" id="kpi-cov">—</div><div class="kl" data-i18n="home.kpi1">90% CI 实测覆盖率 (Conformal)</div></div>
+        <div class="kpi k2"><div class="kglow"></div><div class="kv" id="kpi-narrow">—</div><div class="kl" data-i18n="home.kpi2">MC-Conformal 区间收窄 vs split</div></div>
+        <div class="kpi k3"><div class="kglow"></div><div class="kv" id="kpi-audit">—</div><div class="kl" data-i18n="home.kpi3">SHA-256 审计链当前完整性</div></div>
+        <div class="kpi k4"><div class="kglow"></div><div class="kv" id="kpi-pred">—</div><div class="kl" data-i18n="home.kpi4">累计预测记录</div></div>
+      </div>
+      <div class="kpi-spec">
+        <span class="chip" data-i18n="home.spec1">9 本地 LLM + 云 R1</span><span class="chip">5 BPU swap-load slot</span>
+        <span class="chip" data-i18n="home.spec2b">Lab-FSD v2 · BEV Occupancy</span><span class="chip">BPU anomaly AE ≈1.7ms</span>
+        <span class="chip" data-i18n="home.spec3">25228 文献向量</span><span class="chip">λ_em MAE 6.2nm (TS)</span>
+        <span class="chip" data-i18n="home.spec5">双 X5 异构 · BPU 10 TOPS</span>
+      </div>
+    </div>
+
+    <div class="home-scenario-wrap">
+      <div class="home-section-head">
+        <div><span>闭环任务面</span><h2>从配方到回流的可查证场景</h2></div>
+        <button type="button" onclick="go('defense')">答辩证据地图</button>
+      </div>
+      <div class="home-scenarios" aria-label="实验室任务场景">
+        <button class="home-scenario s-ai" type="button" onclick="go('brain')">
+          <span>证据 C/D · versioned</span><b>配方预测</b><p>TS / MLIP / Conformal CI 与 9 本地 LLM 形成可解释判决。</p><i>source: predict_engine · boundary: 建议不替代实测</i>
+        </button>
+        <button class="home-scenario s-car" type="button" onclick="go('fsd')">
+          <span>证据 C · read-only</span><b>取料路径证据</b><p>LD14 / Astra / BEV occupancy / Nav2 权威控制边界分层展示。</p><i>source: Lab-FSD replay · boundary: 不下发速度</i>
+        </button>
+        <button class="home-scenario s-arm" type="button" onclick="go('replay')">
+          <span>证据 A/C · measured + replay</span><b>双机械臂复赛协同证据</b><p>arm01 单臂视觉冗余与投袋、arm02 并发四周期研磨均已真机完成。</p><i>source: observed/replay · boundary: CPU/OpenCV 状态权威，公网只读</i>
+        </button>
+        <button class="home-scenario s-xrd" type="button" onclick="go('atlas')">
+          <span>证据 A/B · curated</span><b>XRD / PL 表征</b><p>材料图鉴、谱图、lambda_obs 回填与来源标签统一检索。</p><i>source: observed_pl / public fields</i>
+        </button>
+        <button class="home-scenario s-cloud" type="button" onclick="go('command')">
+          <span>受保护 · public-safe</span><b>云端指挥</b><p>任务、资源、阻塞项、回放与公开安全边界同屏关联。</p><i>source: VPS mirror · boundary: no public actuator</i>
+        </button>
+        <button class="home-scenario s-bench" type="button" onclick="go('benchmark')">
+          <span>公开证据 · gated</span><b>全球对标</b><p>把页面、API、证据门禁和差距项放到同一张评估面板。</p><i>source: /api/global_benchmark · 5/5 gates</i>
+        </button>
+      </div>
+    </div>
+
+    <section class="science-availability" aria-label="科研可用性声明">
+      <div class="sa-head">
+        <span>Research Availability Statement</span>
+        <h2>科研可用性与公开边界</h2>
+        <p>借鉴 AlphaFold / Materials Project / Nature 的表达方式, 将数据、接口、协议和限制集中展示, 让评委能追溯每个公开说法。</p>
+      </div>
+      <div class="sa-grid">
+        <article><b>数据可用性</b><p>observed_pl.csv、predictions.jsonl、ml_cache JSON、材料公开字段和只读状态快照。</p><i>evidence: A/B/C · private notes excluded</i></article>
+        <article><b>接口可用性</b><p>OpenAPI 89 paths、public manifest、global benchmark、hardening summary 与状态聚合 API。</p><i>boundary: GET/HEAD/OPTIONS public surface</i></article>
+        <article><b>协议与版本</b><p>实验协议、Defense 叙事、release/SHA 与公开验证摘要形成可复核证据。</p><i>source: public docs + release table</i></article>
+        <article><b>限制说明</b><p>AI 预测不能替代烧制、XRD 与 PL 实测; 公网页面只展示脱敏证据, 不下发物理控制。</p><i>answer-safe: global research entry</i></article>
+      </div>
+    </section>
+
+    <section class="research-passport" aria-label="科研护照与证据包">
+      <div class="rp-head">
+        <div>
+          <span>Research Passport</span>
+          <h2>面向全球科研工作者的公开证据护照</h2>
+          <p>把“我们是谁、证据在哪、边界是什么、如何引用、怎样离线复核”压缩到一张科研护照, 对齐 AlphaFold / Materials Project / Benchling 这类顶级科研平台的可信表达。</p>
+        </div>
+        <div class="rp-actions">
+          <a href="/api/research_passport" target="_blank" rel="noopener">查看护照</a>
+          <a href="/api/evidence_bundle.json" target="_blank" rel="noopener">下载证据包</a>
+        </div>
+      </div>
+      <div class="rp-grid" id="researchPassportGrid">
+        <article><span>Audience</span><b>材料科研工作者</b><p>尤其面向近红外荧光粉、材料自动化与自驱动实验室评审。</p><i>加载公开护照中...</i></article>
+        <article><span>Evidence</span><b>可引用对象</b><p>材料、预测、状态、链路和发布均保留来源标签。</p><i>加载公开护照中...</i></article>
+        <article><span>Boundary</span><b>公网只读</b><p>公开页面不下发机械臂、底盘、升降台或电磁铁控制。</p><i>加载公开护照中...</i></article>
+        <article><span>Trust</span><b>状态透明</b><p>真机、镜像、回放、离线全部显式标注。</p><i>加载公开护照中...</i></article>
+      </div>
+      <div class="rp-cite" id="researchPassportCite">
+        <b>Citation</b>
+        <span>XRD Smart Lab Team. XRD Smart Lab Public Research Passport, version site32-global-commercial-v1.13-20260720, 2026.</span>
+      </div>
+    </section>
+
+    <section class="site29-portal" aria-label="科研对象与系统责任卡">
+      <div class="sp-head">
+        <div>
+          <span>RESEARCH OBJECTS · SYSTEM CARDS · TRUST</span>
+          <h2>可复核科研对象与系统责任卡</h2>
+          <p>每个公开主张都关联来源模态、验证状态、更新时间、限制和下载路径。这里展示研究者能复核什么, 不展示没有外部依据的排名或认证。</p>
+        </div>
+        <div class="sp-actions">
+          <a href="/api/evidence_objects" target="_blank" rel="noopener">证据对象</a>
+          <a href="/api/trust_center" target="_blank" rel="noopener">Trust Center</a>
+          <a href="/api/research_portal" target="_blank" rel="noopener">Research Portal API</a>
+        </div>
+      </div>
+      <div class="sp-metrics" id="site29Metrics">
+        <article><b>7</b><span>核心证据对象</span><i>/api/evidence_objects</i></article>
+        <article><b>0</b><span>公网物理控制入口</span><i>/api/hardening</i></article>
+        <article><b>live / mirror / replay</b><span>状态标签保留</span><i>/api/public_status</i></article>
+        <article><b>4</b><span>证据来源模态</span><i>实测 / 文献 / 计算 / 回放</i></article>
+      </div>
+      <div class="sp-review" aria-label="Site31 科研审阅承诺">
+        <section>
+          <div class="sp-col-head"><span>Open Science</span><b>开放科研承诺</b></div>
+          <div class="sp-commitments" id="site30Commitments">
+            <article><b>透明状态</b><p>live / mirror / replay / planned / offline 显式标注。</p><i>/api/public_status</i></article>
+            <article><b>可下载证据</b><p>证据包和材料公开字段可离线复核。</p><i>/api/evidence_bundle.json</i></article>
+          </div>
+        </section>
+        <section>
+          <div class="sp-col-head"><span>Negative Controls</span><b>负向控制</b></div>
+          <div class="sp-negative" id="site30NegativeControls">
+            <article><span>verified</span><b>no_public_robot_control</b><p>公网不提供物理控制入口。</p></article>
+            <article><span>manual-check</span><b>cloudflare_edge_not_verified</b><p>边缘 WAF/限流无证据前不写 pass。</p></article>
+          </div>
+        </section>
+      </div>
+      <div class="sp-columns">
+        <section>
+          <div class="sp-col-head"><span>System Cards</span><b>方法与系统责任卡</b></div>
+          <div class="sp-patterns" id="site29Patterns">
+            <article><b>AI 脑系统卡</b><p>预测方法、CI、失败模式和实测边界。</p><i>intended use: candidate screening</i></article>
+            <article><b>Lab-FSD 系统卡</b><p>SLAM、BEV、shadow/assist 与 Nav2/MPPI 权威边界。</p><i>prohibited: public velocity control</i></article>
+            <article><b>双机械臂证据卡</b><p>arm01 视觉冗余与投袋、arm02 并发四周期研磨; 袋状态由 CPU/OpenCV 权威判定。</p><i>source: measured + replay · BPU assist only</i></article>
+          </div>
+        </section>
+        <section>
+          <div class="sp-col-head"><span>Evidence Objects</span><b>科研对象化证据</b></div>
+          <div class="sp-objects" id="site29Objects">
+            <article><span>curated</span><b>Research Passport</b><p>受众、引用、限制和下载入口。</p><i>source: mirror · public-safe</i></article>
+            <article><span>replay</span><b>SLAM / Lab-FSD shadow</b><p>建图证据、shadow/assist、Nav2/MPPI + 安全员边界。</p><i>source: replay · no public velocity</i></article>
+            <article><span>measured</span><b>双臂复赛协同</b><p>arm01 单臂视觉冗余、投袋与 arm02 并发四周期研磨真机证据。</p><i>source: observed + documented replay</i></article>
+          </div>
+        </section>
+        <section>
+          <div class="sp-col-head"><span>Trust Controls</span><b>公开防护与限制</b></div>
+          <div class="sp-trust" id="site29Trust">
+            <article><span>implemented-partial</span><b>公网只读边界</b><p>apex 门户公开 GET/HEAD/OPTIONS; 读取面仍持续做字段分级。</p></article>
+            <article><span>implemented-partial</span><b>机器人控制边界</b><p>apex 不暴露物理控制; 子域实时通道仍需独立验证。</p></article>
+            <article><span>manual-check</span><b>Cloudflare WAF</b><p>无控制台/API 证据前保持人工检查状态。</p></article>
+          </div>
+        </section>
+      </div>
+      <div class="sp-ladder" id="site30EvidenceLadder" aria-label="证据来源模态">
+        <article><span>实测</span><b>Observed / measured</b><p>PL/XRD 回填、具身闭环和双机械臂复赛协同。</p></article>
+        <article><span>文献</span><b>Literature / curated</b><p>材料来源、方法、引用和公开字段。</p></article>
+        <article><span>计算</span><b>Computed / model</b><p>MLIP/TS/Conformal/Fly-MB 与不确定性。</p></article>
+        <article><span>回放</span><b>Replay / shadow</b><p>SLAM、Lab-FSD、任务与故障复盘。</p></article>
+      </div>
+    </section>
+
+    <div class="cards" id="cards">
+      <div class="card k-lab" onclick="go('lab')" role="button" tabindex="0" aria-label="打开 AI 脑系统">
+        <div class="glow"></div><div class="ico">🧠</div>
+        <h3 data-i18n="home.cardLabT">AI 脑 · 智能计算平台</h3>
+        <div class="sub" data-i18n="home.cardLabS">Qwen2/Qwen3/R1 + 5 BPU 槽 → 30 秒 AI 预筛</div>
+        <div class="stat"><span class="dot off" id="s-lab"></span><span id="t-lab">探测中…</span></div>
+        <div class="chips" id="c-lab"></div><div class="enter" data-i18n="home.enter">进入 →</div>
+      </div>
+      <div class="card k-car" onclick="go('car')" role="button" tabindex="0" aria-label="打开车载脑系统">
+        <div class="glow"></div><div class="ico">🚗</div>
+        <h3 data-i18n="home.cardCarT">车载脑 · SLAM 建图 / 影子规划证据</h3>
+        <div class="sub" data-i18n="home.cardCarS">SLAM 建图已用于初赛视频 · Lab-FSD shadow/assist · Nav2 安全边界</div>
+        <div class="stat"><span class="dot off" id="s-car"></span><span id="t-car">探测中…</span></div>
+        <div class="chips" id="c-car"></div><div class="enter" data-i18n="home.enter">进入 →</div>
+      </div>
+      <div class="card k-arm" onclick="go('arm')" role="button" tabindex="0" aria-label="打开机械臂工位">
+        <div class="glow"></div><div class="ico">🦾</div>
+        <h3 data-i18n="home.cardArmT">机械臂 · 双臂复赛协同证据</h3>
+        <div class="sub" data-i18n="home.cardArmS">arm01 视觉冗余与投袋 · arm02 并发四周期研磨</div>
+        <div class="stat"><span class="dot off" id="s-arm"></span><span id="t-arm">探测中…</span></div>
+        <div class="chips" id="c-arm"></div><div class="enter" data-i18n="home.enter">进入 →</div>
+      </div>
+    </div>
+
+    <div class="flow-wrap">
+      <div class="flow-head">
+        <div>
+          <h2 data-i18n="home.flowHead">🎬 端到端一条龙</h2>
+          <div class="desc" data-i18n="home.flowDesc">配方预测 → 路径/工位回放 → 表征回填, 三机如何接力串起一次可复核闭环演示。点"一条龙演示"自动逐站导览。</div>
+        </div>
+        <div class="act primary" onclick="tourStart()" role="button" tabindex="0" data-i18n="home.demoBtn">▶ 开始演示</div>
+      </div>
+      <div class="flow">
+        <div class="step s-lab"><div class="box"><div class="n">STEP 1 · AI 脑</div><div class="t" data-i18n="home.step1t">配方预测</div><div class="w" data-i18n="home.step1w">输入化学式 → R1 判决 + 烧结条件</div></div></div>
+        <div class="arrow">→</div>
+        <div class="step s-car"><div class="box"><div class="n">STEP 2 · 具身脑</div><div class="t" data-i18n="home.step2t">具身真机闭环</div><div class="w" data-i18n="home.step2w">取瓶与升顶 → 0.50m 里程计闭环 → 下降放瓶与复位 · SLAM + Lab-FSD shadow 证据</div></div></div>
+        <div class="arrow">→</div>
+        <div class="step s-arm"><div class="box"><div class="n">STEP 3 · 机械臂</div><div class="t" data-i18n="home.step3t">双臂协同</div><div class="w" data-i18n="home.step3w">arm01 视觉冗余与投袋 → arm02 并发四周期研磨 → 安全复位</div></div></div>
+        <div class="arrow">→</div>
+        <div class="step s-lab"><div class="box"><div class="n">STEP 4 · AI 脑</div><div class="t" data-i18n="home.step4t">实测回填</div><div class="w" data-i18n="home.step4w">XRD/PL 回填 → 闭环学习下一轮</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 技术亮点 -->
+  <div class="page" id="highlights">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge">✨ 技术亮点 · 答辩速览</span>
+        <h1 class="hl-title">5 大实测亮点 · 把 15 个月决策压到 15 分钟</h1>
+        <p>双 RDK X5 异构 —— AI 脑 9 本地 LLM + 5 BPU 推理槽出脑力, 具身脑已真机完成取瓶、升顶、0.50m 里程计闭环直行、下降放瓶与复位, Lab-FSD 保持 shadow/assist; 双机械臂已完成 arm01 视觉冗余与投袋、arm02 并发四周期研磨。
+           以下为可复核的真机实测亮点 (RDK X5 Bayes-e 10 TOPS, CMA 391MB)。</p>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gchip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+        <g fill="#94a3b8">
+          <rect x="50" y="20" width="6" height="14" rx="2"/><rect x="72" y="20" width="6" height="14" rx="2"/><rect x="94" y="20" width="6" height="14" rx="2"/>
+          <rect x="50" y="116" width="6" height="14" rx="2"/><rect x="72" y="116" width="6" height="14" rx="2"/><rect x="94" y="116" width="6" height="14" rx="2"/>
+          <rect x="20" y="50" width="14" height="6" rx="2"/><rect x="20" y="72" width="14" height="6" rx="2"/><rect x="20" y="94" width="14" height="6" rx="2"/>
+          <rect x="116" y="50" width="14" height="6" rx="2"/><rect x="116" y="72" width="14" height="6" rx="2"/><rect x="116" y="94" width="14" height="6" rx="2"/>
+        </g>
+        <rect x="34" y="34" width="82" height="82" rx="14" fill="url(#gchip)"/>
+        <rect x="48" y="48" width="54" height="54" rx="9" fill="#fff" opacity=".16"/>
+        <rect x="59" y="59" width="32" height="32" rx="7" fill="#fff"><animate attributeName="opacity" values=".5;1;.5" dur="1.8s" repeatCount="indefinite"/></rect>
+        <text x="75" y="80" text-anchor="middle" font-size="13" font-weight="800" fill="#6d28d9" font-family="-apple-system,sans-serif">BPU</text>
+        <circle r="3" fill="#06b6d4"><animateMotion dur="2s" repeatCount="indefinite" path="M53 27 L53 48"/></circle>
+        <circle r="3" fill="#a855f7"><animateMotion dur="2s" begin=".7s" repeatCount="indefinite" path="M27 75 L48 75"/></circle>
+        <circle r="3" fill="#2563eb"><animateMotion dur="2s" begin="1.2s" repeatCount="indefinite" path="M97 123 L97 102"/></circle>
+      </svg></div>
+    </div>
+    <div class="hl-grid">
+      <div class="hlc c1"><div class="bar"></div>
+        <div class="top"><span class="ic">🧠</span><span class="ttl">X5 BPU 24 层 Qwen2 Transformer<span class="first">真机实测</span></span></div>
+        <div class="metric"><div class="m"><div class="mv">553<span style="font-size:.8rem">ms</span></div><div class="ml">单次 forward 延迟</div></div>
+          <div class="m"><div class="mv">9%→52%</div><div class="ml">BPU 峰值利用率 (5.8×)</div></div></div>
+        <div class="why">手写 ManualQwen2 (24 层 Linear + RoPE/RMSNorm/GQA/SwiGLU), opset 11 绕 fused ops, 切 2 bin 链式推理。把 LLM 推理真正搬上嵌入式 BPU, 不靠 CPU。</div>
+        <div class="meas">● 真机实测 · 手写 vs HF byte-level 对齐 (max diff 0.0000)</div>
+      </div>
+      <div class="hlc c2"><div class="bar"></div>
+        <div class="top"><span class="ic">👁</span><span class="ttl">X5 BPU 端到端 VLM<span class="first">真机实测</span></span></div>
+        <div class="metric"><div class="m"><div class="mv">256M</div><div class="ml">SmolVLM hybrid 参数</div></div>
+          <div class="m"><div class="mv">33<span style="font-size:.8rem">s</span></div><div class="ml">单次 query (vision BPU)</div></div></div>
+        <div class="why">vision 双段上 BPU + decoder CPU 的 hybrid 方案 (INT8 PTQ 后 decoder 语义崩坏, 诚实降级), 让视觉-语言模型在边缘跑通。</div>
+        <div class="meas">● 真机实测 · 具身脑 X5</div>
+      </div>
+      <div class="hlc c3"><div class="bar"></div>
+        <div class="top"><span class="ic">🔤</span><span class="ttl">PP-OCRv4 检测 · 全 BPU</span></div>
+        <div class="metric"><div class="m"><div class="mv">6<span style="font-size:.8rem">ms</span></div><div class="ml">163 FPS · 0 CPU fallback</div></div>
+          <div class="m"><div class="mv">2.7<span style="font-size:.8rem">MB</span></div><div class="ml">BPU 算子覆盖 95%</div></div></div>
+        <div class="why">烧结炉数显读数全程 BPU 检测, 零 CPU 回退。七段 OpenCV + Qwen-VL 兜底协同。</div>
+        <div class="meas">● 真机实测 · BPU det</div>
+      </div>
+      <div class="hlc c4"><div class="bar"></div>
+        <div class="top"><span class="ic">🛰</span><span class="ttl">MPPI cost MLP · BPU 加速</span></div>
+        <div class="metric"><div class="m"><div class="mv">1.14<span style="font-size:.8rem">ms</span></div><div class="ml">880K traj·s⁻¹ (4.1× CPU)</div></div>
+          <div class="m"><div class="mv">264<span style="font-size:.8rem">KB</span></div><div class="ml">cost 网络体积</div></div></div>
+        <div class="why">把 MPPI 候选轨迹的代价评估交给 BPU 批量并行, shadow/assist 评估链路 4.1× 提速; 底盘执行仍受 Nav2/MPPI 与安全员边界约束。</div>
+        <div class="meas">● 真机实测 · 车载脑 X5</div>
+      </div>
+      <div class="hlc c5"><div class="bar"></div>
+        <div class="top"><span class="ic">⚙</span><span class="ttl">双 RDK X5 异构协同</span></div>
+        <div class="metric"><div class="m"><div class="mv">9 LLM</div><div class="ml">大脑: + 5 BPU swap-load slot</div></div>
+          <div class="m"><div class="mv">19+</div><div class="ml">小脑: BPU 感知/规划节点</div></div></div>
+        <div class="why">大脑 (AI 脑) 出决策, 小脑 (具身脑) 完成真机闭环并提供地图/风险/路径证据, 双臂完成视觉冗余、投袋与并发研磨。硬件未上电时公网只展示镜像/回放标签。</div>
+        <div class="meas">● 真机/回放标注 · 双 X5 + arm01 主臂 + arm02 副臂</div>
+      </div>
+    </div>
+    <div class="hl-foot">X5/BPU 指标取自真机实测; 系统闭环以基准页与黑匣子回放共同呈现。点 <b>▶ 一条龙演示</b> 看端到端证据链。</div>
+  </div>
+
+  <!-- Site9 R2 Public Status -->
+  <div class="page" id="statusview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#0369a1;background:rgba(14,165,233,.09);border-color:rgba(14,165,233,.28)">● 公共状态</span>
+        <h1 class="status-title">公网状态页 · 真实 / 镜像 / 回放透明</h1>
+        <p>这里把 VPS、网站外壳、AI 脑、车载脑、主/副机械臂、预测 API、镜像服务、认证和静态缓存放在同一张状态图里。
+          X5、Pi 或机器人关机时不会伪装成在线；页面会明确标注 <b>live / mirror / replay / stale / offline / unknown</b>。</p>
+        <div class="meta">
+          <span class="tag" id="psTs">状态加载中</span>
+          <span class="story-cta" onclick="loadPublicStatus()" role="button" tabindex="0">↻ 刷新</span>
+        </div>
+      </div>
+      <div class="hero-ico status-orb" aria-hidden="true">
+        <span></span><i></i><em></em>
+      </div>
+    </div>
+    <div class="ps-summary" id="psSummary"><div class="skel" style="height:120px"></div></div>
+    <div class="ps-grid" id="psComponents"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="ps-two">
+      <div class="ps-panel">
+        <div class="aw-head"><h2>24h / 7d 可用性</h2><span class="oe-sub">historian 样本 · 镜像与真机分开展示</span></div>
+        <div id="psAvailability"><div class="skel-rows"><div class="skel"></div><div class="skel"></div></div></div>
+      </div>
+      <div class="ps-panel">
+        <div class="aw-head"><h2>近期事件</h2><span class="oe-sub">事故、告警、serving 切换</span></div>
+        <div id="psEvents"><div class="skel-rows"><div class="skel"></div><div class="skel"></div></div></div>
+      </div>
+    </div>
+    <div class="hl-foot" style="margin-top:20px">状态口径: 正常 / 降级 / 镜像 / 回放 / 离线 / 未知。设备未上电时本页会如实标注, 不伪装 live。</div>
+  </div>
+
+  <!-- 运维总览 -->
+  <div class="page" id="opsview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#065f46;background:rgba(5,150,105,.1);border-color:rgba(5,150,105,.28)">🩺 运维总览 · 链路自愈</span>
+        <h1 class="ops-title">三机健康 + 故障自愈拓扑</h1>
+        <p>公网链路经边缘防护与香港受保护源站提供只读访问, 前台将设备来源与公开镜像分开展示。
+           设备未上电时只呈现镜像/回放证据, 不伪装实时硬件。下方为脱敏后的服务状态摘要。</p>
+        <div class="meta"><span class="tag" id="opsTs">— 探活中 —</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gsrv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        <g fill="none" stroke="#06b6d4" stroke-width="3" stroke-linecap="round">
+          <path d="M60 42 A 21 21 0 0 1 90 42"><animate attributeName="opacity" values=".2;.9;.2" dur="1.8s" repeatCount="indefinite"/></path>
+          <path d="M52 34 A 32 32 0 0 1 98 34"><animate attributeName="opacity" values=".15;.7;.15" dur="1.8s" begin=".5s" repeatCount="indefinite"/></path>
+        </g>
+        <circle cx="75" cy="46" r="4" fill="#059669"/>
+        <rect x="34" y="58" width="82" height="22" rx="6" fill="url(#gsrv)"/>
+        <rect x="34" y="84" width="82" height="22" rx="6" fill="url(#gsrv)"/>
+        <rect x="34" y="110" width="82" height="22" rx="6" fill="url(#gsrv)"/>
+        <circle cx="45" cy="69" r="3" fill="#fff"><animate attributeName="opacity" values="1;.3;1" dur="1.3s" repeatCount="indefinite"/></circle>
+        <circle cx="45" cy="95" r="3" fill="#fff"><animate attributeName="opacity" values="1;.3;1" dur="1.3s" begin=".4s" repeatCount="indefinite"/></circle>
+        <circle cx="45" cy="121" r="3" fill="#fff"><animate attributeName="opacity" values="1;.3;1" dur="1.3s" begin=".8s" repeatCount="indefinite"/></circle>
+        <polyline points="56,69 64,69 68,61 74,77 78,69 104,69" fill="none" stroke="#fff" stroke-width="2" opacity=".9" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg></div>
+    </div>
+    <div class="alarm-wrap">
+      <div class="aw-head"><h2>🚨 告警中心</h2>
+        <span class="oe-sub">规则引擎自动升警 (双路全离线 / 镜像服务失效 / 延迟超阈 ×3 / 审计链断裂 / LLM 降级) → 人工确认 → 恢复自动销警</span>
+        <span class="mail-ch" id="mailCh">✉ 邮件通道: —</span></div>
+      <div class="alarm-list" id="alarmList"><div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+      <div class="aw-hist-h">🕊 最近已恢复</div>
+      <div class="alarm-hist" id="alarmHist"><div class="oe-empty">—</div></div>
+    </div>
+    <div class="ops-grid" id="opsGrid"></div>
+    <div class="slo-wrap">
+      <div class="aw-head"><h2>📈 SLO 可用性与延迟</h2>
+        <span class="oe-sub">historian 真数据 (30s 采样分桶) — "UI 可用"含镜像兜底, "真机在线"单列不混淆</span></div>
+      <div class="slo-legend">
+        <span><i class="seg real"></i>真机直连</span><span><i class="seg mirror"></i>镜像演示</span>
+        <span><i class="seg down"></i>双路离线</span><span><i class="seg none"></i>无数据</span></div>
+      <div id="sloGrid"><div class="oe-empty">historian 累积中…</div></div>
+    </div>
+    <div class="ops-note">受保护网关采用健康检查与只读镜像兜底; 公网页面仅披露抽象状态和来源标签, 不公开源站拓扑、端口、服务名或运维命令。</div>
+    <div class="ops-events">
+      <div class="oe-head"><h2>📜 实时事件流</h2>
+        <span class="oe-sub">historian 真数据 — 状态跃迁 / 链路切换自动落库, SSE 实时推送 (30s 周期采样 + 请求路径即时检测)</span></div>
+      <div class="oe-feed" id="evFeed"><div class="oe-empty">暂无事件 — 三机链路稳定 (发生 真机↔镜像↔离线 跃迁时自动记录)</div></div>
+    </div>
+    <div class="report-wrap">
+      <div class="aw-head"><h2>📊 报表中心</h2>
+        <span class="oe-sub">跨天自动生成运行日报 (historian 汇总, 邮件通道开了同步发摘要)</span>
+        <span style="margin-left:auto"></span>
+        <a class="csvbtn" href="/api/export/events.csv?hours=168">⬇ 事件 CSV</a>
+        <a class="csvbtn" href="/api/export/history.csv?sys=lab&hours=24">⬇ 状态 CSV</a>
+        <a class="csvbtn" href="/api/export/workorders.csv">⬇ 工单 CSV</a>
+        <a class="csvbtn" id="repGenBtn" style="display:none" onclick="repGenNow()">⚡ 立即生成今日 (部分)</a>
+      </div>
+      <div class="rep-list" id="repList"><div class="oe-empty">暂无日报</div></div>
+    </div>
+  </div>
+
+  <!-- 资产数字孪生 -->
+  <div class="page" id="assetsview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">🗂 资产数字孪生 · 设备档案</span>
+        <h1>全资产注册表 + 维保台账</h1>
+        <p>三机 + 公网基础设施的真实硬件清单, 实时挂接 serving 状态; 维保记录落 historian 并自动记操作人 (SSO)。
+           点资产组卡上的 <b>⬢ 3D</b> 跳到总览三维场景聚焦该设备。</p>
+        <div class="meta"><span class="tag" id="assetsTs">— 加载中 —</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gast" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+        <rect x="55" y="14" width="40" height="26" rx="7" fill="url(#gast)"/>
+        <circle cx="75" cy="27" r="5" fill="#fff" opacity=".9"><animate attributeName="opacity" values=".9;.4;.9" dur="1.8s" repeatCount="indefinite"/></circle>
+        <path d="M75 40 V58 M75 58 H35 M75 58 H115 M35 58 V74 M75 58 V74 M115 58 V74" stroke="#a5b4fc" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle r="2.6" fill="#7c3aed"><animateMotion dur="2.2s" repeatCount="indefinite" path="M75 40 V58 H35 V74"/></circle>
+        <circle r="2.6" fill="#2563eb"><animateMotion dur="2.2s" begin=".7s" repeatCount="indefinite" path="M75 40 V58 V74"/></circle>
+        <circle r="2.6" fill="#d97706"><animateMotion dur="2.2s" begin="1.4s" repeatCount="indefinite" path="M75 40 V58 H115 V74"/></circle>
+        <g><rect x="17" y="74" width="36" height="24" rx="6" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/><text x="35" y="90" text-anchor="middle" font-size="11" fill="#6d28d9" font-weight="800">🧠</text></g>
+        <g><rect x="57" y="74" width="36" height="24" rx="6" fill="#e0f2fe" stroke="#0891b2" stroke-width="2"/><text x="75" y="90" text-anchor="middle" font-size="11" fill="#0e7490" font-weight="800">🚗</text></g>
+        <g><rect x="97" y="74" width="36" height="24" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="115" y="90" text-anchor="middle" font-size="11" fill="#b45309" font-weight="800">🦾</text></g>
+        <path d="M35 98 V112 M75 98 V112 M115 98 V112" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="3 4"/>
+        <circle cx="35" cy="120" r="4" fill="#34d399"><animate attributeName="opacity" values="1;.3;1" dur="1.4s" repeatCount="indefinite"/></circle>
+        <circle cx="75" cy="120" r="4" fill="#22d3ee"><animate attributeName="opacity" values="1;.3;1" dur="1.4s" begin=".4s" repeatCount="indefinite"/></circle>
+        <circle cx="115" cy="120" r="4" fill="#fbbf24"><animate attributeName="opacity" values="1;.3;1" dur="1.4s" begin=".8s" repeatCount="indefinite"/></circle>
+      </svg></div>
+    </div>
+    <div class="asset-grid" id="assetGrid"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="maint-wrap">
+      <div class="aw-head"><h2>🔧 维保台账</h2>
+        <span class="oe-sub">人工维保记录, 操作人自动记账 (SSO X-User) 并同步到事件流 — 评委账号只读</span></div>
+      <div class="maint-form">
+        <select id="mAsset" aria-label="维保资产"></select>
+        <input id="mNote" aria-label="维保内容" placeholder="维保内容, 例: D300 雷达换线缆 / arm01 重新上电入网 / 更换 12V 适配器…" maxlength="200">
+        <button class="ackbtn" onclick="addMaint()">＋ 记录</button>
+      </div>
+      <div class="maint-list" id="maintList"><div class="oe-empty">暂无维保记录</div></div>
+    </div>
+  </div>
+
+  <!-- G1 数字孪生 -->
+  <div class="page" id="twinview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0e7490;background:rgba(6,182,212,.08);border-color:rgba(6,182,212,.3)">🌐 数字孪生 · 真尺寸 · 真运动学</span>
+      <h1>实验室全景孪生</h1>
+      <p>孪生按 <b>myCobot 280 URDF/DH</b> 建模; arm01 视觉冗余与投袋、arm02 并发四周期研磨均有真机/回放证据。浏览器逐帧正运动学; 小车由公开位姿/回放摘要驱动。
+         真机在线即真遥测, 离线时镜像 mock 驱动并如实标注。车体外观为近似 (LD14 顶置 + Astra 前向)。</p>
+      <div class="meta" id="twChips"><span class="tag">— 连接中 —</span></div>
+    </div>
+    <div class="twin-wrap">
+      <div class="twin-scene" id="twScene">
+        <canvas id="tw3d" style="display:none;border-radius:18px;cursor:grab;width:100%;"></canvas>
+        <div id="twFallback" class="oe-empty" style="padding:60px 20px">⏳ 3D 场景加载中…</div>
+        <div class="twin-views">
+          <button class="twvbtn on" data-v="all" onclick="twView('all')">🏛 全景</button>
+          <button class="twvbtn" data-v="bench" onclick="twView('bench')">🦾 双臂工位</button>
+          <button class="twvbtn" data-v="car" onclick="twView('car')">🚗 跟车</button>
+          <button class="twvbtn" data-v="fpv" onclick="twView('fpv')">🎥 车头视角</button>
+          <button class="twvbtn" data-v="rack" onclick="twView('rack')">🧠 AI 脑机架</button>
+          <button class="twvbtn" data-v="path" onclick="twView('path')">🧪 样品路径</button>
+          <button class="twvbtn" data-v="furnace" onclick="twView('furnace')">🔥 炉/XRD/PL</button>
+          <button class="twvbtn" data-v="cloud" onclick="twView('cloud')">☁ VPS 层</button>
+        </div>
+      </div>
+      <div class="twin-data">
+        <div class="aw-head"><h2>📡 实时遥测</h2>
+          <span class="oe-sub">/api/twin · 2.5s 轮询 · 数字与 3D 同一数据源</span></div>
+        <div class="tw-replay">
+          <label>时间回放 <input id="twReplay" aria-label="数字孪生时间回放进度" type="range" min="0" max="100" value="100" oninput="twReplay(this.value)"></label>
+          <button onclick="twReplayLive()">回到 live</button>
+          <span id="twReplayLabel">Live telemetry</span>
+        </div>
+        <div id="twData"><div class="oe-empty">等待遥测…</div></div>
+        <div class="aw-head tw-subhead"><h2>🗺 实验室小地图</h2><span class="oe-sub">route · zones · sample</span></div>
+        <div id="twMap" class="tw-map"><div class="oe-empty">等待地图…</div></div>
+        <div class="aw-head tw-subhead"><h2>⏭ Next 30s</h2><span class="oe-sub">replay-safe plan</span></div>
+        <div id="twPlan" class="tw-plan"><div class="oe-empty">等待计划…</div></div>
+        <div class="twin-note">💡 高模钩子: 把 CAD 导出的 <code>mycobot.glb / agv.glb / x5rack.glb</code>
+          放到门户 <code>/models/</code> 即自动替换程序化模型 (当前为真尺寸程序化建模)。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- G6 Closed-loop Experiment Replay -->
+  <div class="page" id="replayview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#7c2d12;background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.28)">闭环实验回放 · 10 阶段</span>
+        <h1 class="replay-title"><span>闭环实验</span><span>回放控制台</span></h1>
+        <p>把 AI 预测、队列、具身真机闭环、双臂协同、执行层公开证据、烧结、XRD/PL 和失败回流串成一条可拖动、可注入叙事故障、可答辩的实验电影; 故障注入只影响回放叙事。</p>
+        <div class="meta">
+          <span class="tag" id="replayTs">— 加载中 —</span>
+          <span class="tag">trace_id · 工单 · 样品流</span>
+          <span class="tag">只读回放 · 不下发机器人命令</span>
+        </div>
+      </div>
+      <div class="hero-ico replay-ico" aria-hidden="true">
+        <span>AI</span><span>车</span><span>臂</span><span>XRD</span>
+      </div>
+    </div>
+    <div class="replay-shell">
+      <div class="replay-control">
+        <label>时间线 <input id="replayPct" aria-label="实验回放时间线" type="range" min="0" max="100" value="58" oninput="replayScrub(this.value)"></label>
+        <div class="replay-faults" id="replayFaults"><button class="on" data-f="" onclick="replayFault('')">正常</button></div>
+        <span id="replayPctLabel">58%</span>
+      </div>
+      <div id="replayShell"><div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    </div>
+  </div>
+
+  <!-- G7 Cloud Lab Command Center -->
+  <div class="page" id="commandview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#075985;background:rgba(14,165,233,.11);border-color:rgba(14,165,233,.26)">云端实验室指挥中心 · 资源排程</span>
+        <h1 class="command-title"><span>云端实验室</span><span>指挥中心</span></h1>
+        <p>把任务队列、设备能力、资源预约、样品位置、人工确认、风险锁和依赖 blocker 汇成一张公开安全的调度总览。它展示为什么还不能执行、需要谁确认，但不开放危险远控。</p>
+        <div class="meta">
+          <span class="tag" id="commandTs">— 加载中 —</span>
+          <span class="tag">任务队列 · 资源 · 阻塞项</span>
+          <span class="tag">公开只读展示</span>
+        </div>
+      </div>
+      <div class="hero-ico command-ico" aria-hidden="true">
+        <span>队列</span><span>资产</span><span>风险</span><span>链路</span>
+      </div>
+    </div>
+    <div class="command-shell" id="commandShell">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <!-- G8 Defense Mode Pro -->
+  <div class="page" id="defenseview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.10);border-color:rgba(124,58,237,.25)">证据索引 / 答辩防御模式</span>
+        <h1 class="defense-title"><span>答辩防御模式</span><span>证据矩阵</span></h1>
+        <p>把 3 / 5 / 8 分钟答辩路径、创新点证据、离线演示路线、评委 checklist 和公网安全边界合成一个可复核的证据索引。每个主张都有页面或 API 入口；没有证据的能力不会写成 live。</p>
+        <div class="meta">
+          <span class="tag" id="defenseTs">— 加载中 —</span>
+          <span class="tag">3 · 5 · 8 分钟脚本</span>
+          <span class="tag">证据链接 · 来源标签</span>
+        </div>
+      </div>
+      <div class="hero-ico defense-ico" aria-hidden="true">
+        <span>3m</span><span>5m</span><span>8m</span><span>API</span>
+      </div>
+    </div>
+    <div class="defense-shell" id="defenseShell">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <!-- G11 Global Benchmark -->
+  <div class="page" id="benchmarkview">
+    <div class="hero hero-with-ico benchmark-hero">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#075985;background:rgba(14,165,233,.10);border-color:rgba(14,165,233,.25)">全球顶级对标 · 顶级站横向验收</span>
+        <h1 class="benchmark-title"><span>全球顶级对标</span><span>验收控制台</span></h1>
+        <p>把 Apple / AlphaFold / Materials Project / Emerald Cloud Lab / Waymo / Datadog / Grafana / Vercel 的顶级网站特征映射到本站页面、API、证据链、差距项和评分。不是口头宣布达标，而是逐项公开验收。</p>
+        <div class="meta">
+          <span class="tag" id="benchmarkTs">— 加载中 —</span>
+          <span class="tag">外部标杆 · 站内证据</span>
+          <span class="tag">评分门禁 · 诚实边界</span>
+        </div>
+      </div>
+      <div class="hero-ico benchmark-ico" aria-hidden="true">
+        <span>Apple</span><span>AlphaFold</span><span>Waymo</span><span>API</span>
+      </div>
+    </div>
+    <div class="benchmark-shell" id="benchmarkShell">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <!-- 项目故事 -->
+  <div class="page" id="storyview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#4338ca;background:rgba(79,70,229,.1);border-color:rgba(79,70,229,.28)">📖 项目故事</span>
+      <h1 class="story-title">从 15 个月到 15 分钟</h1>
+      <p>近红外荧光粉 (Cr³⁺/Ni²⁺ 掺杂石榴石) 的配方设计 → AI 预筛 → 取料 → 烧制 → 失败回流完整闭环。
+         我们把"想试就得跑一个月"的实验, 变成"30 秒预筛 + 机器人回放/人工确认边界"的闭环飞轮。</p>
+    </div>
+
+    <div class="sec-h">🔥 痛点 vs 方案</div>
+    <div class="scmp">
+      <div class="scol old"><div class="lab">传统流程</div>
+        <div class="big thru">≈ 15 个月</div>
+        <p>研究员每轮想试 15-20 个候选配方, 每个要经历 研磨 → 烧制 → XRD → PL 光谱 → 决策 ≈ 1 个月。
+           15 个候选串起来就是一年多, 大量算力与试剂耗在注定失败的配方上。</p></div>
+      <div class="scol new"><div class="lab">本系统</div>
+        <div class="big">≈ 15 分钟</div>
+        <p>AI 脑 30 秒预筛出 verdict + 烧结条件 + 置信区间, 15 分钟锁定 3-5 个优质候选真做;
+           具身脑完成真机取放与 0.50m 里程计闭环并展示 SLAM/shadow 证据, 双臂完成视觉冗余、投袋和并发四周期研磨, 实测回填驱动下一轮闭环学习。</p></div>
+    </div>
+
+    <div class="sec-h">⚙ 三机异构 · 大脑 / 小脑 / 小肌群</div>
+    <div class="snodes">
+      <div class="snode k-lab" onclick="go('lab')" role="button" tabindex="0" aria-label="打开 AI 脑系统"><div class="role">大脑 · 出脑力</div><div class="ic">🧠</div>
+        <h3>AI 脑 · 智能计算平台</h3><p>9 本地 LLM + 5 BPU 推理槽 + 云 R1, NIR 配方预测 / 光谱分析 / 决策。点击进入 →</p></div>
+      <div class="snode k-car" onclick="go('car')" role="button" tabindex="0" aria-label="打开车载脑系统"><div class="role">小脑 · 出脚力</div><div class="ic">🚗</div>
+        <h3>车载脑 · SLAM 建图 / 影子规划证据</h3><p>Lab-FSD v2 多模态 BEV + 概率影子规划 + 安全门控, Nav2/MPPI 仍是底盘控制权威。点击进入 →</p></div>
+      <div class="snode k-arm" onclick="go('arm')" role="button" tabindex="0" aria-label="打开机械臂工位"><div class="role">小肌群 · 出手力</div><div class="ic">🦾</div>
+        <h3>机械臂 · 双臂复赛证据</h3><p>arm01 单臂视觉冗余与投袋、arm02 并发四周期研磨均已真机完成; CPU/OpenCV 为袋状态权威。点击进入 →</p></div>
+    </div>
+
+    <div class="sec-h">🔄 闭环实验飞轮</div>
+    <div class="wheel">
+      <div class="wf">
+        <div class="wstep"><div class="wt">配方预测</div><div class="ws">AI 脑 · 30s verdict</div></div>
+        <div class="arrow">→</div>
+        <div class="wstep"><div class="wt">建图 / shadow</div><div class="ws">车载脑 · SLAM + Lab-FSD</div></div>
+        <div class="arrow">→</div>
+        <div class="wstep"><div class="wt">双臂协同</div><div class="ws">arm01 投袋 · arm02 研磨</div></div>
+        <div class="arrow">→</div>
+        <div class="wstep"><div class="wt">烧结 / XRD / PL</div><div class="ws">实测表征</div></div>
+        <div class="arrow">→</div>
+        <div class="wstep"><div class="wt">实测回填</div><div class="ws">GP/EI 主动学习</div></div>
+      </div>
+      <div class="loop">↻ 回填结果驱动下一轮配方 —— 越跑越准, 形成闭环实验飞轮</div>
+    </div>
+
+    <div class="hl-foot" style="margin-top:24px">生态位: 对标 Coscientist / Liverpool 移动机器人化学家, 我们以<b>双 RDK X5 边缘异构</b>切入"大小脑分工 + 嵌入式 BPU 算力"的空白。
+      <span class="story-cta" onclick="go('archive')" role="button" tabindex="0" style="margin-left:10px">📚 工程档案馆 (决策/踩坑/历程) →</span></div>
+  </div>
+
+  <!-- 实验任务队列 (Mission Tracker) -->
+  <div class="page" id="mqview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#0e7490;background:rgba(8,145,178,.1);border-color:rgba(8,145,178,.28)">📋 批次工单 · Batch Records</span>
+        <h1 class="mq-title">真工单系统 — 创建即绑 AI 预测</h1>
+        <p>对标 MES/ISA-88 批记录 —— 新建工单<b>自动调 AI 脑真预测</b> (绑 trace_id + verdict + Conformal CI),
+           再经 <b>路径/工位证据记录 → 烧结/表征 → 实测回填</b> 收单。每步落库记操作人, 批次档案全程留痕可导出。</p>
+        <div class="meta"><span class="tag" id="mqTs">— 加载中 —</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gbk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#06b6d4"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+        <rect x="50" y="30" width="50" height="7" rx="3.5" fill="#64748b"/>
+        <path d="M57 37 L57 72 L40 116 Q37 129 50 129 L100 129 Q113 129 110 116 L93 72 L93 37 Z" fill="none" stroke="#64748b" stroke-width="3" stroke-linejoin="round"/>
+        <clipPath id="bkclip"><path d="M57 37 L57 72 L40 116 Q37 129 50 129 L100 129 Q113 129 110 116 L93 72 L93 37 Z"/></clipPath>
+        <g clip-path="url(#bkclip)">
+          <path d="M44 92 L36 130 L114 130 L106 92 Z" fill="url(#gbk)" opacity=".82"/>
+          <circle cx="64" r="3.6" fill="#a5f3fc"><animate attributeName="cy" values="122;94" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="2.2s" repeatCount="indefinite"/></circle>
+          <circle cx="80" r="3" fill="#bae6fd"><animate attributeName="cy" values="126;90" dur="2.6s" begin=".6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="2.6s" begin=".6s" repeatCount="indefinite"/></circle>
+          <circle cx="90" r="2.6" fill="#a5f3fc"><animate attributeName="cy" values="124;98" dur="2.4s" begin="1.1s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="1.1s" repeatCount="indefinite"/></circle>
+        </g>
+      </svg></div>
+    </div>
+    <div class="wo-create">
+      <div class="aw-head"><h2>➕ 新建工单</h2>
+        <span class="oe-sub">提交即调 lab /api/predict (真机或镜像的真 predict_engine) — 评委账号只读</span></div>
+      <div class="maint-form">
+        <select id="woFormula" aria-label="工单主晶格化学式">
+          <option>Y3Al5O12</option><option>Gd3Ga5O12</option><option>Y3Ga5O12</option>
+          <option>La3Ga5GeO14</option><option>Y3Sc2Ga3O12</option><option>Ca3Sc2Si3O12</option>
+          <option>Lu3Al5O12</option><option value="_custom">自定义化学式…</option>
+        </select>
+        <input id="woCustom" aria-label="自定义化学式" placeholder="自定义化学式" style="display:none;max-width:170px;flex:none">
+        <select id="woSymbol" aria-label="工单掺杂离子"><option>Cr3+</option><option>Ni2+</option></select>
+        <input id="woSite" aria-label="掺杂位点" placeholder="位点 (Al/Ga/Sc…)" style="max-width:130px;flex:none">
+        <input id="woPct" type="number" value="1.0" step="0.1" min="0.1" max="20" style="max-width:90px;flex:none" title="掺杂浓度 %">
+        <button class="ackbtn" id="woBtn" onclick="createWo()">⚡ 创建 + AI 预测</button>
+      </div>
+    </div>
+    <div class="mq-grid" id="mqGrid"><div class="skel-cards"><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="hl-foot" style="margin-top:22px">工单阶段: AI 脑 verdict + 烧结条件 → 车载脑取料路径证据 → 机械臂工位回放 →
+      炉/XRD/PL 表征 → 实测回填收单。设备离线期由操作员推进, 真机上线后由受保护系统在人工确认后回写阶段 API, 公网不触发车/臂动作。</div>
+  </div>
+
+  <!-- G4 Scientific Agent Studio -->
+  <div class="page" id="studioview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#0f766e;background:rgba(20,184,166,.1);border-color:rgba(20,184,166,.26)">科研智能体工作室 · 实验生命周期系统</span>
+        <h1 class="studio-title"><span>科学实验</span><span>智能体工作室</span></h1>
+        <p>把配方设计、AI 预测、批次排队、具身执行、XRD/PL 表征和失败回流放进一条可审计对象链。每一步显示智能体、输入、输出、工具、证据和安全边界。</p>
+        <div class="meta"><span class="tag" id="studioTs">— 加载中 —</span><span class="tag">trace_id · 工单 · 日志 · 材料对象</span></div>
+      </div>
+      <div class="hero-ico studio-ico" aria-hidden="true">
+        <span>设计</span><span>预测</span><span>执行</span><span>回流</span>
+      </div>
+    </div>
+    <div class="studio-shell" id="studioShell">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <!-- G5 Lab-FSD v2 World Model Console -->
+  <div class="page" id="fsdview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#1d4ed8;background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.24)">Lab-FSD v2 · 世界模型控制台</span>
+        <h1 class="fsd-title"><span>Lab-FSD v2</span><span>世界模型控制台</span></h1>
+        <p>只读展示 BEV 占用栅格、未来 BEV、策略 token、安全门禁与 Shadow Planner。Nav2/MPPI 仍是底盘控制权威，公网页面不发送底盘速度或任何执行命令。</p>
+        <div class="meta">
+          <span class="tag" id="fsdTs">— 加载中 —</span>
+          <span class="tag">来源标签</span>
+          <span class="tag">公开只读边界</span>
+        </div>
+      </div>
+      <div class="hero-ico fsd-ico" aria-hidden="true">
+        <span class="fsd-ring"></span>
+        <span class="fsd-scan"></span>
+        <span class="fsd-car">X5</span>
+      </div>
+    </div>
+    <div class="fsd-shell" id="fsdShell">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <!-- H2 演示就绪预检 (Preflight) -->
+  <div class="page" id="preflightview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#065f46;background:rgba(5,150,105,.1);border-color:rgba(5,150,105,.28)">✅ 演示就绪预检 · Preflight</span>
+        <h1 class="pf-h1">上台前一键体检</h1>
+        <p>把散落在运维 / 告警 / historian / KPI / 备份 / 安全各处的"是否就绪"汇成一张 <b>GO/NO-GO</b> 清单,
+           再附 <b>在险册</b> (已知风险的实时状态)。全部派生自真实状态 —— 有 crit 就如实 NO-GO, 不刷"全绿"。</p>
+        <div class="meta">
+          <span class="tag" id="pfTs">— 体检中 —</span>
+          <span class="story-cta" onclick="loadPreflight()" role="button" tabindex="0">↻ 重新体检</span>
+        </div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gpf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+        <circle cx="75" cy="75" r="50" fill="none" stroke="#d1fae5" stroke-width="10"/>
+        <circle cx="75" cy="75" r="50" fill="none" stroke="url(#gpf)" stroke-width="10" stroke-linecap="round"
+          stroke-dasharray="235 314" transform="rotate(-90 75 75)">
+          <animate attributeName="stroke-dasharray" values="0 314;235 314" dur="1.4s" fill="freeze"/></circle>
+        <path d="M52 76 L68 92 L100 58" fill="none" stroke="#059669" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+          <animate attributeName="stroke-dasharray" values="0 90;90 90" dur="0.7s" begin="0.5s" fill="freeze"/>
+          <animate attributeName="stroke-dashoffset" values="90;0" dur="0.7s" begin="0.5s" fill="freeze"/></path>
+      </svg></div>
+    </div>
+
+    <div class="pf-verdict" id="pfVerdict"><div class="pf-vskel skel"></div></div>
+
+    <div class="pf-cols">
+      <div class="pf-checks">
+        <div class="aw-head"><h2>🩺 就绪清单</h2>
+          <span class="oe-sub">按严重度排序 — 红=阻断演示, 黄=注意项, 蓝=设计内降级, 绿=就绪</span></div>
+        <div id="pfChecks"><div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+      </div>
+      <div class="pf-side">
+        <div class="pf-card">
+          <div class="aw-head"><h2>⚠ 在险册</h2>
+            <span class="oe-sub">已知风险 · 实时状态</span></div>
+          <div id="pfRisks"><div class="oe-empty">—</div></div>
+        </div>
+        <div class="pf-card">
+          <div class="aw-head"><h2>💾 备份心跳</h2></div>
+          <div id="pfBackup"><div class="oe-empty">—</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hl-foot" style="margin-top:22px">体检在每次进入本页时实时重跑; GO 表示无阻断项即可开演,
+      NO-GO 列出必须先处理的 crit。在险册中"设计内降级"(如真机未上电走镜像) 不算阻断 —— 那正是双路径架构的卖点。</div>
+  </div>
+
+  <!-- H4 材料图鉴 / Atlas -->
+  <div class="page" id="atlasview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">🔬 材料图鉴 · 生成式图鉴</span>
+        <h1>近红外荧光粉候选图鉴</h1>
+        <p>AI 脑生成式管线 (MatterGen 生成 → MatterSim/CHGNet 稳定性弛豫 → TS 光学代理 λ_em) 产出的候选池,
+           按 <b>判读 / 发射波长 / 来源</b> 可筛。每张卡是一个真实候选 (带 trace_id), 数据取自 AI 脑当前 serving 端。</p>
+        <div class="meta"><span class="tag" id="atTs">— 加载中 —</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gatl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs>
+        <circle cx="75" cy="40" r="11" fill="url(#gatl)"/>
+        <circle cx="44" cy="92" r="11" fill="url(#gatl)"/><circle cx="106" cy="92" r="11" fill="url(#gatl)"/>
+        <circle cx="75" cy="116" r="8" fill="#c4b5fd"/>
+        <g stroke="#a78bfa" stroke-width="2.5" opacity=".7">
+          <line x1="75" y1="40" x2="44" y2="92"/><line x1="75" y1="40" x2="106" y2="92"/>
+          <line x1="44" y1="92" x2="106" y2="92"/><line x1="44" y1="92" x2="75" y2="116"/><line x1="106" y1="92" x2="75" y2="116"/></g>
+        <circle r="3" fill="#ec4899"><animateMotion dur="2.4s" repeatCount="indefinite" path="M75 40 L44 92 L106 92 Z"/></circle>
+      </svg></div>
+    </div>
+    <div class="at-stats" id="atStats"><div class="skel-rows"><div class="skel"></div></div></div>
+    <div class="mx-panel">
+      <div class="mx-toolbar">
+        <div class="mx-search">
+          <span>MX</span>
+          <input id="mxQ" aria-label="材料图鉴检索" placeholder="化学式 / host / dopant / trace_id / 工单" oninput="mxApply()" onkeydown="mxKey(event)">
+        </div>
+        <select id="mxSort" aria-label="材料图鉴排序方式" onchange="mxApply()">
+          <option value="lambda_em">排序: lambda_em</option>
+          <option value="formula">排序: 化学式</option>
+          <option value="verdict">排序: 判读</option>
+          <option value="source">排序: 来源</option>
+          <option value="created">排序: 创建时间</option>
+        </select>
+        <button onclick="mxFlipDir()" id="mxDir">升序</button>
+        <button onclick="mxToggleDensity()" id="mxDensity">紧凑</button>
+        <button onclick="mxToggleCols()">列</button>
+        <button onclick="mxExport('csv')">CSV</button>
+        <button onclick="mxExport('json')">JSON</button>
+      </div>
+      <div class="mx-examples">
+        <button onclick="mxExample('YAG:Cr3+')">YAG:Cr3+</button>
+        <button onclick="mxExample('GGG:Ni2+')">GGG:Ni2+</button>
+        <button onclick="mxExample('SYGO:Cr/Ni')">SYGO:Cr/Ni</button>
+      </div>
+      <div class="mx-cols" id="mxCols"></div>
+      <div class="mx-summary" id="mxSummary">正在加载材料图鉴...</div>
+      <div class="mx-schema" id="mxSchema"></div>
+      <div class="mx-table-wrap">
+        <table class="mx-table" id="mxTable"></table>
+      </div>
+      <div class="mx-cards" id="mxCards"></div>
+    </div>
+    <div class="at-filters" id="atFilters"></div>
+    <div class="at-grid" id="atGrid"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="hl-foot" style="margin-top:20px">verdict: <b>GO</b> 直接可做 · <b>REVISE</b> 需调整再做 (新颖候选多为 REVISE, 符合预期);
+      发射波长经可微 Tanabe-Sugano 光学代理估计 (λ_em MAE 6.2nm); 稳定性为 MatterSim/CHGNet 双 MLIP 交叉验证。</div>
+  </div>
+
+  <!-- G3 AI Brain / Fly-MB public explainability -->
+  <div class="page" id="brainview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">AI Brain · Fly-MB Explainability</span>
+        <h1>AI 脑解释系统</h1>
+        <p>公网安全地解释 AI 脑如何把配方对象、Fly-MB 稀疏推理、MLIP/TS 科学代理、BPU/LLM 共识与 X5-RB-VoE 风险有界证据策略串成一个可复核的材料预测对象。</p>
+        <div class="meta"><span class="tag" id="brainTs">— 加载中 —</span><span class="tag">只读解释 · 不开放设备控制</span></div>
+      </div>
+      <div class="hero-ico brain-ico" aria-hidden="true">
+        <div class="mb-node n1"></div><div class="mb-node n2"></div><div class="mb-node n3"></div>
+        <div class="mb-core">Fly-MB</div>
+      </div>
+    </div>
+    <div class="brain-shell" id="brainExplain">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+    <section class="voe-shell" id="rbVoeExplain" aria-live="polite">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </section>
+  </div>
+
+  <!-- H14 工程档案馆 -->
+  <!-- Site9 R6 material / prediction detail -->
+  <div class="page" id="detailview">
+    <div class="dt-hero">
+      <div>
+        <span class="hl-badge">Citable Research Object</span>
+        <h1 id="dtTitle">材料详情</h1>
+        <p id="dtSub">正在加载公开材料 / 预测对象...</p>
+        <div class="dt-badges" id="dtBadges"></div>
+      </div>
+      <div class="dt-cite" id="dtCite"></div>
+    </div>
+    <div class="dt-actions" id="dtDownloads"></div>
+    <div class="dt-tabs" id="dtTabs"></div>
+    <div class="dt-body" id="dtBody">
+      <div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <div class="page" id="archiveview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#475569;background:rgba(71,85,105,.08);border-color:rgba(71,85,105,.22)">📚 工程档案馆 · Engineering Archive</span>
+        <h1>关键决策 · 踩坑实录 · 研发历程</h1>
+        <p>一个真实工程系统的可追溯记录: 我们做过哪些<b>架构决策 (ADR)</b> 及其理由、踩过哪些<b>硬核坑</b>及修法、
+           走过怎样的<b>研发路线</b>。这不是宣传, 是给同行与评委看的真实工程证据链。</p>
+        <div class="meta">
+          <span class="tag" id="arTs">—</span>
+          <span class="ar-tabs">
+            <span class="ar-tab on" data-t="adr" onclick="arTab('adr')" role="tab" tabindex="0" aria-selected="true">架构决策</span>
+            <span class="ar-tab" data-t="trap" onclick="arTab('trap')" role="tab" tabindex="0" aria-selected="false">踩坑实录</span>
+            <span class="ar-tab" data-t="road" onclick="arTab('road')" role="tab" tabindex="0" aria-selected="false">研发历程</span>
+          </span>
+        </div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="garc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#64748b"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+        <rect x="32" y="30" width="86" height="22" rx="4" fill="url(#garc)"/>
+        <rect x="32" y="56" width="86" height="22" rx="4" fill="url(#garc)" opacity=".82"/>
+        <rect x="32" y="82" width="86" height="22" rx="4" fill="url(#garc)" opacity=".64"/>
+        <rect x="32" y="108" width="86" height="22" rx="4" fill="url(#garc)" opacity=".46"/>
+        <circle cx="44" cy="41" r="4" fill="#fff"/><circle cx="44" cy="67" r="4" fill="#fff"/>
+        <circle cx="44" cy="93" r="4" fill="#fff"/><circle cx="44" cy="119" r="4" fill="#fff"/>
+        <rect x="56" y="38" width="50" height="5" rx="2.5" fill="#fff" opacity=".7"/>
+        <rect x="56" y="64" width="50" height="5" rx="2.5" fill="#fff" opacity=".7"/>
+        <rect x="56" y="90" width="38" height="5" rx="2.5" fill="#fff" opacity=".7"/>
+        <rect x="56" y="116" width="44" height="5" rx="2.5" fill="#fff" opacity=".7"/>
+      </svg></div>
+    </div>
+    <div id="arBody"></div>
+    <div class="hl-foot" style="margin-top:20px">完整档案见仓库 CLAUDE.md (ADR / 已知坑表 / Round 1-9 历程) 与各子系统 CLAUDE.md;
+      本页为面向演示的精选, 每条均可在代码与提交记录中核对。</div>
+  </div>
+
+  <!-- H16 模型注册表 -->
+  <div class="page" id="modelsview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">🧩 模型注册表 · Model Registry</span>
+        <h1>平台全模型清单 + 实时在线态</h1>
+        <p>三机协同用到的<b>每一个模型</b>: AI 脑本地 LLM + BPU swap-load 槽 (真元数据取自 serving 端)、
+           轻量 BPU 感知、具身脑 BPU、双臂工位模型。在线态实时探活 —— 设备离线时如实标"未加载",绝不刷绿。</p>
+        <div class="meta"><span class="tag" id="mdTs">— 加载中 —</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gmdl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+        <rect x="28" y="28" width="40" height="40" rx="8" fill="url(#gmdl)"/>
+        <rect x="82" y="28" width="40" height="40" rx="8" fill="url(#gmdl)" opacity=".8"/>
+        <rect x="28" y="82" width="40" height="40" rx="8" fill="url(#gmdl)" opacity=".8"/>
+        <rect x="82" y="82" width="40" height="40" rx="8" fill="url(#gmdl)" opacity=".62"/>
+        <circle cx="48" cy="48" r="7" fill="#fff"><animate attributeName="opacity" values="1;.4;1" dur="1.6s" repeatCount="indefinite"/></circle>
+        <circle cx="102" cy="48" r="7" fill="#fff"><animate attributeName="opacity" values="1;.4;1" dur="1.6s" begin=".4s" repeatCount="indefinite"/></circle>
+        <circle cx="48" cy="102" r="7" fill="#fff"><animate attributeName="opacity" values="1;.4;1" dur="1.6s" begin=".8s" repeatCount="indefinite"/></circle>
+        <circle cx="102" cy="102" r="7" fill="#fff"><animate attributeName="opacity" values="1;.4;1" dur="1.6s" begin="1.2s" repeatCount="indefinite"/></circle>
+      </svg></div>
+    </div>
+    <div class="md-stats" id="mdStats"><div class="skel-rows"><div class="skel"></div></div></div>
+    <div id="mdBody"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="hl-foot" style="margin-top:20px">LLM/BPU 槽为真元数据 (label/架构/分段取自 AI 脑 serving 端); 轻量感知/具身/双臂为策展真实清单。
+      在线灯: 🟢 已加载 · ⚪ 未加载 (设备离线) · — 策展 (无活体探活)。</div>
+  </div>
+
+  <!-- H28 标准合规墙 -->
+  <div class="page" id="standardsview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#065f46;background:rgba(5,150,105,.1);border-color:rgba(5,150,105,.28)">📐 标准合规墙 · Standards Wall</span>
+        <h1>对标工业标准的工程化落地</h1>
+        <p>本页把报警生命周期、批记录、审计留痕、SLO 与历史数据等工程实践映射到相关标准思想。
+           每条映射均指向站内实现和当前边界，但不代表已获得 ISA、21 CFR 或其他第三方认证。</p>
+        <div class="meta"><span class="tag">标准思想映射 · 非认证声明</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gstd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+        <path d="M75 22 L118 40 V74 C118 100 99 118 75 128 C51 118 32 100 32 74 V40 Z" fill="url(#gstd)"/>
+        <path d="M56 74 L70 88 L98 56" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg></div>
+    </div>
+    <div id="stBody"><div class="skel-rows"><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="hl-foot" style="margin-top:20px">合规是"按标准做"而非"声称合规": 每条都指向平台里可点开的真实功能与代码路径。</div>
+  </div>
+
+  <!-- H25 成本能效 -->
+  <div class="page" id="costview">
+    <div class="hero hero-with-ico">
+      <div class="hero-textcol">
+        <span class="hl-badge" style="color:#b45309;background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.28)">💰 成本能效 · Cost & Efficiency</span>
+        <h1>边缘异构的成本账</h1>
+        <p>把整套系统的<b>硬件采购 / 公网运营 / 能耗</b>摊开看 —— 边缘 BPU 推理相比云 GPU 的能效优势,
+           以及"双 X5 + 双臂 + 公网"全栈的真实月成本。数字取自真实 BOM 与功耗规格。</p>
+        <div class="meta"><span class="tag" id="csTs">真实 BOM + 功耗规格</span></div>
+      </div>
+      <div class="hero-ico"><svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="gcst" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#d97706"/></linearGradient></defs>
+        <rect x="34" y="86" width="22" height="40" rx="4" fill="url(#gcst)"/>
+        <rect x="64" y="64" width="22" height="62" rx="4" fill="url(#gcst)"/>
+        <rect x="94" y="40" width="22" height="86" rx="4" fill="url(#gcst)"/>
+        <path d="M30 70 L52 56 L76 64 L116 30" fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="116" cy="30" r="5" fill="#2563eb"/>
+      </svg></div>
+    </div>
+    <div id="csBody"><div class="skel-cards"><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="hl-foot" style="margin-top:20px">能效对比为量级估算 (BPU 10 TOPS @ ~5W vs 云 GPU 推理功耗), 用于说明边缘推理的能效定位, 非精确基准。</div>
+  </div>
+
+  <!-- E8 统一运营总览 NOC Wall -->
+  <div class="page" id="nocview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0f766e;background:rgba(15,118,110,.09);border-color:rgba(15,118,110,.3)">🖥 统一运营总览 · NOC Wall</span>
+      <h1>一屏掌控三机平台</h1>
+      <p>把可观测性、SLO、告警、KPI、事件流收拢到<b>一块运维墙</b> —— 舰队 serving 态、延迟趋势、24h 可用性、活动事故、实时事件,
+         10 秒自动刷新。对标 Grafana 首页 / NOC 大屏。点各面板可下钻到对应专题页。</p>
+      <div class="meta"><span class="tag" id="nocTs">实时聚合</span></div>
+    </div>
+    <div id="nocBody"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+  </div>
+
+  <!-- I1 平台自监控 -->
+  <div class="page" id="selfview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#6d28d9;background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.28)">🩺 平台自监控 · Self-Observability</span>
+      <h1 data-i18n="self.h1">看门狗也要被看 —— 平台监控它自己</h1>
+      <p data-i18n="self.p">门户进程的生命体征 (内存/线程/运行时长) 与 <b>RED 黄金信号</b> (请求率 Rate / 错误率 Errors / 延迟 Duration),
+         进程指标读自 <code>/proc/self/status</code> 零依赖, 并以 Prometheus 标准 <code>/metrics</code> 曝露。对标 Grafana + Prometheus。</p>
+      <div class="meta"><span class="tag" id="selfTs">自监控</span><a class="tag" href="/metrics" target="_blank" style="text-decoration:none">/metrics ↗</a></div>
+    </div>
+    <div id="selfBody"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+  </div>
+
+  <!-- I2 OEE 生产线看板 -->
+  <div class="page" id="oeeview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#b45309;background:rgba(180,83,9,.08);border-color:rgba(180,83,9,.28)">🏭 生产线看板 · OEE & Andon</span>
+      <h1 data-i18n="oee.h1">把平台当一条产线来运营</h1>
+      <p data-i18n="oee.p"><b>OEE = 可用率 A × 性能 P × 质量 Q</b> —— 全部源自真实 historian: A=serving 不离线占比, P=采样按额定节拍完成率,
+         Q=审计链完整率×Conformal CI 覆盖率。配安灯板 (Andon) 三机状态灯与呼叫支援。对标精益制造 OEE / 丰田安灯。</p>
+      <div class="meta"><span class="tag" id="oeeTs">OEE 实时</span></div>
+    </div>
+    <div class="i-tabs" id="oeeWin"></div>
+    <div id="oeeBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- I3 告警中心 -->
+  <div class="page" id="alertview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#be123c;background:rgba(190,18,60,.08);border-color:rgba(190,18,60,.28)">🔔 告警中心 · Alerting & On-call</span>
+      <h1 data-i18n="alert.h1">规则引擎 + 通知渠道 + 值班轮转</h1>
+      <p data-i18n="alert.p">自定义<b>告警规则</b> (7 指标×6 算子, 连续 N 次命中触发), 命中即推<b>企业微信/钉钉/飞书/邮件</b> (未配置如实标注);
+         <b>静默/维护窗口</b>抑制升警, <b>值班表</b>标注当前在岗。复用告警生命周期, 对标 PagerDuty / Opsgenie。</p>
+      <div class="meta"><span class="tag" id="alertTs">告警中心</span></div>
+    </div>
+    <div id="alertBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- I4 日志检索 -->
+  <div class="page" id="fleetview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0f766e;background:rgba(15,118,110,.08);border-color:rgba(15,118,110,.28)">🛰 机群驾驶舱</span>
+      <h1>三机舰队状态, 明确 live / mirror / offline</h1>
+      <p>从 historian、镜像服务和安全公开指标拼出舰队视图; 设备关机时页面仍快速可用, 不等待真机探活, 不伪装实时。</p>
+      <div class="meta"><span class="tag" id="fleetConsoleTs">机群</span></div>
+    </div>
+    <div id="fleetBody"><div class="skel" style="height:240px"></div></div>
+  </div>
+
+  <div class="page" id="tasksview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#7c3aed;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.28)">🧾 任务与批次流</span>
+      <h1>工单从预测 trace 到实验闭环</h1>
+      <p>把批次工单按阶段、阻塞项、下一步动作、人工复核和最近历史集中呈现, 方便离线时做复盘、上线后继续执行。</p>
+      <div class="meta"><span class="tag" id="tasksTs">任务</span></div>
+    </div>
+    <div id="tasksBody"><div class="skel" style="height:240px"></div></div>
+  </div>
+
+  <div class="page" id="logsview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0e7490;background:rgba(14,116,144,.08);border-color:rgba(14,116,144,.28)">📑 日志检索 · 链路追踪</span>
+      <h1 data-i18n="logs.h1">每个请求都有 ID, 每步都可追</h1>
+      <p data-i18n="logs.p">结构化访问日志 (环形 5000 行): 方法/路由/状态/延迟/用户/IP/<code>req_id</code>, 可按条件检索;
+         点任一行可<b>追踪同一 req_id 的全链路</b> (含副驾多步工具调用)。对标 ELK / OpenTelemetry。</p>
+      <div class="meta"><span class="tag" id="logsTs">日志</span></div>
+    </div>
+    <div class="logs-filter" id="logsFilter"></div>
+    <div id="logsBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <div class="page" id="tracesview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#2563eb;background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.28)">🧬 链路追踪</span>
+      <h1>预测、请求、工单的公开追踪瀑布</h1>
+      <p>连接 <code>trace_id</code>、工单、材料对象与请求 <code>req_id</code>; 只展示公开字段, 内部 prompt、token 和原始密钥不进入页面。</p>
+      <div class="meta"><span class="tag" id="tracesTs">追踪</span></div>
+    </div>
+    <div class="logs-filter">
+      <input id="traceQ" aria-label="链路追踪检索" placeholder="trace_id / req_id / 化学式 / 工单" oninput="traceDeb()">
+      <button class="i-mini" onclick="loadTracesConsole()">刷新</button>
+    </div>
+    <div id="tracesBody"><div class="skel" style="height:240px"></div></div>
+  </div>
+
+  <!-- I5 质量中心 QMS -->
+  <div class="page" id="qmsview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0369a1;background:rgba(3,105,161,.08);border-color:rgba(3,105,161,.28)">🧪 质量中心 · QMS</span>
+      <h1 data-i18n="qms.h1">不合格 → 纠正 → 合格证 → 族谱</h1>
+      <p data-i18n="qms.p">项目质量闭环: <b>NCR</b> 不合格报告 → <b>CAPA</b> 纠正措施 → <b>COA</b> 记录 (预测 + 审计 SHA + 项目电子签批)
+         → <b>批次族谱</b>。这些是可追溯工程实践，不宣称通过 ISO 9001 或 21 CFR Part 11 认证。</p>
+      <div class="meta"><span class="tag" id="qmsTs">质量中心</span></div>
+    </div>
+    <div id="qmsBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- I6 维护管理 CMMS -->
+  <div class="page" id="cmmsview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#047857;background:rgba(4,120,87,.08);border-color:rgba(4,120,87,.28)">🔧 维护管理 · CMMS</span>
+      <h1 data-i18n="cmms.h1">预防性维护 + 可靠性 + 备件</h1>
+      <p data-i18n="cmms.p"><b>MTBF/MTTR</b> 可靠性指标算自真实告警历史; <b>PM</b> 预防性维护排程 (临期/逾期提醒, 一键完成续期);
+         <b>备件库存</b>低于安全库存标红。对标 CMMS (Maximo/Fiix)。</p>
+      <div class="meta"><span class="tag" id="cmmsTs">维护管理</span></div>
+    </div>
+    <div id="cmmsBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- I7 安全态势 -->
+  <div class="page" id="secview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#9f1239;background:rgba(159,18,57,.08);border-color:rgba(159,18,57,.28)">🛡 安全态势 · Security Posture</span>
+      <h1 data-i18n="sec.h1">检查安全控制与剩余风险</h1>
+      <p data-i18n="sec.p">检查<b>响应头</b>、SSO/RBAC、密钥文件权限、登录审计与公网只读边界，区分已验证、部分实现、人工核验和计划项。
+         本页不是渗透测试或合规认证。</p>
+      <div class="meta"><span class="tag" id="secTs">安全态势</span></div>
+    </div>
+    <div id="secBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- I8 发布与配置 -->
+  <div class="page" id="releaseview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#4338ca;background:rgba(67,56,202,.08);border-color:rgba(67,56,202,.28)">🚀 发布与配置 · Release & Config</span>
+      <h1 data-i18n="rel.h1">原子发布 · 变更日志 · 配置中心</h1>
+      <p data-i18n="rel.p"><b>发布清单</b> manifest (备份上一版可回滚) + <b>变更日志</b>; <b>配置中心</b>运行期特性开关/阈值/通知 webhook
+         (敏感值掩码, 改动审计)。对标 release engineering / LaunchDarkly。</p>
+      <div class="meta"><span class="tag" id="relTs">发布与配置</span></div>
+    </div>
+    <div id="relBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- I9 数据治理 -->
+  <div class="page" id="dataview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0f766e;background:rgba(15,118,110,.08);border-color:rgba(15,118,110,.28)">🗄 数据治理 · Data Governance</span>
+      <h1 data-i18n="data.h1">留存 · 降采样 · 备份心跳</h1>
+      <p data-i18n="data.p">数据生命周期: 原始 30s 样本留 14 天 → <b>小时降采样</b>长期留; <code>integrity_check</code> 运行时校验;
+         <b>备份心跳</b>显示在线快照与计划中的 PC 拉取。全表清单、WAL 大小和导出边界保持可见。</p>
+      <div class="meta"><span class="tag" id="dataTs">数据治理</span></div>
+    </div>
+    <div id="dataBody"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- E1 可观测性中心 -->
+  <div class="page" id="obsview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0d9488;background:rgba(13,148,136,.09);border-color:rgba(13,148,136,.3)">📈 可观测性中心 · Observability</span>
+      <h1>把平台 17 小时的脉搏画出来</h1>
+      <p>三机 <b>30 秒采样</b>的服务延迟、可用性, 与预测吞吐 / CI 覆盖 / 审计 / LLM 在线率的<b>历史趋势</b> ——
+         全部取自 historian 真数据 (SQLite WAL), 分桶降采样后交互式呈现。对标 Grafana / Ignition 的时序观测。</p>
+      <div class="meta"><span class="tag" id="obsTs">historian 真数据</span></div>
+    </div>
+    <div class="obs-ctrl">
+      <div class="obs-metrics" id="obsMetrics"></div>
+      <div class="obs-range" id="obsRange"></div>
+    </div>
+    <div class="r8-ops" id="obsOps"></div>
+    <div class="obs-sum" id="obsSum"></div>
+    <div class="obs-card">
+      <div class="obs-chart" id="obsChart"><div class="skel" style="height:340px"></div></div>
+      <div class="obs-legend" id="obsLegend"></div>
+    </div>
+    <div class="hl-foot" style="margin-top:16px">悬停看十字线与各机读数; 可用性 = 真机直连占比 (设备未上电时为 0, 镜像兜底中, 属设计内)。数据随平台运行持续累积。</div>
+  </div>
+
+  <!-- E7 全局时间机器 -->
+  <div class="page" id="timeview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#7c3aed;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.28)">⏳ 全局时间机器 · Time Travel</span>
+      <h1>拖回任意时刻, 看当时平台什么样</h1>
+      <p>用 historian 重建<b>历史任意时刻</b>的完整平台快照 —— 三机 serving / 延迟、KPI、当时正在响的告警、周边事件,
+         全部"穿越"回那一刻。可播放回放。对标 Palantir Foundry / Ignition 的 time-travel。</p>
+      <div class="meta"><span class="tag" id="tmTs">historian 重建</span></div>
+    </div>
+    <div class="tm-bar">
+      <button class="tm-play" id="tmPlay" onclick="tmTogglePlay()">▶</button>
+      <div class="tm-slider">
+        <input type="range" id="tmRange" aria-label="时间机器回放范围" min="0" max="1000" value="1000" oninput="tmScrub(this.value)">
+        <div class="tm-marks" id="tmMarks"></div>
+      </div>
+      <div class="tm-now" id="tmNow">现在</div>
+      <button class="tm-live" id="tmLive" onclick="tmGoLive()">⟲ 回到现在</button>
+    </div>
+    <div class="tm-snap" id="tmSnap"><div class="skel" style="height:200px"></div></div>
+  </div>
+
+  <!-- E3 SLO 错误预算 -->
+  <div class="page" id="sloview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0369a1;background:rgba(3,105,161,.08);border-color:rgba(3,105,161,.28)">🎯 SLO 错误预算 · Error Budget</span>
+      <h1>可用性目标还剩多少容错额度</h1>
+      <p>诚实 SLO = <b>UI 可用性</b> (真机或镜像任一在即算可用)。错误预算 = (1−目标)×窗口的允许停机时长;
+         <b>镜像兜底正是让这个 SLO 不受设备开关机影响的关键</b>。燃尽图看剩余预算随时间下降。对标 Google SRE / Nobl9。</p>
+      <div class="meta"><span class="tag" id="sloTs">真 samples 计算</span></div>
+    </div>
+    <div class="obs-ctrl">
+      <div class="slo-tabs" id="sloScope"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label class="slo-tg">目标 <input id="sloTarget" aria-label="SLO 目标百分比" type="number" min="90" max="99.99" step="0.1" value="99.5" onchange="sloSet()"> %</label>
+        <div class="obs-range" id="sloWin"></div>
+      </div>
+    </div>
+    <div class="slo-cards" id="sloCards"></div>
+    <div class="obs-card"><div class="obs-chart" id="sloChart"><div class="skel" style="height:300px"></div></div></div>
+    <div class="hl-foot" style="margin-top:14px" id="sloNote"></div>
+  </div>
+
+  <!-- E4 事故复盘 -->
+  <div class="page" id="incview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#b45309;background:rgba(217,119,6,.09);border-color:rgba(217,119,6,.3)">🚨 事故复盘 · Incident & Postmortem</span>
+      <h1>每次告警, 一份自动复盘</h1>
+      <p>把告警生命周期 (触发 → 确认 → 恢复) 与周边 historian 事件组装成<b>事故时间线</b>, 据规则库自动生成
+         <b>影响 / 根因 / 处置 / 改进项</b>草稿。设计内降级 (设备未上电) 如实标注, 不当故障。对标 PagerDuty / Blameless。</p>
+      <div class="meta"><span class="tag" id="incTs">告警生命周期 + historian</span></div>
+    </div>
+    <div class="inc-sum" id="incSum"></div>
+    <div id="incList"><div class="skel-cards"><div class="skel"></div><div class="skel"></div></div></div>
+  </div>
+
+  <!-- E2 服务依赖拓扑 -->
+  <div class="page" id="topoview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#4338ca;background:rgba(79,70,229,.08);border-color:rgba(79,70,229,.28)">🕸 服务依赖拓扑 · Service Map</span>
+      <h1>一张图看清流量怎么到达三机</h1>
+      <p>访客 → 边缘防护 → 香港受保护源站 → <b>(公开设备摘要 | 只读镜像)</b> 的脱敏链路。节点按公开健康摘要着色,
+         <b>当前 serving 来源高亮</b> —— 设备未上电时明确切换到镜像/回放标签。对标 Datadog APM 服务地图的信息层级。</p>
+      <div class="meta"><span class="tag" id="topoVerdict">活体链路</span></div>
+    </div>
+    <div class="topo-card"><div id="topoGraph"><div class="skel" style="height:380px"></div></div></div>
+    <div class="topo-leg">
+      <span class="topo-lk"><i class="ok"></i>真机直连</span>
+      <span class="topo-lk"><i class="info"></i>镜像兜底</span>
+      <span class="topo-lk"><i class="crit"></i>离线/异常</span>
+      <span class="topo-lk"><i class="idle"></i>待命</span>
+      <span class="topo-lk"><b style="color:var(--emerald)">━</b> 当前流量路径</span>
+    </div>
+  </div>
+
+  <!-- H26 镜像保鲜台 -->
+  <div class="page" id="syncview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0369a1;background:rgba(2,132,199,.09);border-color:rgba(2,132,199,.3)">🔄 镜像保鲜台 · Mirror Freshness</span>
+      <h1>设备关机, UI 照常在 —— 代价透明化</h1>
+      <p>三机在 VPS 常驻<b>镜像</b>: 真机在线即直连, 关机自动切镜像兜底。这里实时看每个镜像的<b>数据新鲜度 / 服务健康 / 真机可达性</b> ——
+         镜像数据是上次设备在线时的快照, 真机在线时可一键拉取刷新, 离线时服务照常兜底, 界面与功能不受影响。</p>
+      <div class="meta"><span class="tag" id="msTs">实时文件新鲜度 + 真机探活</span></div>
+    </div>
+    <div id="msBody"><div class="skel-cards"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="hl-foot" style="margin-top:20px">陈旧阈值 7 天 · 全量数据拷贝由 PC 每日备份任务承担 (拉真机 <code>~/predictions/</code> 留 30 天), 此处「同步检查」记录真机可刷新信号。</div>
+  </div>
+
+  <!-- H20 实测复现台 -->
+  <div class="page" id="reproview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#7c3aed;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.28)">🔬 实测复现台 · Reproduction Bench</span>
+      <h1>把实测锚点喂回引擎, 现场复现给你看</h1>
+      <p>参考值是<b>实验室真实测 λ_em</b> (observed_pl.csv, 每条带 source 溯源)。点「复现」即由<b>当前 serving 端的真 predict_engine 现算</b>,
+         比对预测 λ_em 与实测值、是否落 90% 置信区间 —— 证明「公网 → 真引擎 → Conformal CI」全链路实时自洽, 不是静态表格。</p>
+      <div class="meta"><span class="tag" id="rpTs">实验室实测 ground truth</span></div>
+    </div>
+    <div class="rp-honest">⚖️ <b>诚实说明</b>: 这些锚点在引擎类比库内, 故复现误差天然 ≈0 (<b>in-sample 一致性</b>, 验证管线自洽与 CI 标定实时性); 真正的<b>留一法泛化误差</b>请看 AI 脑 <a href="#" onclick="go('lab',{path:'/bet'});return false">/bet 盲抽墙</a>。</div>
+    <div id="rpBody"><div class="skel-cards"><div class="skel"></div><div class="skel"></div></div></div>
+  </div>
+
+  <!-- H17 AR 晶体查看器 -->
+  <div class="page" id="arview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#be185d;background:rgba(219,39,119,.08);border-color:rgba(219,39,119,.28)">🧊 AR 晶体查看器 · Augmented Reality</span>
+      <h1>把荧光粉晶体放到你桌面上</h1>
+      <p>三维查看 NIR 荧光粉的<b>示意晶胞</b> —— 紫色为 Cr³⁺ 发光中心, 红色为配位氧八面体, 青/灰为外围格点。
+         桌面端可拖拽旋转缩放; 支持 AR 的手机 (Android Chrome / iOS Safari) 点右下「在 AR 中查看」即可<b>放进真实环境</b>按真实尺度观察。</p>
+      <div class="meta"><span class="tag">程序化示意结构</span><span class="tag" id="arStat">加载中…</span></div>
+    </div>
+    <div class="ar-stage" id="arStage">
+      <model-viewer id="arMV" src="/models/phosphor_cell.glb?v=1" alt="NIR 荧光粉示意晶胞"
+        camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="18deg"
+        ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto"
+        shadow-intensity="0.9" exposure="1.05" camera-orbit="35deg 70deg 9m" min-camera-orbit="auto auto 4m"
+        interaction-prompt="none" style="width:100%;height:100%;background:transparent">
+        <button slot="ar-button" class="ar-btn">📱 在 AR 中查看</button>
+        <div slot="poster" class="ar-poster">🧊 正在加载 3D 晶体…</div>
+      </model-viewer>
+    </div>
+    <div class="ar-honest">⚖️ 这是用于直观展示的<b>示意晶胞</b> (schematic), 非任何具体 CIF 的精确原子坐标; 真实结构以 AI 脑 3Dmol.js 查看器 (pymatgen P1 展开, 与 VESTA 金标准对齐) 为准。</div>
+  </div>
+
+  <!-- H13 术语百科 -->
+  <div class="page" id="glossaryview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0e7490;background:rgba(8,145,178,.08);border-color:rgba(8,145,178,.3)">📖 术语百科 · Glossary</span>
+      <h1>看懂这套系统的关键词</h1>
+      <p>近红外荧光粉、晶体场理论、边缘 AI、机器人导航 —— 跨学科术语的白话解释。给非本专业的评委/同行快速建立背景。</p>
+      <div class="meta"><input id="glIn" class="gl-search" aria-label="术语检索" placeholder="🔍 搜索术语…" oninput="glRender(this.value)"></div>
+    </div>
+    <div id="glBody"></div>
+  </div>
+
+  <!-- H27 更新日志 / What's New -->
+  <div class="page" id="changelogview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">🆕 更新日志 · What's New</span>
+      <h1>平台演进时间线</h1>
+      <p>这个系统是怎样一步步长成今天这样的 —— 从单机脚手架到双 X5 异构、从本地工具到公网工业级平台。每条都是真实交付。</p>
+    </div>
+    <div id="clBody"></div>
+  </div>
+
+  <!-- H24 周期表配方构建器 -->
+  <div class="page" id="buildview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">🧪 配方构建器 · Periodic Builder</span>
+      <h1>点周期表搭配方, 一键真预测</h1>
+      <p>点元素搭出主晶格化学式, 选掺杂离子/位点/浓度, 提交即调 <b>AI 脑真 predict_engine</b>
+         (真机或镜像的真算法) 给出 verdict + 发射波长 + Conformal 区间 + 烧结条件。所见即真预测, 非演示。</p>
+    </div>
+    <div class="bd-wrap">
+      <div class="bd-left">
+        <div class="bd-ptable" id="bdPtable"></div>
+        <div class="bd-hint">点元素加入化学式 · 再点同元素 +1 下标 · 周期表为荧光粉常用元素子集</div>
+      </div>
+      <div class="bd-right">
+        <div class="bd-formula"><span class="bd-fl" id="bdFormula">点元素开始…</span>
+          <button class="bd-clr" onclick="bdClear()">清空</button></div>
+        <div class="bd-ctrl">
+          <label>掺杂<select id="bdSymbol" aria-label="构建器掺杂离子"><option>Cr3+</option><option>Ni2+</option><option>Cr3++Ni2+</option></select></label>
+          <label>位点<input id="bdSite" aria-label="构建器掺杂位点" placeholder="Al/Ga/Sc…" maxlength="10" style="width:88px"></label>
+          <label>浓度<input id="bdPct" aria-label="构建器掺杂浓度百分比" type="number" value="1.0" step="0.1" min="0.1" max="20" style="width:70px"> %</label>
+        </div>
+        <button class="bd-go" id="bdGo" onclick="bdPredict()">⚡ 真预测</button>
+        <div class="bd-presets">预设:
+          <span onclick="bdPreset('Y3Al5O12','Al')" role="button" tabindex="0">Y₃Al₅O₁₂</span>
+          <span onclick="bdPreset('Gd3Ga5O12','Ga')" role="button" tabindex="0">Gd₃Ga₅O₁₂</span>
+          <span onclick="bdPreset('Y3Sc2Ga3O12','Sc')" role="button" tabindex="0">Y₃Sc₂Ga₃O₁₂</span>
+          <span onclick="bdPreset('Lu3Al5O12','Al')" role="button" tabindex="0">Lu₃Al₅O₁₂</span>
+        </div>
+        <div class="bd-result" id="bdResult"></div>
+      </div>
+    </div>
+    <div class="hl-foot" style="margin-top:18px">predict_engine 真实管线: 化学式解析 → Shannon 半径 → MACE 缓存/Vegard → TS 虚拟谱 → 失配 flag → R1 5 级判决。
+      设备离线时由 VPS 镜像的同一份 predict_engine 计算 (镜像真算)。</div>
+  </div>
+
+  <!-- H8/H21 实测导入向导 (DropZone) -->
+  <div class="page" id="importview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#0e7490;background:rgba(8,145,178,.08);border-color:rgba(8,145,178,.3)">📥 实测导入向导 · Data Drop Zone</span>
+      <h1>把实测数据拖进来, 先看后回填</h1>
+      <p>研究员拿到 XRD/PL 实测结果后, 把 CSV 拖到下方即可<b>本地预览 + 自动识别列</b> (发射波长/掺杂/host 等),
+         确认无误再走 AI 脑回填闭环。解析全在浏览器本地完成, 数据不上传 —— 这是导入前的安全预检。</p>
+    </div>
+    <div class="imp-zone" id="impZone">
+      <input type="file" id="impFile" aria-label="选择材料数据文件" accept=".csv,.tsv,.txt" style="display:none" onchange="impFiles(this.files)">
+      <div class="imp-inner">
+        <div class="imp-ic">📄</div>
+        <div class="imp-t">拖拽 CSV 到此处, 或 <button class="imp-browse" onclick="document.getElementById('impFile').click()">选择文件</button></div>
+        <div class="imp-sub">支持 observed_pl.csv 风格 (逗号/制表符分隔, 首行表头) · 纯本地解析</div>
+      </div>
+    </div>
+    <div id="impResult"></div>
+    <div class="hl-foot" style="margin-top:18px">列自动识别基于表头关键词 (lambda/em/波长 → 发射波长; dopant/掺杂 → 掺杂; host/formula → 主晶格…)。
+      预览仅本地展示; 正式回填请在 AI 脑提交, 触发 actuals.csv 更新 + 失败学习库刷新 + 准确率 KPI 重算。</div>
+  </div>
+
+  <!-- H30 电子实验笔记 (ELN) -->
+  <div class="page" id="elnview">
+    <div class="hero">
+      <span class="hl-badge" style="color:#6d28d9;background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25)">📓 电子实验笔记 · ELN</span>
+      <h1>记录每一次实验的观察与思路</h1>
+      <p>把烧结条件、外观、谱图观察、下一步想法记下来 —— 关联化学式 + 标签 + 操作人, <b>真持久化到平台历史库</b>。
+         评委账号只读。这是把"实验直觉"沉淀成可检索资产的电子实验记录本。</p>
+      <div class="meta"><span class="tag" id="elnTs">—</span>
+        <input id="elnSearch" class="gl-search" style="max-width:260px" aria-label="实验笔记检索" placeholder="🔍 搜标题/化学式/标签…" oninput="elnSearchDebounce(this.value)"></div>
+    </div>
+    <div class="eln-create" id="elnCreate">
+      <div class="aw-head"><h2>✍ 新建笔记</h2><span class="oe-sub" id="elnRoleNote">member 可写 · 评委只读</span></div>
+      <div class="eln-form">
+        <input id="elnTitle" aria-label="实验笔记标题" placeholder="标题, 例: GAGG:Cr 1450℃ 首烧观察" maxlength="120">
+        <input id="elnFormula" aria-label="实验笔记关联化学式" placeholder="关联化学式 (选填)" maxlength="60" style="max-width:200px">
+        <input id="elnTags" aria-label="实验笔记标签" placeholder="标签 (逗号分隔, 选填)" maxlength="120" style="max-width:200px">
+        <textarea id="elnBody" aria-label="实验笔记正文" placeholder="观察 / 烧结条件 / 下一步想法…" maxlength="5000" rows="3"></textarea>
+        <button class="ackbtn" id="elnBtn" onclick="elnCreate()">＋ 保存笔记</button>
+      </div>
+    </div>
+    <div class="eln-list" id="elnList"><div class="skel-cards"><div class="skel"></div><div class="skel"></div></div></div>
+  </div>
+</div>
+
+<!-- 命令面板 (Ctrl+K) -->
+<div class="pal" id="pal" onclick="if(event.target===this) palClose()">
+  <div class="palbox pal-box">
+    <div class="palinrow">
+      <input id="palIn" aria-label="全局命令面板检索" placeholder="搜索视图 / 资产 / 工单 / 操作 (支持模糊 + 多词)…" autocomplete="off" spellcheck="false">
+      <button class="palscan" onclick="scanOpen()" title="扫码跳转">📷</button>
+    </div>
+    <div class="pallist" id="palList"></div>
+    <div class="palfoot pal-footbar"><span>↑↓ 选择 · Enter 执行 · Esc 关闭</span><span id="palCnt"></span><span>Ctrl+K 随处唤起</span></div>
+  </div>
+</div>
+
+<!-- H12 扫码跳转 overlay -->
+<div class="scan-ov" id="scanOv" onclick="if(event.target===this) scanClose()">
+  <div class="scan-box">
+    <div class="scan-head"><span>📷 扫码跳转</span><button class="scan-x" onclick="scanClose()">✕</button></div>
+    <div class="scan-stage"><video id="scanVid" playsinline muted></video><div class="scan-frame"></div></div>
+    <div class="scan-msg" id="scanMsg">正在启动摄像头…</div>
+    <div class="scan-manual" id="scanManual" style="display:none">
+      <input id="scanInput" aria-label="扫码或粘贴码值" placeholder="粘贴码值 / 链接 (如 ?go=mq 或 WO2026…)" autocomplete="off"
+        onkeydown="if(event.key==='Enter')scanManualGo()">
+      <button onclick="scanManualGo()">跳转</button>
+    </div>
+    <div class="scan-tip">把样品 / 工单单上的二维码对准取景框 · 支持本站深链 (?go=、WO 码) 直达</div>
+  </div>
+</div>
+
+<!-- E6 快捷键帮助 -->
+<div class="kbd-ov" id="kbdHelp" onclick="if(event.target===this) kbdToggle()">
+  <div class="kbd-box">
+    <div class="kbd-head"><span>⌨ 键盘快捷键</span><button class="scan-x" onclick="kbdToggle()">✕</button></div>
+    <div class="kbd-body" id="kbdBody"></div>
+  </div>
+</div>
+
+<!-- 日报 overlay -->
+<div class="womodal" id="repModal" onclick="if(event.target===this) repClose()">
+  <div class="wocard">
+    <div class="wo-head"><b id="repTitle">📊 运行日报</b><span style="margin-left:auto"></span>
+      <button class="ackbtn ghostbtn" onclick="repClose()">✕ 关闭</button></div>
+    <div id="repBody"></div>
+  </div>
+</div>
+
+<!-- 管理面板 overlay (admin only) -->
+<div class="womodal" id="adminModal" onclick="if(event.target===this) adminClose()">
+  <div class="wocard">
+    <div class="wo-head"><b>🛡 平台管理</b><span class="wost open">admin</span>
+      <span style="margin-left:auto"></span>
+      <button class="ackbtn ghostbtn" onclick="adminClose()">✕ 关闭</button></div>
+    <div id="admBody"><div class="oe-empty">加载中…</div></div>
+  </div>
+</div>
+
+<!-- 批次档案 overlay -->
+<div class="womodal" id="woModal" onclick="if(event.target===this) woClose()">
+  <div class="wocard">
+    <div class="wo-head"><b id="wodCode">WO-</b><span id="wodState" class="wost"></span>
+      <span style="margin-left:auto"></span>
+      <button class="ackbtn" onclick="woExport()">⬇ 导出 JSON</button>
+      <button class="ackbtn ghostbtn" onclick="window.print()">🖨 打印</button>
+      <button class="ackbtn ghostbtn" onclick="woClose()">✕ 关闭</button></div>
+    <div id="wodBody"></div>
+  </div>
+</div>
+
+<!-- 过渡动画 overlay -->
+<div class="boot" id="boot" data-accent="home" onclick="skipBoot()" role="button" tabindex="0" aria-label="跳过启动动画">
+  <div class="boot-grid"></div>
+  <div class="boot-stack">
+    <div class="boot-logo">
+      <span class="logo-hex" id="bIcon">⬢</span>
+      <div class="logo-rings"><span class="logo-ring r1"></span><span class="logo-ring r2"></span><span class="logo-ring r3"></span></div>
+    </div>
+    <div class="boot-title" id="bTitle">智研指挥中心</div>
+    <div class="boot-sub" id="bSub">三机异构协同 · 统一控制台</div>
+    <div class="boot-rows" id="bRows"></div>
+    <div class="boot-bar"><div class="boot-bar-fill" id="bFill"></div></div>
+    <div class="boot-foot"><span id="bFoot">正在接入…</span><span>·</span><span>点击 / Esc 跳过</span></div>
+  </div>
+</div>
+
+<!-- 首次导览 spotlight -->
+<div class="onb" id="onb">
+  <div class="onb-ring" id="onbRing"></div>
+  <div class="onb-tip" id="onbTip">
+    <h4 id="onbTitle">👋 欢迎</h4>
+    <p id="onbBody"></p>
+    <div class="row"><span class="step" id="onbStep">1 / 4</span><span class="sp"></span>
+      <span class="b" onclick="onbEnd()" role="button" tabindex="0">跳过</span>
+      <span class="b pri" id="onbNext" onclick="onbNext()" role="button" tabindex="0">下一步</span></div>
+  </div>
+</div>
+
+<!-- H7 通知中心 (告警 · 事件 · 大事记) -->
+<div class="nc-mask" id="ncMask" onclick="if(event.target===this) ncToggle()">
+  <aside class="nc-drawer" id="ncDrawer">
+    <div class="nc-head">
+      <b>🔔 通知中心</b>
+      <div class="nc-tabs">
+        <span class="nc-tab on" data-t="live" onclick="ncTab('live')" role="tab" tabindex="0" aria-selected="true">实时</span>
+        <span class="nc-tab" data-t="alarm" onclick="ncTab('alarm')" role="tab" tabindex="0" aria-selected="false">告警</span>
+        <span class="nc-tab" data-t="miles" onclick="ncTab('miles')" role="tab" tabindex="0" aria-selected="false">大事记</span>
+      </div>
+      <button class="cp-x" onclick="ncToggle()">✕</button>
+    </div>
+    <div class="nc-body" id="ncBody"><div class="skel-rows"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+    <div class="nc-foot"><span id="ncFoot">—</span><a class="csvbtn" onclick="ncToggle();go('ops')">运维总览 →</a></div>
+  </aside>
+</div>
+
+<!-- H3 问平台 Copilot (运维副驾) -->
+<button class="cp-fab" id="cpFab" onclick="cpToggle()" title="问平台 · 运维副驾 (实时接地)">
+  <span class="cp-fab-ic">💬</span><span class="cp-fab-tx">问平台</span></button>
+<div class="cp-panel" id="cpPanel">
+  <div class="cp-head">
+    <div class="cp-ttl"><span class="cp-orb"></span><b>运维副驾</b><span class="cp-sub">答平台状态 · 数据实时接地</span></div>
+    <button class="cp-x" onclick="cpToggle()">✕</button>
+  </div>
+  <div class="cp-body" id="cpBody"></div>
+  <div class="cp-sugg" id="cpSugg"></div>
+  <div class="cp-deepbar" id="cpDeepBar" style="display:none">
+    <label class="cp-deep"><input type="checkbox" id="cpDeep" aria-label="启用深答模式" onchange="cpDeepToggle()"><span>🧠 深答</span></label>
+    <span class="cp-deep-hint" id="cpDeepHint">规则巡检即时, 据实可核</span>
+  </div>
+  <div class="cp-input">
+    <input id="cpIn" aria-label="科研问答输入" placeholder="问平台状态 / 告警 / 就绪 / 架构…" autocomplete="off"
+      onkeydown="if(event.key==='Enter')cpSend()">
+    <button class="cp-send" onclick="cpSend()" id="cpSendBtn">↑</button>
+  </div>
+</div>
+
+<div class="offbar" id="offbar" aria-hidden="true">⚠ 网络已断开 — 门户显示最近缓存快照 (离线降级)。恢复后自动刷新。</div>
+<button class="totop" id="totop" onclick="totopGo()" title="返回顶部" aria-label="返回顶部">↑</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- I 轮通用模态 (日志追踪 / COA / 族谱) -->
+<div class="imodal" id="iModal" style="display:none" onclick="if(event.target===this)iModalClose()">
+  <div class="imodal-box"><button class="imodal-x" onclick="iModalClose()" aria-label="关闭">✕</button><div id="iModalBody"></div></div>
+</div>
+<script src="/i18n.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/three.min.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/app.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/twin.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/r4.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/r4-performance.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/r4-accessibility.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script src="/full-experience.js?v=site32-global-commercial-v1.13-20260720" defer></script>
+<script type="module" src="/site32.js?v=site32-global-commercial-v1.13-20260720"></script>
+</body>
+</html>

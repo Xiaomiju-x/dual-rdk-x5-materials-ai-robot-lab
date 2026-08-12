@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+testpaths = ["tests_public"]
+python_files = ["test_*.py"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+exclude = [
+  "public_evidence_data",
+  "report_source",
+  "workstation_frontend_public",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["E501"]

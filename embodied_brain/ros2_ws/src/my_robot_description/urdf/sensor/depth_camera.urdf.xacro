@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    Orbbec Astra Pro 深度相机.
+    Spec: 164.85 × 48.25 × 30 mm, 0.6-8m, FOV H58.4° × V45.5°, USB UVC + OpenNI2.
+    安装在底盘前部 (base_link 前向, 略低), 辅助避障 + 故事感.
+
+    REP-103: 相机有两个 frame:
+      - depth_camera_link: 物理上的盒子位置, X 前/Y 左/Z 上 (跟 base_link 同坐标系)
+      - depth_camera_optical_frame: 光学坐标, X 右/Y 下/Z 前 (ROS 相机驱动发布的 PointCloud2 用这个)
+  -->
+
+  <xacro:macro name="depth_camera_xacro" params="parent xyz:='0 0 0' rpy:='0 0 0'">
+
+    <!-- 物理盒子 -->
+    <link name="depth_camera_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.030 0.16485 0.04825"/>
+        </geometry>
+        <material name="orbbec_black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.030 0.16485 0.04825"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="0.15" x="0.030" y="0.16485" z="0.04825"/>
+    </link>
+
+    <joint name="${parent}_to_depth_camera" type="fixed">
+      <parent link="${parent}"/>
+      <child link="depth_camera_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- 光学坐标 (ROS REP-103 标准: 相机光学 frame, X 右 Y 下 Z 前) -->
+    <link name="depth_camera_optical_frame"/>
+    <joint name="depth_camera_link_to_optical_frame" type="fixed">
+      <parent link="depth_camera_link"/>
+      <child link="depth_camera_optical_frame"/>
+      <!-- 把 ROS 标准 (X 前/Y 左/Z 上) 旋到 光学标准 (X 右/Y 下/Z 前) -->
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

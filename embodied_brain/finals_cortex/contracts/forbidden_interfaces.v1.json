@@ -1,0 +1,36 @@
+{
+  "schema_version": "x5-embodied-cortex-forbidden-interfaces/1.0",
+  "forbidden_publishers": [
+    "/cmd_vel",
+    "/cmd_vel_safe",
+    "/tf",
+    "/tf_static",
+    "/map",
+    "/odom"
+  ],
+  "forbidden_prefixes": [
+    "/f407",
+    "/serial_f407"
+  ],
+  "forbidden_python_imports": [
+    "geometry_msgs",
+    "nav2_msgs",
+    "rclpy.action",
+    "serial"
+  ],
+  "forbidden_call_names": [
+    "create_publisher",
+    "create_service",
+    "create_client",
+    "ActionClient",
+    "Serial"
+  ],
+  "allowed_runtime_output_prefix": "/x5_embodied_cortex/",
+  "must_not_modify": [
+    "embodied_brain/tools/finals_lift_nav_demo.sh",
+    "embodied_brain/tools/finals_lift_nav_demo.py",
+    "embodied_brain/stm32_f407",
+    "embodied_brain/ros2_ws/src/my_robot_drivers",
+    "embodied_brain/ros2_ws/src/my_robot_navigation/config/lab_fsd_shadow.yaml"
+  ]
+}

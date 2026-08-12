@@ -1,0 +1,26 @@
+{
+  "checkpoint": null,
+  "configuration": {
+    "kind": "extra_trees"
+  },
+  "created_at": "2026-08-02T18:47:48.447097+00:00",
+  "extra": {
+    "baseline": true
+  },
+  "family_id": "RND-MAT-01",
+  "fit_id": "baseline_extra_trees",
+  "fit_seconds": 0.3087742999996408,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": null,
+  "receipt_sha256": "d355d8271b4bb22ae4f519c4f454d0bcb39186018ef924d28a07ef6d5ca830bf",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20260803,
+  "selection_metrics": {
+    "mae": 25.150813565353772,
+    "r2": -0.1370848346496576,
+    "rmse": 29.483172257076884
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

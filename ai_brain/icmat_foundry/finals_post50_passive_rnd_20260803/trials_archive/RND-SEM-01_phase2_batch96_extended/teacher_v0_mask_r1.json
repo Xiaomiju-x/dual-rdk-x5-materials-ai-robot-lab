@@ -1,0 +1,102 @@
+{
+  "checkpoint": {
+    "bytes": 185890,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/teacher_v0_mask_r1.pt",
+    "sha256": "ceca391d0873d9d69293ae8e9fbadad619e325855ad8107ce0128b11f6930f2f"
+  },
+  "configuration": {
+    "augment": 0.02,
+    "id": "v0_mask",
+    "kind": "teacher",
+    "w_boundary": 0.0,
+    "w_distance": 0.0,
+    "width": 5
+  },
+  "created_at": "2026-08-02T17:51:52.934094+00:00",
+  "extra": {
+    "epochs": 12,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.1589237100937788,
+        "score": 0.5701390610677111
+      },
+      {
+        "epoch": 2,
+        "loss": 0.9018788986346301,
+        "score": 0.5743270583589002
+      },
+      {
+        "epoch": 3,
+        "loss": 0.7805571678806754,
+        "score": 0.6263220379935706
+      },
+      {
+        "epoch": 4,
+        "loss": 0.6807020744856667,
+        "score": 0.6135107690688715
+      },
+      {
+        "epoch": 5,
+        "loss": 0.600349090555135,
+        "score": 0.5937727492483779
+      },
+      {
+        "epoch": 6,
+        "loss": 0.6945175177910748,
+        "score": 0.6227390833054536
+      },
+      {
+        "epoch": 7,
+        "loss": 0.6156874448060989,
+        "score": 0.5974450141784795
+      },
+      {
+        "epoch": 8,
+        "loss": 0.5627119628822103,
+        "score": 0.599239884583347
+      },
+      {
+        "epoch": 9,
+        "loss": 0.5517880118945065,
+        "score": 0.6566079899739521
+      },
+      {
+        "epoch": 10,
+        "loss": 0.5125526803381303,
+        "score": 0.6817406490940736
+      },
+      {
+        "epoch": 11,
+        "loss": 0.4844246936195037,
+        "score": 0.7281879445929783
+      },
+      {
+        "epoch": 12,
+        "loss": 0.41830836762400236,
+        "score": 0.6804408809267163
+      }
+    ],
+    "optimizer_state_restored": false,
+    "phase1_archive": "trials_archive/RND-SEM-01_phase1_6epoch",
+    "resumed_from_epoch": 5
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "teacher_v0_mask_r1",
+  "fit_seconds": 79.1233200000006,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 40204,
+  "receipt_sha256": "6e0ccb88af0e00003e425c8e054a209f3dfa7409ea0a80698b5c43321368d180",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267804,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.09032769664888468,
+    "dice": 0.7056060204307572,
+    "foreground_iou": 0.5451250958254931,
+    "score": 0.7281879445929783,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

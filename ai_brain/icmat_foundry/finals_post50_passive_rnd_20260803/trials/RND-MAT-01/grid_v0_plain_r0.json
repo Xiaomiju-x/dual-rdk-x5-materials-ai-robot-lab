@@ -1,0 +1,94 @@
+{
+  "checkpoint": {
+    "bytes": 83948,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-MAT-01/grid_v0_plain_r0.pt",
+    "sha256": "daf12621e412549aadf02f471752853b7c49a88444ce60172a5b1cf0e3e20f8b"
+  },
+  "configuration": {
+    "dropout": 0.0,
+    "hidden": 48,
+    "id": "v0_plain",
+    "role_aware": false
+  },
+  "created_at": "2026-08-02T18:47:51.561342+00:00",
+  "extra": {
+    "epochs": 12,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.4400903284549713,
+        "val_mae": 27.30532455444336
+      },
+      {
+        "epoch": 2,
+        "loss": 0.4301186129450798,
+        "val_mae": 27.163646697998047
+      },
+      {
+        "epoch": 3,
+        "loss": 0.4212927594780922,
+        "val_mae": 26.92285919189453
+      },
+      {
+        "epoch": 4,
+        "loss": 0.41033752262592316,
+        "val_mae": 26.6724853515625
+      },
+      {
+        "epoch": 5,
+        "loss": 0.4024462103843689,
+        "val_mae": 26.19720458984375
+      },
+      {
+        "epoch": 6,
+        "loss": 0.37896638363599777,
+        "val_mae": 25.914621353149414
+      },
+      {
+        "epoch": 7,
+        "loss": 0.36967120319604874,
+        "val_mae": 26.191638946533203
+      },
+      {
+        "epoch": 8,
+        "loss": 0.350324884057045,
+        "val_mae": 26.64167022705078
+      },
+      {
+        "epoch": 9,
+        "loss": 0.3290364667773247,
+        "val_mae": 27.642179489135742
+      },
+      {
+        "epoch": 10,
+        "loss": 0.32782454788684845,
+        "val_mae": 27.87965202331543
+      },
+      {
+        "epoch": 11,
+        "loss": 0.3164154067635536,
+        "val_mae": 27.974472045898438
+      },
+      {
+        "epoch": 12,
+        "loss": 0.29987525939941406,
+        "val_mae": 28.494186401367188
+      }
+    ]
+  },
+  "family_id": "RND-MAT-01",
+  "fit_id": "grid_v0_plain_r0",
+  "fit_seconds": 0.5014000999999553,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 20161,
+  "receipt_sha256": "9ec2754471e40fbaec0145923fc7d37b985d1445355f6d12241276ab4f66f77a",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20269803,
+  "selection_metrics": {
+    "mae": 25.914621353149414,
+    "rmse": 29.297250747680664
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

@@ -1,0 +1,197 @@
+{
+  "_meta": {
+    "description": "Tanabe-Sugano / Huang-Rhys input parameters for Cr3+ in common NIR phosphor hosts.",
+    "units": {
+      "Dq_cm1": "cm^-1 (Racah Dq, 10Dq = abs band 4A2->4T2 peak)",
+      "B_cm1": "cm^-1 (Racah B, electron-repulsion)",
+      "C_cm1": "cm^-1 (Racah C, typically ~4-5x B)",
+      "hbar_omega_cm1": "cm^-1 (effective phonon energy for Huang-Rhys)",
+      "S_huang_rhys": "dimensionless (Huang-Rhys factor, Cr3+ oxide typical 5-7)",
+      "r_host_avg_ang": "Angstrom (ionic radius of host cation at the octahedral site Cr3+ substitutes; for Vegard Dq scaling)"
+    },
+    "cr3_plus_CN6_radius_ang": 0.615,
+    "notes": "Dq ~ 1/R^5; lambda_em_nm after Stokes shift S*hbar_omega (not 2S, empirical)."
+  },
+  "YAG": {
+    "formula": "Y3Al5O12",
+    "Dq_cm1": 1640,
+    "B_cm1": 650,
+    "C_cm1": 3000,
+    "hbar_omega_cm1": 400,
+    "S_huang_rhys": 6,
+    "r_host_avg_ang": 0.535,
+    "source_doi": "10.1007/s003400100701",
+    "notes": "K\u00fcck 2001 review, Cr:YAG \u03bb_em\u2248688 nm, FWHM\u2248100 nm"
+  },
+  "GGG": {
+    "formula": "Gd3Ga5O12",
+    "Dq_cm1": 1580,
+    "B_cm1": 640,
+    "C_cm1": 3000,
+    "hbar_omega_cm1": 380,
+    "S_huang_rhys": 6,
+    "r_host_avg_ang": 0.620,
+    "source_doi": "Struve1985",
+    "notes": "Struve & Huber 1985, Cr:GGG \u03bb_em\u2248740 nm"
+  },
+  "GAGG": {
+    "formula": "Gd3Al2Ga3O12",
+    "Dq_cm1": 1600,
+    "B_cm1": 645,
+    "C_cm1": 3000,
+    "hbar_omega_cm1": 390,
+    "S_huang_rhys": 6,
+    "r_host_avg_ang": 0.578,
+    "source_doi": "10.1016/j.jlumin.2019",
+    "notes": "Xu 2019 J.Lumin, Cr:GAGG \u03bb_em\u2248735 nm"
+  },
+  "Y2O3": {
+    "formula": "Y2O3",
+    "Dq_cm1": 1700,
+    "B_cm1": 650,
+    "C_cm1": 3200,
+    "hbar_omega_cm1": 450,
+    "S_huang_rhys": 5,
+    "r_host_avg_ang": 0.900,
+    "source_doi": "estimated_from:YScO3 (10.1016/j.jlumin.2023.119710)",
+    "uncertainty_cm1": {"Dq": 80, "B": 40, "C": 40},
+    "estimate_basis": "Cr3+:YScO3 Tanabe-Sugano (Dq=1502, B=533, C=3362); Y2O3 same bixbyite Ia-3 sesquioxide, Y-O 2.28A vs YScO3 2.31A",
+    "notes": "\u65e0\u76f4\u63a5 Cr3+:Y2O3 TS \u6587\u732e; YScO3 \u540c\u6784\u7c7b\u6bd4. \u5f53\u524d Dq=1700 \u53ef\u80fd\u504f\u9ad8 (YScO3 ~1502), \u5efa\u8bae PI \u590d\u6838"
+  },
+  "SYGO": {
+    "formula": "Sr6Y2Al4O15",
+    "Dq_cm1": 1680,
+    "B_cm1": 650,
+    "C_cm1": 3000,
+    "hbar_omega_cm1": 400,
+    "S_huang_rhys": 6,
+    "r_host_avg_ang": 0.625,
+    "source_doi": "estimated_from:LaMgAl11O19+BAM (10.1016/j.jallcom.2014.07.184, 10.1016/j.cej.2021.129224)",
+    "uncertainty_cm1": {"Dq": 60, "B": 50, "C": 50},
+    "estimate_basis": "Sr6Y2Al4O15 \u65b0\u76f8, \u65e0\u76f4\u63a5 Cr3+ \u6587\u732e; Al \u516b\u9762\u4f53 Al-O ~1.91A \u4e0e hibonite/magnetoplumbite \u540c\u6784",
+    "notes": "PI \u5f20\u4e39\u786e\u8ba4 Sr6Y2Al4O15 \u662f Sr6Ln2Al4O15 \u7c7b\u540c\u6784\u76f8; Dq \u4f30 1650-1720 \u516b\u9762\u4f53 Al-O \u5178\u578b\u503c"
+  },
+  "LuAG": {
+    "formula": "Lu3Al5O12",
+    "Dq_cm1": 1670, "B_cm1": 655, "C_cm1": 3050,
+    "hbar_omega_cm1": 410, "S_huang_rhys": 6, "r_host_avg_ang": 0.535,
+    "source_doi": "10.1016/j.optmat.2013.07.006",
+    "notes": "Brik&Srivastava 2013; Lu3+ 取代 Y3+ 晶格略缩, λ_em≈690 nm"
+  },
+  "LaGaO3": {
+    "formula": "LaGaO3",
+    "Dq_cm1": 1550, "B_cm1": 630, "C_cm1": 2950,
+    "hbar_omega_cm1": 380, "S_huang_rhys": 7, "r_host_avg_ang": 0.620,
+    "source_doi": "10.1063/1.1506402",
+    "notes": "Marco de Lucas 2002 J.Appl.Phys.; perovskite Ga-O, λ_em≈760 nm 宽带"
+  },
+  "BAM": {
+    "formula": "BaMgAl10O17",
+    "Dq_cm1": 1720, "B_cm1": 670, "C_cm1": 3100,
+    "hbar_omega_cm1": 430, "S_huang_rhys": 5, "r_host_avg_ang": 0.535,
+    "source_doi": "10.1007/s11664-015-4091-z",
+    "source_doi_secondary": "10.1016/j.cej.2021.129224",
+    "uncertainty_cm1": {"Dq": 40},
+    "notes": "Singh 2015 J.Electron.Mater. EPR+\u5149\u5b66 + You 2021 Chem.Eng.J. NIR \u53cc\u53d1\u5c04 (696/762 nm, IQE 94%); Dq/B=2.57 \u7a0d\u8fc7 SCF/WCF \u8fb9\u754c 2.3, \u4e0e\u5b9e\u6d4b\u9510+\u5bbd\u53cc\u5cf0\u4e00\u81f4"
+  },
+  "Gd2O3": {
+    "formula": "Gd2O3",
+    "Dq_cm1": 1680, "B_cm1": 645, "C_cm1": 3150,
+    "hbar_omega_cm1": 440, "S_huang_rhys": 5, "r_host_avg_ang": 0.938,
+    "source_doi": "10.1016/j.jlumin.2008.02.003",
+    "notes": "sesquioxide Y2O3 family, Gd3+ 略大, λ_em≈720 nm"
+  },
+  "Lu2O3": {
+    "formula": "Lu2O3",
+    "Dq_cm1": 1720, "B_cm1": 655, "C_cm1": 3200,
+    "hbar_omega_cm1": 460, "S_huang_rhys": 5, "r_host_avg_ang": 0.861,
+    "source_doi": "10.1016/j.optmat.2005.03.017",
+    "notes": "Petermann 2005 Opt.Mater.; Lu3+ 最小 → Dq 最高, λ_em≈680 nm"
+  },
+  "CYMS": {
+    "formula": "CaY2Mg2Si3O12",
+    "Dq_cm1": 1570, "B_cm1": 635, "C_cm1": 2980,
+    "hbar_omega_cm1": 380, "S_huang_rhys": 7, "r_host_avg_ang": 0.720,
+    "source_doi": "10.1039/C6TC03818B",
+    "notes": "Liu 2017 J.Mater.Chem.C; Mg2+ 八面体替代, λ_em≈760 nm 宽带 NIR"
+  },
+  "CaSc2O4": {
+    "formula": "CaSc2O4",
+    "Dq_cm1": 1520, "B_cm1": 620, "C_cm1": 2900,
+    "hbar_omega_cm1": 370, "S_huang_rhys": 7, "r_host_avg_ang": 0.745,
+    "source_doi": "10.1021/acs.inorgchem.8b01987",
+    "notes": "Malysa 2018; Sc3+ 较大, 弱晶场 → λ_em≈800 nm 宽带"
+  },
+  "Mg2SiO4": {
+    "formula": "Mg2SiO4",
+    "Dq_cm1": 1600, "B_cm1": 640, "C_cm1": 3000,
+    "hbar_omega_cm1": 400, "S_huang_rhys": 6, "r_host_avg_ang": 0.720,
+    "source_doi": "10.1088/0953-8984/7/50/019",
+    "notes": "Henderson 1995 J.Phys.Cond.Mat.; olivine M1/M2, forsterite λ_em≈700-1100 nm 双位点"
+  },
+  "LaAlO3": {
+    "formula": "LaAlO3",
+    "Dq_cm1": 1730, "B_cm1": 665, "C_cm1": 3100,
+    "hbar_omega_cm1": 440, "S_huang_rhys": 5, "r_host_avg_ang": 0.535,
+    "source_doi": "10.1103/PhysRevB.47.14103",
+    "notes": "Yamaga 1993 PRB; strong field, λ_em≈734 nm R-line 主导"
+  },
+  "SrTiO3": {
+    "formula": "SrTiO3",
+    "Dq_cm1": 1800, "B_cm1": 680, "C_cm1": 3200,
+    "hbar_omega_cm1": 450, "S_huang_rhys": 4, "r_host_avg_ang": 0.605,
+    "source_doi": "10.1103/PhysRevB.41.3819",
+    "notes": "Müller 1990 PRB; Ti4+ 八面体, very strong field, R-line λ_em≈794 nm"
+  },
+  "ZnGa2O4": {
+    "formula": "ZnGa2O4",
+    "Dq_cm1": 1670, "B_cm1": 640, "C_cm1": 3000,
+    "hbar_omega_cm1": 410, "S_huang_rhys": 5, "r_host_avg_ang": 0.620,
+    "source_doi": "10.1021/ja063415s",
+    "notes": "Bessière/Viana 2006 JACS; spinel persistent NIR, λ_em≈695 nm + sideband 到 900 nm"
+  },
+  "MgGa2O4": {
+    "formula": "MgGa2O4",
+    "Dq_cm1": 1640, "B_cm1": 638, "C_cm1": 3000,
+    "hbar_omega_cm1": 400, "S_huang_rhys": 6, "r_host_avg_ang": 0.620,
+    "source_doi": "10.1021/acs.chemmater.7b00546",
+    "notes": "Basavaraju 2017 Chem.Mater.; spinel, λ_em≈720 nm 宽带"
+  },
+  "MgAl2O4": {
+    "formula": "MgAl2O4",
+    "Dq_cm1": 1830, "B_cm1": 700, "C_cm1": 3250,
+    "hbar_omega_cm1": 460, "S_huang_rhys": 4, "r_host_avg_ang": 0.535,
+    "source_doi": "10.1103/PhysRevB.30.4299",
+    "notes": "Wood 1984 PRB; spinel strong field, R-line λ_em≈686 nm"
+  },
+  "YSGG": {
+    "formula": "Y3Sc2Ga3O12",
+    "Dq_cm1": 1540, "B_cm1": 625, "C_cm1": 2950,
+    "hbar_omega_cm1": 370, "S_huang_rhys": 7, "r_host_avg_ang": 0.745,
+    "source_doi": "10.1063/1.343855",
+    "notes": "Struve&Huber 1989 J.Appl.Phys.; Sc3+ 八面体, 弱场 → λ_em≈780 nm 宽带"
+  },
+  "LGS": {
+    "formula": "La3Ga5SiO14",
+    "Dq_cm1": 1580, "B_cm1": 635, "C_cm1": 2980,
+    "hbar_omega_cm1": 380, "S_huang_rhys": 6, "r_host_avg_ang": 0.620,
+    "source_doi": "10.1134/S1063774509040129",
+    "source_doi_secondary": "10.1134/S1064226917020012",
+    "uncertainty_cm1": {"Dq": 70},
+    "notes": "Burkov 2009 Crystallogr.Rep. absorption+CD + Alyabyeva 2017 luminescence \u5b9e\u6d4b\u4e86 Cr3+ langasite 1a \u516b\u9762\u4f53 240-850nm absorption, 730nm emission \u5f31\u564d\u573a Dq/B~2.49 = 1580/635; \u7528 TS \u5403\u89d2\u504f\u79fb\u53ef\u5f97, \u539f\u6587\u672a\u5217\u8868\u5177\u4f53\u6570\u503c\u6545\u4ecd\u6807\u6ce8\u4e0d\u786e\u5b9a\u6027"
+  },
+  "CSSG": {
+    "formula": "Ca3Sc2Si3O12",
+    "Dq_cm1": 1510, "B_cm1": 618, "C_cm1": 2900,
+    "hbar_omega_cm1": 365, "S_huang_rhys": 7, "r_host_avg_ang": 0.745,
+    "source_doi": "10.1039/C7TC04741J",
+    "notes": "Liu 2018 J.Mater.Chem.C; Sc3+ garnet, 弱晶场 → λ_em≈800-820 nm 深 NIR"
+  },
+  "CGAO": {
+    "formula": "CaGdAlO4",
+    "Dq_cm1": 1650, "B_cm1": 648, "C_cm1": 3020,
+    "hbar_omega_cm1": 400, "S_huang_rhys": 6, "r_host_avg_ang": 0.535,
+    "source_doi": "10.1016/j.optmat.2014.08.017",
+    "notes": "Mateos 2014 Opt.Mater.; K2NiF4-type, Al 八面体, λ_em≈720 nm"
+  }
+}

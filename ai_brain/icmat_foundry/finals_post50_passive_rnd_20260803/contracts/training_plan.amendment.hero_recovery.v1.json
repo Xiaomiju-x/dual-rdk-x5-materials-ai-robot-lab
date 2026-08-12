@@ -1,0 +1,26 @@
+{
+  "schema": "x5_icmat_foundry.post50_training_plan_amendment.v1",
+  "plan_id": "post50-passive-rnd-20260803",
+  "reason": "The first 40 HERO-VM17 fits were invalidated because the isolated reimplementation omitted the frozen PVD feature-scale floor. The defect was detected before any candidate promotion.",
+  "original_hero_fit_disposition": "INVALID_PIPELINE",
+  "recovery": {
+    "family_id": "RND-PROC-01",
+    "fits": 16,
+    "feature_scale_floor": 0.001,
+    "normalized_feature_clip": [-8.0, 8.0],
+    "post_recovery_retuning": false
+  },
+  "budget_reallocation": {
+    "from": [
+      {"family_id": "RND-MAT-04", "name": "DielectricPair", "fits": 8},
+      {"family_id": "RND-MAT-05", "name": "Thermoelectric4", "fits": 8}
+    ],
+    "to": {"family_id": "RND-PROC-01", "name": "HERO-VM17 recovery", "fits": 16},
+    "total_physical_fit_cap_unchanged": 160
+  },
+  "conditional_families_disposition": "SKIPPED_BUDGET_REALLOCATED",
+  "official_50_affected": false,
+  "release_created": false,
+  "network_used": false,
+  "x5_contacted": false
+}

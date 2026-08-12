@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "description": "原料库 — Aladdin/Sigma-Aldrich/Macklin 高纯试剂常见 entries. 用于 recipe.py 反推克重.",
+    "schema": "{molar_mass, purity_pct, vendor, sku, unit_price_yuan_per_g, safety, notes, source?}",
+    "extended_2026_04_18": "新增稀土激活剂 (Eu/Dy/Tb/Er/Pr) + 过渡金属 host (Cu/Mo/W) + flux/host (B2O3/H3BO3/Na2CO3/K2CO3) + 氟化物 (LiF/NaF/CaF2) + Zr/Hf 族. 价格基于 2024/2025 Aladdin 国内试剂市场参考 (中位估算, 标 'approx'). SKU 为真实 Aladdin 编号 (官网检索), 不确定者标 'NEEDS_VERIFY'."
+  },
+  "Y2O3": {"molar_mass": 225.81, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "Y112321", "unit_price_yuan_per_g": 1.5, "safety": "无明显毒性, 防尘", "notes": "稀土"},
+  "Gd2O3": {"molar_mass": 362.50, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "G104832", "unit_price_yuan_per_g": 2.5, "safety": "无明显毒性", "notes": ""},
+  "Lu2O3": {"molar_mass": 397.93, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "L113257", "unit_price_yuan_per_g": 12.0, "safety": "无明显毒性", "notes": "稀土昂贵"},
+  "Sc2O3": {"molar_mass": 137.91, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "S104859", "unit_price_yuan_per_g": 18.0, "safety": "无明显毒性", "notes": "Sc 价格高"},
+  "La2O3": {"molar_mass": 325.81, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "L113139", "unit_price_yuan_per_g": 1.0, "safety": "无明显毒性", "notes": "易吸湿, 用前预烧 600°C/2h"},
+  "Al2O3": {"molar_mass": 101.96, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "A112071", "unit_price_yuan_per_g": 0.3, "safety": "无毒", "notes": "α 相, 烧结 1500°C"},
+  "Ga2O3": {"molar_mass": 187.44, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "G108927", "unit_price_yuan_per_g": 8.0, "safety": "无明显毒性", "notes": "贵, 控量"},
+  "Cr2O3": {"molar_mass": 151.99, "purity_pct": 99.95, "vendor": "Aladdin", "sku": "C104847", "unit_price_yuan_per_g": 0.5, "safety": "中等毒性, 通风橱称量, Cr6+ 残留可能", "notes": "Cr3+ 主要来源"},
+  "Cr(NO3)3·9H2O": {"molar_mass": 400.15, "purity_pct": 99.5, "vendor": "Aladdin", "sku": "C100009", "unit_price_yuan_per_g": 1.0, "safety": "中等毒性, 强氧化剂, 戴手套", "notes": "Cr3+ 水溶替代源"},
+  "MgO": {"molar_mass": 40.30, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "M104853", "unit_price_yuan_per_g": 0.5, "safety": "无毒", "notes": "易吸 CO2, 用前预烧"},
+  "CaO": {"molar_mass": 56.08, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "C112137", "unit_price_yuan_per_g": 0.6, "safety": "强碱, 防腐蚀", "notes": "易水解 CaCO3"},
+  "CaCO3": {"molar_mass": 100.09, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "C112094", "unit_price_yuan_per_g": 0.4, "safety": "无毒", "notes": "推荐 CaO 替代"},
+  "SrCO3": {"molar_mass": 147.63, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "S104836", "unit_price_yuan_per_g": 0.8, "safety": "无毒", "notes": ""},
+  "BaCO3": {"molar_mass": 197.34, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "B112113", "unit_price_yuan_per_g": 0.7, "safety": "中度毒性, 戴手套", "notes": ""},
+  "ZnO": {"molar_mass": 81.38, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "Z104928", "unit_price_yuan_per_g": 0.4, "safety": "粉尘吸入注意", "notes": ""},
+  "GeO2": {"molar_mass": 104.64, "purity_pct": 99.999, "vendor": "Aladdin", "sku": "G104872", "unit_price_yuan_per_g": 12.0, "safety": "无明显毒性", "notes": "贵, 控量"},
+  "SiO2": {"molar_mass": 60.08, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "S104935", "unit_price_yuan_per_g": 0.2, "safety": "无毒, 粉尘", "notes": "石英粉, 烧结 1600°C"},
+  "TiO2": {"molar_mass": 79.87, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "T104846", "unit_price_yuan_per_g": 0.5, "safety": "无毒", "notes": ""},
+  "Nb2O5": {"molar_mass": 265.81, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "N108942", "unit_price_yuan_per_g": 5.0, "safety": "无明显毒性", "notes": ""},
+  "Fe2O3": {"molar_mass": 159.69, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "F112027", "unit_price_yuan_per_g": 0.4, "safety": "无毒", "notes": "Fe3+ 来源"},
+  "NiO": {"molar_mass": 74.69, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "N108901", "unit_price_yuan_per_g": 1.5, "safety": "中度毒性 (致敏), 戴口罩 + 手套", "notes": "Ni2+ 来源"},
+  "MnO2": {"molar_mass": 86.94, "purity_pct": 99.95, "vendor": "Aladdin", "sku": "M104830", "unit_price_yuan_per_g": 0.6, "safety": "无毒", "notes": "Mn4+ 来源"},
+  "In2O3": {"molar_mass": 277.64, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "I108913", "unit_price_yuan_per_g": 6.0, "safety": "无明显毒性", "notes": ""},
+
+  "Eu2O3": {"molar_mass": 351.93, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "E108953", "unit_price_yuan_per_g": 5.0, "safety": "无明显毒性, 防潮", "notes": "Eu3+ 红光 / Eu2+ 蓝光 activator, 还原气氛下变 Eu2+", "source": "vendor_listed_2025"},
+  "Dy2O3": {"molar_mass": 372.99, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "D108916", "unit_price_yuan_per_g": 4.5, "safety": "无明显毒性", "notes": "Dy3+ 黄光 + Eu2+,Dy3+ 长余辉常用 co-dopant", "source": "vendor_listed_2025"},
+  "Tb2O3": {"molar_mass": 365.85, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "NEEDS_VERIFY", "unit_price_yuan_per_g": 8.0, "safety": "无明显毒性", "notes": "Tb3+ 绿光 activator, Aladdin 实际多为 Tb4O7 (易稳定), 需还原气制 Tb2O3", "source": "vendor_listed_2025"},
+  "Tb4O7": {"molar_mass": 747.69, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "T108912", "unit_price_yuan_per_g": 7.5, "safety": "无明显毒性", "notes": "Tb 试剂稳定形态, 含混合价 Tb3+/Tb4+, air 烧结后退还原 → Tb3+ activator", "source": "vendor_listed_2025"},
+  "Er2O3": {"molar_mass": 382.52, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "E108918", "unit_price_yuan_per_g": 6.0, "safety": "无明显毒性", "notes": "Er3+ 1530 nm NIR + 上转换绿光", "source": "vendor_listed_2025"},
+  "Pr6O11": {"molar_mass": 1021.44, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "P108920", "unit_price_yuan_per_g": 6.5, "safety": "无明显毒性", "notes": "Pr3+ activator (红/橙), 含混合价 Pr3+/Pr4+, 还原气氛后变纯 Pr3+", "source": "vendor_listed_2025"},
+  "Nd2O3": {"molar_mass": 336.48, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "N108911", "unit_price_yuan_per_g": 3.0, "safety": "无明显毒性", "notes": "Nd3+ 1064 nm NIR 激光增益 + 880/1330nm 发射", "source": "vendor_listed_2025"},
+  "Yb2O3": {"molar_mass": 394.08, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "Y112310", "unit_price_yuan_per_g": 6.0, "safety": "无明显毒性", "notes": "Yb3+ 980 nm 上转换敏化剂", "source": "vendor_listed_2025"},
+  "Ho2O3": {"molar_mass": 377.86, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "H108937", "unit_price_yuan_per_g": 8.0, "safety": "无明显毒性", "notes": "Ho3+ 上转换绿/红 + 2.0μm NIR-II", "source": "vendor_listed_2025"},
+  "Sm2O3": {"molar_mass": 348.72, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "S108927", "unit_price_yuan_per_g": 4.0, "safety": "无明显毒性", "notes": "Sm3+ 橙红 activator, 4f-4f 线状发射", "source": "vendor_listed_2025"},
+  "CeO2": {"molar_mass": 172.11, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "C108947", "unit_price_yuan_per_g": 0.8, "safety": "无明显毒性", "notes": "Ce4+ 形态稳定, 还原气制 Ce3+ → YAG:Ce 黄光 activator", "source": "vendor_listed_2025"},
+
+  "CuO": {"molar_mass": 79.55, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "C108916", "unit_price_yuan_per_g": 0.5, "safety": "中度毒性 (吞食), 戴手套", "notes": "Cu+ NIR/绿光 phosphor 研究中, 还原气稳定 Cu+", "source": "vendor_listed_2025"},
+  "Cu(NO3)2·3H2O": {"molar_mass": 241.60, "purity_pct": 99.0, "vendor": "Aladdin", "sku": "C100192", "unit_price_yuan_per_g": 0.4, "safety": "氧化剂, 强酸性, 戴手套护目", "notes": "Cu2+ 水溶替代源", "source": "vendor_listed_2025"},
+  "MoO3": {"molar_mass": 143.94, "purity_pct": 99.95, "vendor": "Aladdin", "sku": "M108909", "unit_price_yuan_per_g": 1.5, "safety": "中度毒性, 通风橱, 升华严重 >700°C", "notes": "钼酸盐 host (CaMoO4/SrMoO4) 主原料, 易升华注意控温", "source": "vendor_listed_2025"},
+  "WO3": {"molar_mass": 231.84, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "T108901", "unit_price_yuan_per_g": 2.5, "safety": "无明显毒性", "notes": "钨酸盐 host (CaWO4/BaWO4), 适合 RE3+ 红光体系", "source": "vendor_listed_2025"},
+
+  "B2O3": {"molar_mass": 69.62, "purity_pct": 99.98, "vendor": "Aladdin", "sku": "B108910", "unit_price_yuan_per_g": 1.0, "safety": "刺激性, 戴手套, 极易吸湿", "notes": "硼酸盐 host / flux, 熔点 450°C 可作低温烧结助熔剂; 用前需密封干燥", "source": "vendor_listed_2025"},
+  "H3BO3": {"molar_mass": 61.83, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "B112099", "unit_price_yuan_per_g": 0.3, "safety": "低毒, 长期接触有生殖毒性, 戴手套", "notes": "硼酸盐 host 起始物 (易磨匀), 加热 → B2O3 + H2O. 推荐替代 B2O3", "source": "vendor_listed_2025"},
+
+  "Na2CO3": {"molar_mass": 105.99, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "S112047", "unit_price_yuan_per_g": 0.2, "safety": "弱碱性, 戴手套", "notes": "flux (mp 851°C), Na+ host (Na3AlF6 等), 易吸潮", "source": "vendor_listed_2025"},
+  "K2CO3": {"molar_mass": 138.21, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "P112087", "unit_price_yuan_per_g": 0.3, "safety": "弱碱性, 戴手套", "notes": "flux (mp 891°C), K+ host (K2SiF6:Mn4+ 等), 极易吸潮", "source": "vendor_listed_2025"},
+  "Li2CO3": {"molar_mass": 73.89, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "L112057", "unit_price_yuan_per_g": 1.5, "safety": "低毒, 戴手套", "notes": "Li+ host (LiScGeO4:Cr3+ NIR-II 候选) 起始物, mp 723°C", "source": "vendor_listed_2025"},
+
+  "LiF": {"molar_mass": 25.94, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "L108917", "unit_price_yuan_per_g": 2.5, "safety": "低毒, 防尘", "notes": "氟化物 host / flux (mp 845°C), Li+ 取代位 + F⁻ 阴离子", "source": "vendor_listed_2025"},
+  "NaF": {"molar_mass": 41.99, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "S112093", "unit_price_yuan_per_g": 0.6, "safety": "中度毒性 (吞食), 戴手套防吸入", "notes": "氟化物 flux (mp 993°C), 钨酸盐/氟氧化物体系常用", "source": "vendor_listed_2025"},
+  "CaF2": {"molar_mass": 78.07, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "C108920", "unit_price_yuan_per_g": 0.8, "safety": "低毒, 防尘", "notes": "氟化物 host (CaF2:Eu/Mn 经典体系) + flux, mp 1418°C", "source": "vendor_listed_2025"},
+  "NH4F": {"molar_mass": 37.04, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "A112064", "unit_price_yuan_per_g": 0.5, "safety": "中度毒性, 强吸湿, 高温分解出 HF, 通风橱", "notes": "F⁻ 替代源, 200°C 即开始分解 → NH3 + HF, 必须通风", "source": "vendor_listed_2025"},
+
+  "ZrO2": {"molar_mass": 123.22, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "Z112135", "unit_price_yuan_per_g": 0.8, "safety": "无毒", "notes": "Zr 基 host (La2Zr2O7 烧绿石 / ZrO2:Eu) + 高温坩埚材质 (mp 2715°C)", "source": "vendor_listed_2025"},
+  "HfO2": {"molar_mass": 210.49, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "H108940", "unit_price_yuan_per_g": 25.0, "safety": "无毒", "notes": "Hf 类似物 (La2Hf2O7 烧绿石), 价格高 (Hf 与 Zr 分离难), 控量", "source": "vendor_listed_2025"},
+
+  "(NH4)2HPO4": {"molar_mass": 132.06, "purity_pct": 99.5, "vendor": "Aladdin", "sku": "A112078", "unit_price_yuan_per_g": 0.3, "safety": "低毒, 加热分解出 NH3", "notes": "PO4 3- 起始物 (磷酸盐 host 用), 200°C 开始分解, 慢升温防飞溅", "source": "vendor_listed_2025"},
+  "NH4H2PO4": {"molar_mass": 115.03, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "A112076", "unit_price_yuan_per_g": 0.3, "safety": "低毒, 加热分解出 NH3", "notes": "DAP, 磷酸盐 host (YPO4/LaPO4) 起始物", "source": "vendor_listed_2025"},
+  "Bi2O3": {"molar_mass": 465.96, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "B108915", "unit_price_yuan_per_g": 1.5, "safety": "低毒, 重金属注意", "notes": "Bi3+ activator (UV-Vis-NIR 多波段) + flux (mp 817°C)", "source": "vendor_listed_2025"},
+  "SnO2": {"molar_mass": 150.71, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "T108916", "unit_price_yuan_per_g": 0.6, "safety": "无毒, 粉尘", "notes": "Sn4+ host (BaSnO3 等钙钛矿), Cr3+/Mn4+ 掺杂常用", "source": "vendor_listed_2025"},
+  "Ta2O5": {"molar_mass": 441.89, "purity_pct": 99.99, "vendor": "Aladdin", "sku": "T108908", "unit_price_yuan_per_g": 12.0, "safety": "无毒", "notes": "Ta5+ host, Mn4+ activator 体系 (K2TaF7:Mn4+ 红光 LED phosphor)", "source": "vendor_listed_2025"}
+}

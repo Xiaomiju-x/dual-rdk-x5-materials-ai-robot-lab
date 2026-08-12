@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    驱动轮 macro. 步进电机驱动, F407 + 编码器闭环.
+    左右两个轮子分别实例化, name 由 wheel_name 参数决定.
+    轮子绕 base_link 的 y 轴 (前进/后退方向) 旋转 → joint axis="0 1 0"
+  -->
+
+  <xacro:macro name="wheel_xacro" params="
+      wheel_name
+      parent
+      xyz
+      radius:=0.04
+      length:=0.02">
+
+    <link name="${wheel_name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial mass="0.1" radius="${radius}" length="${length}"/>
+    </link>
+
+    <joint name="${wheel_name}_joint" type="continuous">
+      <parent link="${parent}"/>
+      <child link="${wheel_name}_link"/>
+      <origin xyz="${xyz}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

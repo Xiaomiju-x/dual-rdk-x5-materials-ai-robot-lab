@@ -1,0 +1,45 @@
+{
+  "schema": "x5_icmat_foundry.bpu_llm_swap_load.v1",
+  "mode": "ON_DEMAND_SIDECAR",
+  "default_state": "DEPLOYED_OFF",
+  "startup": {
+    "autostart": false,
+    "systemd_registration_allowed": false,
+    "port_listener_allowed": false,
+    "production_dependency": false
+  },
+  "authority": {
+    "decision_authority": false,
+    "may_block_dashboard": false,
+    "may_block_five_ports": false,
+    "may_replace_existing_slots": false,
+    "may_open_camera": false,
+    "may_issue_robot_commands": false
+  },
+  "residency": {
+    "maximum_loaded_domain_models": 1,
+    "segments_per_loaded_model": 2,
+    "load_unit": "ONE_CONTENT_HASHED_MODEL_WITH_BOTH_SEGMENTS",
+    "mixed_model_segments_forbidden": true,
+    "release_mechanism": "DEDICATED_PROCESS_EXIT",
+    "reason": "Historical pyeasy_dnn behavior releases CMA reliably only when the owning process exits."
+  },
+  "resource_gates": {
+    "historical_cma_budget_mb": 391,
+    "historical_two_segment_estimate_mb": 360,
+    "board_measurement_required_before_claiming_fit": true,
+    "board_measurement_required_before_claiming_latency": true,
+    "fail_closed_on_partial_load": true,
+    "restore_previous_runtime_state_after_probe": true
+  },
+  "release_requirements": [
+    "merged_hf_content_hash",
+    "manual_vs_hf_diff_receipt",
+    "onnx_vs_manual_diff_receipt",
+    "part1_bin_sha256",
+    "part2_bin_sha256",
+    "compiler_log_sha256",
+    "cpu_tensor_manifest",
+    "x5_actual_backend_receipt_before_board_claim"
+  ]
+}

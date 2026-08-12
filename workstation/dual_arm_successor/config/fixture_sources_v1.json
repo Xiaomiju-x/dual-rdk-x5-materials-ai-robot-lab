@@ -1,0 +1,52 @@
+{
+  "schema_version": "xrd-dual-arm-fixture-sources-v1",
+  "status": "FROZEN_COMMAND_SOURCES",
+  "sources": {
+    "arm01": {
+      "path": "workstation/dual_arm/arm01_compact_front_transfer.py",
+      "sha256": "a52062242654db16a4061ef4d376b737dc010e5084ce5be68ca2934c0d141b8f"
+    },
+    "arm02": {
+      "path": "workstation/dual_arm/arm02_direct_grind_closed_loop.py",
+      "sha256": "c070db7c87455723dd43b3d4727f7968343fa0200483c68b68cd9e4ccb518619"
+    },
+    "orchestrator": {
+      "path": "workstation/dual_arm/finals_part3_orchestrator.py",
+      "sha256": "64011e4423cfc415bb066b313f7f322d9749bac271ecd389ac65d26e7cb38d9c"
+    },
+    "station": {
+      "path": "workstation/dual_arm/station_config.json",
+      "sha256": "e37dfeccb0d35dda8fd9938317a856072b885dd3a2c4672f39097ed0f2de205d"
+    }
+  },
+  "tasks": {
+    "single_arm_visual_redundancy": {
+      "instruction": "Move arm01 from START to OBSERVE, hold for the visual gate, and return to START while arm02 remains at START."
+    },
+    "dual_arm_bag_grind": {
+      "instruction": "Transfer the powder bag to the dish, clear arm01 upward, overlap arm01 return with arm02 four-cycle grinding, and return both arms to START."
+    }
+  },
+  "state_layout": [
+    "arm01_j1_deg",
+    "arm01_j2_deg",
+    "arm01_j3_deg",
+    "arm01_j4_deg",
+    "arm01_j5_deg",
+    "arm01_j6_deg",
+    "arm01_gripper_open_fraction",
+    "arm02_j1_deg",
+    "arm02_j2_deg",
+    "arm02_j3_deg",
+    "arm02_j4_deg",
+    "arm02_j5_deg",
+    "arm02_j6_deg"
+  ],
+  "action_semantics": "next_commanded_state",
+  "measured_robot_telemetry": false,
+  "camera_frames_synchronized": false,
+  "real_robot_policy": false,
+  "motion_authority": false,
+  "execution_allowed": false,
+  "actuator_commands_issued": 0
+}

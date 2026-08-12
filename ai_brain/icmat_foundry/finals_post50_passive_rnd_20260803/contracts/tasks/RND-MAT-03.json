@@ -1,0 +1,11 @@
+{
+  "claim_boundary": "version-fixed public JARVIS DFT proxy, not measured IR intensity",
+  "family_id": "RND-MAT-03",
+  "receipt_sha256": "0627259120a0062c00f5325fb271be7c22079aab6f788a83c5f0ec3795418f16",
+  "schema": "x5_icmat_foundry.post50_task_contract.v1",
+  "source_archive_sha256": "f9e0a3309f0000d5de1ec9e49c93963109ea45e63f451103f8f6595d2eabf7f5",
+  "split": "existing formula/approximate-structure-family disjoint split",
+  "target": "max_ir_mode",
+  "task": "JARVIS computed maximum IR mode intensity regression",
+  "transform": "log1p"
+}

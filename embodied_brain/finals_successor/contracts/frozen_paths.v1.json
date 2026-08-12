@@ -1,0 +1,27 @@
+{
+  "contract_id": "xrd-embodied-finals-repechage-freeze-v1",
+  "firmware_build_id": 2026071907,
+  "validated_entry": "bash ~/tools/finals_lift_nav_demo.sh",
+  "validated_distance_m": 0.5,
+  "forbidden_candidate_publishers": [
+    "/cmd_vel",
+    "/cmd_vel_safe",
+    "/tf",
+    "/tf_static",
+    "/f407"
+  ],
+  "paths": [
+    "embodied_brain/tools/finals_lift_nav_demo.sh",
+    "embodied_brain/tools/finals_lift_nav_demo.py",
+    "embodied_brain/stm32_f407/firmware_images/finals_1907_full_flow_passed_user_confirmed_20260719/a_2026071907.hex",
+    "embodied_brain/stm32_f407/App/main.c",
+    "embodied_brain/stm32_f407/App/proto.c",
+    "embodied_brain/stm32_f407/App/proto.h",
+    "embodied_brain/stm32_f407/App/bsp_lift.c",
+    "embodied_brain/stm32_f407/App/bsp_lift.h",
+    "embodied_brain/ros2_ws/src/my_robot_drivers/include/my_robot_drivers/serial_protocol.hpp",
+    "embodied_brain/ros2_ws/src/my_robot_drivers/src/serial_f407_node.cpp",
+    "embodied_brain/ros2_ws/src/my_robot_navigation/config/lab_fsd_shadow.yaml",
+    "embodied_brain/evidence/navigation_commissioning/finals_lift_nav_demo_20260719_202724.json"
+  ]
+}

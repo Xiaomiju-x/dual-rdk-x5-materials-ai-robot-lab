@@ -1,0 +1,79 @@
+{
+  "checkpoint": {
+    "bytes": 47954,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-XRD-01/final_lite_v7_lite.pt",
+    "sha256": "20284df54b1abbb6f0f39886b6d966d7353792af8ae6984b69bcbd20e0c566e6"
+  },
+  "configuration": {
+    "id": "v7_lite",
+    "w_contrast": 0.08,
+    "w_diff": 0.2,
+    "w_peak": 0.12,
+    "width": 10
+  },
+  "created_at": "2026-08-02T17:36:15.330923+00:00",
+  "extra": {
+    "epochs": 6,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.6342631280422211,
+        "selection_score": 0.12957892089225206
+      },
+      {
+        "epoch": 2,
+        "loss": 0.5947989337146282,
+        "selection_score": 0.10617622739173746
+      },
+      {
+        "epoch": 3,
+        "loss": 0.5318425334990025,
+        "selection_score": 0.08455215298775573
+      },
+      {
+        "epoch": 4,
+        "loss": 0.5014835670590401,
+        "selection_score": 0.0685362832832217
+      },
+      {
+        "epoch": 5,
+        "loss": 0.47622377797961235,
+        "selection_score": 0.06234541953176163
+      },
+      {
+        "epoch": 6,
+        "loss": 0.45205456018447876,
+        "selection_score": 0.06017726359864497
+      }
+    ],
+    "test_split_observed": false
+  },
+  "family_id": "RND-XRD-01",
+  "fit_id": "final_lite_v7_lite",
+  "fit_seconds": 53.99902949999887,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 10046,
+  "receipt_sha256": "8d11cb12b26d64a32aecd1dbbdf35f08ceb92cf86740893a366d4bc53f6287d9",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267705,
+  "selection_metrics": {
+    "profile": {
+      "mae": 0.018510982394218445,
+      "mean_cosine": 0.5857332348823547,
+      "peak_f1": 0.4690743759114695,
+      "peak_precision": 0.5931872423519201,
+      "peak_recall": 0.3879114642451759,
+      "rmse": 0.06534238159656525
+    },
+    "retrieval": {
+      "median_rank": 5.5,
+      "mrr": 0.37384474210505697,
+      "top1": 0.244,
+      "top5": 0.5
+    },
+    "selection_score": 0.06017726359864497
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

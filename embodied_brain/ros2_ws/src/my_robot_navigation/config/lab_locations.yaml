@@ -1,0 +1,103 @@
+# lab_locations.yaml — 实验室 C409 固定点位坐标库
+#
+# command_interpreter 解析自然语言后, 用 location_id 查这个文件拿 PoseStamped (map frame),
+# dispatch_server 把它喂给 Nav2 NavigateToPose action.
+#
+# 坐标系: map (slam_toolbox 给的, 单位 m, theta 单位 rad).
+#
+# 怎么填真值 (建图后每个点做一次, 工具只读 TF, 不发布运动命令):
+#   1. 启动 SLAM/定位并让车由安全员移动到目标姿态
+#   2. python3 ~/tools/capture_nav_location.py --id furnace_1 \
+#        --description "1 号马弗炉" \
+#        --out ~/nav_location_evidence/furnace_1.json
+#   3. 把命令输出的 pose 填到下面对应位置, scp 回 X5 + colcon build
+#   4. 保留 JSON 作为 map -> base_footprint 现场标定证据
+# 也可以用 RViz Publish Point 辅助选点, 但必须另行确认朝向 theta.
+#
+# 占位用 0.0, 0.0, 0.0 — Nav2 会跑到 origin (建图原点), 一般是首启点 = 工位
+#
+# 跟 my_robot_msgs/action/DispatchTask.action 的 from_location/to_location 字段对齐:
+#   - 字符串值就是这里的 key (比如 "furnace_1", "shelf_2_slot_3", "home")
+
+frame_id: map        # 所有 pose 都在 map 坐标系下
+
+locations:
+
+  # ==================== 工位 ====================
+  home:
+    description: 默认工位 / 充电点 / SLAM 建图原点
+    pose:
+      x: 0.0
+      y: 0.0
+      theta: 0.0      # 朝向 +x 方向
+    approach_distance: 0.0   # 到达就行, 不需要预进入
+
+  # ==================== 烧结炉 (3 台) ====================
+  furnace_1:
+    description: 1 号马弗炉 (1700°C 高温, 烧结主炉)
+    pose: { x: 0.0, y: 0.0, theta: 0.0 }
+    approach_distance: 0.5   # 车在炉前 0.5m 停, 升降台抬起对准送瓶口
+
+  furnace_2:
+    description: 2 号管式炉 (气氛控制, 备用)
+    pose: { x: 0.0, y: 0.0, theta: 0.0 }
+    approach_distance: 0.5
+
+  furnace_3:
+    description: 3 号箱式炉 (低温预烧)
+    pose: { x: 0.0, y: 0.0, theta: 0.0 }
+    approach_distance: 0.5
+
+  # ==================== 试剂柜 (按位置编号, 先做 3 个) ====================
+  shelf_1:
+    description: 试剂柜 1 (Y/Lu/Sc/Ga 类稀土氧化物)
+    pose: { x: 0.0, y: 0.0, theta: 0.0 }
+    approach_distance: 0.4
+    # 试剂瓶按格子编号 (slot_1, slot_2, ..., slot_N), 编号是 AprilTag 上贴的
+    # 车到试剂柜后, 升降台高度按 slot 行号决定
+    slots:
+      slot_1: { tag_id: 11, height_mm: 100 }   # 第 1 行第 1 列
+      slot_2: { tag_id: 12, height_mm: 100 }
+      slot_3: { tag_id: 13, height_mm: 100 }
+      slot_4: { tag_id: 21, height_mm: 250 }   # 第 2 行
+      slot_5: { tag_id: 22, height_mm: 250 }
+      slot_6: { tag_id: 23, height_mm: 250 }
+
+  shelf_2:
+    description: 试剂柜 2 (掺杂源 Cr/Ni/Co/Mn 等)
+    pose: { x: 0.0, y: 0.0, theta: 0.0 }
+    approach_distance: 0.4
+    slots:
+      slot_1: { tag_id: 31, height_mm: 100 }
+      slot_2: { tag_id: 32, height_mm: 100 }
+      slot_3: { tag_id: 33, height_mm: 100 }
+
+  shelf_3:
+    description: 试剂柜 3 (烧结后样品回收)
+    pose: { x: 0.0, y: 0.0, theta: 0.0 }
+    approach_distance: 0.4
+    slots: {}   # 动态分配, 烧结完成的样品放空格
+
+  # ==================== XRD 测试位 (将来扩展) ====================
+  # xrd_station:
+  #   description: XRD 衍射仪样品台
+  #   pose: { x: 0.0, y: 0.0, theta: 0.0 }
+  #   approach_distance: 0.3
+
+  # ==================== PL 光谱测试位 (将来扩展) ====================
+  # pl_station:
+  #   description: 荧光光谱仪样品台
+  #   pose: { x: 0.0, y: 0.0, theta: 0.0 }
+  #   approach_distance: 0.3
+
+# AI 脑 bottle_id 命名规范 (跟 dashboard.py 的 SYGO/YCAS 系列一致)
+# 提示给后续会话, 解析自然语言时用:
+known_bottle_id_prefixes:
+  - SYGO   # Sr-Y-Ga-O 系列
+  - YCAS   # Y-Ca-Al-Si 系列
+  - YAG    # Y3Al5O12
+  - GGG    # Gd3Ga5O12
+  - GAGG   # Gd3Al2Ga3O12
+  - Y2O3
+  - LMA    # LaMgAl11O19
+  # 数字后缀: SYGO-1, SYGO-2, ... 表示同一系列不同配方编号

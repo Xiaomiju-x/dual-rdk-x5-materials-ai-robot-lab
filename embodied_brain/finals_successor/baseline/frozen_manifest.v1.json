@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "contract_id": "xrd-embodied-finals-repechage-freeze-v1",
+  "created_at": "2026-07-28T06:54:30.265966+00:00",
+  "repository_root": "<REPO_ROOT>",
+  "snapshot_root": "embodied_brain\\finals_successor\\baseline\\snapshot_v1",
+  "firmware_build_id": 2026071907,
+  "validated_entry": "bash ~/tools/finals_lift_nav_demo.sh",
+  "validated_distance_m": 0.5,
+  "files": [
+    {
+      "path": "embodied_brain/evidence/navigation_commissioning/finals_lift_nav_demo_20260719_202724.json",
+      "bytes": 800,
+      "sha256": "3772a4cd0a7c8f048d6bd00a82182c454c9a7890dd939bf8643f68aad794bd7c"
+    },
+    {
+      "path": "embodied_brain/ros2_ws/src/my_robot_drivers/include/my_robot_drivers/serial_protocol.hpp",
+      "bytes": 5299,
+      "sha256": "cf388ede5ecf10be5f9bb3e8bea4cc5c973bdc8a47bac162775761a8c9af7465"
+    },
+    {
+      "path": "embodied_brain/ros2_ws/src/my_robot_drivers/src/serial_f407_node.cpp",
+      "bytes": 69645,
+      "sha256": "4350bb3ac3381048f3442612c78b3d222efdf176789d597c5215876b3b479027"
+    },
+    {
+      "path": "embodied_brain/ros2_ws/src/my_robot_navigation/config/lab_fsd_shadow.yaml",
+      "bytes": 2197,
+      "sha256": "df36b4f27adfc3872e40ec6f01c9b62757f4112283df391f737dd260bb8040cb"
+    },
+    {
+      "path": "embodied_brain/stm32_f407/App/bsp_lift.c",
+      "bytes": 17012,
+      "sha256": "762a302306b269f5bb95d3013ade07a64de5f70a38b1341b0524c7ff11bc4fee"
+    },
+    {
+      "path": "embodied_brain/stm32_f407/App/bsp_lift.h",
+      "bytes": 4033,
+      "sha256": "8fd156d4b259fe4ce886a9bc2df710f8526f98c96e95f920e2714535af92a5ef"
+    },
+    {
+      "path": "embodied_brain/stm32_f407/App/main.c",
+      "bytes": 50277,
+      "sha256": "897ec64478808b5c147b2598d3221399f88b4872d00ee08c6800fd4632d4d415"
+    },
+    {
+      "path": "embodied_brain/stm32_f407/App/proto.c",
+      "bytes": 29370,
+      "sha256": "c2622465601d6cd2eb03f1ef968166a7346a5a8c7569841b8ac562ca648c4f36"
+    },
+    {
+      "path": "embodied_brain/stm32_f407/App/proto.h",
+      "bytes": 3872,
+      "sha256": "65aa68ffbd578c468a8d7d325f653dcbeaeb818a87fb5b366d3ea4b05a6dbc6b"
+    },
+    {
+      "path": "embodied_brain/stm32_f407/firmware_images/finals_1907_full_flow_passed_user_confirmed_20260719/a_2026071907.hex",
+      "bytes": 36673,
+      "sha256": "76ffacdc85659cb0381dcc9daaa5a6a0b1157f5f351d6cf8987ee96c3f068050"
+    },
+    {
+      "path": "embodied_brain/tools/finals_lift_nav_demo.py",
+      "bytes": 17609,
+      "sha256": "ee56f5cf012fe1427a701a8d39d30d2f5988c4f3540e3748ae0cb144947edf50"
+    },
+    {
+      "path": "embodied_brain/tools/finals_lift_nav_demo.sh",
+      "bytes": 5764,
+      "sha256": "3598de623e84e69781aeb75856ca1fd280aada9ec25562169557281cf487145e"
+    }
+  ],
+  "manifest_sha256": "f62729be0099ead851c6e5430c3bff08d473b4478e849fc52e172841a0527213"
+}

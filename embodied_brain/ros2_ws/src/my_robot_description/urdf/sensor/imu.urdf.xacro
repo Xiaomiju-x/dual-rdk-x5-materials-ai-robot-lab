@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    IMU. 当前 STM32F407 板载 (MPU6050 / ICM20602 之类). 暂占位 link, 后期接到 base_link.
+    frame_id="imu_link", REP-145 规定 X 前/Y 左/Z 上.
+  -->
+
+  <xacro:macro name="imu_xacro" params="parent xyz:='0 0 0' rpy:='0 0 0'">
+    <link name="imu_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.005"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <xacro:box_inertial mass="0.01" x="0.02" y="0.02" z="0.005"/>
+    </link>
+
+    <joint name="${parent}_to_imu" type="fixed">
+      <parent link="${parent}"/>
+      <child link="imu_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+</robot>

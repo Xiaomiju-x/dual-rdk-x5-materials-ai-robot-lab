@@ -1,0 +1,99 @@
+{
+  "checkpoint": {
+    "bytes": 99474,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-MAT-01/grid_v2_role48_r0.pt",
+    "sha256": "b05d882c30807f9288b281820a059abeb547fcc38e9d87d877a80a2bebcd9f84"
+  },
+  "configuration": {
+    "dropout": 0.0,
+    "hidden": 48,
+    "id": "v2_role48",
+    "role_aware": true
+  },
+  "created_at": "2026-08-02T18:47:53.421179+00:00",
+  "extra": {
+    "epochs": 13,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.4327250048518181,
+        "val_mae": 26.90204429626465
+      },
+      {
+        "epoch": 2,
+        "loss": 0.4284346252679825,
+        "val_mae": 26.684877395629883
+      },
+      {
+        "epoch": 3,
+        "loss": 0.4283180832862854,
+        "val_mae": 26.62702751159668
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4207685813307762,
+        "val_mae": 26.50678825378418
+      },
+      {
+        "epoch": 5,
+        "loss": 0.4062129557132721,
+        "val_mae": 26.212472915649414
+      },
+      {
+        "epoch": 6,
+        "loss": 0.40407533943653107,
+        "val_mae": 25.90305519104004
+      },
+      {
+        "epoch": 7,
+        "loss": 0.40702466666698456,
+        "val_mae": 25.801279067993164
+      },
+      {
+        "epoch": 8,
+        "loss": 0.3959299325942993,
+        "val_mae": 25.809246063232422
+      },
+      {
+        "epoch": 9,
+        "loss": 0.39350295066833496,
+        "val_mae": 25.882476806640625
+      },
+      {
+        "epoch": 10,
+        "loss": 0.3854513540863991,
+        "val_mae": 26.019102096557617
+      },
+      {
+        "epoch": 11,
+        "loss": 0.36848434060811996,
+        "val_mae": 26.294931411743164
+      },
+      {
+        "epoch": 12,
+        "loss": 0.3585352376103401,
+        "val_mae": 26.377593994140625
+      },
+      {
+        "epoch": 13,
+        "loss": 0.3467244729399681,
+        "val_mae": 26.351966857910156
+      }
+    ]
+  },
+  "family_id": "RND-MAT-01",
+  "fit_id": "grid_v2_role48_r0",
+  "fit_seconds": 0.35425889999896754,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 23761,
+  "receipt_sha256": "1e2c422948cac21199a88b91224446e8ea93213559cf41c2d9d7cd6bcf523313",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20269823,
+  "selection_metrics": {
+    "mae": 25.801279067993164,
+    "rmse": 29.19676971435547
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

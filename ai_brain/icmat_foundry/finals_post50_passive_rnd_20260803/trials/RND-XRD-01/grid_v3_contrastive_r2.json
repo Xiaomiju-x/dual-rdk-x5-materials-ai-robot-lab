@@ -1,0 +1,79 @@
+{
+  "checkpoint": {
+    "bytes": 77898,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-XRD-01/grid_v3_contrastive_r2.pt",
+    "sha256": "fc7397cc4637dccdbbbb484f35467be0da4f7c5001114c62b3d3bef3b235a300"
+  },
+  "configuration": {
+    "id": "v3_contrastive",
+    "w_contrast": 0.1,
+    "w_diff": 0.0,
+    "w_peak": 0.0,
+    "width": 16
+  },
+  "created_at": "2026-08-02T17:15:29.163553+00:00",
+  "extra": {
+    "epochs": 6,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.6274031847715378,
+        "selection_score": 0.14612837662267383
+      },
+      {
+        "epoch": 2,
+        "loss": 0.5682134591042995,
+        "selection_score": 0.08726768215111254
+      },
+      {
+        "epoch": 3,
+        "loss": 0.4985850192606449,
+        "selection_score": 0.06433612020443753
+      },
+      {
+        "epoch": 4,
+        "loss": 0.428157027810812,
+        "selection_score": 0.06161380372169166
+      },
+      {
+        "epoch": 5,
+        "loss": 0.37336302176117897,
+        "selection_score": 0.0619878639073403
+      },
+      {
+        "epoch": 6,
+        "loss": 0.32370547764003277,
+        "selection_score": 0.062251171826737714
+      }
+    ],
+    "test_split_observed": false
+  },
+  "family_id": "RND-XRD-01",
+  "fit_id": "grid_v3_contrastive_r2",
+  "fit_seconds": 70.1116847000003,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 17282,
+  "receipt_sha256": "512ff1c2b122ba1b3c4f2dddc9ef28c516dbaf780b4f39b042191c8ede468cb1",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20265835,
+  "selection_metrics": {
+    "profile": {
+      "mae": 0.02095418982207775,
+      "mean_cosine": 0.5981738567352295,
+      "peak_f1": 0.48200772200772196,
+      "peak_precision": 0.5288037953236191,
+      "peak_recall": 0.4428206583427923,
+      "rmse": 0.06550125777721405
+    },
+    "retrieval": {
+      "median_rank": 5.0,
+      "mrr": 0.3968423099826027,
+      "top1": 0.262,
+      "top5": 0.56
+    },
+    "selection_score": 0.06161380372169166
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

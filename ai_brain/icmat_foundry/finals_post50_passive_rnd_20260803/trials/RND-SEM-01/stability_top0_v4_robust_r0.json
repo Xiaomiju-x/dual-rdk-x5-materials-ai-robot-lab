@@ -1,0 +1,102 @@
+{
+  "checkpoint": {
+    "bytes": 130992,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/stability_top0_v4_robust_r0.pt",
+    "sha256": "e5fd1304b2d859c5b3858baf19670468cbc8d543dcb9b386c379add964b1ab3c"
+  },
+  "configuration": {
+    "augment": 0.05,
+    "distilled": true,
+    "kind": "student",
+    "width": 5
+  },
+  "created_at": "2026-08-02T18:38:40.671018+00:00",
+  "extra": {
+    "effective_target_epochs": 12,
+    "epochs": 12,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.5035296100200992,
+        "score": 0.5953339443819418
+      },
+      {
+        "epoch": 2,
+        "loss": 1.128380284451022,
+        "score": 0.6153014408065787
+      },
+      {
+        "epoch": 3,
+        "loss": 0.7334486018903185,
+        "score": 0.6846451760467664
+      },
+      {
+        "epoch": 4,
+        "loss": 0.64291712051571,
+        "score": 0.6195297859460983
+      },
+      {
+        "epoch": 5,
+        "loss": 0.5572822810989795,
+        "score": 0.6870443927883503
+      },
+      {
+        "epoch": 6,
+        "loss": 0.4833179346405634,
+        "score": 0.7834079382329947
+      },
+      {
+        "epoch": 7,
+        "loss": 0.4109601599745231,
+        "score": 0.8169661807984222
+      },
+      {
+        "epoch": 8,
+        "loss": 0.400683984603032,
+        "score": 0.7885611424223109
+      },
+      {
+        "epoch": 9,
+        "loss": 0.3675894849371202,
+        "score": 0.8496127026577693
+      },
+      {
+        "epoch": 10,
+        "loss": 0.35176611123698776,
+        "score": 0.7938469242259544
+      },
+      {
+        "epoch": 11,
+        "loss": 0.3372042490409152,
+        "score": 0.8361138528665261
+      },
+      {
+        "epoch": 12,
+        "loss": 0.33505549628545744,
+        "score": 0.8794086111243407
+      }
+    ],
+    "optimizer_state_restored": false,
+    "prior_receipt_archive": null,
+    "resumed_from_epoch": 0,
+    "training_batch_size": 32
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "stability_top0_v4_robust_r0",
+  "fit_seconds": 74.26094039999953,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 29511,
+  "receipt_sha256": "2358cd67e22cbc390cd7e17c4bea1561b2241753b5cd1dd5ccae9deeb33ff022",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20269303,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.21482430747050815,
+    "dice": 0.8257025342567136,
+    "foreground_iou": 0.703146371160231,
+    "score": 0.8794086111243407,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

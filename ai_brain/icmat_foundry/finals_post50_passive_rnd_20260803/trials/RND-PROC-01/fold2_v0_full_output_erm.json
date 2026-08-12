@@ -1,0 +1,98 @@
+{
+  "checkpoint": {
+    "bytes": 104442,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold2_v0_full_output_erm.pt",
+    "sha256": "4211097deef65a24e86f41ed18b68e5c7635475a4d0965aa684b0efc9aba9c76"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 64,
+    "id": "v0_full_output_erm",
+    "latent": false,
+    "rank": 17
+  },
+  "created_at": "2026-08-02T16:52:52.543069+00:00",
+  "extra": {
+    "epochs": 8,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.2295227208558251,
+        "selection_score": 0.012944625690579414
+      },
+      {
+        "epoch": 2,
+        "loss": 0.18802917617208817,
+        "selection_score": 0.0130478092469275
+      },
+      {
+        "epoch": 3,
+        "loss": 0.16605754634913275,
+        "selection_score": 0.013489286415278912
+      },
+      {
+        "epoch": 4,
+        "loss": 0.14773028387742884,
+        "selection_score": 0.014245085418224335
+      },
+      {
+        "epoch": 5,
+        "loss": 0.1343687899848994,
+        "selection_score": 0.015044207219034433
+      },
+      {
+        "epoch": 6,
+        "loss": 0.12418167687514249,
+        "selection_score": 0.016078495886176825
+      },
+      {
+        "epoch": 7,
+        "loss": 0.11447276087368236,
+        "selection_score": 0.014967379160225391
+      },
+      {
+        "epoch": 8,
+        "loss": 0.11025359087130603,
+        "selection_score": 0.015310813672840595
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold2_v0_full_output_erm",
+  "fit_seconds": 1.3124733999993623,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 24610,
+  "receipt_sha256": "65daf6bb7a4b609b5870914f0e512af602352fb3fc56f38a141de0a2cea1ffd1",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20261003,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.008536708541214466,
+      "r2": 0.9889430227138937,
+      "rmse": 0.01151940505951643
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.008815834298729897,
+        "r2": 0.15708641712472882,
+        "rmse": 0.0111710699275136,
+        "uniformity_mae": 0.0022392941173166037,
+        "worst_point_mae": 0.013398656621575356
+      },
+      "WTi": {
+        "mae": 0.007758688181638718,
+        "r2": -0.03630395640186346,
+        "rmse": 0.012438961304724216,
+        "uniformity_mae": 0.0014433467295020819,
+        "worst_point_mae": 0.013470112346112728
+      }
+    },
+    "selection_score": 0.012944625690579414,
+    "worst_domain_mae": 0.008815834298729897
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

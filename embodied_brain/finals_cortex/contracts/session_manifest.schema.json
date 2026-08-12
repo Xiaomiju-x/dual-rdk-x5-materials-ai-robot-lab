@@ -1,0 +1,396 @@
+{
+  "$id": "https://xrd.local/contracts/x5-real-sensor-session.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "created_at_utc": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "files": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actual_sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "actual_size_bytes": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "declared_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "declared_size_bytes": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "path": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "declared_sha256",
+          "actual_sha256",
+          "declared_size_bytes",
+          "actual_size_bytes",
+          "verified"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "integrity": {
+      "additionalProperties": false,
+      "properties": {
+        "issue_counts": {
+          "additionalProperties": false,
+          "properties": {
+            "critical": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "error": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "info": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "warning": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ],
+          "type": "object"
+        },
+        "issues": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "message": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sequence": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "error",
+                  "critical"
+                ]
+              },
+              "stream": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "timestamp_ns": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "code",
+              "severity",
+              "stream",
+              "sequence",
+              "timestamp_ns",
+              "message"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "valid": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "valid",
+        "issue_counts",
+        "issues"
+      ],
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "permissions": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "control_authority": {
+          "const": false
+        },
+        "forbidden_interfaces": {
+          "contains": {
+            "const": "/cmd_vel"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "mode": {
+          "const": "read_only_offline_recorder"
+        },
+        "publishers": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "x5-real-sensor-recorder-permissions.v1"
+        },
+        "serial_devices": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "services": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "tf_broadcasters": {
+          "maxItems": 0,
+          "type": "array"
+        }
+      },
+      "required": [
+        "schema_version",
+        "mode",
+        "publishers",
+        "services",
+        "actions",
+        "tf_broadcasters",
+        "serial_devices",
+        "control_authority",
+        "forbidden_interfaces"
+      ],
+      "type": "object"
+    },
+    "recorder": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor_stream": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "required_streams": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "tolerance_ns": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "version": {
+          "const": "x5-real-sensor-recorder.v1"
+        }
+      },
+      "required": [
+        "version",
+        "required_streams",
+        "anchor_stream",
+        "tolerance_ns"
+      ],
+      "type": "object"
+    },
+    "samples": {
+      "items": {
+        "$ref": "#/$defs/sample"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "x5-real-sensor-session.v1"
+    },
+    "session_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "streams": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "synchronization": {
+      "type": "object"
+    },
+    "timing": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "session_id",
+    "created_at_utc",
+    "recorder",
+    "permissions",
+    "metadata",
+    "streams",
+    "samples",
+    "files",
+    "synchronization",
+    "timing",
+    "integrity"
+  ],
+  "type": "object",
+  "$defs": {
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "capture_host": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "clock_domain": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "device_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "source_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "live_sensor",
+            "live_camera",
+            "recorded_replay",
+            "cached_camera",
+            "synthetic_fixture",
+            "derived",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "source_id",
+        "device_id",
+        "clock_domain",
+        "capture_host",
+        "artifact_sha256",
+        "metadata"
+      ],
+      "type": "object"
+    },
+    "sample": {
+      "additionalProperties": false,
+      "properties": {
+        "message_type": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "payload_file": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "payload_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "payload_size_bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "receive_clock_domain": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "received_timestamp_ns": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sequence": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "stream": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "timestamp_ns": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "stream",
+        "message_type",
+        "sequence",
+        "timestamp_ns",
+        "received_timestamp_ns",
+        "receive_clock_domain",
+        "payload_file",
+        "payload_sha256",
+        "payload_size_bytes",
+        "provenance"
+      ],
+      "type": "object"
+    }
+  }
+}

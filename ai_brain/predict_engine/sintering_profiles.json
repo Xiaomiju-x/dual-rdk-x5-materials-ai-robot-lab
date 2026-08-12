@@ -1,0 +1,238 @@
+{
+  "_meta": {
+    "description": "结构化烧结工艺参数库 — 替代 recipe.py L163-197 硬编码. 每条 host_family 给出 calcine + sinter + cooling + crucible + grinding_cycles + 文献来源. RAG 抽取自 spectrum_knowledge_shared/embeddings/chunks.json (2462 篇 NIR 荧光粉论文, 1683 unique sources). 没有命中的 host 族标 source='literature_default_by_family' 不编 DOI.",
+    "schema": {
+      "example_formulas": ["示例化学式"],
+      "calcine": {"temp_C": "预烧温度 °C", "hours": "保温小时", "ramp_C_per_min": "升温速率", "atmosphere": "气氛 (air/Ar/N2/H2-N2/O2)"},
+      "sinter":  {"temp_C": "主烧温度 °C", "hours": "保温小时", "ramp_C_per_min": "升温速率", "atmosphere": "气氛"},
+      "cooling": "降温方式描述",
+      "crucible": "推荐坩埚材质",
+      "grinding_cycles": "中间研磨次数",
+      "sources": [{"doi": "10.xxx/yyy", "src_file": "chunks.json 内的 source 文件名", "cited_temp_C": "原文引用温度", "cited_hours": "原文引用时长", "note": "适用条件"}],
+      "notes": "工艺备注"
+    },
+    "rag_corpus": "spectrum_knowledge_shared/embeddings/chunks.json (25228 chunks, 1683 papers)",
+    "rag_extraction_date": "2026-04-18",
+    "rag_query_keywords": ["sintered", "calcined", "fired", "annealed", "°C", "host formula"],
+    "fallback_policy": "RAG 未覆盖 host 族时, source='literature_default_by_family', cited_* 字段填经典固相反应教科书共识 (Shriver/Smart 'Solid State Chemistry' + Materials Project 工艺数据), 不编 DOI"
+  },
+
+  "garnet": {
+    "example_formulas": ["Y3Al5O12", "Lu3Al5O12", "Gd3Al5O12", "Tb3Al5O12", "Y3Al5O12:Ce", "Y3Al5O12:Cr"],
+    "calcine": {"temp_C": 900, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1500, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷至室温 (~3 °C/min)",
+    "crucible": "Al2O3 (corundum)",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "Investigation-on-the-effect-of-vacuum-annealing-time-on-struct_2022_Optics--.pdf",
+       "cited_temp_C": 1600, "cited_hours": 5,
+       "note": "经典固相反应 YAG:Ce 文中明确 'high sintering temperature (>1600 °C) and long soaking time'; sol-gel 路径可降至 1050 °C/1h"},
+      {"doi": null, "src_file": "jp106693z.pdf",
+       "cited_temp_C": 1300, "cited_hours": 8,
+       "note": "garnet 体系下温合成示例, alumina crucible"},
+      {"doi": null, "src_file": "1-s2.0-S002554082200304X-main.pdf",
+       "cited_temp_C": 1325, "cited_hours": 6,
+       "note": "garnet phase formation mid-range temperature"}
+    ],
+    "notes": "Cr3+:YAG / Ce3+:YAG 标准工艺: 950 °C 预烧 4h → 中间研磨 → 1500 °C 烧 6h. 若用 Cr2O3 → 1600 °C 更易固溶. Cr3+ 掺杂可在 air 下完成 (无需还原), Ce3+ 需弱还原气氛 (95%N2+5%H2) 抑制 Ce4+."
+  },
+
+  "garnet_gallium": {
+    "example_formulas": ["Y3Ga5O12", "Gd3Ga5O12", "Lu3Ga5O12", "Gd3Al2Ga3O12", "Y3Ga5O12:Cr"],
+    "calcine": {"temp_C": 900, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1450, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3 (corundum) — Ga2O3 在高温下挥发, 不要用敞口 Pt",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 1450, "cited_hours": 6,
+       "note": "Ga2O3 沸点低 (1900 °C, 但 1500+ 已显著挥发), 标准 GGG/YGG 烧结温度 1400-1500 °C 比纯 Al-garnet 低 ~50-100 °C; 教科书共识"}
+    ],
+    "notes": "GGG / YGG / GAGG 等含 Ga 的 garnet 体系: Ga2O3 高温挥发, 须加盖坩埚 + 控制升温速率 ≤5 °C/min; 推荐 1450 °C/6h. 若需更高致密度, 可在 1500 °C 下加 1.5x 过量 Ga2O3 补偿挥发."
+  },
+
+  "perovskite": {
+    "example_formulas": ["YAlO3", "LaAlO3", "GdAlO3", "LaGaO3", "SrTiO3", "CaTiO3"],
+    "calcine": {"temp_C": 1000, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1300, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3 或 MgO",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 1300, "cited_hours": 4,
+       "note": "ABO3 钙钛矿, 立方/正交结构形成温度普遍 1200-1400 °C, 来源于教科书 (Shriver-Smart Inorganic Chemistry, Solid State Reactions chapter)"}
+    ],
+    "notes": "REAlO3 (RE = Y, La, Gd) 钙钛矿: 1300 °C/4h. 若与 garnet 相竞争 (RE3Al5O12), 升温速率不宜 >5 °C/min, 否则 garnet 杂相."
+  },
+
+  "spinel": {
+    "example_formulas": ["MgAl2O4", "ZnAl2O4", "ZnGa2O4", "MgGa2O4", "MgAl2O4:Cr", "MgAl2O4:Ni"],
+    "calcine": {"temp_C": 800, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1400, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "Sol-gel combustion synthesis and near-infrared luminescence of Ni2+-doped MgAl2O4.pdf",
+       "cited_temp_C": 1200, "cited_hours": 4,
+       "note": "sol-gel 路径 MgAl2O4:Ni2+ 1200 °C 已成相; 固相反应需 1400 °C+"},
+      {"doi": "10.1080/10584587.2010.488529", "src_file": "Photocurrent Characteristics of Sr1-x Ca x Al2O4 Co-Doped with Eu2+ and Ni2+.pdf",
+       "cited_temp_C": 1350, "cited_hours": 5,
+       "note": "(Sr,Ca)Al2O4 spinel-related 1350 °C/5h sol-gel 路径"}
+    ],
+    "notes": "MgAl2O4:Cr3+ / Ni2+ 标准固相工艺: 800 °C/4h 分解碳酸盐 → 研磨 → 1400 °C/6h. sol-gel 可降至 1200 °C. 对 Ni2+ 体系建议轻度还原 (1% H2/Ar) 抑制 Ni3+."
+  },
+
+  "orthosilicate": {
+    "example_formulas": ["Y2SiO5", "Lu2SiO5", "Sc2SiO5", "Y2Si2O7", "Ca2MgSi2O7"],
+    "calcine": {"temp_C": 1000, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1400, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Pt 或 Al2O3 (SiO2 与 Al2O3 在高温有反应风险, 推荐 Pt)",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "feng2019.pdf",
+       "cited_temp_C": 1400, "cited_hours": 6,
+       "note": "silicate phosphor 1400 °C 范围多次出现 (4/6/10/15h 系列对照实验)"},
+      {"doi": null, "src_file": "ma2010.pdf",
+       "cited_temp_C": 1200, "cited_hours": 2,
+       "note": "中温 silicate 工艺: 450 °C/10h 预烧 → 1200 °C/2h 主烧"},
+      {"doi": "10.1002/anie.202114902", "src_file": "anie.202114902.pdf",
+       "cited_temp_C": 1400, "cited_hours": 6,
+       "note": "silicate 多步烧结 1000+1400 °C 常见组合"}
+    ],
+    "notes": "Y2SiO5/Lu2SiO5 (X1/X2 多型): 1400 °C → X1 单斜相, 1700 °C+ → X2. SiO2 易烧粘 Al2O3 坩埚, 优先 Pt; 若必须用 Al2O3 须加 BN 衬层."
+  },
+
+  "pyrochlore": {
+    "example_formulas": ["La2Zr2O7", "Y2Ti2O7", "Gd2Ti2O7", "Lu2Ti2O7", "La2Hf2O7"],
+    "calcine": {"temp_C": 1000, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1500, "hours": 12, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3 或 ZrO2 (含 Zr 体系)",
+    "grinding_cycles": 3,
+    "sources": [
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 1500, "cited_hours": 12,
+       "note": "A2B2O7 烧绿石: B = Zr/Hf 体系扩散慢, 需要 1500 °C / 长时间 (12-24h) + 多次研磨, 教科书共识"}
+    ],
+    "notes": "La2Zr2O7 / Gd2Ti2O7 等: 长时间烧 12h 才能形成有序烧绿石相 (无序 fluorite 相 → 有序 pyrochlore 相). 中间研磨 3 次. Cr3+ 掺杂在 B 位 (Ti/Zr) 需还原气氛."
+  },
+
+  "aluminate": {
+    "example_formulas": ["SrAl2O4", "CaAl2O4", "Sr3Al2O6", "BaAl2O4", "Sr6Y2Al4O15", "CaYAlO4"],
+    "calcine": {"temp_C": 900, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1350, "hours": 5, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": "10.1080/10584587.2010.488529", "src_file": "Photocurrent Characteristics of Sr1-x Ca x Al2O4 Co-Doped with Eu2+ and Ni2+.pdf",
+       "cited_temp_C": 1350, "cited_hours": 5,
+       "note": "(Sr,Ca)Al2O4 体系 sol-gel 1350 °C/5h, 适用复合 RE-aluminate 类比"},
+      {"doi": null, "src_file": "feng2019.pdf",
+       "cited_temp_C": 1400, "cited_hours": 6,
+       "note": "aluminate 类相 1400 °C 范围多种保温时间扫描"},
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 1400, "cited_hours": 6,
+       "note": "Sr6Y2Al4O15 (SYGO) 同结构类比物 Sr6RE2Al4O15 (RE=Y,Lu) 经典固相反应温度区间"}
+    ],
+    "notes": "SYGO (Sr6Y2Al4O15) 实验室新相, 无独立 ICSD 编号; 张丹 PI 已确认与 Sr6Y2Al4O15 同构. 建议工艺: 900 °C/4h 预烧分解 SrCO3 → 1400 °C/6h 主烧. SrAl2O4 系长余辉 (Eu2+,Dy3+) 须 H2/N2 还原, Cr3+ 掺杂 air 即可."
+  },
+
+  "oxide_simple": {
+    "example_formulas": ["Y2O3", "Gd2O3", "Lu2O3", "Sc2O3", "La2O3", "Y2O3:Cr"],
+    "calcine": {"temp_C": 800, "hours": 2, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1500, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3 或 Pt",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 1500, "cited_hours": 6,
+       "note": "RE2O3 (C-type cubic, bixbyite 结构) 致密化温度: Y2O3/Lu2O3 ~1500 °C, La2O3 较低 ~1300 °C 但易吸湿. 教科书 (West, Solid State Chemistry, 2014) 共识"}
+    ],
+    "notes": "Y2O3:Cr3+ 标准工艺: 800 °C/2h 除潮 → 1500 °C/6h. 注意 La2O3 称量前 600 °C/2h 预烧除水 (避免化学计量偏离). RE2O3 单相在 air 下烧, 无需气氛."
+  },
+
+  "borate": {
+    "example_formulas": ["YBO3", "GdBO3", "LaBO3", "Ca3Y(BO3)3", "Sr2MgB2O6"],
+    "calcine": {"temp_C": 600, "hours": 4, "ramp_C_per_min": 3, "atmosphere": "air"},
+    "sinter":  {"temp_C": 950, "hours": 6, "ramp_C_per_min": 3, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3 (硼酸高温熔融, 不能用 Pt 防侵蚀)",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": "10.1039/c9dt04092g", "src_file": "Sr2MgB2O6-CE3-TB3-DT.pdf",
+       "cited_temp_C": 950, "cited_hours": 6,
+       "note": "Sr2MgB2O6 borate Ce3+/Tb3+ 共掺 950 °C 烧结, NIR 荧光粉相邻领域"},
+      {"doi": null, "src_file": "Narrow UVB-Emitted YBO3 Phosphor Activated by Bi3+ and Gd3+ Co-Doping.pdf",
+       "cited_temp_C": 800, "cited_hours": 4,
+       "note": "YBO3:Bi3+/Gd3+ 800 °C 已成相, 中温体系"}
+    ],
+    "notes": "硼酸盐熔点低 (B2O3 mp ~450 °C), 升温必须慢 (3 °C/min) 防 boric anhydride 飞溅. 推荐起始物 H3BO3 (易磨匀). YBO3 体系 800-950 °C, REBO3 大体系 ≤1000 °C. 不要超过 1100 °C, 否则 B2O3 大量挥发."
+  },
+
+  "phosphate": {
+    "example_formulas": ["YPO4", "LaPO4", "Y(PO4)", "Sr9LiMg(PO4)7"],
+    "calcine": {"temp_C": 800, "hours": 4, "ramp_C_per_min": 3, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1300, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3 (磷酸盐对 Pt 微侵蚀)",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "Sr9LiMg(PO4)7-CE3-TB3-Mn2.pdf",
+       "cited_temp_C": 1300, "cited_hours": 6,
+       "note": "复合磷酸盐 Sr9LiMg(PO4)7 Ce3+/Tb3+/Mn2+ 三掺 1300 °C/6h"}
+    ],
+    "notes": "磷酸盐起始物 NH4H2PO4 (DAP) 在 200 °C 即开始分解放出 NH3, 必须在通风炉中慢升温; 推荐 200 °C 保 1h → 600 °C 保 1h → 1300 °C 主烧."
+  },
+
+  "germanate": {
+    "example_formulas": ["LiScGeO4", "Mg2GeO4", "Zn2GeO4", "Ca3Ga2Ge3O12"],
+    "calcine": {"temp_C": 800, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1200, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "acsaelm.2c01759.pdf",
+       "cited_temp_C": 1200, "cited_hours": 6,
+       "note": "germanate NIR phosphor 1200 °C 中温区"}
+    ],
+    "notes": "GeO2 价格高 (~12 元/g), 严格控量. Cr3+ 掺杂的 Mg2GeO4/LiScGeO4 是 NIR-II 候选, 1200 °C/6h 经验值. Zn2GeO4 (willemite-type) 1100-1200 °C 已足够."
+  },
+
+  "fluoride": {
+    "example_formulas": ["K2SiF6", "Na3AlF6", "YF3", "LaF3", "CaF2", "NaYF4"],
+    "calcine": {"temp_C": 400, "hours": 2, "ramp_C_per_min": 2, "atmosphere": "Ar"},
+    "sinter":  {"temp_C": 700, "hours": 4, "ramp_C_per_min": 3, "atmosphere": "Ar"},
+    "cooling": "随炉冷, 全程 Ar/N2 保护",
+    "crucible": "Pt 或刚玉密封管 (不能用 Al2O3 — F⁻ 在高温下侵蚀 Al2O3 生成 AlF3)",
+    "grinding_cycles": 1,
+    "sources": [
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 700, "cited_hours": 4,
+       "note": "氟化物相多在 600-800 °C 形成, 高温会水解; K2SiF6:Mn4+ 等湿化学制备温度更低 (≤80 °C), 教科书共识"}
+    ],
+    "notes": "氟化物体系不推荐固相反应 (产物含 OH⁻), 推荐共沉淀/水热. 若必须固相, 用密封 Pt 管 + Ar 保护, ≤700 °C."
+  },
+
+  "default_unknown": {
+    "example_formulas": ["未知 host"],
+    "calcine": {"temp_C": 900, "hours": 4, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "sinter":  {"temp_C": 1450, "hours": 6, "ramp_C_per_min": 5, "atmosphere": "air"},
+    "cooling": "随炉冷",
+    "crucible": "Al2O3",
+    "grinding_cycles": 2,
+    "sources": [
+      {"doi": null, "src_file": "literature_default_by_family",
+       "cited_temp_C": 1450, "cited_hours": 6,
+       "note": "未识别 host_family 时的安全默认 — 复合氧化物固相反应中位数, 实际可调 ±100 °C"}
+    ],
+    "notes": "host_family 未知时退回此项. 1450 °C/6h 是大多数复合氧化物 (RE-Al-O / RE-Ga-O / RE-Si-O) 的成相温度中位数. 实测后调整: 杂相 → 升温 50-100 °C; 颗粒过粗 → 缩短保温 / 加 1 次研磨."
+  }
+}

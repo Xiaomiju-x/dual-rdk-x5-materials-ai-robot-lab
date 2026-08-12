@@ -1,0 +1,451 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:xrd:dual-arm-successor:schema:shadow-prediction:v1",
+  "title": "DualArm Shadow Prediction v1",
+  "description": "Advisory-only model output for POST_RUN_REPLAY.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "prediction_id",
+    "created_at",
+    "replay_mode",
+    "prediction_disposition",
+    "motion_authority",
+    "execution_allowed",
+    "actuator_commands_issued",
+    "episode_ref",
+    "model_ref",
+    "input_window",
+    "stage_prediction",
+    "next_skill_prediction",
+    "action_chunk",
+    "ood",
+    "world_model",
+    "inference"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "shadow_prediction_v1"
+    },
+    "prediction_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "replay_mode": {
+      "const": "POST_RUN_REPLAY"
+    },
+    "prediction_disposition": {
+      "const": "ADVISORY_ONLY"
+    },
+    "motion_authority": {
+      "const": false
+    },
+    "execution_allowed": {
+      "const": false
+    },
+    "actuator_commands_issued": {
+      "const": 0
+    },
+    "episode_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "episode_id",
+        "episode_sha256"
+      ],
+      "properties": {
+        "episode_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "episode_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "model_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_id",
+        "model_family",
+        "artifact_sha256",
+        "receipt_sha256"
+      ],
+      "properties": {
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_family": {
+          "enum": [
+            "SMOLVLA",
+            "COMPACT_ACT",
+            "TINY_ACT",
+            "OPENVLA_OFT_TEACHER",
+            "XR0_TEACHER",
+            "X5_BISKILL_STUDENT",
+            "WORLD_MODEL",
+            "ENSEMBLE"
+          ]
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "input_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_timestamp_ns",
+        "end_timestamp_ns",
+        "state_dimension",
+        "camera_ids"
+      ],
+      "properties": {
+        "start_timestamp_ns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_timestamp_ns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "state_dimension": {
+          "const": 13
+        },
+        "camera_ids": {
+          "const": [
+            "arm01_wrist",
+            "arm02_overhead"
+          ]
+        }
+      }
+    },
+    "stage_prediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predicted_stage",
+        "confidence",
+        "class_scores"
+      ],
+      "properties": {
+        "predicted_stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "confidence": {
+          "$ref": "#/$defs/probability"
+        },
+        "class_scores": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/classScore"
+          }
+        }
+      }
+    },
+    "next_skill_prediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skill",
+        "confidence"
+      ],
+      "properties": {
+        "skill": {
+          "$ref": "#/$defs/skill"
+        },
+        "confidence": {
+          "$ref": "#/$defs/probability"
+        }
+      }
+    },
+    "action_chunk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "dimension",
+        "steps"
+      ],
+      "properties": {
+        "disposition": {
+          "const": "ADVISORY_ONLY"
+        },
+        "dimension": {
+          "const": 13
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/predictedActionStep"
+          }
+        }
+      }
+    },
+    "ood": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "score",
+        "threshold",
+        "is_ood",
+        "method",
+        "reason_codes"
+      ],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0
+        },
+        "threshold": {
+          "type": "number",
+          "minimum": 0
+        },
+        "is_ood": {
+          "type": "boolean"
+        },
+        "method": {
+          "enum": [
+            "CONFORMAL",
+            "ENERGY",
+            "ENSEMBLE",
+            "MAHALANOBIS",
+            "RULES_PLUS_MODEL",
+            "UNSPECIFIED"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "CAMERA_MISSING",
+              "STATE_MISSING",
+              "CLOCK_SKEW",
+              "VISUAL_SHIFT",
+              "STATE_RANGE",
+              "MODEL_UNCERTAIN",
+              "UNKNOWN_TASK",
+              "NONE"
+            ]
+          }
+        }
+      }
+    },
+    "world_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "horizons"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "AVAILABLE",
+            "DEGRADED",
+            "UNKNOWN"
+          ]
+        },
+        "horizons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/worldHorizon"
+          }
+        }
+      }
+    },
+    "inference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "backend",
+        "device",
+        "latency_ms",
+        "measured_on_device",
+        "bpu_forward_executed"
+      ],
+      "properties": {
+        "backend": {
+          "enum": [
+            "PYTORCH",
+            "ONNX_RUNTIME",
+            "BAYES_E",
+            "HYBRID_CPU_BPU"
+          ]
+        },
+        "device": {
+          "type": "string",
+          "minLength": 1
+        },
+        "latency_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "measured_on_device": {
+          "type": "boolean"
+        },
+        "bpu_forward_executed": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "probability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "stage": {
+      "enum": [
+        "PRE_RUN",
+        "SINGLE_ARM_OBSERVE_OUTBOUND",
+        "APRILTAG_OBSERVE",
+        "SINGLE_ARM_RETURN_START",
+        "DUAL_ARM_PICK_APPROACH",
+        "DUAL_ARM_PICK_GRASP",
+        "DUAL_ARM_BAG_TRANSPORT",
+        "DUAL_ARM_DISH_DROP",
+        "ARM01_CLEAR_TOP",
+        "DUAL_ARM_GRIND_CONCURRENT",
+        "DUAL_ARM_RETURN_START",
+        "COMPLETED",
+        "UNKNOWN"
+      ]
+    },
+    "skill": {
+      "enum": [
+        "HOLD",
+        "OBSERVE_TAG",
+        "RETURN_START",
+        "APPROACH_BAG",
+        "CLOSE_GRIPPER",
+        "TRANSPORT_BAG",
+        "OPEN_GRIPPER",
+        "CLEAR_ARM01",
+        "START_ARM02",
+        "GRIND_CYCLE",
+        "RETURN_BOTH",
+        "STOP",
+        "UNKNOWN"
+      ]
+    },
+    "bagState": {
+      "enum": [
+        "EMPTY",
+        "PRESENT",
+        "UNKNOWN"
+      ]
+    },
+    "vector13": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "items": false
+    },
+    "classScore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage",
+        "score"
+      ],
+      "properties": {
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "score": {
+          "$ref": "#/$defs/probability"
+        }
+      }
+    },
+    "predictedActionStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relative_time_ms",
+        "action_13d",
+        "uncertainty"
+      ],
+      "properties": {
+        "relative_time_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "action_13d": {
+          "$ref": "#/$defs/vector13"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/probability"
+        }
+      }
+    },
+    "worldHorizon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "horizon_ms",
+        "predicted_stage",
+        "bag_state",
+        "dual_arm_sync_score",
+        "success_probability",
+        "uncertainty"
+      ],
+      "properties": {
+        "horizon_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "predicted_stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "bag_state": {
+          "$ref": "#/$defs/bagState"
+        },
+        "dual_arm_sync_score": {
+          "$ref": "#/$defs/probability"
+        },
+        "success_probability": {
+          "$ref": "#/$defs/probability"
+        },
+        "uncertainty": {
+          "$ref": "#/$defs/probability"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-08-02T18:46:33.882679+00:00",
+  "family_id": "RND-SEM-01",
+  "final_validation_scores": {
+    "lite": 0.05401367394416058,
+    "quality": 0.751294525844895,
+    "robust": 0.8301390872597687
+  },
+  "fit_budget_reallocation": {
+    "completed_extra_students": [
+      "student_top3_v6_boundary_heavy_r0",
+      "student_top3_v6_boundary_heavy_r1"
+    ],
+    "dropped_unexported_fits": [
+      "stability_top1_repeat1",
+      "final_control"
+    ]
+  },
+  "fit_count_before_test": 32,
+  "post_test_retuning_allowed": false,
+  "ranked_student_teacher_ids": [
+    "v4_robust",
+    "v5_quality",
+    "v2_distance",
+    "v1_boundary"
+  ],
+  "ranked_teacher_ids": [
+    "v4_robust",
+    "v5_quality",
+    "v2_distance",
+    "v6_boundary_heavy",
+    "v1_boundary",
+    "v7_lite_teacher",
+    "v3_boundary_distance",
+    "v0_mask"
+  ],
+  "receipt_sha256": "d15f6cf947edc3f380156de9efd0befbedc1df20a00884945da88a169fcd4667",
+  "schema": "x5_icmat_foundry.post50_selection_lock.v1",
+  "selected_quality_variant": "robust",
+  "test_opened": false,
+  "variant_thresholds": {
+    "lite": 0.35,
+    "quality": 0.65,
+    "robust": 0.65
+  }
+}

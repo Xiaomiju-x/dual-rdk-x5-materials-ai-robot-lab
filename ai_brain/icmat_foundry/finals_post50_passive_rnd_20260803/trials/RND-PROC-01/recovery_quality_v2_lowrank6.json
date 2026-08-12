@@ -1,0 +1,138 @@
+{
+  "checkpoint": {
+    "bytes": 97994,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/recovery_quality_v2_lowrank6.pt",
+    "sha256": "7ff5b2fa30d49afd72be94f36ec0ed41a4ae4dd5b6b0d95f264adf0452157d55"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 64,
+    "id": "v2_lowrank6",
+    "latent": true,
+    "rank": 6
+  },
+  "created_at": "2026-08-02T16:56:09.941806+00:00",
+  "extra": {
+    "epochs": 16,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.2340937077999115,
+        "selection_score": 0.014767321292310953
+      },
+      {
+        "epoch": 2,
+        "loss": 0.1863194949924946,
+        "selection_score": 0.013665421400219202
+      },
+      {
+        "epoch": 3,
+        "loss": 0.16402859315276147,
+        "selection_score": 0.01298876665532589
+      },
+      {
+        "epoch": 4,
+        "loss": 0.1509084604680538,
+        "selection_score": 0.012305163778364658
+      },
+      {
+        "epoch": 5,
+        "loss": 0.13926765285432338,
+        "selection_score": 0.012914671562612057
+      },
+      {
+        "epoch": 6,
+        "loss": 0.12799996472895145,
+        "selection_score": 0.011884840670973063
+      },
+      {
+        "epoch": 7,
+        "loss": 0.1192748162895441,
+        "selection_score": 0.012438331265002489
+      },
+      {
+        "epoch": 8,
+        "loss": 0.11388236917555332,
+        "selection_score": 0.012113655917346478
+      },
+      {
+        "epoch": 9,
+        "loss": 0.10872775949537754,
+        "selection_score": 0.01136795268394053
+      },
+      {
+        "epoch": 10,
+        "loss": 0.10449961200356483,
+        "selection_score": 0.011586671695113182
+      },
+      {
+        "epoch": 11,
+        "loss": 0.10126080252230167,
+        "selection_score": 0.011187340365722775
+      },
+      {
+        "epoch": 12,
+        "loss": 0.09611432440578938,
+        "selection_score": 0.011505065485835075
+      },
+      {
+        "epoch": 13,
+        "loss": 0.09477217048406601,
+        "selection_score": 0.011844477616250515
+      },
+      {
+        "epoch": 14,
+        "loss": 0.0916967574506998,
+        "selection_score": 0.012031892780214548
+      },
+      {
+        "epoch": 15,
+        "loss": 0.0936885729432106,
+        "selection_score": 0.012143324129283428
+      },
+      {
+        "epoch": 16,
+        "loss": 0.08964742999523878,
+        "selection_score": 0.011984516866505146
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "recovery_quality_v2_lowrank6",
+  "fit_seconds": 2.8827744000000166,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 22790,
+  "receipt_sha256": "59bb6dd136a8594d2532d88400abff1a269023557e3e4d46d2f0bc3c5f1053f7",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20264703,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.007445470429956913,
+      "r2": 0.9923328801547123,
+      "rmse": 0.009498002007603645
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.007483739871531725,
+        "r2": 0.4740783305786086,
+        "rmse": 0.009575712494552135,
+        "uniformity_mae": 0.0017906066495925188,
+        "worst_point_mae": 0.01184879057109356
+      },
+      "WTi": {
+        "mae": 0.007339021191000938,
+        "r2": 0.23393682853829256,
+        "rmse": 0.009278420358896255,
+        "uniformity_mae": 0.0016718676779419184,
+        "worst_point_mae": 0.01005152054131031
+      }
+    },
+    "selection_score": 0.011187340365722775,
+    "worst_domain_mae": 0.007483739871531725
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

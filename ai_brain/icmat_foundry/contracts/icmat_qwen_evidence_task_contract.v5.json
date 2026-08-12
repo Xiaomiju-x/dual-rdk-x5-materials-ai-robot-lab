@@ -1,0 +1,54 @@
+{
+  "schema": "icmat_qwen_evidence_task_contract.v5",
+  "product_id": "ICMat-Qwen-0.5B",
+  "selection_policy": "researcher_explicit_domain_and_task",
+  "domains": [
+    "electronic_materials_property",
+    "fab_process_metrology_yield",
+    "opto_packaging_reliability"
+  ],
+  "tasks": [
+    {
+      "task": "claim_verification",
+      "purpose": "Decide whether a requested engineering claim is supported by the supplied licensed evidence.",
+      "supported_result": "Return the exact supported claim with evidence ID and provenance.",
+      "unsupported_result": "Return a structured REFUSE result without inventing a claim."
+    },
+    {
+      "task": "evidence_selection",
+      "purpose": "Select the evidence passage that supports a requested materials or process claim.",
+      "supported_result": "Return the supported claim and exact selected evidence ID.",
+      "unsupported_result": "Return a structured REFUSE result when no passage supports the request."
+    },
+    {
+      "task": "claim_extraction",
+      "purpose": "Extract one evidence-bounded engineering claim from the supplied passage.",
+      "supported_result": "Return the exact claim, citation, and provenance.",
+      "unsupported_result": "Return a structured REFUSE result when the requested claim is absent."
+    }
+  ],
+  "knowledge_namespaces": [
+    {
+      "namespace": "electronic_materials",
+      "scope": "electronic and optoelectronic material properties"
+    },
+    {
+      "namespace": "process_metrology",
+      "scope": "semiconductor process development, virtual metrology, and quality prediction"
+    },
+    {
+      "namespace": "packaging_reliability",
+      "scope": "advanced packaging, interconnect, and reliability evidence"
+    }
+  ],
+  "forbidden_claims": [
+    "Published literature is a local instrument measurement.",
+    "An unsupported requested claim is true.",
+    "The model autonomously selected the production task or production model.",
+    "The candidate is a production safety gate.",
+    "The candidate executes on BPU."
+  ],
+  "fallback": "structured REFUSE or retain the existing frozen CPU/BPU model selected by the researcher",
+  "default_enabled": false,
+  "production_integration_allowed": false
+}

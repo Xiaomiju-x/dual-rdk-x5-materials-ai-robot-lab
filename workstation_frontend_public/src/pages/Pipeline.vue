@@ -63,8 +63,6 @@ const GRIPPERS: Gripper[] = [
   { key: 'bottle', name: '瓶+漏斗+相机', icon: '🍼', actuator: 'MG996R 25T ×2 + 模块',
     stages: 'S3 接瓶 / S4 倒粉', payload: '料瓶 + 小漏斗 + USB 相机模块', status: 'pending' },
 ]
-const showGrippers = ref(true)
-
 // ---------------- 互锁 ghost 顶视图 ----------------
 interface Ghost { points: { arm01: number[][]; arm02: number[][] }; tick: { min_dist_mm: number | null; level: string } }
 const ghost = ref<Ghost | null>(null)

@@ -1,0 +1,5 @@
+# Installed only in `.venv-icmat`; never install this file on the frozen X5 runtime.
+peft==0.19.1
+accelerate==1.14.0
+bitsandbytes==0.50.0
+sentencepiece==0.2.1

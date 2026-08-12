@@ -1,0 +1,8 @@
+numpy>=1.26,<3
+onnx>=1.16,<2
+onnxruntime>=1.18,<2
+opencv-python-headless>=4.10,<5
+PyYAML>=6,<7
+pytest>=8,<10
+rosbags>=0.10,<1
+torch==2.6.0

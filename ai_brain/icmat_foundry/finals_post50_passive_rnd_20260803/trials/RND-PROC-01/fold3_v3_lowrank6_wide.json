@@ -1,0 +1,108 @@
+{
+  "checkpoint": {
+    "bytes": 254546,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold3_v3_lowrank6_wide.pt",
+    "sha256": "fda896ca98494b5bf96915d8c5e454cb8ca11cebc13c63a67518f283f969de5b"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 128,
+    "id": "v3_lowrank6_wide",
+    "latent": true,
+    "rank": 6
+  },
+  "created_at": "2026-08-02T16:53:13.855767+00:00",
+  "extra": {
+    "epochs": 10,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.20729586619295573,
+        "selection_score": 6.650854825973511
+      },
+      {
+        "epoch": 2,
+        "loss": 0.17289454372305618,
+        "selection_score": 5.270285606384277
+      },
+      {
+        "epoch": 3,
+        "loss": 0.16169552583443492,
+        "selection_score": 6.746842622756958
+      },
+      {
+        "epoch": 4,
+        "loss": 0.13752598550758863,
+        "selection_score": 6.515778064727783
+      },
+      {
+        "epoch": 5,
+        "loss": 0.1409673400615391,
+        "selection_score": 4.808953404426575
+      },
+      {
+        "epoch": 6,
+        "loss": 0.13209156888095955,
+        "selection_score": 10.464633703231812
+      },
+      {
+        "epoch": 7,
+        "loss": 0.11765017262414883,
+        "selection_score": 24.785897254943848
+      },
+      {
+        "epoch": 8,
+        "loss": 0.11270936225589953,
+        "selection_score": 8.082339525222778
+      },
+      {
+        "epoch": 9,
+        "loss": 0.12021644099762566,
+        "selection_score": 7.8534862995147705
+      },
+      {
+        "epoch": 10,
+        "loss": 0.1029492495091338,
+        "selection_score": 6.2698235511779785
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold3_v3_lowrank6_wide",
+  "fit_seconds": 1.6886187999998583,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 61958,
+  "receipt_sha256": "7f9b67bd4a9e91ab476097ee8ddb47a6a51689758f22651053727dfadce73a3a",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20261106,
+  "selection_metrics": {
+    "combined": {
+      "mae": 1.6668909788131714,
+      "r2": -3645.1354125294747,
+      "rmse": 6.566445350646973
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.009259644895792007,
+        "r2": 0.14472610668440744,
+        "rmse": 0.01184149645268917,
+        "uniformity_mae": 0.0026764413341879845,
+        "worst_point_mae": 0.018450962379574776
+      },
+      "WTi": {
+        "mae": 6.284124851226807,
+        "r2": -1128425.2287733762,
+        "rmse": 12.775796890258789,
+        "uniformity_mae": 6.610877513885498,
+        "worst_point_mae": 14.93966007232666
+      }
+    },
+    "selection_score": 4.808953404426575,
+    "worst_domain_mae": 6.284124851226807
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

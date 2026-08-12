@@ -1,0 +1,118 @@
+{
+  "checkpoint": {
+    "bytes": 167874,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold2_v6_hero_full.pt",
+    "sha256": "34acbc1f238ae9a3b940aff98f9808e3473227616ea0b22d42333c6f61a8bbd5"
+  },
+  "configuration": {
+    "distill": true,
+    "group_dro": true,
+    "hidden": 96,
+    "id": "v6_hero_full",
+    "latent": true,
+    "rank": 6
+  },
+  "created_at": "2026-08-02T16:53:05.166064+00:00",
+  "extra": {
+    "epochs": 12,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.2137148257564096,
+        "selection_score": 0.013659538235515356
+      },
+      {
+        "epoch": 2,
+        "loss": 0.17724257532288046,
+        "selection_score": 0.013839044608175755
+      },
+      {
+        "epoch": 3,
+        "loss": 0.16078286968609867,
+        "selection_score": 0.013331997208297253
+      },
+      {
+        "epoch": 4,
+        "loss": 0.1542899678735172,
+        "selection_score": 0.012814487796276808
+      },
+      {
+        "epoch": 5,
+        "loss": 0.14511820673942566,
+        "selection_score": 0.01370167825371027
+      },
+      {
+        "epoch": 6,
+        "loss": 0.14706290820065668,
+        "selection_score": 0.01363180298358202
+      },
+      {
+        "epoch": 7,
+        "loss": 0.13197720050811768,
+        "selection_score": 0.012319450732320547
+      },
+      {
+        "epoch": 8,
+        "loss": 0.1316927623222856,
+        "selection_score": 0.013992642983794212
+      },
+      {
+        "epoch": 9,
+        "loss": 0.12592354855116675,
+        "selection_score": 0.013496479019522667
+      },
+      {
+        "epoch": 10,
+        "loss": 0.12244280865963768,
+        "selection_score": 0.013418831396847963
+      },
+      {
+        "epoch": 11,
+        "loss": 0.12054804537226171,
+        "selection_score": 0.014021079987287521
+      },
+      {
+        "epoch": 12,
+        "loss": 0.12351588641895968,
+        "selection_score": 0.013537033926695585
+      }
+    ],
+    "teacher_distillation": true
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold2_v6_hero_full",
+  "fit_seconds": 3.1405722999998034,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 40326,
+  "receipt_sha256": "5bbdd1cfb17d0a7a6d7d3349e752aa6ab5efd96d91b101f149479c12bb0ccb2a",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20261009,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.008152616210281849,
+      "r2": 0.9873993044368007,
+      "rmse": 0.012297281064093113
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.008087660185992718,
+        "r2": 0.25945250322397295,
+        "rmse": 0.010470795445144176,
+        "uniformity_mae": 0.0020382944494485855,
+        "worst_point_mae": 0.01263007614761591
+      },
+      "WTi": {
+        "mae": 0.008333669044077396,
+        "r2": -0.7891749495878666,
+        "rmse": 0.016344323754310608,
+        "uniformity_mae": 0.001836285344325006,
+        "worst_point_mae": 0.013857745565474033
+      }
+    },
+    "selection_score": 0.012319450732320547,
+    "worst_domain_mae": 0.008333669044077396
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

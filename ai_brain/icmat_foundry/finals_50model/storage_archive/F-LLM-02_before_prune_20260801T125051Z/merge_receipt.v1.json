@@ -1,0 +1,30 @@
+{
+  "adapter_tree_sha256": "ab13ce6378f162aabc2401b04ec1156e3211e9577693ab11d8c8c1ddff2b5e90",
+  "claims": {
+    "production_integrated": false,
+    "x5_accessed": false
+  },
+  "created_at": "2026-08-01T12:35:13.827395Z",
+  "duration_seconds": 29.177942752838135,
+  "merged_hf": {
+    "files": {
+      "added_tokens.json": "79f6ec6fcc423d3a82bfac8b9033b1daac7b7bce06a5f5f441637b480cc605de",
+      "chat_template.jinja": "51fa65c79bb57f058dc7ef8734884bd325fe9d45bb03a61bfef59785d3bc2da9",
+      "config.json": "9a6a3f60adf33b1094bc7e93cfb396041b5b3bbdcf0778be253c7276c8297bde",
+      "generation_config.json": "757981fe8a3022277be120d547c94a073701f55d94e96e921a06ae8363686951",
+      "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "model-00001-of-00002.safetensors": "1041f91ff5892cf45b5aaec4ff5296f6c3493238c1227c19daacdd6c93a7dd1a",
+      "model-00002-of-00002.safetensors": "4b90b61001a9dd546d122839ed584ca12759518a79a55c5bee6d07424cd11779",
+      "model.safetensors.index.json": "b4382a5b0939b028e804920117967bee14ddef2763ff9b994138aea53237d982",
+      "special_tokens_map.json": "57255613bbe23c9497211ca68561ff429a51e871dbaf5a59998fa4c8f7fe168a",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "tokenizer_config.json": "fe37b7e143fe76d8cfb6dad7a7f1215a98d48418ecca8de234f2d62d76e808a7",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    "path": "icmat_foundry\\finals_50model\\artifacts\\llm\\F-LLM-02\\merged_hf",
+    "tree_sha256": "e7c2a0b153168b14401143fbfec594b862896a2fa80d972fd09e36962af638bf"
+  },
+  "model_id": "F-LLM-02",
+  "schema": "icmat_evidenceqa_17b_merge_receipt.v1",
+  "status": "MERGED_HF_PC_EXPORT_READY"
+}

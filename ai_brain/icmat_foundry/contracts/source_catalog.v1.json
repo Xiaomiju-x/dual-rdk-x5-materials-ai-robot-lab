@@ -1,0 +1,287 @@
+{
+  "schema": "icmat_source_catalog.v1",
+  "created_at": "2026-07-28T00:00:00+08:00",
+  "status": "LICENSE_REVIEWED",
+  "claim_boundary": "The catalog authorizes only the listed acquisition and research uses. Public datasets and model cards do not prove local-fab performance, experimental ground truth, X5 deployment, or production integration.",
+  "records": [
+    {
+      "source_id": "nist_jarvis_dft",
+      "domain": "electronic_materials",
+      "name": "NIST JARVIS-DFT 3D dataset",
+      "source_type": "official_dataset",
+      "primary_url": "https://figshare.com/articles/dataset/jdft_3d-7-7-2018_json/6815699",
+      "publisher": "NIST JARVIS / Figshare",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Train and evaluate ICMat-PropNet on computed electronic-material properties.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "composition_reduced_formula_and_structure_prototype",
+      "doi": "10.6084/m9.figshare.6815699.v11",
+      "version": "v11 file 64391379, dated 2025-09-24",
+      "download_url": "https://ndownloader.figshare.com/files/64391379",
+      "download_name": "jdft_3d-9-24-2025.json.zip",
+      "expected_bytes": 48447610,
+      "expected_md5": "c3179161ef0d029cf1fa70da463aac6e",
+      "expected_artifacts": [
+        "raw zip with verified MD5 and SHA-256",
+        "normalized property table",
+        "prototype-disjoint split manifest"
+      ],
+      "risk_flags": [
+        "dft_not_experimental_ground_truth",
+        "functional_systematic_error",
+        "property_missingness",
+        "structure_family_leakage"
+      ],
+      "claim_boundary": "Results are computed-property screening on a version-pinned public JARVIS-DFT dataset, not experimental or fab-line validation.",
+      "status": "downloaded"
+    },
+    {
+      "source_id": "uci_secom",
+      "domain": "fab_metrology_yield",
+      "name": "UCI SECOM semiconductor manufacturing dataset",
+      "source_type": "official_dataset",
+      "primary_url": "https://archive.ics.uci.edu/dataset/179/secom",
+      "publisher": "UCI Machine Learning Repository",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Train and evaluate FabYield-X5 as a public semiconductor process-quality benchmark.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "chronological_test_timestamp",
+      "doi": "10.24432/C54305",
+      "version": "UCI repository snapshot checked 2026-07-28",
+      "download_url": "https://archive.ics.uci.edu/static/public/179/secom.zip",
+      "download_name": "secom.zip",
+      "expected_bytes": 1964989,
+      "expected_md5": "a23a3fac2897c747ff9c8811ff980f5a",
+      "expected_artifacts": [
+        "raw zip with local SHA-256",
+        "chronological split manifest",
+        "missingness and class-imbalance audit"
+      ],
+      "risk_flags": [
+        "anonymous_features",
+        "legacy_unknown_process",
+        "severe_class_imbalance",
+        "temporal_leakage"
+      ],
+      "claim_boundary": "This is a 2008 anonymous public benchmark and must not be described as a model trained on the team's or a modern fab's production data.",
+      "status": "downloaded"
+    },
+    {
+      "source_id": "nist_chips_sem_metrology",
+      "domain": "fab_metrology_yield",
+      "name": "NIST Detection Limits for SEM Image Segmentation",
+      "source_type": "official_dataset",
+      "primary_url": "https://catalog.data.gov/dataset/detection-limits-for-sem-image-segmentation",
+      "publisher": "National Institute of Standards and Technology",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "NIST Open License",
+      "license_url": "https://www.nist.gov/open/license",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Train and evaluate a lightweight SEM segmentation and image-quality candidate.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "official_sets_1_to_5_train_set_6_test",
+      "doi": "10.18434/mds2-3838",
+      "version": "v1.0.0",
+      "expected_artifacts": [
+        "official file inventory with hashes",
+        "sets 1-5 training manifest",
+        "set 6 locked evaluation manifest"
+      ],
+      "risk_flags": [
+        "simulated_sem_images",
+        "not_real_wafer_defects",
+        "large_download",
+        "third_party_runtime_licenses"
+      ],
+      "claim_boundary": "The benchmark measures segmentation detection limits on simulated SEM imagery and does not establish generalization to real wafer defects.",
+      "status": "candidate"
+    },
+    {
+      "source_id": "qwen25_05b_instruct",
+      "domain": "foundation_model",
+      "name": "Qwen2.5-0.5B-Instruct",
+      "source_type": "official_model",
+      "primary_url": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct",
+      "publisher": "Qwen",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Base model for structured materials extraction and compact grounded responses.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "document_source_family",
+      "version": "Hugging Face revision 7ae557604adf67be50417f59c2c2f167def9a775",
+      "model_repo_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "expected_artifacts": [
+        "snapshot revision",
+        "file hashes",
+        "base model card"
+      ],
+      "risk_flags": [
+        "hallucination",
+        "base_model_update",
+        "bpu_operator_and_cma_limits"
+      ],
+      "claim_boundary": "Downloading the base model does not prove domain adaptation, BPU conversion, or X5 runtime.",
+      "status": "downloaded"
+    },
+    {
+      "source_id": "qwen25_15b_instruct",
+      "domain": "foundation_model",
+      "name": "Qwen2.5-1.5B-Instruct",
+      "source_type": "official_model",
+      "primary_url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct",
+      "publisher": "Qwen",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Base model for local grounded materials question answering.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "document_source_family",
+      "version": "revision must be pinned at acquisition",
+      "model_repo_id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "expected_artifacts": [
+        "snapshot revision",
+        "file hashes",
+        "base model card"
+      ],
+      "risk_flags": [
+        "hallucination",
+        "base_model_update",
+        "rtx4050_memory_limit"
+      ],
+      "claim_boundary": "Downloading the base model does not prove domain adaptation or X5 runtime.",
+      "status": "approved_for_download"
+    },
+    {
+      "source_id": "qwen3_4b_teacher_gguf",
+      "domain": "foundation_model",
+      "name": "Qwen3-4B-GGUF local distillation teacher",
+      "source_type": "official_model",
+      "primary_url": "https://huggingface.co/Qwen/Qwen3-4B-GGUF",
+      "publisher": "Qwen Team",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Offline teacher candidate for citation-grounded integrated-circuit-material instruction generation.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "document_source_family",
+      "version": "bc640142c66e1fdd12af0bd68f40445458f3869b",
+      "model_repo_id": "Qwen/Qwen3-4B-GGUF",
+      "model_revision": "bc640142c66e1fdd12af0bd68f40445458f3869b",
+      "expected_artifacts": [
+        "Qwen3-4B-Q4_K_M.gguf",
+        "README.md",
+        "immutable file hashes"
+      ],
+      "risk_flags": [
+        "teacher_hallucination",
+        "quantized_teacher",
+        "citation_drift",
+        "not_an_x5_runtime_model"
+      ],
+      "claim_boundary": "Teacher output is only a candidate instruction and must be checked against its licensed source passage; download does not prove domain adaptation or X5 runtime.",
+      "status": "downloaded"
+    },
+    {
+      "source_id": "deepseek_r1_distill_qwen_15b",
+      "domain": "foundation_model",
+      "name": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "source_type": "official_model",
+      "primary_url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "publisher": "DeepSeek AI",
+      "checked_at": "2026-07-28",
+      "license_status": "verified_open",
+      "license_name": "MIT with Qwen2.5 Apache-2.0 base notice",
+      "license_url": "https://github.com/deepseek-ai/DeepSeek-R1/blob/main/LICENSE",
+      "redistribution": "allowed_with_attribution",
+      "intended_use": "Base model for an evidence-constrained process and materials failure-reasoning adapter.",
+      "reuse_gate": "ALLOW_TRAIN_REDISTRIBUTE",
+      "split_group": "document_source_family",
+      "version": "revision must be pinned at acquisition",
+      "model_repo_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "expected_artifacts": [
+        "snapshot revision",
+        "file hashes",
+        "base and derivative license notices"
+      ],
+      "risk_flags": [
+        "reasoning_hallucination",
+        "base_model_update",
+        "rtx4050_memory_limit"
+      ],
+      "claim_boundary": "A domain adapter remains an evidence-assisted reasoning model and cannot replace measurements or process engineers.",
+      "status": "approved_for_download"
+    },
+    {
+      "source_id": "frozen_phosphor_xrd_pl",
+      "domain": "phosphor_xrd_pl",
+      "name": "Frozen project phosphor, XRD and PL assets",
+      "source_type": "internal_published",
+      "primary_url": "repo://docs/ai_brain_upgrade_20260709",
+      "publisher": "XRD Smart Lab project",
+      "checked_at": "2026-07-28",
+      "license_status": "internal_only",
+      "license_name": "Mixed per-record provenance",
+      "license_url": "repo://docs/ai_brain_upgrade_20260709/DATA_ASSET_REUSE_AND_LICENSE_PLAN_20260709.md",
+      "redistribution": "prohibited",
+      "intended_use": "Reuse only the frozen local RAG and task evidence under the existing provenance rules.",
+      "reuse_gate": "RETRIEVAL_PRIVATE_ONLY",
+      "split_group": "doi_reference_family",
+      "expected_artifacts": [
+        "unchanged frozen index",
+        "namespace adapter without re-ingestion"
+      ],
+      "risk_flags": [
+        "mixed_document_licenses",
+        "published_paper_not_automatically_training_licensed",
+        "cross_domain_overgeneralization"
+      ],
+      "claim_boundary": "Existing published papers and local vectors remain subject to their per-document rights and cannot be republished as a bulk corpus.",
+      "status": "frozen"
+    },
+    {
+      "source_id": "icmat_rag_namespaces",
+      "domain": "optoelectronics_packaging_reliability",
+      "name": "ICMat four-domain RAG namespace contract",
+      "source_type": "internal_published",
+      "primary_url": "repo://icmat_foundry/contracts",
+      "publisher": "XRD Smart Lab project",
+      "checked_at": "2026-07-28",
+      "license_status": "internal_only",
+      "license_name": "Per-document license gate",
+      "license_url": "repo://icmat_foundry/contracts/source_catalog.v1.json",
+      "redistribution": "derived_artifacts_only",
+      "intended_use": "Provide namespace routing, provenance and refusal contracts over individually licensed sources.",
+      "reuse_gate": "RETRIEVAL_PRIVATE_ONLY",
+      "split_group": "source_document_family",
+      "expected_artifacts": [
+        "namespace manifest",
+        "document license ledger",
+        "retrieval regression cases"
+      ],
+      "risk_flags": [
+        "license_mixing",
+        "namespace_pollution",
+        "citation_mismatch"
+      ],
+      "claim_boundary": "The namespace contract contains no licensed corpus by itself and authorizes no document lacking a per-record license decision.",
+      "status": "candidate"
+    }
+  ]
+}

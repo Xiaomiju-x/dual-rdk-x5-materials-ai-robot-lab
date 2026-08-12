@@ -1,0 +1,7 @@
+# 控制电磁铁通断
+# 实现: my_robot_drivers/serial_f407_node 把 on/off 通过 0xAA55 串口发给 STM32F407 GPIO
+
+bool turn_on    # true=吸盘通电, false=断电
+---
+bool success
+string message  # 错误信息 (e.g. "F407 unreachable")

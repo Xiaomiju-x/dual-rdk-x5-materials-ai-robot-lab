@@ -1,0 +1,55 @@
+schema_version: xrd-dual-arm-fixture-config-v1
+project: X5-BiVLA-FixtureReplay
+status: FIXTURE_REPLAY_NOT_REAL_POLICY
+truthfulness:
+  fixture_replay_only: true
+  command_derived_digital_twin: true
+  measured_robot_telemetry: false
+  synchronized_camera_actions: false
+  real_robot_policy: false
+  shadow_only: true
+  motion_authority: false
+  execution_allowed: false
+  actuator_commands_issued: 0
+  deployment_eligible_by_training_alone: false
+hardware:
+  require_cuda: true
+  required_gpu_name_contains: RTX 5090
+  minimum_vram_gib: 28
+dataset:
+  row_schema: xrd-dual-arm-fixture-replay-row-v1
+  manifest_schema: xrd-dual-arm-fixture-replay-manifest-v1
+  provenance_state: COMMAND_DERIVED_DIGITAL_TWIN
+  allowed_tasks:
+    - single_arm_visual_redundancy
+    - dual_arm_bag_grind
+  expected_dimension: 13
+  min_episodes: 50
+  min_rows: 10000
+  min_episodes_per_task: 20
+  split_seed: 20260730
+  validation_fraction: 0.2
+training:
+  seeds: [20260730, 20260731, 20260732]
+  epochs: 16
+  initial_batch_size: 256
+  minimum_batch_size: 16
+  gradient_accumulation: 1
+  num_workers: 4
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  amp: true
+tiny_act:
+  history_len: 8
+  chunk_len: 8
+  hidden_dim: 192
+  transformer_heads: 6
+  transformer_layers: 3
+  dropout: 0.1
+world_model:
+  history_len: 8
+  hidden_dim: 192
+  recurrent_layers: 2
+  dropout: 0.1
+  residual_prediction: true
+  stage_loss_weight: 0.05

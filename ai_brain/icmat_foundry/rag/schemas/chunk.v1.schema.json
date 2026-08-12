@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xrd.local/schemas/icmat-rag-chunk.v1.schema.json",
+  "title": "ICMat RAG Chunk v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "chunk_id",
+    "namespace",
+    "source_id",
+    "source_title",
+    "source_uri",
+    "locator",
+    "evidence_kind",
+    "text",
+    "content_sha256",
+    "license_id",
+    "metadata"
+  ],
+  "properties": {
+    "schema": {"const": "icmat.rag.chunk.v1"},
+    "chunk_id": {"type": "string", "pattern": "^icmch1:[0-9a-f]{64}$"},
+    "namespace": {
+      "enum": [
+        "phosphor_xrd_pl",
+        "electronic_materials_property",
+        "fab_process_metrology_yield",
+        "opto_packaging_reliability"
+      ]
+    },
+    "source_id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}$"},
+    "source_title": {"type": "string", "minLength": 1},
+    "source_uri": {"type": "string", "minLength": 1},
+    "locator": {"type": "string", "minLength": 1},
+    "evidence_kind": {
+      "enum": [
+        "literature_knowledge",
+        "real_measurement",
+        "structured_dataset",
+        "source_metadata"
+      ]
+    },
+    "text": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "license_id": {"type": "string", "minLength": 1},
+    "metadata": {"type": "object"}
+  }
+}
