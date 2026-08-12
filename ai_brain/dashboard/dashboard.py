@@ -25,7 +25,7 @@ from flask import Flask, Response, jsonify, request
 
 # v4.1 Round 5: 把 repo 根目录 (以及 X5 上的 ~/) 加入 path, 让 predict_engine 可被导入
 _HERE = Path(__file__).resolve().parent
-for _cand in [_HERE, _HERE.parent, Path("/home/rdk
+for _cand in [_HERE, _HERE.parent, Path("/home/rdk")]:
     if str(_cand) not in sys.path:
         sys.path.insert(0, str(_cand))
 
@@ -1282,7 +1282,7 @@ pre{{background:#1e293b;padding:12px 14px;border-radius:8px;overflow-x:auto;
 </style></head><body>
 <h1>⚗ 合成预测报告</h1>
 <p style="color:#94a3b8;font-size:0.85em;">trace_id: <code>{trace_id}</code> ·
-2026 嵌入式竞赛 RDK X5 · NIR 荧光粉智慧实验室</p>
+基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 · 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</p>
 <h2>📋 输入配方</h2>
 <div><b>化学式:</b> <code>{payload.get('formula','')}</code></div>
 <div><b>掺杂:</b> {payload.get('dopant',{}).get('symbol','')} @ {payload.get('dopant',{}).get('site','')}, {payload.get('dopant',{}).get('pct','')}%</div>
@@ -1724,7 +1724,7 @@ def page_matrix(matrix_id):
 
 _BET_HTML = r"""<!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8"/>
-<title>🎲 对赌盲抽墙 · Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration</title>
+<title>🎲 对赌盲抽墙 · 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
@@ -4637,7 +4637,7 @@ def api_ai_candidates():
     """
     from pathlib import Path
     import re
-    REPO = Path("/home/rdk if Path("/home/rdk/crystal_data_shared").exists() else Path.cwd()
+    REPO = Path("/home/rdk") if Path("/home/rdk/crystal_data_shared").exists() else Path.cwd()
     out = {"ok": True, "n_nir": 0, "n_base": 0, "entries": []}
 
     # Load validation results (v1 old + v2 new)
@@ -5017,7 +5017,7 @@ def api_dqb_scan_map():
     """P0-1: serve predictions/dqb_scan_top20.json as {formula: entry} map for /discovery column."""
     try:
         from pathlib import Path as _P
-        REPO = _P("/home/rdk if _P("/home/rdk/predictions").exists() else _P.cwd()
+        REPO = _P("/home/rdk") if _P("/home/rdk/predictions").exists() else _P.cwd()
         p = REPO / "predictions" / "dqb_scan_top20.json"
         if not p.exists():
             return jsonify({"ok": False, "error": "dqb_scan_top20.json missing; run tools/dqb_scan_250.py"})
@@ -7028,7 +7028,7 @@ async function main(){
   if(!d.ok){document.getElementById('doc').textContent=d.error;return}
   const c=d.campaign,g=c.goal,p=c.progress;
   let h=`<h1>🎯 Campaign 报告 — ${esc(c.name)}</h1>
-  <div class="sub">基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 · 闭环优化 (GP/EI 贝叶斯主动学习) · 生成于 ${new Date().toLocaleString('zh-CN')} · ${c.cid}</div>
+  <div class="sub">双 RDK X5 材料合成 AI 与多机具身实验助理 · 闭环优化 (GP/EI 贝叶斯主动学习) · 生成于 ${new Date().toLocaleString('zh-CN')} · ${c.cid}</div>
   <div class="goal"><span>目标 <b>${g.target_nm} ± ${g.tol_nm} nm</b></span>
     <span>掺杂 <b>${esc(g.dopant_element)}3+ @ ${g.dopant_pct}%</b></span>
     <span>轮数 <b>${c.rounds.length}</b></span><span>已实测 <b>${p.n_measured_total}</b></span>
@@ -8133,7 +8133,7 @@ Y3Al5O12 Cr3+ Al 1.0
 </div><!-- end container -->
 
 <div class="footer">
-  基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 | 研磨 → 烧制 → XRD → PL → <span>配方决策</span> | 2026 嵌入式竞赛
+  基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 | 研磨 → 烧制 → XRD → PL → <span>配方决策</span> | 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题
 </div>
 
 <script>
@@ -9552,7 +9552,7 @@ def api_ts_diagram():
 def ts_explorer_page():
     html = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tanabe-Sugano 交互图 — 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人</title>__CSS__
+<title>Tanabe-Sugano 交互图 — 双 RDK X5 材料合成 AI 与多机具身实验助理</title>__CSS__
 <style>
 .ts-wrap{display:grid;grid-template-columns:1fr 320px;gap:18px}
 @media(max-width:900px){.ts-wrap{grid-template-columns:1fr}}
@@ -9649,7 +9649,7 @@ upd();
 def engine_page():
     html = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>推理机房 — 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人</title>__CSS__
+<title>推理机房 — 双 RDK X5 材料合成 AI 与多机具身实验助理</title>__CSS__
 <style>
 .racks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
 .rack{background:#fff;border:1px solid rgba(15,23,42,.07);border-radius:16px;overflow:hidden;
@@ -9725,7 +9725,7 @@ poll(); setInterval(poll, 6000);
 def compare_page():
     html = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>预测对比台 — 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人</title>__CSS__
+<title>预测对比台 — 双 RDK X5 材料合成 AI 与多机具身实验助理</title>__CSS__
 <style>
 .cmp-wrap{display:grid;grid-template-columns:340px 1fr;gap:18px}
 @media(max-width:980px){.cmp-wrap{grid-template-columns:1fr}}

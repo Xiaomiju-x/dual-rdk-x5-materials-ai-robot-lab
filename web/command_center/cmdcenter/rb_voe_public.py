@@ -12,6 +12,10 @@ from typing import Any
 
 PUBLIC_SCHEMA_VERSION = "xrd.rb_voe.public.v1"
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_PRIVATE_HOME_PREFIX = "/" + "home/"
+_PRIVATE_DEPLOYMENT_RE = re.compile(
+    r"(?:[A-Za-z]:\\|192\.168\.|10\.\d+\.\d+\.\d+|sk-[A-Za-z0-9])"
+)
 _TOP_LEVEL_FIELDS = frozenset(
     {
         "schema_version",
@@ -98,7 +102,7 @@ def validate_public_snapshot(payload: Mapping[str, Any]) -> dict[str, Any]:
         if not isinstance(atom, str) or not re.fullmatch(r"[A-Z][A-Z0-9_]{2,127}", atom):
             raise RbVoePublicError("failure core contains an unsafe identifier")
     serialized = json.dumps(detached, ensure_ascii=True, sort_keys=True)
-    if re.search(r"(?:[A-Za-z]:\\|/home/rdk serialized):
+    if _PRIVATE_HOME_PREFIX in serialized or _PRIVATE_DEPLOYMENT_RE.search(serialized):
         raise RbVoePublicError("public snapshot contains private deployment material")
     detached["public_snapshot_sha256"] = claimed_digest
     return detached

@@ -34,7 +34,7 @@
     "embodied_device_id": "embodied-x5:REPLACE_WITH_EMBODIED_DEVICE_DIGEST",
     "embodied_boot_id": "REPLACE_WITH_CURRENT_EMBODIED_BOOT_ID",
     "embodied_required_artifact_sha256": {
-      "collector_script": "315a40f4a86873694b5e86b7d6bf29c07e3973876a1fa7c3531555671a9dc7a9",
+      "collector_script": "1b571d9f9bbc64848e277935e22fbee9a94c1852bab62e2c23f6b78e956b41a1",
       "body_contour": "REPLACE_WITH_MEASURED_BODY_CONTOUR_SHA256",
       "full_launch": "62e1a92378bd3f7f7cff9eefbfcb770feff595692cae2aed7192932848ee7458",
       "nav2_params": "568fd06dda966c5119c540281db201d0f38548d79ca3d9cfb55f60d081a394d2",

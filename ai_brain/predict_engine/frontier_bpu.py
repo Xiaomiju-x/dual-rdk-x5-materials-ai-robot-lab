@@ -17,7 +17,7 @@ import numpy as np
 from .flybrain import DEFAULT_CONFIG, build_material_vector
 
 
-_ROOT_CANDS = [Path("/home/rdk Path(__file__).resolve().parent.parent, Path.cwd()]
+_ROOT_CANDS = [Path("/home/rdk"), Path(__file__).resolve().parent.parent, Path.cwd()]
 REPO_ROOT = next((p for p in _ROOT_CANDS if (p / "models").exists()), Path(__file__).resolve().parent.parent)
 MODEL_DIR = REPO_ROOT / "models" / "frontier_bpu"
 SURROGATE_BIN = MODEL_DIR / "material_descriptor_surrogate.bin"

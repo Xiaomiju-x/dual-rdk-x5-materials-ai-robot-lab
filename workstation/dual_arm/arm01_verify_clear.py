@@ -8,7 +8,7 @@ import json
 import sys
 import time
 
-sys.path.insert(0, "/home/rdk
+sys.path.insert(0, "/home/rdk")
 
 import bag_fixed_pick_g23 as baseline
 

@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.11"
       - name: Verify generated award blocks
@@ -32,6 +32,8 @@ jobs:
         run: python -B tools/publication/check_markdown_links.py . --format text
       - name: Audit the public release boundary
         run: python -B tools/publication/audit_release.py . --strict --format text
+      - name: Verify public-media hashes, metadata, audio and size
+        run: python -B tools/publication/verify_media.py --root .
       - name: Run hardware-free tests
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -52,11 +54,27 @@ jobs:
       run:
         working-directory: workstation_frontend_public
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "20"
           cache: npm
           cache-dependency-path: workstation_frontend_public/package-lock.json
       - run: npm ci
       - run: npm run build
+
+  embodied-dashboard-frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: embodied_brain/ros2_ws/src/my_robot_dashboard/frontend
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "20"
+      - name: Activate the lockfile-declared pnpm version
+        run: corepack enable && corepack prepare pnpm@9.12.3 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build

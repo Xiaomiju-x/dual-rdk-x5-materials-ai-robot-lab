@@ -40,12 +40,18 @@ $privateIpv4 = [regex]::new(
 )
 $hostKey = [regex]::new("ssh-ed25519\s+[A-Za-z0-9+/=]{20,}")
 $apiKeyPattern = [regex]::new("(?<![A-Za-z0-9])sk-[A-Za-z0-9]{20,}")
-$windowsUser = [regex]::new(('C:' + '\\Users\\' + '[^\\\s]+'))
-$forwardWindowsUser = [regex]::new(('C:' + '/Users/' + '[^/\s]+'))
-$linuxHome = [regex]::new(('/' + 'home/' + '(?!rdk(?:/|$))[^/\s]+'))
+$windowsUser = [regex]::new(('C:' + '\\Users\\' + '[A-Za-z0-9._-]+'))
+$forwardWindowsUser = [regex]::new(('C:' + '/Users/' + '[A-Za-z0-9._-]+'))
+$linuxHome = [regex]::new(
+    ('/' + 'home/' + '(?!rdk(?:/|$))[A-Za-z_][A-Za-z0-9_.-]*')
+)
 $privateDeviceLogin = [regex]::new(
     '(?<![A-Za-z0-9._-])[A-Za-z][A-Za-z0-9_-]{1,31}@' +
-    '(?=(?:10\.|192\.168\.|172\.(?:1[6-9]|2[0-9]|3[01])\.))'
+    '(?=(?:' +
+    '10(?:\.[0-9]{1,3}){3}|' +
+    '192\.168(?:\.[0-9]{1,3}){2}|' +
+    '172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2}' +
+    ')(?![0-9.]))'
 )
 
 $files = Get-ChildItem -LiteralPath $root -Recurse -File -Force -ErrorAction SilentlyContinue |

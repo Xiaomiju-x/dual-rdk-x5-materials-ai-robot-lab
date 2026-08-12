@@ -18,6 +18,7 @@ import os
 import sys
 import threading
 import time
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -25,8 +26,21 @@ import numpy as np
 import requests
 from flask import Flask, Response, jsonify, request, send_from_directory
 
+
+def _record_internal_error(scope: str) -> str:
+    """Return a correlation id while keeping exception details server-private."""
+    error_id = uuid.uuid4().hex[:12]
+    print(f"[internal-error] scope={scope} error_id={error_id}", flush=True)
+    return error_id
+
 # ---- 让 src 可导入 ----
 _ROOT = Path(__file__).resolve().parent
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+from xrd_security.path_safety import UnsafePathError, resolve_contained_path
+
 sys.path.insert(0, str(_ROOT / "src"))
 sys.path.insert(0, str(_ROOT))   # 让 voice_backend / shared_locks 可导入
 for _parent in (_ROOT.parent, _ROOT.parent.parent):
@@ -47,12 +61,12 @@ except ImportError:
     print("[WARN] shared_locks 未找到, 麦克风互斥保护禁用")
 try:
     from voice_backend import VoiceState, extract_tts_summary, match_voice_command, clean_llm_output
-except ImportError as _e:
+except ImportError:
     VoiceState = None
     extract_tts_summary = lambda t: (t or "")[:100]
     match_voice_command = lambda t: ""
     clean_llm_output = lambda t: (t or "")
-    print(f"[WARN] voice_backend 未找到 ({_e}), 语音功能禁用")
+    print("[WARN] voice_backend 未找到, 语音功能禁用")
 
 from parse_pl import parse_pl_csv                    # noqa: E402
 from extract_peaks_pl import extract_pl_peaks        # noqa: E402
@@ -79,8 +93,9 @@ try:
     from rag_engine import RAGEngine
     _RAG = RAGEngine()
     print(f"[RAG] 已加载")
-except Exception as e:
-    print(f"[RAG] 加载失败, Agent 将跳过 RAG 检索: {e}")
+except Exception:
+    _record_internal_error("pl_num_rag_load")
+    print("[RAG] 加载失败, Agent 将跳过 RAG 检索")
 
 # ---- DeepSeek-R1 配置 (和 xrd_vision 共用同一个 key) ----
 DEEPSEEK_R1_URL = "https://api.deepseek.com/v1/chat/completions"
@@ -175,8 +190,9 @@ def _get_bpu_classifier():
                 _bpu_classifier_path = p
                 print(f"[MLP] BPU 加载 {p.name}", flush=True)
                 return _bpu_classifier
-            except Exception as e:
-                print(f"[MLP] BPU 加载失败 ({e}), 降级 PyTorch", flush=True)
+            except Exception:
+                error_id = _record_internal_error("pl_num_bpu_load")
+                print(f"[MLP] BPU 加载失败, 降级 PyTorch; error_id={error_id}", flush=True)
     return None
 
 
@@ -267,8 +283,9 @@ def _execute_tool(name: str, args: dict) -> str:
             return "RAG 不可用 (未加载)"
         try:
             return _RAG.retrieve(args.get("query", ""), top_k=3)
-        except Exception as e:
-            return f"RAG 检索失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_num_rag_query")
+            return f"RAG 检索失败（错误编号 {error_id}）"
     elif name == "evaluate_pl_performance" and evaluate_pl_performance is not None:
         try:
             return evaluate_pl_performance(
@@ -276,8 +293,9 @@ def _execute_tool(name: str, args: dict) -> str:
                 fwhm=float(args.get("fwhm", 0)),
                 dopant_type=str(args.get("dopant_type", "cr")),
             )
-        except Exception as e:
-            return f"评估失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_num_evaluate")
+            return f"评估失败（错误编号 {error_id}）"
     elif name == "suggest_next_doping" and suggest_next_doping is not None:
         try:
             return suggest_next_doping(
@@ -286,16 +304,18 @@ def _execute_tool(name: str, args: dict) -> str:
                 fwhm=float(args.get("fwhm", 0)),
                 host_material=str(args.get("host_material", "")),
             )
-        except Exception as e:
-            return f"建议失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_num_suggest")
+            return f"建议失败（错误编号 {error_id}）"
     elif name == "compare_host_materials" and compare_host_materials is not None:
         try:
             return compare_host_materials(
                 target_dopant=str(args.get("target_dopant", "")),
                 current_host=str(args.get("current_host", "")),
             )
-        except Exception as e:
-            return f"对比失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_num_compare")
+            return f"对比失败（错误编号 {error_id}）"
     return f"未知工具: {name}"
 
 
@@ -422,8 +442,9 @@ def _run_agent_background(result: dict, initial_buffer: str = ""):
             use_tools = PL_AGENT_TOOLS if round_i < max_rounds else None
             try:
                 resp = call_deepseek_r1(messages, tools=use_tools)
-            except Exception as e:
-                full_thinking += f"\n[R1 调用失败: {e}]\n"
+            except Exception:
+                error_id = _record_internal_error("pl_num_agent_round")
+                full_thinking += f"\n[R1 调用失败；错误编号 {error_id}]\n"
                 _write(full_thinking)
                 break
 
@@ -476,8 +497,9 @@ def _run_agent_background(result: dict, initial_buffer: str = ""):
                 if final_content:
                     full_thinking += f"\n💡 结论:\n{final_content}\n"
                     _write(full_thinking)
-            except Exception as e:
-                full_thinking += f"\n[最终调用失败: {e}]\n"
+            except Exception:
+                error_id = _record_internal_error("pl_num_agent_final")
+                full_thinking += f"\n[最终调用失败；错误编号 {error_id}]\n"
                 _write(full_thinking)
 
         final_content = clean_llm_output(final_content)
@@ -490,8 +512,8 @@ def _run_agent_background(result: dict, initial_buffer: str = ""):
         try:
             if voice is not None and final_content:
                 voice.enqueue_tts(extract_tts_summary(final_content))
-        except Exception as _e:
-            print(f"[spec_num][TTS] 分析完播报失败 {_e}")
+        except Exception:
+            _record_internal_error("pl_num_tts_summary")
     finally:
         with state.lock:
             state.thinking_done = True
@@ -499,6 +521,16 @@ def _run_agent_background(result: dict, initial_buffer: str = ""):
 
 # ============ Flask 应用 ============
 app = Flask(__name__)
+
+
+def _resolve_public_spectrum(relative_path: str, *, require_file: bool = True) -> Path:
+    """Resolve one HTTP-selected PL CSV below the application data root."""
+    return resolve_contained_path(
+        _ROOT,
+        relative_path,
+        allowed_suffixes={".csv", ".txt"},
+        require_file=require_file,
+    )
 
 
 @app.route("/")
@@ -537,12 +569,11 @@ def api_file_spectrum():
     rel = request.args.get("path", "")
     if not rel:
         return jsonify({"ok": False, "error": "缺 path 参数"}), 400
-    # 防路径越权
-    rel = rel.replace("\\", "/").lstrip("/")
-    full = (_ROOT / rel).resolve()
-    if _ROOT.resolve() not in full.parents and full.parent != _ROOT.resolve():
+    try:
+        full = _resolve_public_spectrum(rel)
+    except UnsafePathError:
         return jsonify({"ok": False, "error": "非法路径"}), 403
-    if not full.exists():
+    except FileNotFoundError:
         return jsonify({"ok": False, "error": f"文件不存在: {rel}"}), 404
     s = parse_pl_csv(str(full))
     if not s.is_valid():
@@ -570,15 +601,18 @@ def api_analyze():
     rel = data.get("path", "")
     if not rel:
         return jsonify({"ok": False, "error": "缺 path 参数"}), 400
-    rel = rel.replace("\\", "/").lstrip("/")
-    full = (_ROOT / rel).resolve()
-    if not full.exists():
+    try:
+        full = _resolve_public_spectrum(rel)
+    except UnsafePathError:
+        return jsonify({"ok": False, "error": "非法路径"}), 403
+    except FileNotFoundError:
         return jsonify({"ok": False, "error": f"文件不存在: {rel}"}), 404
 
     try:
         result = _infer_spectrum(str(full))
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"推理失败: {e}"}), 500
+    except Exception:
+        error_id = _record_internal_error("pl_num_analyze")
+        return jsonify({"ok": False, "error": "推理失败", "error_id": error_id}), 500
 
     if not result.get("ok"):
         return jsonify(result)
@@ -596,7 +630,7 @@ def api_analyze():
         state.thinking_buffer = initial_buf
         state.thinking_done = False
         state.last_result = {}
-        state.last_path = str(full)
+        state.last_path = full.relative_to(_ROOT.resolve()).as_posix()
 
     threading.Thread(target=_run_agent_background, args=(result,),
                      kwargs={"initial_buffer": initial_buf}, daemon=True).start()
@@ -1459,17 +1493,19 @@ import shutil as _shutil
 import subprocess as _sp
 
 _HAS_ESPEAK = _shutil.which("espeak-ng") is not None
-_BAIDU_TTS_APP_ID = "<REMOVED_FROM_HISTORY>"
-_BAIDU_TTS_API_KEY = "<REMOVED_FROM_HISTORY>"
-_BAIDU_TTS_SECRET_KEY = "<REMOVED_FROM_HISTORY>"
+_BAIDU_TTS_APP_ID = os.environ.get("BAIDU_APP_ID", "").strip()
+_BAIDU_TTS_API_KEY = os.environ.get("BAIDU_API_KEY", "").strip()
+_BAIDU_TTS_SECRET_KEY = os.environ.get("BAIDU_SECRET_KEY", "").strip()
 _baidu_tts_client = None
 try:
-    from aip import AipSpeech as _AipSpeech
-    _baidu_tts_client = _AipSpeech(_BAIDU_TTS_APP_ID, _BAIDU_TTS_API_KEY,
-                                   _BAIDU_TTS_SECRET_KEY)
-    print("[TTS] 百度 AipSpeech 客户端已初始化", flush=True)
-except Exception as _e:
-    print(f"[TTS] 百度 SDK 不可用 ({_e}), 走 espeak-ng 兜底", flush=True)
+    if all((_BAIDU_TTS_APP_ID, _BAIDU_TTS_API_KEY, _BAIDU_TTS_SECRET_KEY)):
+        from aip import AipSpeech as _AipSpeech
+        _baidu_tts_client = _AipSpeech(_BAIDU_TTS_APP_ID, _BAIDU_TTS_API_KEY,
+                                       _BAIDU_TTS_SECRET_KEY)
+        print("[TTS] 百度 AipSpeech 客户端已初始化", flush=True)
+except Exception:
+    _record_internal_error("pl_num_tts_sdk")
+    print("[TTS] 百度 SDK 不可用, 走 espeak-ng 兜底", flush=True)
 
 
 def _detect_speaker_dev() -> str:
@@ -1508,8 +1544,9 @@ def _tts_speak(text: str):
                     p.communicate(input=res, timeout=30)
                     return
                 print(f"[TTS] 百度错误 {res.get('err_msg','')}, 回退 espeak", flush=True)
-            except Exception as e:
-                print(f"[TTS] 百度失败 {e}, 回退 espeak", flush=True)
+            except Exception:
+                error_id = _record_internal_error("pl_num_tts_baidu")
+                print(f"[TTS] 百度失败, 回退 espeak; error_id={error_id}", flush=True)
         if _HAS_ESPEAK:
             try:
                 p1 = _sp.Popen(['espeak-ng', '-v', 'zh', text, '--stdout'],
@@ -1517,8 +1554,8 @@ def _tts_speak(text: str):
                 p2 = _sp.Popen(['aplay', '-D', _SPK_DEV, '-q'],
                                stdin=p1.stdout, stderr=_sp.DEVNULL)
                 p2.communicate(timeout=30)
-            except Exception as e:
-                print(f"[TTS] espeak 播报失败 {e}", flush=True)
+            except Exception:
+                _record_internal_error("pl_num_tts_espeak")
         else:
             print(f"[TTS] 无可用引擎, 丢弃: {text[:40]}...", flush=True)
 
@@ -1567,8 +1604,9 @@ def api_bpu_infer_80d():
                 logits = model(torch.from_numpy(x).float())
                 probs = torch.softmax(logits, dim=-1).numpy()[0]
             backend = "PyTorch"
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"推理失败: {e}"}), 500
+    except Exception:
+        error_id = _record_internal_error("pl_num_bpu_infer")
+        return jsonify({"ok": False, "error": "推理失败", "error_id": error_id}), 500
     idx = int(probs.argmax())
     latency = round((time.perf_counter() - t0) * 1000, 3)
     with _SYNTH_LOCK:
@@ -1702,7 +1740,7 @@ footer{{margin-top:24px;text-align:center;font-size:11px;color:#94a3b8;}}
 <h2>DeepSeek-R1 Agent 配方决策</h2><div class="box">{reasoning}</div>
 {fu_html}
 <h2>🧠 R1 完整推理链</h2><div class="box thinking">{thinking or '(无推理链)'}</div>
-<footer>RDK X5 · 2026 嵌入式芯片与系统设计竞赛</footer>
+<footer>RDK X5 · 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</footer>
 </body></html>"""
     return Response(html, mimetype="text/html; charset=utf-8")
 
@@ -1733,8 +1771,9 @@ def _on_voice_command_pl(text: str):
         try:
             with state.lock:
                 p = state.last_path
-            if p and os.path.isfile(p):
-                result = _infer_spectrum(p)
+            if p:
+                validated_path = _resolve_public_spectrum(p)
+                result = _infer_spectrum(str(validated_path))
                 with state.lock:
                     state.thinking_buffer = ""
                     state.thinking_done = False
@@ -1742,9 +1781,9 @@ def _on_voice_command_pl(text: str):
                                  daemon=True).start()
             else:
                 if voice: voice.enqueue_tts("没有上次分析的文件")
-        except Exception as e:
+        except Exception:
             if voice: voice.enqueue_tts("重新分析失败")
-            print(f"[spec_num][voice] reanalyze {e}")
+            _record_internal_error("pl_num_reanalyze")
         return
     if cmd in ("export", "compare"):
         if voice: voice.enqueue_tts("光谱数值线暂未支持该指令")
@@ -1822,8 +1861,8 @@ def _do_followup_async_pl(question: str, source: str = "ui"):
                                       "src": source})
             if voice and ans:
                 voice.enqueue_tts(extract_tts_summary(ans))
-        except Exception as e:
-            print(f"[spec_num][followup] 失败 {e}")
+        except Exception:
+            _record_internal_error("pl_num_followup")
             if voice: voice.enqueue_tts("跟进提问失败")
     threading.Thread(target=_worker, daemon=True).start()
 
@@ -1876,8 +1915,10 @@ def api_knowledge_graph_pl():
         ]
         _kg_cache = {"ok": True, "groups": groups}
         return jsonify(_kg_cache)
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+    except Exception:
+        error_id = _record_internal_error("pl_num_knowledge_graph")
+        return jsonify({"ok": False, "error": "知识图谱加载失败",
+                        "error_id": error_id}), 500
 
 
 def _pl_cif_search_dirs():
@@ -1950,9 +1991,10 @@ def api_crystal_candidates_pl():
     sys.path.insert(0, _SCRIPT_DIR_PL)
     try:
         from crystal_agent import generate_candidates, run_crystal_agent
-    except Exception as e:
+    except Exception:
+        error_id = _record_internal_error("pl_num_crystal_agent_load")
         return jsonify({"ok": False, "candidates": [],
-                        "error": f"crystal_agent 加载失败: {e}"})
+                        "error": "crystal_agent 加载失败", "error_id": error_id})
 
     candidates = generate_candidates(pool_key, top_k=3)
     if not candidates:
@@ -1988,8 +2030,9 @@ def api_crystal_candidates_pl():
                 c["best"] = (c.get("mp_id") == best_mp)
             cands_out.sort(key=lambda c: not c["best"])
         thinking = rank.get("thinking") or rank.get("reasoning") or thinking
-    except Exception as e:
-        thinking += f"\n[候选 Agent] R1 排序跳过 ({e})"
+    except Exception:
+        error_id = _record_internal_error("pl_num_crystal_rank")
+        thinking += f"\n[候选 Agent] R1 排序跳过（错误编号 {error_id}）"
 
     return jsonify({"ok": True, "candidates": cands_out, "thinking": thinking,
                     "pool_key": pool_key})

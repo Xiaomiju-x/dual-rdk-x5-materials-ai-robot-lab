@@ -6,7 +6,8 @@ SPDX 2.3 JSON 软件物料清单。它用于回答“本次公开源码中声明
 
 ## 覆盖范围
 
-- `Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration` 顶层项目包；
+- 正式项目“基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人”
+  的 `v1.0.1` 顶层项目包；
 - `workstation_frontend_public/package-lock.json` 的 npm 根包及全部锁定的直接、传递和开发依赖；
 - `requirements/*.txt` 中声明的 Python 依赖；
 - `public_site_static/` 与 `web/command_center/static/` 随仓分发的 three.js r128、

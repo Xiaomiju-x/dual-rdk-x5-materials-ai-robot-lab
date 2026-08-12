@@ -129,7 +129,7 @@ _FROZEN_PROFILE_SPECS: Final[Mapping[str, _FrozenProfileSpec]] = MappingProxyTyp
             required_artifacts=_EMBODIED_X5_REQUIRED_ARTIFACTS,
             execution_authority=False,
             r3_permit_ready=False,
-            profile_sha256="fc16687488b548b1e7779a433ef1640777bb91bdb18e39de4f4e723e0a4940cc",
+            profile_sha256="c0d5488e7371b9ddab85537b7397b4d6cd492fea1683ccc7ad30351cc1feb793",
         ),
         "dual_arm.v1": _FrozenProfileSpec(
             subsystem="dual_arm",

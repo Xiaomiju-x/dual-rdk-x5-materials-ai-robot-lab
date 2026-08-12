@@ -51,11 +51,14 @@ sudo apt install espeak-ng     # 离线TTS备用
 ## 4. 百度语音API配置 (ASR + TTS 共用同一个AipSpeech客户端)
 
 ```python
+import os
 from aip import AipSpeech
 
-BAIDU_TTS_APP_ID     = "<REMOVED_FROM_HISTORY>"
-BAIDU_TTS_API_KEY    = "<REMOVED_FROM_HISTORY>"
-BAIDU_TTS_SECRET_KEY = "<REMOVED_FROM_HISTORY>"
+BAIDU_TTS_APP_ID = os.environ.get("BAIDU_APP_ID", "")
+BAIDU_TTS_API_KEY = os.environ.get("BAIDU_API_KEY", "")
+BAIDU_TTS_SECRET_KEY = os.environ.get("BAIDU_SECRET_KEY", "")
+if not all((BAIDU_TTS_APP_ID, BAIDU_TTS_API_KEY, BAIDU_TTS_SECRET_KEY)):
+    raise RuntimeError("百度语音凭据未通过环境变量配置")
 
 client = AipSpeech(BAIDU_TTS_APP_ID, BAIDU_TTS_API_KEY, BAIDU_TTS_SECRET_KEY)
 ```

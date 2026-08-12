@@ -111,6 +111,11 @@ CREDENTIAL_ENV_NAME_RE = re.compile(
     r"PWD|SECRET(?:_?KEY)?|TOKEN|WEBHOOK)(?:$|_)",
     re.IGNORECASE,
 )
+BAIDU_CREDENTIAL_ASSIGNMENT_RE = re.compile(
+    r"\b_?(?:DEFAULT_)?BAIDU_(?:TTS_)?(?:APP_ID|API_KEY|SECRET_KEY)\b"
+    r"\s*=\s*[\"'](?P<value>[^\"']+)[\"']",
+    re.IGNORECASE,
+)
 HOST_PUBLIC_KEY_RE = re.compile(
     r"\b(?:ssh-(?:rsa|ed25519)|ecdsa-sha2-nistp\d+)\s+"
     r"[A-Za-z0-9+/]{40,}={0,3}\b"
@@ -415,6 +420,17 @@ def _scan_text(
                     "credential_default",
                     relative_path,
                     "An environment lookup contains a non-placeholder fallback credential.",
+                    line_number,
+                )
+                break
+
+        for match in BAIDU_CREDENTIAL_ASSIGNMENT_RE.finditer(line):
+            if not _is_placeholder(match.group("value")):
+                collector.add(
+                    "BLOCKER",
+                    "baidu_credential_assignment",
+                    relative_path,
+                    "A Baidu speech credential is hard-coded instead of read from the environment.",
                     line_number,
                 )
                 break

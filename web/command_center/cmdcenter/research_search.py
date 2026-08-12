@@ -120,8 +120,8 @@ DEFAULT_CORPUS: tuple[dict[str, Any], ...] = (
     {
         "kind": "evidence",
         "id": "ev:xrd:passport",
-        "title": "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人公开科研护照",
-        "title_en": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Public Research Passport",
+        "title": "双 RDK X5 材料合成 AI 预测与多机具身实验助理机器人公开科研护照",
+        "title_en": "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant Public Research Passport",
         "subtitle": "公开只读科研证据门户",
         "href": "/api/evidence_objects/ev%3Axrd%3Apassport",
         "status": "mirror",

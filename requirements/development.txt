@@ -1,4 +1,4 @@
-# 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 — PC 端开发 / 预处理 / 训练依赖
+# 双 RDK X5 材料合成 AI 预测与多机具身实验助理机器人 — PC 端开发 / 预处理 / 训练依赖
 # 对应 Windows/Linux Python 3.11+ (新机 2026-06-30 起用 conda env `xrd`/`cimc` Python 3.11; 旧机曾用 mace_env venv 3.12 / .venv-mace 3.11)
 # X5 无需此文件 (X5 只要 requirements.txt)
 

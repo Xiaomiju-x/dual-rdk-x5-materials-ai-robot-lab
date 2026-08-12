@@ -23,10 +23,17 @@ import re
 import socket
 import sqlite3
 import subprocess
+import sys
 import threading
 import time
 import uuid
 from pathlib import Path
+
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+from xrd_security.path_safety import resolve_contained_path
 
 from flask import Flask, Response, abort, g, jsonify, request, send_from_directory
 from urllib.parse import quote, urlparse
@@ -59,6 +66,13 @@ app = Flask(__name__, static_folder="static", static_url_path="")
 _CMD_CONFIG = load_config()
 ASSET_VER = _CMD_CONFIG.asset_version
 RELEASED_AT = _CMD_CONFIG.released_at
+
+
+def _record_internal_error(scope):
+    """Record a correlation id without logging exception text or a stack trace."""
+    error_id = uuid.uuid4().hex[:12]
+    app.logger.error("internal_error scope=%s error_id=%s", scope, error_id)
+    return error_id
 
 FINALS_PUBLIC_FACTS = {
     "embodied": {
@@ -750,10 +764,26 @@ _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _last_report_check = {"day": None}
 
 
+def _report_path(day_str, *, require_file=False):
+    """Return the canonical JSON path for one valid calendar date."""
+    if not isinstance(day_str, str) or not _DATE_RE.fullmatch(day_str):
+        raise ValueError("invalid report date")
+    canonical_day = datetime.date.fromisoformat(day_str).isoformat()
+    if canonical_day != day_str:
+        raise ValueError("report date must be canonical ISO-8601")
+    return resolve_contained_path(
+        REPORTS_DIR,
+        canonical_day + ".json",
+        allowed_suffixes={".json"},
+        require_file=require_file,
+    )
+
+
 def _gen_report(day_str=None):
     """生成某日运行日报 (默认昨天) — historian 真数据汇总, 存 reports/YYYY-MM-DD.json."""
     if day_str is None:
         day_str = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    report_path = _report_path(day_str)
     day = datetime.date.fromisoformat(day_str)
     t0 = int(time.mktime(day.timetuple()))
     t1 = t0 + 86400
@@ -790,7 +820,7 @@ def _gen_report(day_str=None):
                            "ci_coverage_pct": row[2], "audit": f"{row[3]}/{row[4]}"}
     con.close()
     os.makedirs(REPORTS_DIR, exist_ok=True)
-    with open(os.path.join(REPORTS_DIR, day_str + ".json"), "w", encoding="utf-8") as f:
+    with report_path.open("w", encoding="utf-8") as f:
         json.dump(rep, f, ensure_ascii=False, indent=1)
     return rep
 
@@ -802,8 +832,8 @@ def _daily_report_tick():
         return
     _last_report_check["day"] = today
     yday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
-    path = os.path.join(REPORTS_DIR, yday + ".json")
-    if os.path.exists(path):
+    path = _report_path(yday)
+    if path.exists():
         return
     con = _db()
     has = con.execute("SELECT COUNT(*) FROM samples WHERE ts>=? AND ts<?",
@@ -839,10 +869,13 @@ def api_report_get(day):
     if not _DATE_RE.match(day):
         return jsonify({"error": "日期格式 YYYY-MM-DD"}), 400
     try:
-        with open(os.path.join(REPORTS_DIR, day + ".json"), encoding="utf-8") as f:
+        report_path = _report_path(day, require_file=True)
+        with report_path.open(encoding="utf-8") as f:
             return jsonify(json.load(f))
     except FileNotFoundError:
         return jsonify({"error": "该日无报告"}), 404
+    except ValueError:
+        return jsonify({"error": "无效日期"}), 400
 
 
 @app.route("/api/reports/generate", methods=["POST"])
@@ -2445,7 +2478,7 @@ def _llm_synthesize(q, parts, facts):
     if fl:
         ctx += "\n关键指标: " + fl
     sysp = (
-        "你是「指挥中心运维副驾」, 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人三机异构平台 (AI 脑 + 车载脑 + 双臂工位) 的值班助手。\n"
+        "你是「指挥中心运维副驾」, 双 RDK X5 材料合成 AI 预测与多机具身实验助理机器人平台 (AI 脑 + 车载脑 + 双臂工位) 的值班助手。\n"
         "严格规则:\n"
         "1. 只依据下面【实时平台数据】和【背景知识】作答, 绝不编造数字/状态/指标; 没有的信息就说「暂无该数据, 可进对应页面查看」。\n"
         "2. 简洁中文 2-4 句, 像值班工程师汇报, 不寒暄不堆长清单。\n"
@@ -2474,8 +2507,10 @@ def _copilot_answer(q, deep=False):
         for t in hits:
             try:
                 r = t["run"]()
-            except Exception as e:
-                r = {"summary": f"{t['id']}查询失败 ({e}).", "facts": [], "actions": [], "follow": []}
+            except Exception:
+                error_id = _record_internal_error("copilot_tool")
+                r = {"summary": f"{t['id']}查询失败（错误编号 {error_id}）。",
+                     "facts": [], "actions": [], "follow": []}
             steps.append(t["id"])
             parts.append(r["summary"])
             facts += r["facts"]
@@ -4616,9 +4651,9 @@ def api_copilot():
         out["ts"] = time.time()
         return jsonify(out)
     except Exception:
-        app.logger.exception("copilot")
+        error_id = _record_internal_error("copilot")
         return jsonify({"answer": "副驾处理异常, 请重试或换个问法。", "facts": [], "actions": [],
-                        "grounded": False}), 200
+                        "grounded": False, "error_id": error_id}), 200
 
 
 # ============================================================ I1 平台自监控 (RED/USE + Prometheus)
@@ -4693,7 +4728,7 @@ def _public_boundary_guard():
     if request.endpoint == "named_spa_page":
         page_name = (request.view_args or {}).get("page_name", "")
         named_pages = globals().get("SPA_NAMED_PAGES", frozenset())
-        if page_name not in named_pages and not os.path.isfile(os.path.join(app.static_folder, page_name)):
+        if page_name not in named_pages:
             return None
     access = classify_request(request.path, request.method)
     g._access_scope = access.scope
@@ -5246,8 +5281,9 @@ def _notify_send(channel, title, body, con=None):
             try:
                 _send_alarm_mail("custom_rule", "lab", f"[XRD] {title}", body)
                 status, detail = "sent", "SMTP"
-            except Exception as e:
-                status, detail = "error", str(e)[:80]
+            except Exception:
+                error_id = _record_internal_error("notify_email")
+                status, detail = "error", f"delivery failed; error_id={error_id}"
         else:
             status, detail = "skipped", "邮件通道未配置 (无 SMTP)"
     else:
@@ -5267,10 +5303,11 @@ def _notify_send(channel, title, body, con=None):
                 http_code = (r.stdout or "").strip()
                 status = "sent" if r.returncode == 0 and http_code.isdigit() and 200 <= int(http_code) < 300 else "error"
                 detail = (f"HTTP {http_code}" if http_code else (r.stderr or "curl failed"))[:120]
-            except ValueError as e:
-                status, detail = "blocked", str(e)[:120]
-            except Exception as e:
-                status, detail = "error", str(e)[:80]
+            except ValueError:
+                status, detail = "blocked", "webhook target violates the outbound policy"
+            except Exception:
+                error_id = _record_internal_error("notify_webhook")
+                status, detail = "error", f"delivery failed; error_id={error_id}"
     con.execute("INSERT INTO notifications(ts,rule,channel,status,detail) VALUES(?,?,?,?,?)",
                 (now, title[:60], channel, status, detail))
     if own:
@@ -6167,8 +6204,10 @@ def _site31_gate_evidence_payload(force_manifest_scan=False):
             return fallback
         payload["valid"] = True
         return payload
-    except Exception as exc:
-        fallback["error"] = f"gate evidence load failed: {type(exc).__name__}"
+    except Exception:
+        error_id = _record_internal_error("gate_evidence_load")
+        fallback["error"] = "gate evidence load failed"
+        fallback["error_id"] = error_id
         return fallback
 
 
@@ -6412,8 +6451,9 @@ def api_config():
             channel = str(key).split(".", 1)[1]
             try:
                 _validate_webhook_url(channel, value)
-            except ValueError as exc:
-                return jsonify({"error": "webhook_rejected", "detail": str(exc)}), 400
+            except ValueError:
+                return jsonify({"error": "webhook_rejected",
+                                "detail": "webhook target violates the outbound policy"}), 400
         con = _db()
         con.execute("INSERT OR REPLACE INTO config(key,value,type,updated_by,ts) VALUES(?,?,?,?,?)",
                     (key, value, d.get("type", "string"),
@@ -6919,7 +6959,7 @@ def _research_passport_payload():
     return {
         "ts": int(time.time()),
         "release": ASSET_VER,
-        "title": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Research Passport",
+        "title": "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant Research Passport",
         "subtitle": "Global-facing public evidence portal for NIR phosphor and materials automation researchers.",
         "audience": ["materials scientists", "NIR phosphor researchers", "competition judges", "robotic lab evaluators"],
         "one_sentence": "A public-safe, read-only research evidence portal linking AI prediction, the verified embodied hardware loop, finals dual-arm collaboration, material atlas, traces, releases and explicit shadow/assist boundaries.",
@@ -6928,10 +6968,10 @@ def _research_passport_payload():
         "trust_posture": trust_posture,
         "limitations": limitations,
         "citation": {
-            "title": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Public Research Passport",
+            "title": "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant Public Research Passport",
             "version": ASSET_VER,
             "url": "https://xiaomiju.xyz/",
-            "how_to_cite": f"Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team. Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Public Research Passport, version {ASSET_VER}, 2026.",
+            "how_to_cite": f"荧光具身智研团队. Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant Public Research Passport, version {ASSET_VER}, 2026.",
         },
         "counts": {
             "api_entries": len(entries),
@@ -7085,7 +7125,7 @@ def _site30_evidence_objects(passport=None):
     ]
     for item in objects:
         links = item.get("links", {})
-        item["citation_text"] = f"Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team. {item.get('kind', 'evidence')} {item.get('scope', 'public_site')}, {ASSET_VER}."
+        item["citation_text"] = f"荧光具身智研团队. {item.get('kind', 'evidence')} {item.get('scope', 'public_site')}, {ASSET_VER}."
         item["download_links"] = [v for v in links.values() if isinstance(v, str) and v.startswith("/api/")]
         item["limitations_short"] = "; ".join((item.get("trust") or {}).get("limitations", [])[:2]) or "public-safe summary only"
         item["reuse_hint"] = "Open the linked API/page to inspect public fields, source labels, validation checks and limitations."
@@ -7243,7 +7283,10 @@ def _site31_evidence_objects(passport=None):
     """Evidence Object v3: stable identity, typed provenance and honest distribution metadata."""
     items = json.loads(json.dumps(_site30_evidence_objects(passport), ensure_ascii=False))
     titles = {
-        "document": ("基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人公开科研护照", "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Public Research Passport"),
+        "document": (
+            "双 RDK X5 材料合成 AI 预测与多机具身实验助理机器人公开科研护照",
+            "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant Public Research Passport",
+        ),
         "material_dataset": ("近红外荧光材料公开数据对象", "Public NIR Phosphor Materials Dataset"),
         "model_system_card": ("AI 脑预测引擎系统卡", "AI Brain Prediction Engine System Card"),
         "trust_control": ("公网只读与脱敏控制", "Public Read-only and Redaction Control"),
@@ -7336,8 +7379,8 @@ def _site31_evidence_objects(passport=None):
         relations = [{"relation_type": relation_types.get(k, "IsReferencedBy"), "target": v,
                       "target_kind": k} for k, v in sorted(links.items())]
         citation_key = "xrd_" + re.sub(r"[^a-z0-9]+", "_", object_key.lower()).strip("_")
-        citation_text = f"Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team. {title_zh}. Version {ASSET_VER}, 2026."
-        citation_text_en = f"Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team. {title_en}. Version {ASSET_VER}, 2026."
+        citation_text = f"荧光具身智研团队. {title_zh}. Version {ASSET_VER}, 2026."
+        citation_text_en = f"荧光具身智研团队. {title_en}. Version {ASSET_VER}, 2026."
         transformed = {
             "evidence_id": stable_id,
             "schema_version": "site31.evidence_object.v3",
@@ -7355,9 +7398,9 @@ def _site31_evidence_objects(passport=None):
             "title_en": title_en,
             "description": item.get("claim") or "",
             "description_en": claim_en.get(object_key, "Public-safe evidence record with explicit provenance and limits."),
-            "owner": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team",
-            "creators": [{"name": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team", "name_type": "Organizational"}],
-            "publisher": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team",
+            "owner": "荧光具身智研团队",
+            "creators": [{"name": "荧光具身智研团队", "name_type": "Organizational"}],
+            "publisher": "荧光具身智研团队",
             "dates": {"published": "2026-07-10", "updated": "2026-07-10"},
             "claim": item.get("claim") or "",
             "claim_status": item.get("claim_status") or "unknown",
@@ -7434,10 +7477,10 @@ def _site31_evidence_objects(passport=None):
             "citation": {
                 "text": citation_text,
                 "text_en": citation_text_en,
-                "bibtex": f"@misc{{{citation_key}, title={{{title_zh}}}, author={{{{Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team}}}}, year={{2026}}, note={{{ASSET_VER}}}}}",
-                "bibtex_en": f"@misc{{{citation_key}, title={{{title_en}}}, author={{{{Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team}}}}, year={{2026}}, note={{{ASSET_VER}}}}}",
-                "ris": f"TY  - DATA\nTI  - {title_zh}\nAU  - Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team\nPY  - 2026\nVL  - {ASSET_VER}\nER  -",
-                "ris_en": f"TY  - DATA\nTI  - {title_en}\nAU  - Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team\nPY  - 2026\nVL  - {ASSET_VER}\nER  -",
+                "bibtex": f"@misc{{{citation_key}, title={{{title_zh}}}, author={{{{荧光具身智研团队}}}}, year={{2026}}, note={{{ASSET_VER}}}}}",
+                "bibtex_en": f"@misc{{{citation_key}, title={{{title_en}}}, author={{{{荧光具身智研团队}}}}, year={{2026}}, note={{{ASSET_VER}}}}}",
+                "ris": f"TY  - DATA\nTI  - {title_zh}\nAU  - 荧光具身智研团队\nPY  - 2026\nVL  - {ASSET_VER}\nER  -",
+                "ris_en": f"TY  - DATA\nTI  - {title_en}\nAU  - 荧光具身智研团队\nPY  - 2026\nVL  - {ASSET_VER}\nER  -",
             },
             "datacite_mapping": {
                 "schema": "DataCite Metadata Schema 4.7 mapping (not registered)",
@@ -7711,7 +7754,7 @@ def _evidence_object_schema():
     return {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$id": "https://xiaomiju.xyz/api/evidence_objects/schema.json",
-        "title": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Evidence Object v3",
+        "title": "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant Evidence Object v3",
         "type": "object",
         "required": ["evidence_id", "schema_version", "identifier", "version", "title", "claims",
                      "property_provenance", "validation", "uncertainty", "relations", "rights",
@@ -7898,7 +7941,7 @@ def api_evidence_bundle_txt():
     payload = _evidence_bundle_payload()
     p = payload["passport"]
     lines = [
-        "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration public evidence bundle",
+        "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant public evidence bundle",
         f"Release: {ASSET_VER}",
         f"Title: {p['title']}",
         f"Audience: {', '.join(p['audience'])}",
@@ -8079,8 +8122,6 @@ def named_spa_page(page_name):
     """Serve every allowlisted one-segment SPA deep link; unknown paths stay 404."""
     if page_name in SPA_NAMED_PAGES:
         return send_from_directory("static", "index.html")
-    if os.path.isfile(os.path.join(app.static_folder, page_name)):
-        return send_from_directory("static", page_name)
     abort(404)
 
 
@@ -8576,7 +8617,7 @@ def _material_detail_payload(row, kind="material"):
         "version": ASSET_VER,
         "method": row.get("method") or "",
         "source": row.get("source") or "",
-        "text": f"Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration Team. {row.get('formula') or citation_id}. Version {ASSET_VER}, 2026.",
+        "text": f"荧光具身智研团队. {row.get('formula') or citation_id}. Version {ASSET_VER}, 2026.",
     }
     tabs = {
         "structure": {
@@ -8715,7 +8756,7 @@ def api_material_detail_report(mid):
         return err
     it, cite = payload["item"], payload["citation"]
     lines = [
-        "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration public material report",
+        "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant public material report",
         f"Release: {ASSET_VER}",
         f"Formula: {it.get('formula')}",
         f"Dopant/site: {it.get('dopant')} / {it.get('site')}",
@@ -8763,7 +8804,7 @@ def api_prediction_detail_report(trace_id):
         return err
     it, cite = payload["item"], payload["citation"]
     lines = [
-        "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration public prediction report",
+        "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant public prediction report",
         f"Release: {ASSET_VER}",
         f"Trace ID: {it.get('trace_id')}",
         f"Formula: {it.get('formula')}",

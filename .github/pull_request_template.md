@@ -4,8 +4,13 @@
 
 ## Evidence
 
-- [ ] `python tools/publication/audit_release.py --root . --strict`
-- [ ] `python -m unittest discover -s tests_public -v`
+- [ ] `python -B tools/publication/audit_release.py --root . --strict`
+- [ ] `python -B tools/publication/check_markdown_links.py . --format text`
+- [ ] `python -B tools/publication/render_award_status.py --check`
+- [ ] `python -B tools/publication/generate_sbom.py --check`
+- [ ] `python -B tools/publication/verify_media.py --root .`
+- [ ] `python -B -m unittest discover -s tests_public -p "test_*.py" -v`
+- [ ] `gitleaks dir . --config .gitleaks.toml --redact=100 --no-banner`
 - [ ] Frontend build, when `workstation_frontend_public/` changed
 - [ ] Documentation links and claim/evidence mapping updated
 

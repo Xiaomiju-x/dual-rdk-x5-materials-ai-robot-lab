@@ -1,6 +1,6 @@
 # 系统架构
 
-Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration 把材料信息处理、边缘 AI、移动具身助理、双机械臂工作站、底层执行器和只读证据展示连接为一个可追溯系统。近红外荧光粉是已完成真实验证的材料载体；面向电子材料、制程、SEM 与封装的扩展使用公开基准、固定任务、回放或仿真证据，不能被概括为完整晶圆厂验证。
+“基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人”把材料信息处理、边缘 AI、移动具身助理、双机械臂工作站、底层执行器和只读证据展示连接为一个可追溯系统。近红外荧光粉是已完成真实验证的材料载体；面向电子材料、制程、SEM 与封装的扩展使用公开基准、固定任务、回放或仿真证据，不能被概括为完整晶圆厂验证。
 
 ![系统架构图](../../assets/images/system/fig_xrd_architecture_html.png)
 

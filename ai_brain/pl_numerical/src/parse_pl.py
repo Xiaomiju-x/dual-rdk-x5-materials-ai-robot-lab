@@ -57,11 +57,12 @@ class PLSpectrum:
 
 
 # ============ 核心函数 ============
-def _read_text(path: str) -> list[str]:
-    """读文件, 自动 fallback UTF-8 → GBK → latin1."""
+def _read_text(path: str | Path) -> list[str]:
+    """读已由调用方授权的文件, 自动 fallback UTF-8 → GBK → latin1."""
+    source = Path(path)
     for enc in ("utf-8-sig", "utf-8", "gbk", "gb18030", "latin1"):
         try:
-            with open(path, "r", encoding=enc) as f:
+            with source.open("r", encoding=enc) as f:
                 return f.read().splitlines()
         except (UnicodeDecodeError, UnicodeError):
             continue
@@ -147,11 +148,12 @@ def parse_pl_csv(path: str) -> PLSpectrum:
 
     总是返回 PLSpectrum, 解析失败时 is_valid() == False, skip_reason 说明原因.
     """
-    path = str(path)
-    fname = Path(path).name
+    source = Path(path)
+    path = str(source)
+    fname = source.name
 
     try:
-        lines = _read_text(path)
+        lines = _read_text(source)
     except Exception as e:
         return PLSpectrum(
             wavelength=None, counts=None, scan_type="unknown",

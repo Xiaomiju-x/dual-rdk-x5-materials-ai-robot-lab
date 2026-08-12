@@ -1,0 +1,25 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "baidu-cloud-credential-assignment"
+description = "Baidu Cloud credential embedded in source"
+regex = '''(?i)(?:baidu[_-]?)?(?:api[_-]?key|secret[_-]?key)\s*[:=]\s*["'][A-Za-z0-9_-]{12,}["']'''
+keywords = ["api_key", "apikey", "secret_key", "secretkey", "baidu"]
+
+[[rules]]
+id = "baidu-cloud-app-id-assignment"
+description = "Baidu Cloud application identifier embedded in source"
+regex = '''(?i)(?:baidu[_-]?)?app[_-]?id\s*[:=]\s*["']?[0-9]{6,}["']?'''
+keywords = ["app_id", "appid", "baidu"]
+
+[[allowlists]]
+id = "documented-public-identifiers"
+description = "Checksums and fixed public tokenizer/material identifiers are not credentials"
+targetRules = ["generic-api-key"]
+regexTarget = "secret"
+regexes = [
+  '''^[0-9a-fA-F]{64}$''',
+  '''^icmat_mixed_alnum_cjk_v1$''',
+  '''^SYGO_sc221\.cif$''',
+]

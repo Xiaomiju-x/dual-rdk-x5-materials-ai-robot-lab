@@ -56,9 +56,9 @@ window.I18N = {
     "ia.more": "More",
 
     /* ---- 总览首页 ---- */
-    "home.h1": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration",
+    "home.h1": "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant",
     "home.sub": "A read-only evidence portal for NIR phosphor prediction and experimental feedback. Search formulas, AI verdicts, XRD/PL observations and embodied-lab replays, then inspect each result's origin, version, limitations and download path.",
-    "home.kicker": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration · public read-only research portal",
+    "home.kicker": "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant · public read-only research portal",
     "home.boundary": "Status & boundary",
     "home.proofFormula": "Formula → verdict",
     "home.proofFeedback": "Experiment → feedback",

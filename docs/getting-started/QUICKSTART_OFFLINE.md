@@ -17,7 +17,7 @@ Tier 0/1 是普通贡献和代码评审的默认范围。不要因为源码存�
 ## Tier 0：十分钟审阅
 
 1. 从 [项目首页](../../README.md) 阅读状态表和真实性边界。
-2. 查看 [系统实物总览](../../assets/images/system/fig_actual_system_global.jpg) 与 [系统架构图](../../assets/images/system/fig_xrd_architecture_html.png)。
+2. 查看 [最新硬件 Hero](../../assets/media/hero/project-hardware-hero.webp)、[实机与视频画廊](../gallery.md)和[系统架构图](../../assets/images/system/fig_xrd_architecture_html.png)。
 3. 在浏览器中直接打开 `public_site_static/index.html`，检查归档的只读证据站快照。该快照不连接真实设备，也不代表当前在线服务状态。
 4. 查看 [`schemas/`](../../schemas/) 中的只读状态合同与示例响应。
 5. 用 [证据索引](../evidence/EVIDENCE_INDEX.md) 交叉核对模型会计、板端后端和候选状态。
@@ -43,6 +43,7 @@ python -B tools/publication/audit_release.py --root . --strict
 python -B tools/publication/check_markdown_links.py . --format text
 python -B tools/publication/render_award_status.py --check
 python -B tools/publication/generate_sbom.py --check
+python -B tools/publication/verify_media.py --root .
 python -B -m unittest discover -s tests_public -p "test_*.py" -v
 python -B examples/offline_demo/run_demo.py
 ```

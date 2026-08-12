@@ -13,12 +13,21 @@ import sys
 import os
 import time
 import json
+import html
 import argparse
 import threading
+import uuid
 import numpy as np
 from pathlib import Path
+from werkzeug.utils import secure_filename
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+from xrd_security.path_safety import UnsafePathError, resolve_safe_basename
+
 for _parent in (os.path.dirname(_SCRIPT_DIR), os.path.dirname(os.path.dirname(_SCRIPT_DIR))):
     if os.path.isdir(os.path.join(_parent, "rb_voe")):
         sys.path.insert(0, _parent)
@@ -74,6 +83,67 @@ if not os.path.isdir(RAW_DIR):
     RAW_DIR = "/home/rdk/xrd1/data/raw_files"
 
 
+def _record_internal_error(scope: str) -> str:
+    """Create a correlation id without exposing exception text or tracebacks."""
+    error_id = uuid.uuid4().hex[:12]
+    print(f"[internal-error] scope={scope} error_id={error_id}", flush=True)
+    return error_id
+
+
+def _raw_search_dirs():
+    return (
+        RAW_DIR,
+        os.path.join(_SCRIPT_DIR, "data", "raw_files"),
+        "/home/rdk/xrd1/data/raw_files",
+    )
+
+
+def _raw_file_registry():
+    """Return request IDs mapped to already-contained local RAW files."""
+    registry = {}
+    for directory in _raw_search_dirs():
+        if not os.path.isdir(directory):
+            continue
+        for name in sorted(os.listdir(directory)):
+            if not name.lower().endswith(".raw"):
+                continue
+            try:
+                candidate = resolve_safe_basename(
+                    directory, name, allowed_suffixes={".raw"}, require_file=True
+                )
+            except (UnsafePathError, FileNotFoundError, OSError):
+                continue
+            registry.setdefault(name, str(candidate))
+    return registry
+
+
+_CRYSTAL_SEARCH_DIRS = (
+    os.path.join(_SCRIPT_DIR, "crystal_data"),
+    os.path.join(os.path.dirname(_SCRIPT_DIR), "crystal_data"),
+    "d:/桌面/xrd/crystal_data",
+    "/home/rdk/xrd1/crystal_data",
+)
+
+
+def _cif_file_registry():
+    """Build a public crystal-name allowlist from trusted directories."""
+    registry = {}
+    for directory in _CRYSTAL_SEARCH_DIRS:
+        if not os.path.isdir(directory):
+            continue
+        for filename in sorted(os.listdir(directory)):
+            if not filename.lower().endswith(".cif"):
+                continue
+            try:
+                candidate = resolve_safe_basename(
+                    directory, filename, allowed_suffixes={".cif"}, require_file=True
+                )
+            except (UnsafePathError, FileNotFoundError, OSError):
+                continue
+            registry.setdefault(Path(filename).stem, candidate)
+    return registry
+
+
 # ============ 语音交互系统 ============
 import struct as _struct
 import subprocess as _sp
@@ -107,9 +177,9 @@ M260C_VAD_THRESH = 800
 M260C_TTS_MAX = 100
 
 # 百度语音 API
-BAIDU_APP_ID = "<REMOVED_FROM_HISTORY>"
-BAIDU_API_KEY = "<REMOVED_FROM_HISTORY>"
-BAIDU_SECRET_KEY = "<REMOVED_FROM_HISTORY>"
+BAIDU_APP_ID = os.environ.get("BAIDU_APP_ID", "").strip()
+BAIDU_API_KEY = os.environ.get("BAIDU_API_KEY", "").strip()
+BAIDU_SECRET_KEY = os.environ.get("BAIDU_SECRET_KEY", "").strip()
 
 
 def _clean_dsml(text: str) -> str:
@@ -211,8 +281,9 @@ def tts_speak(text, client):
                     stdin=_sp.PIPE, stderr=_sp.DEVNULL)
                 proc.communicate(input=result, timeout=30)
                 return
-        except Exception as e:
-            print(f"[TTS] 百度失败: {e}, 回退espeak")
+        except Exception:
+            error_id = _record_internal_error("xrd_num_tts_baidu")
+            print(f"[TTS] 百度失败, 回退espeak; error_id={error_id}")
     if _HAS_ESPEAK:
         try:
             p1 = _sp.Popen(['espeak-ng', '-v', 'zh', text, '--stdout'],
@@ -220,8 +291,8 @@ def tts_speak(text, client):
             p2 = _sp.Popen(['aplay', '-D', M260C_SPK_DEV, '-q'],
                            stdin=p1.stdout, stderr=_sp.DEVNULL)
             p2.communicate(timeout=30)
-        except Exception as e:
-            print(f"[TTS] espeak失败: {e}")
+        except Exception:
+            _record_internal_error("xrd_num_tts_espeak")
 
 
 def enqueue_tts(state, text):
@@ -287,8 +358,8 @@ def do_asr(audio_bytes, client):
         result = client.asr(audio_bytes, 'pcm', 16000, {'dev_pid': 1537})
         if result.get('err_no') == 0:
             return result['result'][0]
-    except Exception as e:
-        print(f"[ASR] 失败: {e}")
+    except Exception:
+        _record_internal_error("xrd_num_asr")
     return ""
 
 
@@ -330,10 +401,10 @@ def handle_voice_input(state, audio_bytes, client):
         summary = extract_tts_summary(followup_result)
         enqueue_tts(state, summary)
         _voice_log(state, "llm", summary)
-    except Exception as e:
-        print(f"[Voice] 跟进失败: {e}")
+    except Exception:
+        error_id = _record_internal_error("xrd_num_voice_followup")
         enqueue_tts(state, "抱歉，查询失败")
-        _voice_log(state, "error", str(e))
+        _voice_log(state, "error", f"查询失败（错误编号 {error_id}）")
 
 
 def vad_thread(state, client):
@@ -408,8 +479,9 @@ def vad_thread(state, client):
                                 state.voice_status = "idle"
 
             proc.terminate()
-        except Exception as e:
-            print(f"[VAD] 麦克风错误: {e}, 3s后重试")
+        except Exception:
+            error_id = _record_internal_error("xrd_num_vad")
+            print(f"[VAD] 麦克风错误, 3s后重试; error_id={error_id}")
             with state.lock:
                 state.mic_active = False
                 state.voice_status = "error"
@@ -832,9 +904,10 @@ def run_pipeline(filepath, offline=False):
                         f"\n\n---\n\n📝 **最终结论**\n\n{report}\n"
                     )
                 report_mode = "AI Agent(R1)"
-            except Exception as e:
-                print(f"[Agent] R1失败({e}), 降级DeepSeek")
-                _stream(f"\n\n⚠️ R1 Agent 异常 ({e}), 降级到 DeepSeek\n\n")
+            except Exception:
+                error_id = _record_internal_error("xrd_num_agent")
+                print(f"[Agent] R1失败, 降级DeepSeek; error_id={error_id}")
+                _stream(f"\n\n⚠️ R1 Agent 异常（错误编号 {error_id}）, 降级到 DeepSeek\n\n")
                 # 2. 降级到普通DeepSeek
                 try:
                     all_probs = np.array([probs[i] for i in range(len(probs))])
@@ -878,10 +951,10 @@ def run_pipeline(filepath, offline=False):
         result["total_ms"] = round(total * 1000, 2)
         result["local_ms"] = round((total - timings.get('agent', 0) - timings.get('rag', 0)) * 1000, 2)
 
-    except Exception as e:
-        import traceback
-        result["error"] = str(e)
-        result["traceback"] = traceback.format_exc()
+    except Exception:
+        error_id = _record_internal_error("xrd_num_pipeline")
+        result["error"] = "分析流水线执行失败"
+        result["error_id"] = error_id
 
     # v4.1 Round 5: pipeline 结束, 清 busy 标志 + 关闭流
     with voice_state.lock:
@@ -1224,7 +1297,7 @@ background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
 
             <!-- Platform badge -->
             <rect x="10" y="218" width="840" height="28" rx="6" fill="#f1f5f9" stroke="#e2e8f0"/>
-            <text x="430" y="237" text-anchor="middle" fill="#475569" font-size="10">RDK X5 | BPU Bayes-e 10TOPS | ARM Cortex-A55 | Conformal+XAI+Agent+RAG(197篇) | 2026全国嵌入式芯片与系统设计竞赛</text>
+            <text x="430" y="237" text-anchor="middle" fill="#475569" font-size="10">RDK X5 | BPU Bayes-e 10 TOPS | ARM Cortex-A55 | Conformal+XAI+Agent+RAG(197篇) | 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</text>
         </svg>
     </div>
 </div>
@@ -1460,7 +1533,7 @@ async function showCandidateCrystals(label){
 
 </div><!-- end dash -->
 
-<div class="footer">XRD智能分析系统 | RDK X5 BPU加速 | 2026 全国嵌入式芯片与系统设计竞赛</div>
+<div class="footer">XRD 智能分析系统 | RDK X5 BPU 加速 | 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</div>
 
 <script>
 /* ============ 状态 ============ */
@@ -2586,8 +2659,11 @@ def index():
 @app.route('/report')
 def report_view():
     """独立报告页面(QR码扫码用, 手机友好)"""
-    report_text = voice_state.current_report or "暂无分析报告。请先在主界面分析一个样品。"
-    filename = voice_state.current_filename or ""
+    report_text = html.escape(
+        str(voice_state.current_report or "暂无分析报告。请先在主界面分析一个样品。"),
+        quote=True,
+    )
+    filename = html.escape(str(voice_state.current_filename or ""), quote=True)
     return f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -2605,7 +2681,7 @@ th{{background:#f1f5f9;padding:6px;text-align:left;}}td{{padding:5px 6px;border-
 <h1>XRD智能分析报告</h1>
 <div><span class="badge">RDK X5 BPU</span><span class="badge">AI Agent(R1)</span><span class="badge">{filename}</span></div>
 <div style="margin-top:12px;white-space:pre-wrap;font-size:14px;">{report_text}</div>
-<div class="footer">XRD智能分析系统 | RDK X5 BPU | 2026全国嵌入式芯片与系统设计竞赛</div>
+<div class="footer">XRD 智能分析系统 | RDK X5 BPU | 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</div>
 </body></html>"""
 
 
@@ -2618,29 +2694,17 @@ def serve_static(filename):
 @app.route('/api/files')
 def api_files():
     """列出可用的.raw文件"""
-    files = []
-    for d in [RAW_DIR, os.path.join(_SCRIPT_DIR, "data", "raw_files"),
-              "/home/rdk/xrd1/data/raw_files"]:
-        if os.path.isdir(d):
-            files = sorted([f for f in os.listdir(d) if f.endswith('.raw')])
-            break
-    return jsonify({"files": files})
+    return jsonify({"files": sorted(_raw_file_registry())})
 
 
 @app.route('/api/analyze', methods=['POST'])
 def api_analyze():
     """分析指定文件"""
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     filename = data.get('filename', '')
     offline = data.get('offline', OFFLINE_MODE)
 
-    filepath = None
-    for d in [RAW_DIR, os.path.join(_SCRIPT_DIR, "data", "raw_files"),
-              "/home/rdk/xrd1/data/raw_files"]:
-        p = os.path.join(d, filename)
-        if os.path.isfile(p):
-            filepath = p
-            break
+    filepath = _raw_file_registry().get(filename) if isinstance(filename, str) else None
 
     if not filepath:
         return jsonify({"error": f"文件未找到: {filename}"}), 404
@@ -2659,8 +2723,8 @@ def api_analyze():
                        or result.get("llm_response") or "")
         if report_text:
             result["report"] = _clean_dsml(report_text)
-    except Exception as _e:
-        print(f"[xrd_num] 清 DSML 失败 {_e}")
+    except Exception:
+        _record_internal_error("xrd_num_dsml_cleanup")
     return jsonify(result)
 
 
@@ -2670,15 +2734,19 @@ def api_upload():
     if 'file' not in request.files:
         return jsonify({"ok": False, "error": "无文件"}), 400
     f = request.files['file']
-    if not f.filename.endswith('.raw'):
+    upload_name = secure_filename(f.filename or "")
+    if not upload_name or not upload_name.lower().endswith('.raw'):
         return jsonify({"ok": False, "error": "仅支持.raw文件"}), 400
 
     save_dir = RAW_DIR
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir, exist_ok=True)
-    save_path = os.path.join(save_dir, f.filename)
-    f.save(save_path)
-    return jsonify({"ok": True, "filename": f.filename})
+    try:
+        save_path = resolve_safe_basename(save_dir, upload_name, allowed_suffixes={".raw"})
+    except UnsafePathError:
+        return jsonify({"ok": False, "error": "非法文件名"}), 400
+    f.save(str(save_path))
+    return jsonify({"ok": True, "filename": upload_name})
 
 
 # ============ 语音交互 API ============
@@ -2814,23 +2882,20 @@ def api_knowledge_graph():
 
         _kg_cache = {"nodes": node_list, "links": link_list}
         return jsonify(_kg_cache)
-    except Exception as e:
-        return jsonify({"nodes": [], "links": [], "error": str(e)})
+    except Exception:
+        error_id = _record_internal_error("xrd_num_knowledge_graph")
+        return jsonify({"nodes": [], "links": [], "error": "知识图谱加载失败",
+                        "error_id": error_id})
 
 
 @app.route('/api/crystal/<name>')
 def api_crystal(name):
     """读取CIF晶体结构文件"""
     from flask import Response
-    safe_name = name.replace('/', '').replace('\\', '').replace('..', '')
-    for d in [os.path.join(_SCRIPT_DIR, "crystal_data"),
-              os.path.join(os.path.dirname(_SCRIPT_DIR), "crystal_data"),
-              "d:/桌面/xrd/crystal_data",
-              "/home/rdk/xrd1/crystal_data"]:
-        p = os.path.join(d, f"{safe_name}.cif")
-        if os.path.isfile(p):
-            with open(p, 'r', encoding='utf-8') as f:
-                return Response(f.read(), mimetype='text/plain')
+    cif_path = _cif_file_registry().get(name) if isinstance(name, str) else None
+    if cif_path is not None:
+        with cif_path.open('r', encoding='utf-8') as f:
+            return Response(f.read(), mimetype='text/plain')
     return jsonify({"error": "未找到"}), 404
 
 
@@ -2919,8 +2984,10 @@ def api_bpu_infer_190d():
             bpu_infer as _bpu_infer, bpu_infer_fine as _bpu_infer_fine,
             LABEL_MAP_PATH as _LMP,
         )
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"BPU 模型未就绪: {e}"}), 503
+    except Exception:
+        error_id = _record_internal_error("xrd_num_bpu_load")
+        return jsonify({"ok": False, "error": "BPU 模型未就绪",
+                        "error_id": error_id}), 503
 
     data = request.get_json(silent=True) or {}
     feat_list = data.get("feat")
@@ -2936,8 +3003,10 @@ def api_bpu_infer_190d():
     t0 = time.perf_counter()
     try:
         probs = _bpu_infer(feat)
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"BPU 推理失败: {e}"}), 500
+    except Exception:
+        error_id = _record_internal_error("xrd_num_bpu_infer")
+        return jsonify({"ok": False, "error": "BPU 推理失败",
+                        "error_id": error_id}), 500
     idx = int(_np.argmax(probs))
     result = {
         "ok": True,
@@ -3104,8 +3173,8 @@ def api_followup():
                 voice_state.last_followup_a = ans
             enqueue_tts(voice_state, extract_tts_summary(ans))
             _voice_log(voice_state, "llm", ans[:80])
-        except Exception as e:
-            print(f"[xrd_num][followup] 失败 {e}")
+        except Exception:
+            _record_internal_error("xrd_num_followup")
             enqueue_tts(voice_state, "跟进提问失败")
     threading.Thread(target=_worker, daemon=True).start()
     return jsonify({"ok": True, "queued": True})
@@ -3180,9 +3249,10 @@ def api_crystal_candidates():
     sys.path.insert(0, _SCRIPT_DIR)
     try:
         from crystal_agent import generate_candidates, run_crystal_agent
-    except Exception as e:
+    except Exception:
+        error_id = _record_internal_error("xrd_num_crystal_agent_load")
         return jsonify({"ok": False, "candidates": [],
-                        "error": f"crystal_agent 加载失败: {e}"})
+                        "error": "crystal_agent 加载失败", "error_id": error_id})
 
     candidates = generate_candidates(pool_key, top_k=3)
     if not candidates:
@@ -3218,8 +3288,8 @@ def api_crystal_candidates():
                 c["best"] = (c.get("mp_id") == best_mp)
             cands_out.sort(key=lambda c: not c["best"])
         thinking = rank.get("thinking") or rank.get("reasoning") or ""
-    except Exception as e:
-        print(f"[candidates] R1 rank failed: {e}")
+    except Exception:
+        _record_internal_error("xrd_num_crystal_rank")
 
     return jsonify({"ok": True, "candidates": cands_out, "thinking": thinking,
                     "pool_key": pool_key})
@@ -3232,8 +3302,9 @@ def do_warmup():
         from infer_with_llm import warmup_bpu
         n, t = warmup_bpu()
         print(f"[BPU预热] {n}模型就绪 ({t*1000:.0f}ms)")
-    except Exception as e:
-        print(f"[BPU预热] 跳过 ({e})")
+    except Exception:
+        _record_internal_error("xrd_num_bpu_warmup")
+        print("[BPU预热] 跳过")
 
 
 # ============ Main ============
@@ -3261,18 +3332,22 @@ if __name__ == '__main__':
 
     # 启动语音交互
     if not args.no_voice:
-        try:
-            from aip import AipSpeech
-            _aip_client = AipSpeech(BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY)
-            threading.Thread(target=tts_worker, args=(voice_state, _aip_client),
-                             daemon=True).start()
-            threading.Thread(target=vad_thread, args=(voice_state, _aip_client),
-                             daemon=True).start()
-            print("[语音] VAD + TTS 线程已启动")
-        except ImportError:
-            print("[语音] baidu-aip未安装, 语音交互禁用 (pip install baidu-aip)")
-        except Exception as e:
-            print(f"[语音] 启动失败: {e}")
+        if not all((BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY)):
+            print("[语音] 未配置 BAIDU_APP_ID/BAIDU_API_KEY/BAIDU_SECRET_KEY, 在线语音禁用")
+        else:
+            try:
+                from aip import AipSpeech
+                _aip_client = AipSpeech(BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY)
+                threading.Thread(target=tts_worker, args=(voice_state, _aip_client),
+                                 daemon=True).start()
+                threading.Thread(target=vad_thread, args=(voice_state, _aip_client),
+                                 daemon=True).start()
+                print("[语音] VAD + TTS 线程已启动")
+            except ImportError:
+                print("[语音] baidu-aip未安装, 语音交互禁用 (pip install baidu-aip)")
+            except Exception:
+                _record_internal_error("xrd_num_voice_start")
+                print("[语音] 启动失败")
     else:
         print("[语音] 已通过 --no-voice 禁用")
 

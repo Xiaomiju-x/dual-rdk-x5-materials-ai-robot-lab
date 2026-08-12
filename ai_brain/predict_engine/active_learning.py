@@ -32,7 +32,7 @@ from scipy.stats import norm
 
 # ---- repo root path resolution (同 dashboard.py 规则) ----
 _HERE = Path(__file__).resolve().parent
-_REPO_CANDS = [_HERE.parent, Path("/home/rdk Path.cwd()]
+_REPO_CANDS = [_HERE.parent, Path("/home/rdk"), Path.cwd()]
 REPO_ROOT = next((p for p in _REPO_CANDS if (p / "exp_ground_truth").exists()), _HERE.parent)
 
 for _p in _REPO_CANDS:

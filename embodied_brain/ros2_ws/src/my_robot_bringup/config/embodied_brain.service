@@ -1,6 +1,6 @@
 [Unit]
 Description=embodied_brain ROS2 stack (车载脑 RDK X5 主服务)
-Documentation=https://github.com/zhouLingxuan/xrd
+Documentation=https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab
 # ⚠ After= 不能写 multi-user.target — 本服务 WantedBy=multi-user.target 隐含
 # Before=multi-user.target, 再 After 它就成环; eb_sensor_watchdog 又 After 本服务,
 # 2026-06-10 实测 systemd 检出 ordering cycle 直接删掉看门狗的开机启动任务.

@@ -26,7 +26,7 @@ import numpy as np
 
 
 _HERE = Path(__file__).resolve().parent
-_ROOT_CANDS = [_HERE.parent, Path("/home/rdk Path.cwd()]
+_ROOT_CANDS = [_HERE.parent, Path("/home/rdk"), Path.cwd()]
 REPO_ROOT = next((p for p in _ROOT_CANDS if (p / "exp_ground_truth").exists()), _HERE.parent)
 
 ELEMENTS = [

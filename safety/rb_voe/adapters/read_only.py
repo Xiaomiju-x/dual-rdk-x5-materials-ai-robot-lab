@@ -27,6 +27,7 @@ _JSON_RESPONSE_LIMIT = 1024 * 1024
 _SSH_STDERR_LIMIT = 64 * 1024
 _READ_CHUNK_BYTES = 64 * 1024
 _FILE_ATTRIBUTE_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+_REMOTE_HOME_PREFIX = "/" + "home/"
 
 
 def _has_lexical_parent(value: str) -> bool:
@@ -684,8 +685,8 @@ class SshJsonSnapshotTransport:
             _has_lexical_parent(argument) for argument in remote_arguments
         ):
             raise ValueError("SSH collector paths cannot contain a lexical parent segment")
-        if not remote_script.startswith("/home/rdk or not remote_script.endswith(".py"):
-            raise ValueError("remote collector must be an absolute /home/rdk path")
+        if not remote_script.startswith(_REMOTE_HOME_PREFIX) or not remote_script.endswith(".py"):
+            raise ValueError("remote collector must be an absolute home-directory Python path")
         _validate_snapshot_path(allowed_path, field="allowed_path")
         if timeout_s <= 0:
             raise ValueError("timeout_s must be positive")

@@ -1,26 +1,42 @@
-# Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration | Dual-RDK X5 Materials Intelligence & Multi-Robot Lab Assistant | 9th (2026) National College Student Embedded Chip & System Design Competition · D-Robotics Topic · Southwest Region 1st Place
+# Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration | 2026 National College Student Embedded Chip and System Design Competition · Chip Application Division · D-Robotics Topic | Southwest Regional First Prize
 
-**Material-synthesis AI prediction and a multi-agent embodied laboratory assistant built on two cooperating RDK X5 edge computers.**
+**Official Chinese project title:** 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人
 
-> The Southwest Region 1st-place result is team-confirmed; its official ranking source is still pending. The national-final award is pending official announcement.
+> **2026 National College Student Embedded Chip and System Design Competition · Chip Application Division · D-Robotics Topic · Southwest Regional First Prize**
+>
+> Team: **荧光具身智研**. The Southwest Regional First Prize is team-confirmed; its official award source is still pending. The national-final award is pending official announcement.
+
+[![Latest project hardware: mobile laboratory assistant and dual-arm workstation](assets/media/hero/project-hardware-hero.webp)](docs/gallery.md)
+
+Two RDK X5 computers divide materials-AI and embodied-perception workloads, connecting material candidates, XRD/PL analysis, a mobile laboratory assistant, dual arms, an STM32F407 execution layer, and a read-only evidence portal into a traceable, authority-separated experimental system.
+
+[![CI](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/actions/workflows/codeql.yml/badge.svg)](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/actions/workflows/codeql.yml)
+[![Gitleaks](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/actions/workflows/gitleaks.yml)
+[![Latest release](https://img.shields.io/github/v/release/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab?display_name=tag&sort=semver)](https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/releases/latest)
+[![License](https://img.shields.io/github/license/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab?label=license)](LICENSE)
+[![Platform: RDK X5](https://img.shields.io/badge/Edge-RDK%20X5-orange.svg)](docs/architecture/SYSTEM_ARCHITECTURE.md)
+[![Safety: tiered](https://img.shields.io/badge/Safety-Tier%200--4-red.svg)](docs/safety/PHYSICAL_SAFETY.md)
 
 [中文](README.md) · [Documentation](docs/README.md) · [Safe offline start](docs/getting-started/QUICKSTART_OFFLINE.md) · [Evidence index](docs/evidence/EVIDENCE_INDEX.md) · [Known limitations](docs/evaluation/KNOWN_LIMITATIONS.md)
 
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
-[![Platform: RDK X5](https://img.shields.io/badge/Edge-RDK%20X5-orange.svg)](docs/architecture/SYSTEM_ARCHITECTURE.md)
-[![Safety: tiered](https://img.shields.io/badge/Safety-Tier%200--4-red.svg)](docs/safety/PHYSICAL_SAFETY.md)
-[![Evidence: traceable](https://img.shields.io/badge/Claims-Evidence--linked-green.svg)](docs/evidence/CLAIM_MATRIX.csv)
+## Three physical-system demos
 
-Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration is an edge materials-intelligence platform for optoelectronic and advanced-packaging functional materials. Near-infrared phosphors are the real validation carrier; public benchmarks and fixed-task evidence extend the engineering work toward electronic materials, XRD, process metrology, SEM, and packaging without presenting those extensions as fab-line validation.
+Click a poster to play the repository-hosted MP4. The [media gallery](docs/gallery.md) and [`MEDIA_PROVENANCE.yml`](assets/media/MEDIA_PROVENANCE.yml) record timestamps, SHA-256 hashes, processing, and claim boundaries. These silent clips do not turn fixed fixtures, manual preparation, or one-session UI readings into general autonomous capability.
+
+| Materials AI: XRD visual analysis | Embodied assistant: assisted laboratory workflow | Dual arms: complete fixed-workcell sequence |
+| --- | --- | --- |
+| [![Play the materials-AI and XRD-analysis preview](assets/media/previews/dashboard-xrd-pipeline.gif)](assets/media/videos/dashboard-xrd-pipeline.mp4) | [![Play the embodied-assistant workflow preview](assets/media/previews/embodied-assisted-workflow.gif)](assets/media/videos/embodied-assisted-workflow.mp4) | [![Play the complete dual-arm workflow preview](assets/media/previews/dual-arm-complete-hardware-demo.gif)](assets/media/videos/dual-arm-complete-hardware-demo.mp4) |
+| [Play the materials-AI MP4](assets/media/videos/dashboard-xrd-pipeline.mp4): one recorded tablet and hardware session; displayed values apply only to this clip. | [Play the embodied-workflow MP4](assets/media/videos/embodied-assisted-workflow.mp4): bottle-fixture, lift, and assisted actions in a fixed workflow; see the gallery for its boundary. | [Play the complete dual-arm MP4](assets/media/videos/dual-arm-complete-hardware-demo.mp4): physical motion on a fixed workcell; not a learned policy or arbitrary-task generalization. |
 
 ## Competition status
 
-The project was entered by team **荧光具身智研** in the ninth (2026) National College Student Embedded Chip and System Design Competition, Chip Application division, D-Robotics topic. [`docs/competition/award_status.yaml`](docs/competition/award_status.yaml) is the sole source of truth.
+Team **荧光具身智研** entered the project in the **2026 National College Student Embedded Chip and System Design Competition, Chip Application division, D-Robotics topic**. [`docs/competition/award_status.yaml`](docs/competition/award_status.yaml) is the sole award source of truth. When the national result is announced, only that file is updated before the display blocks are regenerated.
 
 <!-- AWARD_STATUS:START -->
 | Stage | Current status | Evidence boundary |
 | --- | --- | --- |
-| Southwest region | 1st place | `team_confirmed`; official ranking source pending |
+| Southwest Regional Contest | First Prize | `team_confirmed`; official award source pending |
 | National final | Pending official announcement | No award may be predicted or prefilled |
 <!-- AWARD_STATUS:END -->
 
@@ -28,7 +44,7 @@ The project was entered by team **荧光具身智研** in the ninth (2026) Natio
 
 ## System overview
 
-![Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration physical system](assets/images/system/fig_actual_system_global.jpg)
+This is an edge materials-intelligence and robotic laboratory platform for optoelectronic and advanced-packaging functional materials. Near-infrared phosphors are the real validation carrier. The repository publishes source, configuration examples, fixed inputs, acceptance receipts, demo media, and explicit publication boundaries—not only competition slides.
 
 The project is organized into five authority-separated modules:
 
@@ -83,11 +99,12 @@ python -B tools/publication/audit_release.py --root . --strict
 python -B tools/publication/check_markdown_links.py . --format text
 python -B tools/publication/render_award_status.py --check
 python -B tools/publication/generate_sbom.py --check
+python -B tools/publication/verify_media.py --root .
 python -B -m unittest discover -s tests_public -p "test_*.py" -v
 python -B examples/offline_demo/run_demo.py
 ```
 
-The release passed the publication audit, repository-local link check, award single-source check, deterministic SPDX SBOM check, hardware-free tests, offline demo, and workstation-frontend build. See the [v1.0.0 verification record](docs/releases/v1.0.0/VERIFICATION.md) for the exact scope and commands.
+The release passed the publication audit, repository-local link check, award single-source check, deterministic SPDX SBOM check, hardware-free tests, offline demo, workstation-frontend build, and embodied-dashboard frontend build. See the [`v1.0.1` verification record](docs/releases/v1.0.1/VERIFICATION.md) for the final exact scope and commands.
 
 > [!CAUTION]
 > This repository contains source code capable of interacting with real mobile, lift, arm, pushrod, servo, and electromagnetic hardware. Source availability is not permission to run it. Tier 4 has no generic one-click command; read the [physical safety policy](docs/safety/PHYSICAL_SAFETY.md) first.
@@ -105,15 +122,23 @@ The release passed the publication audit, repository-local link check, award sin
 | [`schemas/`](schemas/) | Read-only status contracts and examples | [Offline start](docs/getting-started/QUICKSTART_OFFLINE.md) |
 | [`assets/`](assets/) | Reviewed system images and media | Gallery below |
 
-## Gallery
+## Latest physical-system gallery
 
-[Open the complete physical-system and demo gallery →](docs/gallery.md). Its captions preserve source hashes and truth boundaries. Any public-site image shown there is a versioned **archived screenshot/static snapshot**, not a statement about current online state and not a claimed capture of an access-protected live site.
+[Open the complete physical-system and demo gallery →](docs/gallery.md). Its captions preserve timestamps, source hashes, and truth boundaries; the primary gallery uses the latest six photos and three videos selected on 2026-08-13.
 
-| Mobile assistant | Dual-arm workstation |
+| Mobile assistant, three-quarter view | Dual-arm workstation |
 | --- | --- |
-| ![Mobile laboratory assistant](assets/images/system/fig_actual_mech_car.jpg) | ![Dual-arm workstation](assets/images/system/fig_actual_mech_workstation.jpg) |
+| ![Latest mobile laboratory assistant](assets/media/photos/embodied-platform-three-quarter-full.webp) | ![Latest dual-arm workstation](assets/media/photos/dual-arm-workcell-full.webp) |
 
-Media must identify whether a segment is `live`, `shadow`, `replay`, or `sim-only`. The current gallery contains only reviewed media with provenance and metadata checks; identifiable team photographs remain unpublished until explicit portrait consent is available.
+| Mobile assistant, front | Sensor deck and local display |
+| --- | --- |
+| ![Mobile laboratory assistant front](assets/media/photos/embodied-platform-front-full.webp) | ![Mobile laboratory assistant sensor deck](assets/media/photos/embodied-platform-sensor-deck-full.webp) |
+
+| Original project poster (QR retained) | On-site dual-arm integration photo |
+| --- | --- |
+| ![Complete project poster with the original QR code](assets/media/photos/project-overview-poster.webp) | ![Dual-arm integration photo with a team member](assets/media/photos/team-dual-arm-integration-full.webp) |
+
+Media must identify whether a segment is `live`, `shadow`, `replay`, or `sim-only`. A photo or video supports only what happened at that time, with that fixture, and within its stated evidence boundary.
 
 ## Data, licensing and publication boundary
 
@@ -129,4 +154,4 @@ Failures are part of the published engineering record. The release engineering g
 
 Contributions are welcome under [CONTRIBUTING.md](CONTRIBUTING.md). Use [SUPPORT.md](SUPPORT.md) for ordinary questions and [SECURITY.md](SECURITY.md) for private vulnerability reports. Cite a versioned archive using [`CITATION.cff`](CITATION.cff).
 
-The project avoids unverifiable “world first” or “fully autonomous” language, does not equate phosphors with all integrated-circuit materials, does not turn replay/simulation into real-loop evidence, and does not predict a national award before an official announcement.
+The formal project name is **Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration** (Chinese: **基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人**). `XRD` remains only the technical abbreviation for X-ray diffraction and a compatibility-oriented internal identifier; it is not the repository or project name. The project avoids unverifiable “world first” or “fully autonomous” language, does not equate phosphors with all integrated-circuit materials, does not turn replay/simulation into real-loop evidence, and does not predict a national award before an official announcement.

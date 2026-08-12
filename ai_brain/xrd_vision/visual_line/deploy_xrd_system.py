@@ -26,9 +26,17 @@ import threading
 import argparse
 import subprocess
 import shutil
+import uuid
 from datetime import datetime
+from pathlib import Path
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+from xrd_security.path_safety import UnsafePathError, resolve_safe_basename
+
 for _parent in (os.path.dirname(_SCRIPT_DIR), os.path.dirname(os.path.dirname(_SCRIPT_DIR))):
     if os.path.isdir(os.path.join(_parent, "rb_voe")):
         sys.path.insert(0, _parent)
@@ -50,6 +58,13 @@ try:
 except ImportError:
     print("[ERROR] Flask未安装. 运行: pip3 install flask")
     sys.exit(1)
+
+
+def _record_internal_error(scope: str) -> str:
+    """Create a correlation id without serializing exception details."""
+    error_id = uuid.uuid4().hex[:12]
+    print(f"[internal-error] scope={scope} error_id={error_id}", flush=True)
+    return error_id
 
 try:
     import serial
@@ -105,8 +120,9 @@ try:
     if os.path.exists(_rag_chunks) and os.path.exists(_rag_vecs):
         _rag = RAGEngine(_rag_chunks, _rag_vecs)
         HAS_RAG = True
-except Exception as e:
-    print(f"[RAG] 向量RAG未加载: {e}, 降级为全文拼接模式")
+except Exception:
+    _record_internal_error("xrd_vision_rag_load")
+    print("[RAG] 向量RAG未加载, 降级为全文拼接模式")
 
 # ============================================================
 # 配置
@@ -177,8 +193,8 @@ def _auto_detect_alsa_devices():
                 spk = f"plughw:{card},0"
                 print(f"[ALSA] 检测到M260C扬声器: card {card}")
                 break
-    except Exception as e:
-        print(f"[ALSA] 检测失败: {e}")
+    except Exception:
+        _record_internal_error("xrd_vision_alsa_detect")
 
     print(f"[ALSA] ★ 最终选择: 扬声器={spk}, 麦克风={mic}")
     return mic, spk
@@ -188,10 +204,10 @@ M260C_MIC_DEV, M260C_SPK_DEV = _auto_detect_alsa_devices()
 M260C_VAD_THRESH = 800                # 语音活动检测能量阈值
 M260C_VAD_HOLD   = 1.0                # 语音结束后等待秒数
 NO_VOICE         = False              # --no-voice 时设为True
-# 百度TTS (注册: https://ai.baidu.com/tech/speech/tts_online)
-BAIDU_TTS_APP_ID     = "<REMOVED_FROM_HISTORY>"
-BAIDU_TTS_API_KEY    = "<REMOVED_FROM_HISTORY>"
-BAIDU_TTS_SECRET_KEY = "<REMOVED_FROM_HISTORY>"
+# 百度 TTS 凭据仅从进程环境读取；未配置时保持离线语音兜底。
+BAIDU_TTS_APP_ID = os.environ.get("BAIDU_APP_ID", "").strip()
+BAIDU_TTS_API_KEY = os.environ.get("BAIDU_API_KEY", "").strip()
+BAIDU_TTS_SECRET_KEY = os.environ.get("BAIDU_SECRET_KEY", "").strip()
 
 
 # ============================================================
@@ -823,8 +839,9 @@ def run_agent(visual_desc, preanalysis):
         use_tools = AGENT_TOOLS if round_i < max_rounds else None
         try:
             resp = call_deepseek_r1(messages, tools=use_tools)
-        except Exception as e:
-            full_thinking += f"\n[DeepSeek-R1调用失败: {e}]\n"
+        except Exception:
+            error_id = _record_internal_error("xrd_vision_agent_round")
+            full_thinking += f"\n[DeepSeek-R1调用失败；错误编号 {error_id}]\n"
             break
 
         # 提取thinking
@@ -1031,10 +1048,11 @@ def camera_thread(yolo_model):
                     state.camera_error = "open failed"
                 cap = None
                 continue
-            except Exception as e:
+            except Exception:
+                error_id = _record_internal_error("xrd_vision_camera_open")
                 with state.lock:
                     state.camera_enabled = False
-                    state.camera_error = str(e)
+                    state.camera_error = f"open_failed:{error_id}"
                 cap = None
                 continue
 
@@ -1195,8 +1213,9 @@ def call_qwen_vl_consistency(img_b64, extra_context="", n=3):
         for f in concurrent.futures.as_completed(futures):
             try:
                 results.append(f.result())
-            except Exception as e:
-                results.append(f"[调用失败: {e}]")
+            except Exception:
+                error_id = _record_internal_error("xrd_vision_consistency_call")
+                results.append(f"[调用失败；错误编号 {error_id}]")
 
     # 提取材料标签并投票
     votes = [_extract_material_label(r) for r in results]
@@ -1286,9 +1305,10 @@ def do_analyze(frame, best_det):
                 state.agent_thinking = agent_thinking
                 state.stream_buffer = agent_thinking + "\n\n📝 最终结论:\n" + response
 
-        except Exception as e:
+        except Exception:
             # 降级: 回退到千问VL直接分析
-            print(f"[Agent] 降级: {e}")
+            error_id = _record_internal_error("xrd_vision_agent")
+            print(f"[Agent] 降级; error_id={error_id}")
             with state.lock:
                 state.stream_buffer += f"\n⚠️ Agent降级, 回退千问VL直接分析...\n"
             try:
@@ -1668,8 +1688,9 @@ def vad_thread():
                             state.voice_active = False
 
             proc.terminate()
-        except Exception as e:
-            print(f"[VAD] 麦克风错误: {e}, 3s后重试")
+        except Exception:
+            error_id = _record_internal_error("xrd_vision_vad")
+            print(f"[VAD] 麦克风错误, 3s后重试; error_id={error_id}")
             with state.lock:
                 state.mic_ok = False
             time.sleep(3)
@@ -1689,8 +1710,8 @@ def do_asr(audio_bytes):
             return texts[0] if texts else ""
         print(f"[ASR] 错误: {result.get('err_msg', 'unknown')}")
         return ""
-    except Exception as e:
-        print(f"[ASR] 调用失败: {e}")
+    except Exception:
+        _record_internal_error("xrd_vision_asr")
         return ""
 
 
@@ -1710,8 +1731,8 @@ def do_followup_async(text):
                 state.response_mode = "语音跟进(千问VL)"
             summary = extract_tts_summary(result)
             enqueue_tts(summary)
-        except Exception as e:
-            print(f"[ASR] 跟进失败: {e}")
+        except Exception:
+            _record_internal_error("xrd_vision_asr_followup")
             enqueue_tts("抱歉，跟进提问失败")
     threading.Thread(target=_worker, daemon=True).start()
 
@@ -1808,8 +1829,9 @@ def m260c_thread(port_path):
                 if len(buf) > 4096:
                     buf = buf[-256:]
 
-        except Exception as e:
-            print(f"[M260C] 连接断开: {e}, {backoff}s后重试")
+        except Exception:
+            error_id = _record_internal_error("xrd_vision_m260c")
+            print(f"[M260C] 连接断开, {backoff}s后重试; error_id={error_id}")
             with state.lock:
                 state.m260c_connected = False
             time.sleep(backoff)
@@ -1870,8 +1892,9 @@ def tts_speak(text):
                 proc.communicate(input=result, timeout=30)
                 return
             print(f"[TTS] 百度错误: {result.get('err_msg', '')}, 回退espeak")
-        except Exception as e:
-            print(f"[TTS] 百度失败: {e}, 回退espeak")
+        except Exception:
+            error_id = _record_internal_error("xrd_vision_tts_baidu")
+            print(f"[TTS] 百度失败, 回退espeak; error_id={error_id}")
     # espeak-ng离线备用 (无shell注入风险)
     if HAS_TTS:
         try:
@@ -1882,8 +1905,8 @@ def tts_speak(text):
                 ['aplay', '-D', M260C_SPK_DEV, '-q'],
                 stdin=p1.stdout, stderr=subprocess.DEVNULL)
             p2.communicate(timeout=30)
-        except Exception as e:
-            print(f"[TTS] espeak播报失败: {e}")
+        except Exception:
+            _record_internal_error("xrd_vision_tts_espeak")
 
 
 def tts_worker():
@@ -2061,8 +2084,9 @@ def api_followup():
         summary = extract_tts_summary(result)
         enqueue_tts(summary)
         return jsonify({"response": result})
-    except Exception as e:
-        return jsonify({"error": f"调用失败: {e}"})
+    except Exception:
+        error_id = _record_internal_error("xrd_vision_followup")
+        return jsonify({"error": "调用失败", "error_id": error_id}), 500
 
 
 @app.route('/api/history')
@@ -2168,8 +2192,10 @@ def api_bpu_detect_b64():
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if img is None:
             return jsonify({"ok": False, "error": "图像解码失败"}), 400
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"base64 解码失败: {e}"}), 400
+    except Exception:
+        error_id = _record_internal_error("xrd_vision_image_decode")
+        return jsonify({"ok": False, "error": "base64 解码失败",
+                        "error_id": error_id}), 400
 
     h, w = img.shape[:2]
     t0 = time.perf_counter()
@@ -2182,8 +2208,10 @@ def api_bpu_detect_b64():
             output = _YOLO_MODEL.run(None, {inp_name: yolo_input})
         # 合成预测场景放宽阈值 — 虚拟谱图和真实谱图分布有 gap
         dets = yolo_postprocess(output, w, h, conf_thresh=0.2, iou_thresh=0.5)
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"YOLO 推理失败: {e}"}), 500
+    except Exception:
+        error_id = _record_internal_error("xrd_vision_detect")
+        return jsonify({"ok": False, "error": "YOLO 推理失败",
+                        "error_id": error_id}), 500
     latency_ms = round((time.perf_counter() - t0) * 1000, 2)
     scores = [float(d[4]) for d in dets]
     with _SYNTH_LOCK:
@@ -2287,35 +2315,40 @@ _CRYSTAL_SEARCH_DIRS = [
 ]
 
 
-def _find_cif(safe_name: str):
-    """在所有搜索目录里找 CIF, 支持 `{name}.cif` 和 `{name}_sc*.cif` 两种命名."""
+def _cif_registry():
+    """Map public crystal IDs to already-contained CIF files."""
+    registry = {}
     for d in _CRYSTAL_SEARCH_DIRS:
         if not os.path.isdir(d):
             continue
-        # 精确匹配
-        exact = os.path.join(d, f"{safe_name}.cif")
-        if os.path.exists(exact):
-            return exact
-        # 扩胞命名匹配 (e.g. SYGO_sc221.cif)
         try:
             for fn in sorted(os.listdir(d)):
-                if fn.startswith(f"{safe_name}_sc") and fn.endswith(".cif"):
-                    return os.path.join(d, fn)
+                if not fn.lower().endswith(".cif"):
+                    continue
+                try:
+                    candidate = resolve_safe_basename(
+                        d, fn, allowed_suffixes={".cif"}, require_file=True
+                    )
+                except (UnsafePathError, FileNotFoundError, OSError):
+                    continue
+                stem = Path(fn).stem
+                registry.setdefault(stem, candidate)
+                if "_sc" in stem:
+                    registry.setdefault(stem.split("_sc", 1)[0], candidate)
         except OSError:
             continue
-    return None
+    return registry
 
 
 @app.route('/api/crystal/<name>')
 def api_crystal(name):
     """返回 CIF 文件内容 (优先预处理过的 P1 扩胞版本)"""
-    safe_name = name.replace('/', '').replace('\\', '').replace('..', '')
-    cif_path = _find_cif(safe_name)
+    cif_path = _cif_registry().get(name) if isinstance(name, str) else None
     if cif_path is None:
-        return jsonify({"error": f"未找到{safe_name}.cif"}), 404
-    with open(cif_path, 'r', encoding='utf-8') as f:
+        return jsonify({"error": "未找到晶体结构"}), 404
+    with cif_path.open('r', encoding='utf-8') as f:
         return Response(f.read(), mimetype='text/plain',
-                        headers={'X-CIF-Source': os.path.basename(cif_path)})
+                        headers={'X-CIF-Source': cif_path.name})
 
 
 # v4.1: 候选晶体结构 Agent 端点 -------------------------------------------
@@ -2330,8 +2363,8 @@ def _get_crystal_agent():
             spec = importlib.util.spec_from_file_location("crystal_agent", ca_path)
             _crystal_agent_mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(_crystal_agent_mod)
-        except Exception as e:
-            print(f"[crystal_agent] import failed: {e}")
+        except Exception:
+            _record_internal_error("xrd_vision_crystal_agent_load")
             _crystal_agent_mod = False
     return _crystal_agent_mod if _crystal_agent_mod else None
 
@@ -2350,8 +2383,10 @@ def api_crystal_candidates():
     try:
         cands = ca.generate_candidates(classification, top_k=top_k)
         return jsonify({"candidates": cands, "classification": classification})
-    except Exception as e:
-        return jsonify({"candidates": [], "error": str(e)}), 200
+    except Exception:
+        error_id = _record_internal_error("xrd_vision_crystal_candidates")
+        return jsonify({"candidates": [], "error": "候选结构加载失败",
+                        "error_id": error_id}), 200
 
 
 @app.route('/api/crystal/rank', methods=['POST'])
@@ -2370,8 +2405,10 @@ def api_crystal_rank():
                                     experimental_peaks=exp_peaks,
                                     call_r1_func=call_deepseek_r1)
         return jsonify(result)
-    except Exception as e:
-        return jsonify({"best_mp_id": None, "reasoning": f"rank 失败: {e}", "scores": {}})
+    except Exception:
+        error_id = _record_internal_error("xrd_vision_crystal_rank")
+        return jsonify({"best_mp_id": None, "reasoning": "rank 失败", "scores": {},
+                        "error_id": error_id})
 
 
 # v4.1 Round 2: 候选 Agent 流式端点 ------------------------------------------
@@ -2414,9 +2451,12 @@ def api_crystal_rank_start():
                 target_material=target_material,
             )
             _crystal_agent_result["data"] = result
-        except Exception as e:
+        except Exception:
+            error_id = _record_internal_error("xrd_vision_crystal_rank_stream")
             with state.lock:
-                state.crystal_thinking_buffer += f"\n[ERROR] run_crystal_agent: {e}\n"
+                state.crystal_thinking_buffer += (
+                    f"\n[ERROR] run_crystal_agent 失败（错误编号 {error_id}）\n"
+                )
         finally:
             with state.lock:
                 state.crystal_thinking_done = True
@@ -2687,9 +2727,8 @@ def _build_knowledge_graph():
                          if l["source"] not in remove and l["target"] not in remove]
                 seen_links = {(l["source"], l["target"]) for l in links}
 
-        except Exception as e:
-            print(f"[KG] 构建失败: {e}")
-            import traceback; traceback.print_exc()
+        except Exception:
+            _record_internal_error("xrd_vision_knowledge_graph")
 
     result = {"nodes": list(node_map.values()), "links": links}
     print(f"[KG] 构建完成: {len(result['nodes'])}节点, {len(result['links'])}连接")
@@ -2757,7 +2796,7 @@ box-shadow:0 1px 3px rgba(0,0,0,.08);border-left:4px solid #3b82f6;}}
 
 <p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:30px;">
 XRD智能分析系统 | RDK X5 BPU加速<br>
-2026全国嵌入式芯片与系统设计竞赛 · 地瓜机器人赛道</p>
+2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</p>
 
 <h2>相关前沿研究</h2>
 <ul style="font-size:13px;color:#475569;line-height:2;">
@@ -3261,7 +3300,7 @@ padding-right:4px;font-size:10px;font-weight:700;color:#fff;min-width:2px;}
     </div>
 </div>
 
-<div class="footer">XRD智能分析系统 | RDK X5 BPU Bayes-e 10TOPS | 2026全国嵌入式竞赛</div>
+<div class="footer">XRD 智能分析系统 | RDK X5 BPU Bayes-e 10 TOPS | 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</div>
 
 <script src="https://3dmol.csb.pitt.edu/build/3Dmol-min.js" onerror="console.log('3Dmol.js CDN不可用')"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -4231,7 +4270,9 @@ def main():
 
     # 百度TTS初始化
     global _baidu_tts_client
-    if HAS_BAIDU_TTS and BAIDU_TTS_APP_ID:
+    if HAS_BAIDU_TTS and all(
+        (BAIDU_TTS_APP_ID, BAIDU_TTS_API_KEY, BAIDU_TTS_SECRET_KEY)
+    ):
         _baidu_tts_client = AipSpeech(
             BAIDU_TTS_APP_ID, BAIDU_TTS_API_KEY, BAIDU_TTS_SECRET_KEY)
         print(f"[TTS] 百度TTS已初始化")

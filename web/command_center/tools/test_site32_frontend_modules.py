@@ -217,8 +217,8 @@ def check_view_transition_input_passthrough() -> None:
 def check_bilingual_route_title_sync() -> None:
     app = read(STATIC / "app.js")
     for token in (
-        "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration · Materials Prediction and Closed-Loop Evidence",
-        "label==='Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration'",
+        "Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant · Materials Prediction and Closed-Loop Evidence",
+        "label==='Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant'",
         "queueMicrotask(()=>announceRouteChange(cur))",
         "lang==='en'?'Language switch':'语言切换'",
         "Research portal workspaces",

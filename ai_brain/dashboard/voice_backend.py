@@ -40,10 +40,10 @@ except ImportError:
 
 HAS_ESPEAK = shutil.which("espeak-ng") is not None
 
-# ============ 默认凭据 (与 xrd_vision 一致) ============
-DEFAULT_BAIDU_APP_ID = "<REMOVED_FROM_HISTORY>"
-DEFAULT_BAIDU_API_KEY = "<REMOVED_FROM_HISTORY>"
-DEFAULT_BAIDU_SECRET_KEY = "<REMOVED_FROM_HISTORY>"
+# 凭据只从运行环境读取；开源代码永不提供非空 fallback。
+DEFAULT_BAIDU_APP_ID = os.environ.get("BAIDU_APP_ID", "").strip()
+DEFAULT_BAIDU_API_KEY = os.environ.get("BAIDU_API_KEY", "").strip()
+DEFAULT_BAIDU_SECRET_KEY = os.environ.get("BAIDU_SECRET_KEY", "").strip()
 
 # ============ VAD 参数 ============
 M260C_VAD_THRESH = 800        # 能量阈值
@@ -202,7 +202,9 @@ class VoiceState:
     def start(self):
         """ALSA 探测 + 百度 client 初始化 + TTS worker 启动."""
         self.mic_dev, self.spk_dev = setup_alsa()
-        if HAS_BAIDU_SDK:
+        if HAS_BAIDU_SDK and all(
+            (self._baidu_app_id, self._baidu_api_key, self._baidu_secret_key)
+        ):
             try:
                 self._baidu = AipSpeech(self._baidu_app_id,
                                         self._baidu_api_key,

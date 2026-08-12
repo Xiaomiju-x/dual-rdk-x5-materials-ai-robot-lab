@@ -1,5 +1,5 @@
 [Unit]
-Description=Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration public research portal
+Description=Dual-RDK X5 materials-synthesis AI and multi-robot laboratory assistant public research portal
 After=network-online.target
 Wants=network-online.target
 StartLimitIntervalSec=60

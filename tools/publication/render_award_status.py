@@ -91,7 +91,17 @@ def validate(data: dict, root: Path) -> None:
     if data["publication_rules"].get("forbid_predicted_award") is not True:
         raise ValueError("forbid_predicted_award must remain true")
 
+    competition = data["competition"]
+    if competition.get("name_zh") != "2026 全国大学生嵌入式芯片与系统设计竞赛":
+        raise ValueError("competition name must use the approved 2026 title")
+    if competition.get("division") != "芯片应用赛道":
+        raise ValueError("competition division must remain 芯片应用赛道")
+    if competition.get("topic") != "地瓜机器人赛题":
+        raise ValueError("competition topic must remain 地瓜机器人赛题")
+
     regional = data["regional"]
+    if regional.get("region") != "西南赛区" or regional.get("result") != "一等奖":
+        raise ValueError("regional award must remain 西南赛区一等奖")
     if regional.get("status") not in {"team_confirmed", "official_verified"}:
         raise ValueError("regional status must be team_confirmed or official_verified")
     if regional.get("status") == "official_verified":
@@ -130,7 +140,7 @@ def zh_block(data: dict, boundary_header: str) -> str:
     if regional.get("status") == "official_verified":
         regional_boundary = source_link("`official_verified`：官方来源", regional.get("source_url"))
     else:
-        regional_boundary = "`team_confirmed`：队伍确认，官方排名来源待补"
+        regional_boundary = "`team_confirmed`：队伍确认，官方获奖来源待补"
 
     if national.get("status") == PENDING_STATUS:
         national_result = rules["national_pending_text_zh"]
@@ -154,11 +164,11 @@ def zh_block(data: dict, boundary_header: str) -> str:
 def en_block(data: dict) -> str:
     regional = data["regional"]
     national = data["national"]
-    regional_result = "1st place" if regional.get("result") == "第1名" else regional["result"]
+    regional_result = "First Prize" if regional.get("result") == "一等奖" else regional["result"]
     if regional.get("status") == "official_verified":
         regional_boundary = source_link("`official_verified`; official source", regional.get("source_url"))
     else:
-        regional_boundary = "`team_confirmed`; official ranking source pending"
+        regional_boundary = "`team_confirmed`; official award source pending"
 
     if national.get("status") == PENDING_STATUS:
         national_result = "Pending official announcement"
@@ -172,7 +182,7 @@ def en_block(data: dict) -> str:
             START,
             "| Stage | Current status | Evidence boundary |",
             "| --- | --- | --- |",
-            f"| Southwest region | {regional_result} | {regional_boundary} |",
+            f"| Southwest Regional Contest | {regional_result} | {regional_boundary} |",
             f"| National final | {national_result} | {national_boundary} |",
             END,
         ]

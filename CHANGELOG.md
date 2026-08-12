@@ -4,6 +4,25 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-13
+
+### Corrected
+
+- 将项目正式名称统一为“基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人”；`XRD` 仅保留为 X 射线衍射技术缩写和兼容性内部标识，不再作为仓库或项目名称。
+- 将区域奖项从错误的名次表述修正为“西南赛区一等奖”，并在奖项生成器中加入防回退校验。
+- 保持全国总决赛奖项只由 `docs/competition/award_status.yaml` 管理，在组委会公布前不预测或预填等级。
+
+### Changed
+
+- 重构中英文首页首屏、实机图库和三段可点击视频入口，明确固定工装、人工准备与单次界面读数的证据边界。
+- 更新引用元数据、竞赛文档、证据矩阵和版本验证入口，使公开标题、奖项与发布版本一致。
+
+### Security
+
+- 移除历史遗留的硬编码语音服务凭据，改为仅从环境变量读取，并对可达 Git 历史执行敏感数据清理；历史凭据仍须由所有者在服务端轮换或撤销。
+- 修复路径注入、DOM/反射型 XSS、正则拒绝服务、堆栈信息暴露与无效编码替换问题，并增加零硬件回归测试。
+- 增加 Gitleaks 全历史工作流、百度凭据专用规则、媒体完整性门和主分支保护所需的发布检查。
+
 ## [1.0.0] - 2026-08-13
 
 ### Added
@@ -28,5 +47,6 @@
 - 真实硬件路径保持 Tier 4 现场人工授权；公开指挥中心保持只读，不反向控制设备。
 - 受限晶体缓存从 `main` 可达历史中清除；发布前保留离线恢复 bundle，不将其重新分发。
 
-[Unreleased]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/releases/tag/v1.0.0

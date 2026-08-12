@@ -27,7 +27,7 @@ SUBSYSTEM: Final[str] = "embodied_x5"
 SERVICE_NAME: Final[str] = "embodied_brain.service"
 EXPECTED_HOSTNAME: Final[str] = "embodied-x5"
 EXPECTED_WLAN_MAC: Final[str] = "40:55:48:a5:41:92"
-FROZEN_PROFILE_SHA256: Final[str] = "fc16687488b548b1e7779a433ef1640777bb91bdb18e39de4f4e723e0a4940cc"
+FROZEN_PROFILE_SHA256: Final[str] = "c0d5488e7371b9ddab85537b7397b4d6cd492fea1683ccc7ad30351cc1feb793"
 
 LOCALIZATION_ONLINE_SLAM: Final[str] = "ONLINE_SLAM"
 LOCALIZATION_SAVED_MAP_AMCL: Final[str] = "SAVED_MAP_AMCL"

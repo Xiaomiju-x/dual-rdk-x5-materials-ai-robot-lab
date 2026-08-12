@@ -110,7 +110,6 @@ _ELEMENT_SYMBOLS = frozenset(
 )
 _UPPERCASE_FORMULA_ALLOWLIST = frozenset({"BN", "CH", "CN", "CO", "NH", "NO", "OH"})
 _FORMULA_FALSE_POSITIVES = frozenset({"CoAt", "Figure", "MoCo", "Section", "Table"})
-_CITATION_RE = re.compile(r"\[\s*(?:\d+[\s,;\-–]*)+\]")
 _SECTION_LINE_RE = re.compile(r"^\s*Section\s*:[^\n]*\n?", re.IGNORECASE)
 _SPACE_RE = re.compile(r"\s+")
 _SENTENCE_BOUNDARY_RE = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9(])")
@@ -552,9 +551,39 @@ def token_jaccard(left: str, right: str) -> float:
     return len(left_tokens & right_tokens) / len(left_tokens | right_tokens)
 
 
+def _strip_numeric_citations(text: str) -> str:
+    """Remove bracketed numeric citations in one bounded linear scan.
+
+    The previous nested quantified regular expression could backtrack
+    exponentially on a long unterminated citation.  This parser accepts the
+    same digits/whitespace/separator alphabet and preserves malformed text.
+    """
+
+    allowed = frozenset("0123456789 \t\r\n,;-–")
+    output: list[str] = []
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text[cursor] != "[":
+            output.append(text[cursor])
+            cursor += 1
+            continue
+        end = cursor + 1
+        has_digit = False
+        while end < length and text[end] in allowed:
+            has_digit = has_digit or text[end].isdigit()
+            end += 1
+        if has_digit and end < length and text[end] == "]":
+            cursor = end + 1
+            continue
+        output.append("[")
+        cursor += 1
+    return "".join(output)
+
+
 def _protected_sentence_split(text: str) -> tuple[str, ...]:
     clean = _SECTION_LINE_RE.sub("", text)
-    clean = _CITATION_RE.sub("", clean)
+    clean = _strip_numeric_citations(clean)
     clean = _normalize_space(clean)
     protected = clean
     replacements: dict[str, str] = {}

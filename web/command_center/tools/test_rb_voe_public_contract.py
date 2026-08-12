@@ -65,7 +65,7 @@ class RbVoePublicContractTest(unittest.TestCase):
 
     def test_public_payload_contains_no_private_deployment_material(self) -> None:
         text = json.dumps(self.snapshot, ensure_ascii=True, sort_keys=True)
-        for forbidden in ("192.168.", "/home/rdk "C:\\\\Users", "sk-"):
+        for forbidden in ("192.168.", "/home/", "C:\\\\Users", "sk-"):
             self.assertNotIn(forbidden, text)
         keys = set()
 

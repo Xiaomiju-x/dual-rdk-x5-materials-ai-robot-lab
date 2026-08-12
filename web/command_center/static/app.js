@@ -183,15 +183,28 @@ function finishBoot(token){
 }
 function skipBoot(){ if(booting) finishBoot(bootToken); }
 
-function frameFallbackHtml(k){
-  const m=FRAME_FALLBACK[k]||FRAME_FALLBACK.lab;
-  return '<div class="ff-card">'+
-    '<div class="ff-mark">'+m.icon+'</div>'+
-    '<div class="ff-copy"><div class="ff-k">本地镜像驾驶舱 · 子域在线时可手动切入</div>'+
-    '<h2>'+m.title+'</h2><p>'+m.sub+'</p>'+
-    '<div class="ff-chips">'+m.chips.map(x=>'<span>'+x+'</span>').join('')+'</div>'+
-    '<div class="ff-actions"><button data-frame="'+k+'" onclick="frameTryEmbed(this.dataset.frame)">切入子域</button><button class="ghost" data-frame="'+k+'" onclick="window.open(SYS[this.dataset.frame].url)">新窗口打开</button></div></div>'+
-    '<div class="ff-orbit"><span></span><span></span><span></span></div></div>';
+function buildFrameFallback(k){
+  const frameKey=Object.prototype.hasOwnProperty.call(SYS,k)?k:'lab';
+  const m=FRAME_FALLBACK[frameKey]||FRAME_FALLBACK.lab;
+  const card=document.createElement('div'); card.className='ff-card';
+  const mark=document.createElement('div'); mark.className='ff-mark'; mark.textContent=m.icon;
+  const copy=document.createElement('div'); copy.className='ff-copy';
+  const kicker=document.createElement('div'); kicker.className='ff-k';
+  kicker.textContent='本地镜像驾驶舱 · 子域在线时可手动切入';
+  const title=document.createElement('h2'); title.textContent=m.title;
+  const sub=document.createElement('p'); sub.textContent=m.sub;
+  const chips=document.createElement('div'); chips.className='ff-chips';
+  m.chips.forEach(label=>{ const chip=document.createElement('span'); chip.textContent=label; chips.appendChild(chip); });
+  const actions=document.createElement('div'); actions.className='ff-actions';
+  const embed=document.createElement('button'); embed.type='button'; embed.textContent='切入子域';
+  embed.addEventListener('click',()=>frameTryEmbed(frameKey));
+  const external=document.createElement('button'); external.type='button'; external.className='ghost'; external.textContent='新窗口打开';
+  external.addEventListener('click',()=>window.open(SYS[frameKey].url,'_blank','noopener'));
+  actions.append(embed,external); copy.append(kicker,title,sub,chips,actions);
+  const orbit=document.createElement('div'); orbit.className='ff-orbit';
+  orbit.append(document.createElement('span'),document.createElement('span'),document.createElement('span'));
+  card.append(mark,copy,orbit);
+  return card;
 }
 
 function setFrameOnline(k, online){
@@ -263,7 +276,7 @@ function ensureFrame(k, path){
   f.setAttribute('allow','fullscreen; clipboard-read; clipboard-write; autoplay');
   const fb=document.createElement('div');
   fb.className='frame-fallback frame-fallback-'+k+' show';
-  fb.innerHTML=frameFallbackHtml(k);
+  fb.replaceChildren(buildFrameFallback(k));
   const host=document.getElementById('frames');
   host.appendChild(f);
   host.appendChild(fb);
@@ -562,9 +575,9 @@ function announceRouteChange(k){
   const nav=document.querySelector('[data-k="'+CSS.escape(k)+'"]');
   const raw=(heading&&(heading.innerText||heading.textContent))||(nav&&(nav.innerText||nav.textContent))||k;
   const label=String(raw||k).replace(/\s+/g,' ').trim();
-  const product=uiText('基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人','Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration');
-  document.title=(label==='基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人'||label==='Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration')
-    ? uiText('基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 · 材料预测与实验闭环证据库','Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration · Materials Prediction and Closed-Loop Evidence')
+  const product=uiText('基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人','Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant');
+  document.title=(label==='基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人'||label==='Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant')
+    ? uiText('基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 · 材料预测与实验闭环证据库','Dual-RDK X5 Materials-Synthesis AI and Multi-Robot Laboratory Assistant · Materials Prediction and Closed-Loop Evidence')
     : label+' · '+product;
   const live=document.getElementById('routeAnnouncer');
   if(live){
@@ -2547,7 +2560,7 @@ function homeSearchGo(){
 }
 
 /* ---- Site9 R6: citable material / prediction detail ---- */
-function encPath(s){ return encodeURIComponent(String(s||'')).replace(/%2F/g,'%2F'); }
+function encPath(s){ return encodeURIComponent(String(s||'')); }
 let _detailRequest=null, _detailRequestSeq=0;
 function cancelDetailRequest(){
   _detailRequestSeq++;

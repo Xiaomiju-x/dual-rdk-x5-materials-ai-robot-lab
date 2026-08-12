@@ -1,4 +1,4 @@
-# Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration 文档中心
+# 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人｜文档中心
 
 这里是项目公开文档的主入口。先根据你的目标选择阅读路径，不要从真实硬件脚本开始。
 
@@ -38,6 +38,7 @@
 - [支持范围](../SUPPORT.md)
 - [路线图](../ROADMAP.md)
 - [变更记录](../CHANGELOG.md)
+- [v1.0.1 验证记录](releases/v1.0.1/VERIFICATION.md)
 - [v1.0.0 验证记录](releases/v1.0.0/VERIFICATION.md)
 - [引用信息](../CITATION.cff)
 

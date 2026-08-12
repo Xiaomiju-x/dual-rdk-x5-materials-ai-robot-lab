@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_on": "2026-08-13",
+  "source_of_truth": "assets/media/MEDIA_PROVENANCE.yml",
+  "entries": [
+    {
+      "path": "assets/images/system/fig_actual_circuit_top.jpg",
+      "bytes": 240421,
+      "sha256": "1713cb8b74a6b918077791043cd6aae67f9d873883eae2b6b2cd06c6c1e0ec83",
+      "kind": "jpg",
+      "width": 1600,
+      "height": 1200,
+      "frames": 1
+    },
+    {
+      "path": "assets/images/system/fig_actual_mech_car.jpg",
+      "bytes": 274823,
+      "sha256": "f00e297b20a716aef4b8640bd76dbf09483fe8028275dff279f3d2588b5bca88",
+      "kind": "jpg",
+      "width": 1600,
+      "height": 1200,
+      "frames": 1
+    },
+    {
+      "path": "assets/images/system/fig_actual_mech_workstation.jpg",
+      "bytes": 244471,
+      "sha256": "bcb94496d63fe054025adcfdacdf2e2f6a53d2cd3505ceff0a80864062c6dd1b",
+      "kind": "jpg",
+      "width": 1600,
+      "height": 1200,
+      "frames": 1
+    },
+    {
+      "path": "assets/images/system/fig_actual_system_global.jpg",
+      "bytes": 508112,
+      "sha256": "e970480cea97d4e4bd845a67b187bf60cebb86b40206ccedd63e3f692c87feb1",
+      "kind": "jpg",
+      "width": 2000,
+      "height": 1200,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/hero/project-hardware-hero.webp",
+      "bytes": 357090,
+      "sha256": "036fb47a1f8b7c8fd998ef87345255eb54e3d51e45563b1c945ab40c3db1e93e",
+      "kind": "webp",
+      "width": 1920,
+      "height": 1080,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/photos/dual-arm-workcell-full.webp",
+      "bytes": 294428,
+      "sha256": "7dc0c00e07d4a27e767a011ed56551052ca49c965191e31314b2ae899868c74a",
+      "kind": "webp",
+      "width": 1500,
+      "height": 2000,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/photos/embodied-platform-front-full.webp",
+      "bytes": 367470,
+      "sha256": "b8521a18f1cec7dd930735a7470a8b65b44bb64d78ba06b88b6e286c1c5544a8",
+      "kind": "webp",
+      "width": 1500,
+      "height": 2000,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/photos/embodied-platform-sensor-deck-full.webp",
+      "bytes": 243462,
+      "sha256": "ea7e2a4a8dedfc26bbe2cc8df185ef10d4332939df559acaca4b36edd1c70243",
+      "kind": "webp",
+      "width": 1500,
+      "height": 2000,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/photos/embodied-platform-three-quarter-full.webp",
+      "bytes": 272512,
+      "sha256": "496c246978d33fce93d3fd856b16eade2c37680533a3c27eaccba6303c75b8d5",
+      "kind": "webp",
+      "width": 1500,
+      "height": 2000,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/photos/project-overview-poster.webp",
+      "bytes": 456422,
+      "sha256": "78031c05eb01d8eb75812f94300a114941d20ae9339a38936dff3039caee6cde",
+      "kind": "webp",
+      "width": 2400,
+      "height": 1800,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/photos/team-dual-arm-integration-full.webp",
+      "bytes": 274760,
+      "sha256": "8c7b7e0e891e78cd9e88c41e2c6f3589df10b98cb041af64cdca42b8fdd43eeb",
+      "kind": "webp",
+      "width": 1500,
+      "height": 2000,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/posters/dashboard-xrd-pipeline.webp",
+      "bytes": 80764,
+      "sha256": "9990912456a13f8018a79d48ccdfeb27a0a5fd397219e4602f7c981a801f8af7",
+      "kind": "webp",
+      "width": 1600,
+      "height": 900,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/posters/dual-arm-complete-hardware-demo.webp",
+      "bytes": 72022,
+      "sha256": "f1f53618cb452f08d0e153d29475a94ffc97dd43e84226a9d7681de7ab1970d8",
+      "kind": "webp",
+      "width": 1600,
+      "height": 900,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/posters/embodied-assisted-workflow.webp",
+      "bytes": 176710,
+      "sha256": "3f772c0e6ebab029ef04ab2a423832fe771136c3494f265ba1c8d4d20a6b43b7",
+      "kind": "webp",
+      "width": 1080,
+      "height": 1920,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/previews/dashboard-xrd-pipeline.gif",
+      "bytes": 1540375,
+      "sha256": "7841b08975c0c82fe892d8c72c1ef4b247a89acc5f27146d26a550d8c029c801",
+      "kind": "gif",
+      "width": 360,
+      "height": 202,
+      "frames": 48
+    },
+    {
+      "path": "assets/media/previews/dual-arm-complete-hardware-demo.gif",
+      "bytes": 1575540,
+      "sha256": "38021798b5e008e394ba297503f3d31ed1d11dc29489b8ab3039e31f89b2085e",
+      "kind": "gif",
+      "width": 360,
+      "height": 202,
+      "frames": 48
+    },
+    {
+      "path": "assets/media/previews/embodied-assisted-workflow.gif",
+      "bytes": 5836162,
+      "sha256": "301e70f30c4d564c8efea01ac58467a5a6540bbebfc6ad0043a4463d2a109d5b",
+      "kind": "gif",
+      "width": 360,
+      "height": 640,
+      "frames": 48
+    },
+    {
+      "path": "assets/media/videos/dashboard-xrd-pipeline.mp4",
+      "bytes": 10097755,
+      "sha256": "9b02dda5c1ce4c57f83f450de0b79abe7426e43d95b6f0de20bea5763b244bc7",
+      "kind": "mp4"
+    },
+    {
+      "path": "assets/media/videos/dual-arm-complete-hardware-demo.mp4",
+      "bytes": 24942750,
+      "sha256": "adbb468486a1f9d0499709ffd4a5ceacbadd20ef6bf58f75d4bb4c103ce68f66",
+      "kind": "mp4"
+    },
+    {
+      "path": "assets/media/videos/embodied-assisted-workflow.mp4",
+      "bytes": 21414175,
+      "sha256": "f9588aa96674377f10f9801ab1283d9637590da0e4d65d89ff947e03351ba203",
+      "kind": "mp4"
+    }
+  ]
+}

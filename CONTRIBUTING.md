@@ -1,6 +1,6 @@
 # 贡献指南
 
-感谢你帮助改进 Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration。这个仓库同时包含材料智能、边缘推理、ROS 2、双机械臂与嵌入式固件；任何贡献都必须先保证事实可核查和物理系统安全。
+感谢你帮助改进“基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人”。这个仓库同时包含材料智能、边缘推理、ROS 2、双机械臂与嵌入式固件；任何贡献都必须先保证事实可核查和物理系统安全。
 
 ## 适合贡献的内容
 
@@ -24,7 +24,7 @@
 
 1. Fork 仓库并从最新主分支创建主题分支。
 2. 仅在示例配置中填写本地变量；不要提交真实 `.env`。
-3. 运行目标模块自身 README 中明确列出的离线检查。根文档不会为未经验证的模块杜撰统一命令。
+3. 先运行目标模块自身 README 中的离线检查，再运行根 README 列出的发布审计、链接、奖项、SBOM、媒体与零硬件测试门。
 4. 更新受影响的文档、测试、数据来源和 [证据矩阵](docs/evidence/CLAIM_MATRIX.csv)。
 5. 提交内容聚焦的 Pull Request，说明测试环境、实际运行的命令、结果和未验证项。
 

@@ -19,7 +19,7 @@ from typing import Any, Optional
 
 # ---- repo root (同 active_learning.py 规则) ----
 _HERE = Path(__file__).resolve().parent
-_REPO_CANDS = [_HERE.parent, Path("/home/rdk Path.cwd()]
+_REPO_CANDS = [_HERE.parent, Path("/home/rdk"), Path.cwd()]
 REPO_ROOT = next((p for p in _REPO_CANDS if (p / "exp_ground_truth").exists()), _HERE.parent)
 CAMPAIGNS_PATH = REPO_ROOT / "predictions" / "campaigns.json"
 

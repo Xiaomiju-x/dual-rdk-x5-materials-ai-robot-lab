@@ -26,6 +26,7 @@ import os
 import sys
 import threading
 import time
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,13 @@ import cv2
 import numpy as np
 import requests
 from flask import Flask, Response, jsonify, request
+
+
+def _record_internal_error(scope: str) -> str:
+    """Create a public-safe correlation id without serializing an exception."""
+    error_id = uuid.uuid4().hex[:12]
+    print(f"[internal-error] scope={scope} error_id={error_id}", flush=True)
+    return error_id
 
 # ============ BPU (Round 5) ============
 try:
@@ -65,12 +73,12 @@ except ImportError:
     print("[WARN] shared_locks 未找到, 相机/麦克风互斥保护禁用")
 try:
     from voice_backend import VoiceState, extract_tts_summary, match_voice_command, clean_llm_output
-except ImportError as _e:
+except ImportError:
     VoiceState = None
     extract_tts_summary = lambda t: (t or "")[:100]
     match_voice_command = lambda t: ""
     clean_llm_output = lambda t: (t or "")
-    print(f"[WARN] voice_backend 未找到 ({_e}), 语音功能禁用")
+    print("[WARN] voice_backend 未找到, 语音功能禁用")
 
 # YOLO BPU: X5 上 scp 为 pl_detect.bin
 _YOLO_BPU_CANDIDATES = [
@@ -124,8 +132,9 @@ def _get_rag():
         from rag_engine import RAGEngine
         _RAG = RAGEngine()
         print(f"[RAG] 已加载, {len(_RAG.chunks)} chunks", flush=True)
-    except Exception as e:
-        print(f"[RAG] 加载失败, Agent 会跳过检索: {e}", flush=True)
+    except Exception:
+        _record_internal_error("pl_vision_rag_load")
+        print("[RAG] 加载失败, Agent 会跳过检索", flush=True)
         _RAG = False
     return _RAG if _RAG else None
 
@@ -152,8 +161,9 @@ def _load_yolo():
             _yolo_input_name = "bpu"
             print(f"[YOLO] BPU 加载 {_YOLO_BPU.name}", flush=True)
             return _yolo_session
-        except Exception as e:
-            print(f"[YOLO] BPU 加载失败 ({e}), 降级到 ONNX", flush=True)
+        except Exception:
+            error_id = _record_internal_error("pl_vision_yolo_bpu_load")
+            print(f"[YOLO] BPU 加载失败, 降级到 ONNX; error_id={error_id}", flush=True)
 
     # ONNX fallback
     if _YOLO_ONNX.exists():
@@ -165,8 +175,8 @@ def _load_yolo():
             _yolo_is_bpu = False
             print(f"[YOLO] ONNX 加载 {_YOLO_ONNX.name}, input={_yolo_input_name}", flush=True)
             return _yolo_session
-        except Exception as e:
-            print(f"[YOLO] ONNX 加载失败: {e}", flush=True)
+        except Exception:
+            _record_internal_error("pl_vision_yolo_onnx_load")
 
     print("[YOLO] 未找到 BPU/ONNX 模型, bbox 检测禁用", flush=True)
     _yolo_session = False
@@ -245,8 +255,8 @@ def run_yolo(frame: np.ndarray) -> list[list[float]]:
         else:
             out = model.run(None, {_yolo_input_name: inp})
             raw = out
-    except Exception as e:
-        print(f"[YOLO] infer 失败: {e}")
+    except Exception:
+        _record_internal_error("pl_vision_yolo_infer")
         return []
     return yolo_postprocess(raw, w, h)
 
@@ -544,8 +554,9 @@ def _execute_pl_tool(name: str, args: dict) -> str:
             return "RAG 不可用 (未加载)"
         try:
             return rag.retrieve(args.get("query", ""), top_k=3)
-        except Exception as e:
-            return f"RAG 检索失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_vision_rag_query")
+            return f"RAG 检索失败（错误编号 {error_id}）"
     elif name == "evaluate_pl_performance" and evaluate_pl_performance is not None:
         try:
             return evaluate_pl_performance(
@@ -553,8 +564,9 @@ def _execute_pl_tool(name: str, args: dict) -> str:
                 fwhm=float(args.get("fwhm", 0)),
                 dopant_type=str(args.get("dopant_type", "cr")),
             )
-        except Exception as e:
-            return f"评估失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_vision_evaluate")
+            return f"评估失败（错误编号 {error_id}）"
     elif name == "suggest_next_doping" and suggest_next_doping is not None:
         try:
             return suggest_next_doping(
@@ -563,16 +575,18 @@ def _execute_pl_tool(name: str, args: dict) -> str:
                 fwhm=float(args.get("fwhm", 0)),
                 host_material=str(args.get("host_material", "")),
             )
-        except Exception as e:
-            return f"建议失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_vision_suggest")
+            return f"建议失败（错误编号 {error_id}）"
     elif name == "compare_host_materials" and compare_host_materials is not None:
         try:
             return compare_host_materials(
                 target_dopant=str(args.get("target_dopant", "")),
                 current_host=str(args.get("current_host", "")),
             )
-        except Exception as e:
-            return f"对比失败: {e}"
+        except Exception:
+            error_id = _record_internal_error("pl_vision_compare")
+            return f"对比失败（错误编号 {error_id}）"
     return f"未知工具: {name}"
 
 
@@ -616,8 +630,9 @@ def _run_agent_background(vl_description: str, frozen_meta: dict, initial_buffer
             use_tools = PL_IMAGE_AGENT_TOOLS if round_i < max_rounds else None
             try:
                 resp = call_deepseek_r1(messages, tools=use_tools)
-            except Exception as e:
-                full += f"\n[R1 调用失败: {e}]\n"
+            except Exception:
+                error_id = _record_internal_error("pl_vision_agent_round")
+                full += f"\n[R1 调用失败；错误编号 {error_id}]\n"
                 _write(full)
                 break
 
@@ -671,8 +686,9 @@ def _run_agent_background(vl_description: str, frozen_meta: dict, initial_buffer
                 if final_content:
                     full += f"\n💡 结论:\n{final_content}\n"
                     _write(full)
-            except Exception as e:
-                full += f"\n[最终调用失败: {e}]\n"
+            except Exception:
+                error_id = _record_internal_error("pl_vision_agent_final")
+                full += f"\n[最终调用失败；错误编号 {error_id}]\n"
                 _write(full)
 
         # 清理 R1/VL 输出里偶尔混入的工具协议标记 (DSML / function_calls / <|...|>)
@@ -688,8 +704,8 @@ def _run_agent_background(vl_description: str, frozen_meta: dict, initial_buffer
         try:
             if voice is not None and final_content:
                 voice.enqueue_tts(extract_tts_summary(final_content))
-        except Exception as _e:
-            print(f"[spec_vision][TTS] 分析完播报失败 {_e}")
+        except Exception:
+            _record_internal_error("pl_vision_tts_summary")
     finally:
         with state.lock:
             state.thinking_done = True
@@ -745,8 +761,9 @@ def _run_vl_and_agent_background(b64_crop: str, meta: dict):
             rag_ctx = ""
         try:
             vl_desc = call_qwen_vl_pl(b64_crop, rag_context=rag_ctx)
-        except Exception as e:
-            vl_desc = f"[VL 调用失败: {e}]"
+        except Exception:
+            error_id = _record_internal_error("pl_vision_vl")
+            vl_desc = f"[VL 调用失败；错误编号 {error_id}]"
         vl_desc = clean_llm_output(vl_desc)
         with state.lock:
             state.last_vl_description = vl_desc
@@ -754,9 +771,10 @@ def _run_vl_and_agent_background(b64_crop: str, meta: dict):
         _write(full)
         # 进入原 _run_agent_background, 它会继续写 thinking_buffer
         _run_agent_background(vl_desc, meta, initial_buffer=full)
-    except Exception as e:
+    except Exception:
+        error_id = _record_internal_error("pl_vision_pipeline")
         with state.lock:
-            state.thinking_buffer = full + f"\n❌ 异常: {e}\n"
+            state.thinking_buffer = full + f"\n❌ 分析失败（错误编号 {error_id}）\n"
             state.thinking_done = True
 
 
@@ -1550,17 +1568,19 @@ import shutil as _shutil
 import subprocess as _sp
 
 _HAS_ESPEAK = _shutil.which("espeak-ng") is not None
-_BAIDU_TTS_APP_ID = "<REMOVED_FROM_HISTORY>"
-_BAIDU_TTS_API_KEY = "<REMOVED_FROM_HISTORY>"
-_BAIDU_TTS_SECRET_KEY = "<REMOVED_FROM_HISTORY>"
+_BAIDU_TTS_APP_ID = os.environ.get("BAIDU_APP_ID", "").strip()
+_BAIDU_TTS_API_KEY = os.environ.get("BAIDU_API_KEY", "").strip()
+_BAIDU_TTS_SECRET_KEY = os.environ.get("BAIDU_SECRET_KEY", "").strip()
 _baidu_tts_client = None
 try:
-    from aip import AipSpeech as _AipSpeech
-    _baidu_tts_client = _AipSpeech(_BAIDU_TTS_APP_ID, _BAIDU_TTS_API_KEY,
-                                   _BAIDU_TTS_SECRET_KEY)
-    print("[TTS] 百度 AipSpeech 客户端已初始化", flush=True)
-except Exception as _e:
-    print(f"[TTS] 百度 SDK 不可用 ({_e}), 走 espeak-ng 兜底", flush=True)
+    if all((_BAIDU_TTS_APP_ID, _BAIDU_TTS_API_KEY, _BAIDU_TTS_SECRET_KEY)):
+        from aip import AipSpeech as _AipSpeech
+        _baidu_tts_client = _AipSpeech(_BAIDU_TTS_APP_ID, _BAIDU_TTS_API_KEY,
+                                       _BAIDU_TTS_SECRET_KEY)
+        print("[TTS] 百度 AipSpeech 客户端已初始化", flush=True)
+except Exception:
+    _record_internal_error("pl_vision_tts_sdk")
+    print("[TTS] 百度 SDK 不可用, 走 espeak-ng 兜底", flush=True)
 
 
 def _detect_speaker_dev() -> str:
@@ -1600,8 +1620,9 @@ def _tts_speak(text: str):
                     p.communicate(input=res, timeout=30)
                     return
                 print(f"[TTS] 百度错误 {res.get('err_msg','')}, 回退 espeak", flush=True)
-            except Exception as e:
-                print(f"[TTS] 百度失败 {e}, 回退 espeak", flush=True)
+            except Exception:
+                error_id = _record_internal_error("pl_vision_tts_baidu")
+                print(f"[TTS] 百度失败, 回退 espeak; error_id={error_id}", flush=True)
         if _HAS_ESPEAK:
             try:
                 p1 = _sp.Popen(['espeak-ng', '-v', 'zh', text, '--stdout'],
@@ -1609,8 +1630,8 @@ def _tts_speak(text: str):
                 p2 = _sp.Popen(['aplay', '-D', _SPK_DEV, '-q'],
                                stdin=p1.stdout, stderr=_sp.DEVNULL)
                 p2.communicate(timeout=30)
-            except Exception as e:
-                print(f"[TTS] espeak 播报失败 {e}", flush=True)
+            except Exception:
+                _record_internal_error("pl_vision_tts_espeak")
         else:
             print(f"[TTS] 无可用引擎, 丢弃: {text[:40]}...", flush=True)
 
@@ -1733,7 +1754,7 @@ footer{{margin-top:24px;text-align:center;font-size:11px;color:#94a3b8;}}
 <h2>DeepSeek-R1 Agent 结论</h2><div class="box">{reasoning}</div>
 {fu_html}
 <h2>🧠 R1 完整推理链</h2><div class="box thinking">{thinking or '(无推理链)'}</div>
-<footer>RDK X5 · BPU Bayes-e · 2026 嵌入式芯片与系统设计竞赛</footer>
+<footer>RDK X5 · BPU Bayes-e · 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</footer>
 </body></html>"""
     return Response(html, mimetype="text/html; charset=utf-8")
 
@@ -1775,9 +1796,9 @@ def _on_voice_command_spec(text: str):
                                  args=(vl_desc, meta), daemon=True).start()
             else:
                 if voice: voice.enqueue_tts("没有冻结的图像, 请先点冻结分析")
-        except Exception as e:
+        except Exception:
             if voice: voice.enqueue_tts(f"重新分析失败")
-            print(f"[spec_vision][voice] reanalyze 失败 {e}")
+            _record_internal_error("pl_vision_reanalyze")
         return
     if cmd in ("export", "compare"):
         if voice: voice.enqueue_tts("光谱视觉线暂未支持该指令")
@@ -1850,8 +1871,8 @@ def _do_followup_async_spec(question: str, source: str = "ui"):
                                       "src": source})
             if voice:
                 voice.enqueue_tts(extract_tts_summary(ans))
-        except Exception as e:
-            print(f"[spec_vision][followup] 失败 {e}")
+        except Exception:
+            _record_internal_error("pl_vision_followup")
             if voice: voice.enqueue_tts("跟进提问失败")
     threading.Thread(target=_worker, daemon=True).start()
 
@@ -1924,14 +1945,18 @@ def api_bpu_detect_b64():
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         if img is None:
             return jsonify({"ok": False, "error": "图像解码失败"}), 400
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"base64 解码失败: {e}"}), 400
+    except Exception:
+        error_id = _record_internal_error("pl_vision_image_decode")
+        return jsonify({"ok": False, "error": "base64 解码失败",
+                        "error_id": error_id}), 400
 
     t0 = time.perf_counter()
     try:
         dets = run_yolo(img)      # 内部已处理 BPU/ONNX 分支
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"YOLO 推理失败: {e}"}), 500
+    except Exception:
+        error_id = _record_internal_error("pl_vision_detect")
+        return jsonify({"ok": False, "error": "YOLO 推理失败",
+                        "error_id": error_id}), 500
     latency_ms = round((time.perf_counter() - t0) * 1000, 2)
     scores = [float(d[4]) for d in dets]
     with _SYNTH_LOCK:
@@ -2035,8 +2060,10 @@ def api_knowledge_graph():
         ]
         _kg_cache = {"ok": True, "groups": groups}
         return jsonify(_kg_cache)
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+    except Exception:
+        error_id = _record_internal_error("pl_vision_knowledge_graph")
+        return jsonify({"ok": False, "error": "知识图谱加载失败",
+                        "error_id": error_id}), 500
 
 
 def _spec_cif_search_dirs():
@@ -2110,9 +2137,10 @@ def api_crystal_candidates():
     sys.path.insert(0, str(_SCRIPT_DIR))
     try:
         from crystal_agent import generate_candidates, run_crystal_agent
-    except Exception as e:
+    except Exception:
+        error_id = _record_internal_error("pl_vision_crystal_agent_load")
         return jsonify({"ok": False, "candidates": [],
-                        "error": f"crystal_agent 加载失败: {e}"})
+                        "error": "crystal_agent 加载失败", "error_id": error_id})
 
     candidates = generate_candidates(pool_key, top_k=3)
     if not candidates:
@@ -2149,8 +2177,9 @@ def api_crystal_candidates():
                 c["best"] = (c.get("mp_id") == best_mp)
             cands_out.sort(key=lambda c: not c["best"])
         thinking = rank.get("thinking") or rank.get("reasoning") or thinking
-    except Exception as e:
-        thinking += f"\n[候选 Agent] R1 排序跳过 ({e})"
+    except Exception:
+        error_id = _record_internal_error("pl_vision_crystal_rank")
+        thinking += f"\n[候选 Agent] R1 排序跳过（错误编号 {error_id}）"
 
     return jsonify({"ok": True, "candidates": cands_out, "thinking": thinking,
                     "pool_key": pool_key})

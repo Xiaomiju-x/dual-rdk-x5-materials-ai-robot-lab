@@ -31,6 +31,13 @@ LANDMARKS_PATH = Path.home() / 'cockpit_landmarks.json'
 
 _JOBS: dict[str, dict] = {}
 
+
+def _record_internal_error(scope: str) -> str:
+    """Create a support-safe id without serializing exception details."""
+    error_id = uuid.uuid4().hex[:12]
+    print(f'[internal-error] scope={scope} error_id={error_id}', flush=True)
+    return error_id
+
 SYSTEM = (
     '你是荧光粉实验室巡检机器人 (车载 RDK X5) 的语言中枢。回复专业简洁 (≤4 句), 中文。'
     '需要执行动作或查数据时, 输出且只输出:\n'
@@ -201,9 +208,11 @@ async def chat_stream(qid: str = Query(...)) -> StreamingResponse:
                 yield sse({'type': 'phase', 'text': f'🧠 {model} 思考中 (hop {hop + 1})…'})
                 try:
                     reply = await _llm(msgs, job['deep'])
-                except Exception as e:
+                except Exception:
+                    error_id = _record_internal_error('chatcar_llm')
                     yield sse({'type': 'error',
-                               'error': f'本地 LLM 不可达: {type(e).__name__}: {e}'})
+                               'error': '本地 LLM 暂时不可用',
+                               'error_id': error_id})
                     return
                 m = _TOOL_RE.search(reply)
                 if not m or hop == 3:
@@ -234,8 +243,10 @@ async def chat_stream(qid: str = Query(...)) -> StreamingResponse:
                            'photo': name in ('capture_photo',) and '已拍照' in str(result)})
                 msgs.append({'role': 'assistant', 'content': reply})
                 msgs.append({'role': 'user', 'content': f'工具 {name} 结果:\n{result}\n请基于结果回答。'})
-        except Exception as e:
-            yield sse({'type': 'error', 'error': f'{type(e).__name__}: {e}'})
+        except Exception:
+            error_id = _record_internal_error('chatcar_stream')
+            yield sse({'type': 'error', 'error': '对话处理失败',
+                       'error_id': error_id})
 
     return StreamingResponse(gen(), media_type='text/event-stream',
                              headers={'Cache-Control': 'no-cache',

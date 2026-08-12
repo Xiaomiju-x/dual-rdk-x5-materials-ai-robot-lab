@@ -67,11 +67,30 @@ class PublicationAuditTests(unittest.TestCase):
         self.assertTrue(result.ok, result.findings)
 
     def test_detects_api_token_without_echoing_it(self) -> None:
-        secret = "sk" + "-" + ("A" * 32)
-        (self.root / "config.txt").write_text("api=" + secret, encoding="utf-8")
+        synthetic_token = "sk" + "-" + ("A" * 32)
+        (self.root / "config.txt").write_text("api=" + synthetic_token, encoding="utf-8")
         result = audit_release.scan_tree(self.root)
         self.assertIn("api_token", self.rules(result))
-        self.assertNotIn(secret, json.dumps(result.to_dict()))
+        self.assertNotIn(synthetic_token, json.dumps(result.to_dict()))
+
+    def test_blocks_hardcoded_baidu_credentials_but_allows_empty_env_fallback(self) -> None:
+        variable_name = "BAIDU_" + "API_" + "KEY"
+        unsafe_value = "nonempty-" + "fixture-value"
+        source = self.root / "speech.py"
+        source.write_text(
+            f'{variable_name} = "{unsafe_value}"\n',
+            encoding="utf-8",
+        )
+        result = audit_release.scan_tree(self.root)
+        self.assertIn("baidu_credential_assignment", self.rules(result))
+        self.assertNotIn(unsafe_value, json.dumps(result.to_dict()))
+
+        source.write_text(
+            f'{variable_name} = os.environ.get("{variable_name}", "")\n',
+            encoding="utf-8",
+        )
+        result = audit_release.scan_tree(self.root)
+        self.assertNotIn("baidu_credential_assignment", self.rules(result))
 
     def test_detects_private_key_and_host_key(self) -> None:
         private_header = "-----BEGIN " + "PRIVATE KEY-----"

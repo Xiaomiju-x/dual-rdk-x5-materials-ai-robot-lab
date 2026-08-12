@@ -42,7 +42,7 @@ PC acceptance 内的板端字段保留上电前值；板端结果只记录在独
 
 - [`award_status.yaml`](../competition/award_status.yaml) 是唯一权威状态源。
 - [官方来源列表](../competition/OFFICIAL_SOURCES.md) 区分“证明竞赛/赛题存在”和“证明具体名次”。
-- 区域第 1 名当前为队伍确认，官方排名证据待补；全国奖项待正式公布。
+- 西南赛区一等奖当前为队伍确认，官方获奖证据待补；全国奖项待正式公布。
 
 ## 逐项矩阵
 

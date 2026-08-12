@@ -15,10 +15,18 @@ import time
 import json
 import argparse
 import threading
+import uuid
 import numpy as np
 from pathlib import Path
+from werkzeug.utils import secure_filename
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
+
+from xrd_security.path_safety import UnsafePathError, resolve_safe_basename
+
 _SEARCH_DIRS = [
     _SCRIPT_DIR,
     os.path.join(_SCRIPT_DIR, "bpu"),
@@ -56,6 +64,40 @@ OFFLINE_MODE = False
 RAW_DIR = os.path.join(_SCRIPT_DIR, "data", "raw_files")
 if not os.path.isdir(RAW_DIR):
     RAW_DIR = "/home/rdk/xrd1/data/raw_files"
+
+
+def _record_internal_error(scope: str) -> str:
+    """Create a correlation id without exposing exception text or tracebacks."""
+    error_id = uuid.uuid4().hex[:12]
+    print(f"[internal-error] scope={scope} error_id={error_id}", flush=True)
+    return error_id
+
+
+def _raw_search_dirs():
+    return (
+        RAW_DIR,
+        os.path.join(_SCRIPT_DIR, "data", "raw_files"),
+        "/home/rdk/xrd1/data/raw_files",
+    )
+
+
+def _raw_file_registry():
+    """Map public basenames to trusted files without joining request data."""
+    registry = {}
+    for directory in _raw_search_dirs():
+        if not os.path.isdir(directory):
+            continue
+        for name in sorted(os.listdir(directory)):
+            if not name.lower().endswith(".raw"):
+                continue
+            try:
+                candidate = resolve_safe_basename(
+                    directory, name, allowed_suffixes={".raw"}, require_file=True
+                )
+            except (UnsafePathError, FileNotFoundError, OSError):
+                continue
+            registry.setdefault(name, str(candidate))
+    return registry
 
 
 def _fmt_ms(seconds):
@@ -307,10 +349,10 @@ def run_pipeline(filepath, offline=False):
         result["total_ms"] = round(total * 1000, 2)
         result["local_ms"] = round((total - timings.get('report', 0)) * 1000, 2)
 
-    except Exception as e:
-        import traceback
-        result["error"] = str(e)
-        result["traceback"] = traceback.format_exc()
+    except Exception:
+        error_id = _record_internal_error("xrd_vision_legacy_pipeline")
+        result["error"] = "分析流水线执行失败"
+        result["error_id"] = error_id
 
     return result
 
@@ -559,7 +601,7 @@ border-top:2.5px solid #3b82f6;border-radius:50%;animation:spin .7s linear infin
 
 </div><!-- end dash -->
 
-<div class="footer">XRD智能分析系统 | RDK X5 BPU加速 | 2026 全国嵌入式芯片与系统设计竞赛</div>
+<div class="footer">XRD 智能分析系统 | RDK X5 BPU 加速 | 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</div>
 
 <script>
 /* ============ 状态 ============ */
@@ -876,29 +918,17 @@ def serve_static(filename):
 @app.route('/api/files')
 def api_files():
     """列出可用的.raw文件"""
-    files = []
-    for d in [RAW_DIR, os.path.join(_SCRIPT_DIR, "data", "raw_files"),
-              "/home/rdk/xrd1/data/raw_files"]:
-        if os.path.isdir(d):
-            files = sorted([f for f in os.listdir(d) if f.endswith('.raw')])
-            break
-    return jsonify({"files": files})
+    return jsonify({"files": sorted(_raw_file_registry())})
 
 
 @app.route('/api/analyze', methods=['POST'])
 def api_analyze():
     """分析指定文件"""
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     filename = data.get('filename', '')
     offline = data.get('offline', OFFLINE_MODE)
 
-    filepath = None
-    for d in [RAW_DIR, os.path.join(_SCRIPT_DIR, "data", "raw_files"),
-              "/home/rdk/xrd1/data/raw_files"]:
-        p = os.path.join(d, filename)
-        if os.path.isfile(p):
-            filepath = p
-            break
+    filepath = _raw_file_registry().get(filename) if isinstance(filename, str) else None
 
     if not filepath:
         return jsonify({"error": f"文件未找到: {filename}"}), 404
@@ -914,15 +944,19 @@ def api_upload():
     if 'file' not in request.files:
         return jsonify({"ok": False, "error": "无文件"}), 400
     f = request.files['file']
-    if not f.filename.endswith('.raw'):
+    upload_name = secure_filename(f.filename or "")
+    if not upload_name or not upload_name.lower().endswith('.raw'):
         return jsonify({"ok": False, "error": "仅支持.raw文件"}), 400
 
     save_dir = RAW_DIR
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir, exist_ok=True)
-    save_path = os.path.join(save_dir, f.filename)
-    f.save(save_path)
-    return jsonify({"ok": True, "filename": f.filename})
+    try:
+        save_path = resolve_safe_basename(save_dir, upload_name, allowed_suffixes={".raw"})
+    except UnsafePathError:
+        return jsonify({"ok": False, "error": "非法文件名"}), 400
+    f.save(str(save_path))
+    return jsonify({"ok": True, "filename": upload_name})
 
 
 # ============ BPU预热 ============
@@ -932,8 +966,9 @@ def do_warmup():
         from infer_with_llm import warmup_bpu
         n, t = warmup_bpu()
         print(f"[BPU预热] {n}模型就绪 ({t*1000:.0f}ms)")
-    except Exception as e:
-        print(f"[BPU预热] 跳过 ({e})")
+    except Exception:
+        _record_internal_error("xrd_vision_legacy_bpu_warmup")
+        print("[BPU预热] 跳过")
 
 
 # ============ Main ============

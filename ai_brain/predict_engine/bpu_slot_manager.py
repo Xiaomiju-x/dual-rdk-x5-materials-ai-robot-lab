@@ -324,7 +324,7 @@ class BpuSlotManager:
                     r = subprocess.run(
                         ["python3", "-m", "predict_engine.bpu_bin_forward",
                          str(p), str(in_path), str(out_path)],
-                        capture_output=True, timeout=60, cwd="/home/rdk
+                        capture_output=True, timeout=60, cwd="/home/rdk",
                     )
                     if r.returncode != 0:
                         raise RuntimeError(f"bin {i} subprocess failed: {r.stderr.decode()[:200]}")

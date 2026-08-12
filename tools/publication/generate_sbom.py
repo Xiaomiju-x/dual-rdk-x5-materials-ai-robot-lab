@@ -27,8 +27,9 @@ DEFAULT_OUTPUT = "sbom.spdx.json"
 LOCKFILE = "workstation_frontend_public/package-lock.json"
 REQUIREMENTS_DIR = "requirements"
 
-PROJECT_ID = "SPDXRef-Package-XRD-Smart-Lab"
-PROJECT_VERSION = "1.0.0"
+PROJECT_ID = "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot"
+PROJECT_NAME = "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人"
+PROJECT_VERSION = "1.0.1"
 FRONTEND_ID = "SPDXRef-Package-Workcockpit-Frontend"
 
 VENDORED_COMPONENTS = (
@@ -112,6 +113,10 @@ def _input_digest(root: Path) -> str:
     )
 
     digest = hashlib.sha256()
+    digest.update(PROJECT_NAME.encode("utf-8"))
+    digest.update(b"\0")
+    digest.update(PROJECT_VERSION.encode("ascii"))
+    digest.update(b"\0")
     for relative_path in sorted(set(paths)):
         content = _read_bytes(root, relative_path)
         digest.update(relative_path.encode("utf-8"))
@@ -395,7 +400,7 @@ def build_sbom(root: Path) -> dict[str, Any]:
     input_digest = _input_digest(root)
 
     project_package: dict[str, Any] = {
-        "name": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration",
+        "name": PROJECT_NAME,
         "SPDXID": PROJECT_ID,
         "downloadLocation": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab",
         "homepage": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab",
@@ -575,7 +580,7 @@ def build_sbom(root: Path) -> dict[str, Any]:
         "spdxVersion": SPDX_VERSION,
         "dataLicense": DATA_LICENSE,
         "SPDXID": "SPDXRef-DOCUMENT",
-        "name": "XRD-Smart-Lab-SBOM",
+        "name": "Dual-RDK-X5-Materials-AI-Multi-Robot-SBOM",
         "documentNamespace": (
             "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/sbom/spdx-2.3/" + input_digest
         ),

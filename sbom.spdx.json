@@ -2,8 +2,8 @@
   "spdxVersion": "SPDX-2.3",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "name": "XRD-Smart-Lab-SBOM",
-  "documentNamespace": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/sbom/spdx-2.3/2fb91698f4e05349593a719f3b4b0b67aa3902c94329db046da70eaf6881d18e",
+  "name": "Dual-RDK-X5-Materials-AI-Multi-Robot-SBOM",
+  "documentNamespace": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/sbom/spdx-2.3/65beffe703cfbd82356283a7ab05ca02ad393be184ccf68e9a151edb38cf83af",
   "creationInfo": {
     "created": "2026-08-13T00:00:00Z",
     "creators": [
@@ -13,12 +13,12 @@
     "comment": "Generated offline and deterministically. The namespace suffix is a SHA-256 digest of dependency manifests and vendored assets; the timestamp is the public release epoch, not wall-clock generation time."
   },
   "documentDescribes": [
-    "SPDXRef-Package-XRD-Smart-Lab"
+    "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot"
   ],
   "packages": [
     {
-      "name": "Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration",
-      "SPDXID": "SPDXRef-Package-XRD-Smart-Lab",
+      "name": "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人",
+      "SPDXID": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
       "downloadLocation": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab",
       "homepage": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab",
       "filesAnalyzed": false,
@@ -26,7 +26,7 @@
       "licenseDeclared": "Apache-2.0",
       "copyrightText": "NOASSERTION",
       "primaryPackagePurpose": "APPLICATION",
-      "versionInfo": "1.0.0",
+      "versionInfo": "1.0.1",
       "comment": "Top-level project package for this source snapshot. Models, datasets, credentials, private evidence, and generated build outputs are outside this repository SBOM boundary."
     },
     {
@@ -14395,7 +14395,7 @@
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
       "relationshipType": "DESCRIBES",
-      "relatedSpdxElement": "SPDXRef-Package-XRD-Smart-Lab"
+      "relatedSpdxElement": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot"
     },
     {
       "spdxElementId": "SPDXRef-NPM-ajv-b860c3f2dfc7",
@@ -19633,6 +19633,161 @@
       "relatedSpdxElement": "SPDXRef-NPM-tslib-7e89d502d0a3"
     },
     {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-Package-Vendored-Model-Viewer"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-Package-Vendored-ThreeJS-GLTFLoader-r128"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-Package-Vendored-ThreeJS-r128"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-Package-Workcockpit-Frontend"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-ase"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-dashscope"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-flask"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-jsonschema"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-mace-torch"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-matcalc"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-matplotlib"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-mp-api"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-numpy"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-onnx"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-opencv-python"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-openpyxl"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-pandas"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-paramiko"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-pillow"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-pymatgen"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-pytest"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-pytest-cov"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-pyyaml"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-rank-bm25"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-requests"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-ruff"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-scikit-learn"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-scipy"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-torch"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-transformers"
+    },
+    {
+      "spdxElementId": "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot",
+      "relationshipType": "DEPENDS_ON",
+      "relatedSpdxElement": "SPDXRef-Python-ultralytics"
+    },
+    {
       "spdxElementId": "SPDXRef-Package-Vendored-Model-Viewer",
       "relationshipType": "CONTAINS",
       "relatedSpdxElement": "SPDXRef-File-public-site-static-model-viewer.min.js"
@@ -19776,161 +19931,6 @@
       "spdxElementId": "SPDXRef-Package-Workcockpit-Frontend",
       "relationshipType": "DEPENDS_ON",
       "relatedSpdxElement": "SPDXRef-NPM-vueuse-motion-601a7b274803"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "CONTAINS",
-      "relatedSpdxElement": "SPDXRef-Package-Vendored-Model-Viewer"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "CONTAINS",
-      "relatedSpdxElement": "SPDXRef-Package-Vendored-ThreeJS-GLTFLoader-r128"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "CONTAINS",
-      "relatedSpdxElement": "SPDXRef-Package-Vendored-ThreeJS-r128"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "CONTAINS",
-      "relatedSpdxElement": "SPDXRef-Package-Workcockpit-Frontend"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-ase"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-dashscope"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-flask"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-jsonschema"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-mace-torch"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-matcalc"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-matplotlib"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-mp-api"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-numpy"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-onnx"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-opencv-python"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-openpyxl"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-pandas"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-paramiko"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-pillow"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-pymatgen"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-pytest"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-pytest-cov"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-pyyaml"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-rank-bm25"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-requests"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-ruff"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-scikit-learn"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-scipy"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-torch"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-transformers"
-    },
-    {
-      "spdxElementId": "SPDXRef-Package-XRD-Smart-Lab",
-      "relationshipType": "DEPENDS_ON",
-      "relatedSpdxElement": "SPDXRef-Python-ultralytics"
     }
   ]
 }

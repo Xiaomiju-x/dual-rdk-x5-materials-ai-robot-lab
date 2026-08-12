@@ -1,5 +1,5 @@
 claim_id,public_claim,status,scope,backend_or_source,sample_or_count,evidence_path,limitation
-competition.regional.first,"2026竞赛地瓜机器人赛题西南赛区一等奖",team_confirmed,"competition result","team confirmation",1,"docs/competition/award_status.yaml","official ranking source pending"
+competition.regional.first_prize,"2026 全国大学生嵌入式芯片与系统设计竞赛·地瓜机器人赛题·西南赛区一等奖",team_confirmed,"competition result","team confirmation",1,"docs/competition/award_status.yaml","official award source pending"
 competition.national.pending,"全国总决赛奖项待组委会正式公布","待官方公布","competition result","official announcement required",0,"docs/competition/award_status.yaml","no award level may be predicted"
 ai.registry.total,"50 unique logical models are release-ready in PC acceptance",accepted,"PC registry and release contract","PC acceptance",50,"evidence/ai_brain/final_acceptance.v1.json","not 50 board-validated models"
 ai.x5local.total,"49 X5-local logical models have complete status coverage",complete_with_exceptions,"board status accounting","PC plus independent board overlay",49,"evidence/ai_brain/x5_board_phase_acceptance.v1.json","on-demand library; not simultaneously resident"

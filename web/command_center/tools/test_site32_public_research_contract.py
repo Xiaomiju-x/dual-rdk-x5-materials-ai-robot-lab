@@ -208,7 +208,7 @@ class Site32PublicResearchContractTests(unittest.TestCase):
         self.assertEqual(payload["artifact_sha256"], "c" * 64)
         self.assertEqual(payload["asset_manifest"]["manifest_digest"], "a" * 64)
         rendered_gate = json.dumps(payload, ensure_ascii=False).lower()
-        for forbidden in ("127.0.0.1", "/home/rdk "deploy_staged", "systemd", "base_url"):
+        for forbidden in ("127.0.0.1", "/home/", "deploy_staged", "systemd", "base_url"):
             self.assertNotIn(forbidden, rendered_gate)
 
         raw_quality = self.client.get(

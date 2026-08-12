@@ -93,6 +93,7 @@ OVERHEAD_RESULT_SCHEMA: Final[str] = "xrd-overhead-bag-presence-v2"
 OVERHEAD_SUCCESS_STATE: Final[str] = "BAG_PRESENT"
 LOCAL_SSH_EXECUTABLE: Final[str] = "/usr/bin/ssh"
 REMOTE_PYTHON_EXECUTABLE: Final[str] = "/usr/bin/python3"
+REMOTE_HOME_PREFIX: Final[str] = "/" + "home/"
 A0_RUN_SCOPE_SENTINEL: Final[str] = "_A0_RUN_SCOPE_"
 _A0_RUN_SCOPE_RE: Final[re.Pattern[str]] = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.:@+-]{0,127}\Z")
 LIVE_BOOTSTRAP_SNAPSHOT_FILENAMES: Final[Mapping[str, str]] = MappingProxyType(
@@ -330,7 +331,7 @@ _CHALLENGE_PROFILE_KEYS: Final[frozenset[str]] = frozenset(
     {"ai_x5", "assay_station", "dual_arm", "embodied_x5"}
 )
 _REMOTE_SHA256_LINE_RE: Final[re.Pattern[str]] = re.compile(
-    r"^([0-9a-f]{64})  (/home/rdk/-]+\.py)\n$"
+    rf"^([0-9a-f]{{64}})  ({re.escape(REMOTE_HOME_PREFIX)}[A-Za-z0-9_./-]+\.py)\n$"
 )
 _SSH_REMOTE_TOKEN_RE: Final[re.Pattern[str]] = re.compile(r"^[A-Za-z0-9_.:@/+\-]+$")
 _VERIFIED_COLLECTOR_BOOTSTRAP: Final[str] = (
@@ -1435,7 +1436,7 @@ class _StrictPinnedSshJsonSnapshotTransport:
             not isinstance(token, str) or _SSH_REMOTE_TOKEN_RE.fullmatch(token) is None for token in tokens
         ):
             raise ValueError("SSH collector command contains a non-contract token")
-        if not remote_script.startswith("/home/rdk or not remote_script.endswith(".py"):
+        if not remote_script.startswith(REMOTE_HOME_PREFIX) or not remote_script.endswith(".py"):
             raise ValueError("SSH collector script path is outside the frozen topology")
         require_sha256("expected_script_sha256", expected_script_sha256)
         _read_frozen_known_hosts(known_hosts_file)
