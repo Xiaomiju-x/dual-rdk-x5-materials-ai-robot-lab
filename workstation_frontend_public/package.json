@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.1.0",
-    "@fontsource-variable/jetbrains-mono": "^5.1.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@vueuse/core": "^11.2.0",
     "@vueuse/motion": "^3.0.3",
     "echarts": "^5.5.1",
