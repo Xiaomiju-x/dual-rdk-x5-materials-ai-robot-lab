@@ -1,0 +1,31 @@
+/**:
+  ros__parameters:
+    # 200W USB 升降台广角摄像头 (OV2710, 1080p, 148° FOV / -17% 畸变)
+    # 升降台对准电磁铁吸瓶顶铁片用, 频率 30Hz 够
+
+    video_device: "/dev/lift_camera"   # 由 99-cameras.rules SYMLINK 创建; 不存在时回退 /dev/video2
+
+    # 分辨率: 视觉伺服用 720p 性能成本最佳 (省一半带宽)
+    image_width: 1280
+    image_height: 720
+    framerate: 30.0
+
+    # MJPG 解 → BGR8, 不要直接 YUYV (会被切到 5fps)
+    pixel_format: "mjpeg2rgb"
+    av_device_format: "YUV422P"
+    color_format: "yuv422p"
+
+    # 跟 URDF 中 lift_camera_optical_frame 一致
+    camera_name: "lift_camera"
+    camera_frame_id: "lift_camera_optical_frame"
+
+    # 没标定就先空着, 视觉伺服走像素坐标即可; 若 AprilTag 6D 位姿要做精确对准需要标定
+    camera_info_url: ""
+
+    # 自动曝光 (实验室室内光线 OK)
+    auto_white_balance: true
+    autoexposure: true
+    autofocus: false      # 模组定焦无需
+
+    # io_method: USB 帧抓取方式, mmap 性能最好
+    io_method: "mmap"

@@ -1,0 +1,771 @@
+{
+  "aggregate": {
+    "backdrop_filter_active_rules": 84,
+    "backdrop_filter_rules": 109,
+    "bytes": 421157,
+    "duplicate_keyframe_definitions": 0,
+    "duplicate_keyframe_names": 0,
+    "duplicate_keyframes": {},
+    "gzip_bytes": 78549,
+    "keyframe_definitions": 53,
+    "unique_keyframes": 53
+  },
+  "baseline": {
+    "policy": "site32-round1-builtin",
+    "schema_version": "site32.style_baseline.v1",
+    "source": "builtin"
+  },
+  "exit_code": 0,
+  "files": {
+    "static/r4.css": {
+      "backdrop_filter_active_rules": 4,
+      "backdrop_filter_declarations": 11,
+      "backdrop_filter_none_rules": 2,
+      "backdrop_filter_rules": 6,
+      "bytes": 7371,
+      "declarations": 129,
+      "duplicate_keyframe_definitions": 0,
+      "duplicate_keyframe_names": 0,
+      "duplicate_keyframes": {},
+      "gzip_bytes": 2270,
+      "important_occurrences": 52,
+      "keyframe_definitions": 0,
+      "keyframes": [],
+      "lines": 203,
+      "naked_color_literals": 5,
+      "naked_duration_literals": 0,
+      "naked_radius_declarations": 1,
+      "path": "static/r4.css",
+      "rule_blocks": 63,
+      "samples": {
+        "backdrop_filter_active": [
+          {
+            "line": 87,
+            "property": "backdrop-filter",
+            "value": "blur(8px) saturate(125%) !important"
+          },
+          {
+            "line": 95,
+            "property": "backdrop-filter",
+            "value": "blur(8px) saturate(120%) !important"
+          },
+          {
+            "line": 100,
+            "property": "backdrop-filter",
+            "value": "blur(4px) saturate(112%) !important"
+          },
+          {
+            "line": 107,
+            "property": "backdrop-filter",
+            "value": "blur(4px) !important"
+          }
+        ],
+        "important": [
+          {
+            "line": 27,
+            "property": "background",
+            "value": "var(--r4-surface) !important"
+          },
+          {
+            "line": 28,
+            "property": "border",
+            "value": "1px solid var(--r4-line) !important"
+          },
+          {
+            "line": 35,
+            "property": "color",
+            "value": "#324b57 !important"
+          },
+          {
+            "line": 36,
+            "property": "background",
+            "value": "#eef4f7 !important"
+          },
+          {
+            "line": 37,
+            "property": "border-bottom-color",
+            "value": "var(--r4-line-strong) !important"
+          },
+          {
+            "line": 41,
+            "property": "border-bottom-color",
+            "value": "#e5edf1 !important"
+          },
+          {
+            "line": 44,
+            "property": "background",
+            "value": "#f0f7fb !important"
+          },
+          {
+            "line": 80,
+            "property": "border-bottom-color",
+            "value": "#dfe9ee !important"
+          },
+          {
+            "line": 81,
+            "property": "color",
+            "value": "var(--r4-muted) !important"
+          },
+          {
+            "line": 82,
+            "property": "color",
+            "value": "var(--r4-ink) !important"
+          },
+          {
+            "line": 83,
+            "property": "border-left",
+            "value": "3px solid var(--r4-blue) !important"
+          },
+          {
+            "line": 87,
+            "property": "backdrop-filter",
+            "value": "blur(8px) saturate(125%) !important"
+          }
+        ],
+        "naked_color": [
+          {
+            "line": 35,
+            "property": "color",
+            "value": "#324b57 !important"
+          },
+          {
+            "line": 36,
+            "property": "background",
+            "value": "#eef4f7 !important"
+          },
+          {
+            "line": 41,
+            "property": "border-bottom-color",
+            "value": "#e5edf1 !important"
+          },
+          {
+            "line": 44,
+            "property": "background",
+            "value": "#f0f7fb !important"
+          },
+          {
+            "line": 80,
+            "property": "border-bottom-color",
+            "value": "#dfe9ee !important"
+          }
+        ],
+        "naked_radius": [
+          {
+            "line": 54,
+            "property": "border-radius",
+            "value": "3px"
+          }
+        ]
+      },
+      "transition_all_declarations": 0,
+      "unique_keyframes": 0
+    },
+    "static/site32.css": {
+      "backdrop_filter_active_rules": 0,
+      "backdrop_filter_declarations": 10,
+      "backdrop_filter_none_rules": 5,
+      "backdrop_filter_rules": 5,
+      "bytes": 31678,
+      "declarations": 773,
+      "duplicate_keyframe_definitions": 0,
+      "duplicate_keyframe_names": 0,
+      "duplicate_keyframes": {},
+      "gzip_bytes": 6288,
+      "important_occurrences": 0,
+      "keyframe_definitions": 0,
+      "keyframes": [],
+      "lines": 1096,
+      "naked_color_literals": 0,
+      "naked_duration_literals": 0,
+      "naked_radius_declarations": 0,
+      "path": "static/site32.css",
+      "rule_blocks": 229,
+      "samples": {},
+      "transition_all_declarations": 0,
+      "unique_keyframes": 0
+    },
+    "static/style.css": {
+      "backdrop_filter_active_rules": 80,
+      "backdrop_filter_declarations": 170,
+      "backdrop_filter_none_rules": 18,
+      "backdrop_filter_rules": 98,
+      "bytes": 382108,
+      "declarations": 11239,
+      "duplicate_keyframe_definitions": 0,
+      "duplicate_keyframe_names": 0,
+      "duplicate_keyframes": {},
+      "gzip_bytes": 69991,
+      "important_occurrences": 290,
+      "keyframe_definitions": 53,
+      "keyframes": [
+        {
+          "line": 60,
+          "name": "float1"
+        },
+        {
+          "line": 61,
+          "name": "float2"
+        },
+        {
+          "line": 72,
+          "name": "spin"
+        },
+        {
+          "line": 93,
+          "name": "pulse"
+        },
+        {
+          "line": 126,
+          "name": "pageIn"
+        },
+        {
+          "line": 372,
+          "name": "ringDrift"
+        },
+        {
+          "line": 373,
+          "name": "spectrumPulse"
+        },
+        {
+          "line": 374,
+          "name": "bpuBeat"
+        },
+        {
+          "line": 543,
+          "name": "bIn"
+        },
+        {
+          "line": 593,
+          "name": "boot-in"
+        },
+        {
+          "line": 594,
+          "name": "boot-out"
+        },
+        {
+          "line": 615,
+          "name": "logo-breath"
+        },
+        {
+          "line": 620,
+          "name": "ring-out"
+        },
+        {
+          "line": 625,
+          "name": "title-sweep"
+        },
+        {
+          "line": 640,
+          "name": "bspin"
+        },
+        {
+          "line": 680,
+          "name": "evIn"
+        },
+        {
+          "line": 722,
+          "name": "bellpulse"
+        },
+        {
+          "line": 858,
+          "name": "scanPulse"
+        },
+        {
+          "line": 1005,
+          "name": "skelSlide"
+        },
+        {
+          "line": 1025,
+          "name": "clickping"
+        },
+        {
+          "line": 1032,
+          "name": "pfBlink"
+        },
+        {
+          "line": 1192,
+          "name": "cpDot"
+        },
+        {
+          "line": 1776,
+          "name": "topoFlow"
+        },
+        {
+          "line": 2015,
+          "name": "andonblink"
+        },
+        {
+          "line": 2365,
+          "name": "auroraA"
+        },
+        {
+          "line": 2366,
+          "name": "auroraB"
+        },
+        {
+          "line": 2374,
+          "name": "heroSheen"
+        },
+        {
+          "line": 2458,
+          "name": "lgHue"
+        },
+        {
+          "line": 2469,
+          "name": "lgFloatA"
+        },
+        {
+          "line": 2470,
+          "name": "lgFloatB"
+        },
+        {
+          "line": 2473,
+          "name": "lgGlint"
+        },
+        {
+          "line": 2482,
+          "name": "lgFlow"
+        },
+        {
+          "line": 2485,
+          "name": "lgSway"
+        },
+        {
+          "line": 2489,
+          "name": "lgTwinkle"
+        },
+        {
+          "line": 2818,
+          "name": "lgrDash"
+        },
+        {
+          "line": 2819,
+          "name": "lgrDrift"
+        },
+        {
+          "line": 4276,
+          "name": "r4Pulse"
+        },
+        {
+          "line": 7088,
+          "name": "lbFloat"
+        },
+        {
+          "line": 7093,
+          "name": "lbSymbolFloat"
+        },
+        {
+          "line": 7098,
+          "name": "lbSymbolPulse"
+        },
+        {
+          "line": 7102,
+          "name": "fsdScan"
+        },
+        {
+          "line": 7106,
+          "name": "lbFlapL"
+        },
+        {
+          "line": 7110,
+          "name": "lbFlapR"
+        },
+        {
+          "line": 8475,
+          "name": "site31PageIn"
+        },
+        {
+          "line": 8486,
+          "name": "vtSameOld"
+        },
+        {
+          "line": 8487,
+          "name": "vtSameNew"
+        },
+        {
+          "line": 8488,
+          "name": "vtCrossOld"
+        },
+        {
+          "line": 8489,
+          "name": "vtCrossNew"
+        },
+        {
+          "line": 8490,
+          "name": "vtHomeLeaveOld"
+        },
+        {
+          "line": 8491,
+          "name": "vtHomeLeaveNew"
+        },
+        {
+          "line": 8492,
+          "name": "vtHomeEnterOld"
+        },
+        {
+          "line": 8493,
+          "name": "vtHomeEnterNew"
+        },
+        {
+          "line": 8494,
+          "name": "moreLiquidIn"
+        }
+      ],
+      "lines": 8540,
+      "naked_color_literals": 2401,
+      "naked_duration_literals": 158,
+      "naked_radius_declarations": 369,
+      "path": "static/style.css",
+      "rule_blocks": 3313,
+      "samples": {
+        "backdrop_filter_active": [
+          {
+            "line": 66,
+            "property": "backdrop-filter",
+            "value": "blur(18px) saturate(150%)"
+          },
+          {
+            "line": 141,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 162,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 187,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 220,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 232,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 242,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 255,
+            "property": "backdrop-filter",
+            "value": "blur(8px)"
+          },
+          {
+            "line": 301,
+            "property": "backdrop-filter",
+            "value": "blur(14px) saturate(170%)"
+          },
+          {
+            "line": 310,
+            "property": "backdrop-filter",
+            "value": "blur(14px) saturate(170%)"
+          },
+          {
+            "line": 322,
+            "property": "backdrop-filter",
+            "value": "blur(18px) saturate(178%)"
+          },
+          {
+            "line": 371,
+            "property": "backdrop-filter",
+            "value": "blur(12px) saturate(170%)"
+          }
+        ],
+        "important": [
+          {
+            "line": 42,
+            "property": "animation",
+            "value": "none !important"
+          },
+          {
+            "line": 43,
+            "property": "transition-duration",
+            "value": ".01ms !important"
+          },
+          {
+            "line": 43,
+            "property": "scroll-behavior",
+            "value": "auto !important"
+          },
+          {
+            "line": 46,
+            "property": "animation",
+            "value": "none !important"
+          },
+          {
+            "line": 46,
+            "property": "transition-duration",
+            "value": ".01ms !important"
+          },
+          {
+            "line": 46,
+            "property": "scroll-behavior",
+            "value": "auto !important"
+          },
+          {
+            "line": 113,
+            "property": "display",
+            "value": "none !important"
+          },
+          {
+            "line": 668,
+            "property": "animation",
+            "value": "none !important"
+          },
+          {
+            "line": 797,
+            "property": "background",
+            "value": "#f1f5f9!important"
+          },
+          {
+            "line": 797,
+            "property": "color",
+            "value": "#475569!important"
+          },
+          {
+            "line": 797,
+            "property": "box-shadow",
+            "value": "none!important"
+          },
+          {
+            "line": 836,
+            "property": "border-bottom",
+            "value": "none !important"
+          }
+        ],
+        "naked_color": [
+          {
+            "line": 48,
+            "property": "background",
+            "value": "radial-gradient(1200px 760px at 8% -12%, rgba(124,58,237,.16), transparent 60%), radial-gradient(1000px 620px at 102% -4%, rgba(37,99,235,.14), transparent 56%)"
+          },
+          {
+            "line": 57,
+            "property": "background",
+            "value": "radial-gradient(circle, rgba(124,58,237,.34), transparent 66%)"
+          },
+          {
+            "line": 59,
+            "property": "background",
+            "value": "radial-gradient(circle, rgba(8,182,212,.30), transparent 66%)"
+          },
+          {
+            "line": 66,
+            "property": "background",
+            "value": "rgba(255,255,255,.74)"
+          },
+          {
+            "line": 67,
+            "property": "box-shadow",
+            "value": "0 2px 22px rgba(15,23,42,.06)"
+          },
+          {
+            "line": 71,
+            "property": "box-shadow",
+            "value": "0 0 16px rgba(124,58,237,.45)"
+          },
+          {
+            "line": 81,
+            "property": "background",
+            "value": "rgba(15,23,42,.04)"
+          },
+          {
+            "line": 82,
+            "property": "background",
+            "value": "#fff"
+          },
+          {
+            "line": 82,
+            "property": "box-shadow",
+            "value": "0 3px 12px rgba(15,23,42,.07)"
+          },
+          {
+            "line": 83,
+            "property": "box-shadow",
+            "value": "0 3px 12px rgba(124,58,237,.18), inset 0 0 0 1px rgba(124,58,237,.45)"
+          },
+          {
+            "line": 84,
+            "property": "box-shadow",
+            "value": "0 3px 12px rgba(37,99,235,.18), inset 0 0 0 1px rgba(37,99,235,.45)"
+          },
+          {
+            "line": 85,
+            "property": "box-shadow",
+            "value": "0 3px 12px rgba(217,119,6,.18), inset 0 0 0 1px rgba(217,119,6,.45)"
+          }
+        ],
+        "naked_duration": [
+          {
+            "line": 43,
+            "property": "transition-duration",
+            "value": ".01ms !important"
+          },
+          {
+            "line": 46,
+            "property": "transition-duration",
+            "value": ".01ms !important"
+          },
+          {
+            "line": 57,
+            "property": "animation",
+            "value": "float1 24s ease-in-out infinite"
+          },
+          {
+            "line": 59,
+            "property": "animation",
+            "value": "float2 30s ease-in-out infinite"
+          },
+          {
+            "line": 71,
+            "property": "animation",
+            "value": "spin 14s linear infinite"
+          },
+          {
+            "line": 80,
+            "property": "transition",
+            "value": ".18s"
+          },
+          {
+            "line": 91,
+            "property": "animation",
+            "value": "pulse 2s infinite"
+          },
+          {
+            "line": 102,
+            "property": "transition",
+            "value": ".18s"
+          },
+          {
+            "line": 119,
+            "property": "transition",
+            "value": "opacity .36s ease"
+          },
+          {
+            "line": 125,
+            "property": "animation",
+            "value": "pageIn .42s var(--ease-out)"
+          },
+          {
+            "line": 140,
+            "property": "transition",
+            "value": ".22s"
+          },
+          {
+            "line": 157,
+            "property": "transition",
+            "value": ".2s"
+          }
+        ],
+        "naked_radius": [
+          {
+            "line": 40,
+            "property": "border-radius",
+            "value": "4px"
+          },
+          {
+            "line": 69,
+            "property": "border-radius",
+            "value": "9px"
+          },
+          {
+            "line": 78,
+            "property": "border-radius",
+            "value": "11px"
+          },
+          {
+            "line": 96,
+            "property": "border-radius",
+            "value": "999px"
+          },
+          {
+            "line": 100,
+            "property": "border-radius",
+            "value": "10px"
+          },
+          {
+            "line": 134,
+            "property": "border-radius",
+            "value": "999px"
+          },
+          {
+            "line": 139,
+            "property": "border-radius",
+            "value": "18px"
+          },
+          {
+            "line": 154,
+            "property": "border-radius",
+            "value": "8px"
+          },
+          {
+            "line": 161,
+            "property": "border-radius",
+            "value": "18px"
+          },
+          {
+            "line": 168,
+            "property": "border-radius",
+            "value": "13px"
+          },
+          {
+            "line": 181,
+            "property": "border-radius",
+            "value": "999px"
+          },
+          {
+            "line": 185,
+            "property": "border-radius",
+            "value": "18px"
+          }
+        ],
+        "transition_all": [
+          {
+            "line": 654,
+            "property": "transition",
+            "value": "all .3s cubic-bezier(.22,1,.36,1)"
+          },
+          {
+            "line": 657,
+            "property": "transition",
+            "value": "all .3s cubic-bezier(.22,1,.36,1)"
+          }
+        ]
+      },
+      "transition_all_declarations": 2,
+      "unique_keyframes": 53
+    }
+  },
+  "generated_at": "2026-07-20T00:24:32.386461Z",
+  "identity_status": "bound",
+  "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+  "mode": "audit",
+  "ok": true,
+  "policy": {
+    "backdrop_filter_counting": "standard and -webkit declarations in one block count as one logical rule",
+    "compressed_size": "gzip bytes are reported and snapshotted but not gated because zlib output can vary by runtime",
+    "legacy": "baseline ceilings; debt and CSS size may decrease but may not increase",
+    "site32_cross_file_keyframes": "must not reuse a keyframe name from legacy sheets",
+    "site32_strict_zero": [
+      "transition_all_declarations",
+      "important_occurrences",
+      "duplicate_keyframe_definitions",
+      "naked_color_literals",
+      "naked_radius_declarations",
+      "naked_duration_literals"
+    ]
+  },
+  "release": "site32-global-commercial-v1.13-20260720",
+  "root": "web/command_center",
+  "schema_version": "site32.style_audit.v1",
+  "violations": []
+}

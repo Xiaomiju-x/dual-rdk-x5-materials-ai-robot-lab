@@ -1,0 +1,8 @@
+# Installed only by bootstrap_ubuntu.sh --with-smolvla.
+# The base checkpoint must still be supplied as a local path; the runner forces
+# offline mode and never downloads model weights automatically.
+lerobot==0.3.3
+transformers==4.53.2
+accelerate==1.8.1
+datasets==3.6.0
+peft==0.15.2

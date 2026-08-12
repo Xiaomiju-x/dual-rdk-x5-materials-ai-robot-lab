@@ -1,0 +1,79 @@
+{
+  "checkpoint": {
+    "bytes": 78168,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-XRD-01/final_control_v0_reconstruction.pt",
+    "sha256": "187d63f4d844af3fbbd97d60bc81358c3423cac0e8456a8d5db2a61689eae253"
+  },
+  "configuration": {
+    "id": "v0_reconstruction",
+    "w_contrast": 0.0,
+    "w_diff": 0.0,
+    "w_peak": 0.0,
+    "width": 16
+  },
+  "created_at": "2026-08-02T17:37:24.826360+00:00",
+  "extra": {
+    "epochs": 6,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.009806966467294842,
+        "selection_score": 0.08977787475473181
+      },
+      {
+        "epoch": 2,
+        "loss": 0.0025403730978723615,
+        "selection_score": 0.07814308046520066
+      },
+      {
+        "epoch": 3,
+        "loss": 0.0027571641257964075,
+        "selection_score": 0.07683204391282641
+      },
+      {
+        "epoch": 4,
+        "loss": 0.002130181121174246,
+        "selection_score": 0.06458747788833513
+      },
+      {
+        "epoch": 5,
+        "loss": 0.0019473986612865701,
+        "selection_score": 0.06455466620872982
+      },
+      {
+        "epoch": 6,
+        "loss": 0.0018871823122026399,
+        "selection_score": 0.06561691365465891
+      }
+    ],
+    "test_split_observed": false
+  },
+  "family_id": "RND-XRD-01",
+  "fit_id": "final_control_v0_reconstruction",
+  "fit_seconds": 69.41326010000012,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 17282,
+  "receipt_sha256": "e999b7d6bfe4f201ee3b66ef4a0c16b3c8d923708bd7bbf6f9b29fee9652c7e9",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267706,
+  "selection_metrics": {
+    "profile": {
+      "mae": 0.019002849236130714,
+      "mean_cosine": 0.6650680899620056,
+      "peak_f1": 0.4873636605480181,
+      "peak_precision": 0.6497990068574131,
+      "peak_recall": 0.38989784335981836,
+      "rmse": 0.06067487969994545
+    },
+    "retrieval": {
+      "median_rank": 208.0,
+      "mrr": 0.020695009847289243,
+      "top1": 0.004,
+      "top5": 0.018
+    },
+    "selection_score": 0.06455466620872982
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

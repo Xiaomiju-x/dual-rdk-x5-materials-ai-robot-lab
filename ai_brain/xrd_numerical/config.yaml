@@ -1,0 +1,74 @@
+# XRD数值分类Pipeline全局配置
+
+# ============ 路径配置 ============
+paths:
+  raw_dir: "data/raw_files"          # .raw文件目录
+  labels_csv: "data/labels.csv"      # 标注文件
+  feature_cache: "outputs/features"  # 特征缓存
+  model_dir: "outputs/models"        # 模型输出
+  plot_dir: "outputs/plots"          # 可视化输出
+
+# ============ 峰提取参数 ============
+peak_extraction:
+  # 预处理
+  smooth_sigma: 2.0                  # 高斯平滑sigma
+  baseline_window: 50                # 背底估计滑动窗口大小(数据点数)
+
+  # find_peaks参数
+  height_ratio: 0.10                 # 峰高阈值 = max_intensity * height_ratio
+  prominence: 0.03                   # 峰突出度阈值(归一化后)
+  distance: 8                        # 相邻峰最小间距(数据点数)
+  width_rel_height: 0.5              # 半高宽测量的相对高度
+
+# ============ 特征向量配置 ============
+features:
+  # 方案A: Top-N峰特征
+  top_n_peaks: 15                    # 取前N个最强峰
+  features_per_peak: 3               # 每峰特征数: position, intensity, fwhm
+  # → 方案A维度 = top_n_peaks * features_per_peak = 45
+
+  # 方案B: Binned histogram
+  use_binned: true                   # 启用binned特征
+  bin_range: [10.0, 80.0]            # 2θ范围
+  n_bins: 140                        # bin数量(每bin约0.5°)
+  # → 方案B维度 = 140
+
+  # 统计特征
+  use_stats: true                    # 启用统计特征(峰数/峰间距/低角度占比等)
+  # → 统计特征维度 = 5
+
+  # 组合: 45(Top-N) + 140(Binned) + 5(Stats) = 190
+
+# ============ 数据增强 ============
+augmentation:
+  enabled: true
+  noise_std: 0.02                    # 强度高斯噪声标准差
+  shift_range: 0.05                  # 2θ偏移范围(度), 模拟仪器漂移
+  intensity_scale: [0.8, 1.2]        # 强度随机缩放范围
+  augment_factor: 10                 # 每个原始样本增强N倍
+
+# ============ 模型配置 ============
+model:
+  hidden_dims: [256, 128]            # 隐藏层维度(加宽提升BPU INT8量化鲁棒性)
+  dropout: 0.3                       # Dropout率
+  activation: "relu"                 # 激活函数
+  use_batchnorm: true                # BN层: 约束激活范围，提升BPU INT8量化精度
+
+# ============ 训练配置 ============
+training:
+  batch_size: 32
+  epochs: 200
+  learning_rate: 0.001
+  weight_decay: 0.01                 # L2正则化
+  scheduler: "cosine"                # 学习率调度: cosine / step / none
+  early_stopping_patience: 30        # 早停耐心值
+  val_ratio: 0.2                     # 验证集比例
+  seed: 42
+
+# ============ BPU部署配置 ============
+bpu:
+  march: "bayes-e"                   # RDK X5 BPU架构
+  calibration_type: "kl"
+  optimize_level: "O3"
+  onnx_name: "xrd_mlp_classify.onnx"
+  bin_name: "xrd_mlp_classify.bin"

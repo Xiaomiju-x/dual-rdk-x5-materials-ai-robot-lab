@@ -1,0 +1,113 @@
+{
+  "checkpoint": {
+    "bytes": 254546,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold1_v3_lowrank6_wide.pt",
+    "sha256": "266812fd690c72f0cc03bbe3627d42b3bbcaac0d43314ba08815fda0444cf415"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 128,
+    "id": "v3_lowrank6_wide",
+    "latent": true,
+    "rank": 6
+  },
+  "created_at": "2026-08-02T16:52:39.174291+00:00",
+  "extra": {
+    "epochs": 11,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.21143962939580283,
+        "selection_score": 0.013434935361146927
+      },
+      {
+        "epoch": 2,
+        "loss": 0.1724618673324585,
+        "selection_score": 0.012358111329376698
+      },
+      {
+        "epoch": 3,
+        "loss": 0.1496984764933586,
+        "selection_score": 0.012288715224713087
+      },
+      {
+        "epoch": 4,
+        "loss": 0.1349913572271665,
+        "selection_score": 0.011276372708380222
+      },
+      {
+        "epoch": 5,
+        "loss": 0.12621050228675207,
+        "selection_score": 0.012662320397794247
+      },
+      {
+        "epoch": 6,
+        "loss": 0.11934493879477183,
+        "selection_score": 0.009672245709225535
+      },
+      {
+        "epoch": 7,
+        "loss": 0.1078826775153478,
+        "selection_score": 0.010658988496288657
+      },
+      {
+        "epoch": 8,
+        "loss": 0.09981778512398402,
+        "selection_score": 0.011244723107665777
+      },
+      {
+        "epoch": 9,
+        "loss": 0.09281935046116511,
+        "selection_score": 0.011516069993376732
+      },
+      {
+        "epoch": 10,
+        "loss": 0.08933583796024322,
+        "selection_score": 0.010496989358216524
+      },
+      {
+        "epoch": 11,
+        "loss": 0.08164832989374797,
+        "selection_score": 0.011451993137598038
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold1_v3_lowrank6_wide",
+  "fit_seconds": 1.5033278000000792,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 61958,
+  "receipt_sha256": "f2c9977f0a095f40fc75b61c8f4338dad92d6ce7a1b8e7e6ac0fe41b68d80bd1",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20260906,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.006281068082898855,
+      "r2": 0.9941004823748107,
+      "rmse": 0.008336901664733887
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.006101224571466446,
+        "r2": 0.46009320079408655,
+        "rmse": 0.007802409119904041,
+        "uniformity_mae": 0.0012940424494445324,
+        "worst_point_mae": 0.008662223815917969
+      },
+      "WTi": {
+        "mae": 0.00678235525265336,
+        "r2": -0.016135347857871407,
+        "rmse": 0.009672055020928383,
+        "uniformity_mae": 0.0012910201912745833,
+        "worst_point_mae": 0.011330212466418743
+      }
+    },
+    "selection_score": 0.009672245709225535,
+    "worst_domain_mae": 0.00678235525265336
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

@@ -1,0 +1,22 @@
+# 烧结炉显示屏 OCR ROI 标定
+# 实际部署时按真实摄像头位置 + 显示屏角度 lsusb-ctl 标定;
+# 标定脚本: my_robot_agents/scripts/calibrate_furnace_roi.py (Phase 6 写)
+#
+# 当前默认值: 假设 1080p 摄像头 (/pt_camera/image_raw 1920×1080) 对准
+# 合肥科晶 KSL 系列烧结炉显示屏, 显示屏在画面 (200, 400) 占 400×150 像素
+
+# 显示屏在原图中的位置 (像素)
+panel_x: 200
+panel_y: 400
+panel_w: 400
+panel_h: 150
+
+# Power Indicator 红灯位置
+power_led_x: 700
+power_led_y: 350
+power_led_w: 40
+power_led_h: 40
+
+# OCR 阈值
+seg_on_threshold: 0.5
+confidence_threshold: 0.7

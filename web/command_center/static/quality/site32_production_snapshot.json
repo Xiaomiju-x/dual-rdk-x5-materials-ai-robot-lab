@@ -1,0 +1,25 @@
+{
+  "schema_version": "site32.production_snapshot.v1",
+  "captured_at": "2026-07-20T00:27:28Z",
+  "capture_mode": "read_only_manifest_systemd_socket_sso",
+  "release": "site32-global-commercial-v1.12-20260720",
+  "manifest_digest": "c77d1a2ccbcc1ec7a30a4d39a0c36276a1bcbda22e89be1a55e37f5cb7b03b7d",
+  "artifact_sha256": "f4a6a900304e99140a0e39a2e33c7c1ad5cadd268bc3034abc18457d1a253610",
+  "file_count": 121,
+  "total_size": 19467996,
+  "service": {
+    "active_state": "active",
+    "sub_state": "running",
+    "started_at": "2026-07-20T07:29:12+08:00"
+  },
+  "loopback_public_status": {
+    "http_status": 200,
+    "release": "site32-global-commercial-v1.12-20260720",
+    "summary_state": "Replay"
+  },
+  "notes": [
+    "This snapshot records the verified Site32 v1.12 predecessor before the Site32 v1.13 promotion.",
+    "The direct loopback public-status endpoint returned its intended read-only summary; public HTTPS remained protected by the existing SSO boundary.",
+    "No credentials, host addresses, private paths, user identities, or device-control endpoints are included."
+  ]
+}

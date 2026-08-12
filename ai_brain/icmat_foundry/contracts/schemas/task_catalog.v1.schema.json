@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "icmat_task_catalog.v1",
+  "title": "X5-ICMat Foundry task catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "created_at",
+    "selection_policy",
+    "production_integration_allowed",
+    "tasks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "icmat_task_catalog.v1"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "selection_policy": {
+      "const": "researcher_explicit"
+    },
+    "production_integration_allowed": {
+      "const": false
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_id",
+          "model_id",
+          "role",
+          "runtime_priority",
+          "deployment_target",
+          "resident_policy",
+          "source_ids",
+          "metrics",
+          "fallback",
+          "status"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]+$"
+          },
+          "model_id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
+          },
+          "role": {
+            "enum": [
+              "structured_llm",
+              "rag_llm",
+              "reasoning_llm",
+              "property_screening",
+              "process_quality",
+              "sem_metrology",
+              "spectra_quality"
+            ]
+          },
+          "runtime_priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "deployment_target": {
+            "enum": [
+              "cpu_gguf",
+              "cpu_adapter",
+              "cpu_onnx",
+              "bpu_int8_candidate",
+              "cpu_and_bpu_candidate"
+            ]
+          },
+          "resident_policy": {
+            "const": "manual_swap_load"
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metrics": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "fallback": {
+            "type": "string",
+            "minLength": 4
+          },
+          "status": {
+            "enum": [
+              "planned",
+              "data_ready",
+              "trained",
+              "pc_validated",
+              "bpu_binary",
+              "x5_validated",
+              "frozen"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

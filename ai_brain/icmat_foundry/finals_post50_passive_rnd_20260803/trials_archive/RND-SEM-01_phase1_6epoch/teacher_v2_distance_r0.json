@@ -1,0 +1,68 @@
+{
+  "checkpoint": {
+    "bytes": 186370,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/teacher_v2_distance_r0.pt",
+    "sha256": "121607bea1764c2017a88b0444333abd825149063e118e3cc34b38fcd369c57c"
+  },
+  "configuration": {
+    "augment": 0.02,
+    "id": "v2_distance",
+    "kind": "teacher",
+    "w_boundary": 0.0,
+    "w_distance": 0.12,
+    "width": 5
+  },
+  "created_at": "2026-08-02T17:42:35.861459+00:00",
+  "extra": {
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.2632757355185116,
+        "score": 0.09121272908403615
+      },
+      {
+        "epoch": 2,
+        "loss": 1.1986610153142143,
+        "score": 0.12135852825055236
+      },
+      {
+        "epoch": 3,
+        "loss": 1.1095996113384472,
+        "score": 0.13053950993104382
+      },
+      {
+        "epoch": 4,
+        "loss": 1.0385555081507738,
+        "score": 0.17517869346932766
+      },
+      {
+        "epoch": 5,
+        "loss": 0.9375884848482469,
+        "score": 0.47470222666746326
+      },
+      {
+        "epoch": 6,
+        "loss": 0.8693910048288458,
+        "score": 0.5126523186638765
+      }
+    ]
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "teacher_v2_distance_r0",
+  "fit_seconds": 39.33509589999994,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 40204,
+  "receipt_sha256": "cf0f3f75a3b68e05484aa14318cb49e05a9b93cd72d21aaed1142098a9deb025",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267823,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.0627304058572384,
+    "dice": 0.49696971719956695,
+    "foreground_iou": 0.3306456747005254,
+    "score": 0.5126523186638765,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    200W USB 广角摄像头 (信测科技 OV2710).
+    Spec: 32.6 × 32.6 × 28 mm, 1080p@30fps, 148° FOV (-17% 畸变), USB2.0 免驱.
+    挂在升降台 (lift_link) 末端, 跟电磁铁同侧, 用于视觉伺服找瓶顶铁片.
+
+    frame_id="lift_camera_link" + "lift_camera_optical_frame" (ROS 双 frame 规范)
+  -->
+
+  <xacro:macro name="lift_camera_xacro" params="parent xyz:='0 0 0' rpy:='0 0 0'">
+
+    <link name="lift_camera_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.028 0.0326 0.0326"/>
+        </geometry>
+        <material name="usb_cam_pink"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.028 0.0326 0.0326"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="0.05" x="0.028" y="0.0326" z="0.0326"/>
+    </link>
+
+    <joint name="${parent}_to_lift_camera" type="fixed">
+      <parent link="${parent}"/>
+      <child link="lift_camera_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <link name="lift_camera_optical_frame"/>
+    <joint name="lift_camera_link_to_optical_frame" type="fixed">
+      <parent link="lift_camera_link"/>
+      <child link="lift_camera_optical_frame"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

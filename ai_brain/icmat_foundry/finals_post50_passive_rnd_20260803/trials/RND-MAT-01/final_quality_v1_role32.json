@@ -1,0 +1,114 @@
+{
+  "checkpoint": {
+    "bytes": 57714,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-MAT-01/final_quality_v1_role32.pt",
+    "sha256": "e7e855cffefd50759ac71bbce82099c36ae3847fe53faa5a0071dc2f3494fa06"
+  },
+  "configuration": {
+    "dropout": 0.0,
+    "hidden": 32,
+    "id": "v1_role32",
+    "role_aware": true
+  },
+  "created_at": "2026-08-02T18:47:57.591219+00:00",
+  "extra": {
+    "epochs": 16,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.4460899829864502,
+        "val_mae": 26.568134307861328
+      },
+      {
+        "epoch": 2,
+        "loss": 0.4391196295619011,
+        "val_mae": 26.581968307495117
+      },
+      {
+        "epoch": 3,
+        "loss": 0.4250228852033615,
+        "val_mae": 26.574970245361328
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4141562432050705,
+        "val_mae": 26.53594398498535
+      },
+      {
+        "epoch": 5,
+        "loss": 0.4157680869102478,
+        "val_mae": 26.43948745727539
+      },
+      {
+        "epoch": 6,
+        "loss": 0.41730933636426926,
+        "val_mae": 26.269710540771484
+      },
+      {
+        "epoch": 7,
+        "loss": 0.4088614881038666,
+        "val_mae": 26.0875186920166
+      },
+      {
+        "epoch": 8,
+        "loss": 0.40880028903484344,
+        "val_mae": 25.844120025634766
+      },
+      {
+        "epoch": 9,
+        "loss": 0.40369629859924316,
+        "val_mae": 25.674236297607422
+      },
+      {
+        "epoch": 10,
+        "loss": 0.39118586480617523,
+        "val_mae": 25.60724639892578
+      },
+      {
+        "epoch": 11,
+        "loss": 0.39441611617803574,
+        "val_mae": 25.642505645751953
+      },
+      {
+        "epoch": 12,
+        "loss": 0.3853905349969864,
+        "val_mae": 25.700748443603516
+      },
+      {
+        "epoch": 13,
+        "loss": 0.38220278918743134,
+        "val_mae": 25.972585678100586
+      },
+      {
+        "epoch": 14,
+        "loss": 0.36837857961654663,
+        "val_mae": 26.183208465576172
+      },
+      {
+        "epoch": 15,
+        "loss": 0.3580637723207474,
+        "val_mae": 26.205242156982422
+      },
+      {
+        "epoch": 16,
+        "loss": 0.35672878473997116,
+        "val_mae": 26.31099510192871
+      }
+    ]
+  },
+  "family_id": "RND-MAT-01",
+  "fit_id": "final_quality_v1_role32",
+  "fit_seconds": 0.39292050000040035,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 13281,
+  "receipt_sha256": "79c519f874c97e49068790a58b3e54529ea2b02d82134f232febb224685581bd",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20270703,
+  "selection_metrics": {
+    "mae": 25.60724639892578,
+    "rmse": 29.092988967895508
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

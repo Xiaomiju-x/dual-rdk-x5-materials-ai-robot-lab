@@ -1,0 +1,79 @@
+{
+  "checkpoint": {
+    "bytes": 100856,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-XRD-01/grid_v5_full_r0.pt",
+    "sha256": "73e231426676b144e4e9fa714a6e5346b5c6b8cfd2fe2813fb3c5ad8b6d4b78c"
+  },
+  "configuration": {
+    "id": "v5_full",
+    "w_contrast": 0.08,
+    "w_diff": 0.2,
+    "w_peak": 0.12,
+    "width": 20
+  },
+  "created_at": "2026-08-02T17:20:35.785512+00:00",
+  "extra": {
+    "epochs": 6,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.6189369037747383,
+        "selection_score": 0.13796437887633278
+      },
+      {
+        "epoch": 2,
+        "loss": 0.5724284909665585,
+        "selection_score": 0.07646069052224555
+      },
+      {
+        "epoch": 3,
+        "loss": 0.49785178527235985,
+        "selection_score": 0.06711480703301204
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4558311179280281,
+        "selection_score": 0.07401514978727342
+      },
+      {
+        "epoch": 5,
+        "loss": 0.41982749104499817,
+        "selection_score": 0.0640482885407523
+      },
+      {
+        "epoch": 6,
+        "loss": 0.3820796236395836,
+        "selection_score": 0.07032161629114754
+      }
+    ],
+    "test_split_observed": false
+  },
+  "family_id": "RND-XRD-01",
+  "fit_id": "grid_v5_full_r0",
+  "fit_seconds": 84.1085820999997,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 23146,
+  "receipt_sha256": "29d262b61d964c5314efe7623e8fbdd663dd3c50a07bddc09e44e6d90794a117",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20265853,
+  "selection_metrics": {
+    "profile": {
+      "mae": 0.020518893375992775,
+      "mean_cosine": 0.4498571455478668,
+      "peak_f1": 0.40781209670480945,
+      "peak_precision": 0.5180327868852459,
+      "peak_recall": 0.3362656072644722,
+      "rmse": 0.0732029601931572
+    },
+    "retrieval": {
+      "median_rank": 3.0,
+      "mrr": 0.45788914682521403,
+      "top1": 0.304,
+      "top5": 0.664
+    },
+    "selection_score": 0.0640482885407523
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

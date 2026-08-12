@@ -1,0 +1,18 @@
+x5_tribev_readonly_collector:
+  ros__parameters:
+    scan_topic: "/scan"
+    depth_scan_topic: "/scan_depth"
+    odom_topic: "/odom"
+    # Both semantic subscriptions are optional and remain input-only.
+    vision_bev_topic: "/lab_fsd/vision_bev"
+    vision_provenance_topic: "/lab_fsd/vision_objects"
+    staging_root: "/home/rdk/x5_tribev_flow_successor_data"
+    scenario_id: "real_navigation_unlabeled"
+    minimum_frame_period_s: 0.18
+    depth_max_age_s: 0.30
+    odom_max_age_s: 0.25
+    semantic_max_age_s: 1.50
+    depth_origin_x_m: 0.25
+    anchor_stride_s: 1.0
+    future_tolerance_s: 0.12
+    memory_window_s: 8.0

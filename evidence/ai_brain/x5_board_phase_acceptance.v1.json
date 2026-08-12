@@ -1,0 +1,1550 @@
+{
+  "accounting": {
+    "actual_x5_backend_executed": 35,
+    "actual_x5_bpu_executed": 24,
+    "actual_x5_bpu_segment_bins_executed": 6,
+    "actual_x5_cpu_executed": 11,
+    "frozen_production_baseline_preserved": 11,
+    "new_candidates": {
+      "BOARD_EXPERIMENTAL": 4,
+      "BOARD_REJECTED": 3,
+      "X5_VALIDATED": 31
+    },
+    "new_candidates_by_primary_backend": {
+      "BPU": {
+        "BOARD_EXPERIMENTAL": 4,
+        "X5_VALIDATED": 20
+      },
+      "CPU": {
+        "BOARD_REJECTED": 3,
+        "X5_VALIDATED": 11
+      }
+    },
+    "new_finals_candidates_status_complete": 38,
+    "pc_offline_only": 1,
+    "registry_total": 50,
+    "x5_local_logical_models": 49
+  },
+  "board_phase_status": "COMPLETE_WITH_REJECTIONS_AND_EXPERIMENTALS",
+  "bpu_llm_fixed_contracts": [
+    {
+      "actual_backend": "X5_BPU_PART1_AND_PART2_WITH_CPU_EMBED_NORM_LM_HEAD",
+      "actual_next_token_id": 48380,
+      "claim_boundary": "One fixed next-token contract only; not general free generation or FP32 hidden-state parity.",
+      "content_bound": true,
+      "expected_next_token_id": 4913,
+      "inventory_id": "F-LLM-03",
+      "next_token_exact": false,
+      "part1_inference_ms": 213.060676999703,
+      "part1_load_ms": 5308.1679739998435,
+      "part1_model_sha256": "93f32882458cf3cf230c70f4a0e77855f7a54bc128db4afa1541e4050988874f",
+      "part1_output_tensor_sha256": "2c344abddea0a17af4b14e4432432a493080b836e1514dcebfff71e952853fd4",
+      "part2_inference_ms": 217.9788510002254,
+      "part2_input_tensor_sha256": "2c344abddea0a17af4b14e4432432a493080b836e1514dcebfff71e952853fd4",
+      "part2_load_ms": 4637.197303999528,
+      "part2_model_sha256": "acf2224e06c32055703c5984413e352edecd6ac9a1ada550ba2d2846ef7ecb5e"
+    },
+    {
+      "actual_backend": "X5_BPU_PART1_AND_PART2_WITH_CPU_EMBED_NORM_LM_HEAD",
+      "actual_next_token_id": 1071,
+      "claim_boundary": "One fixed next-token contract only; not general free generation or FP32 hidden-state parity.",
+      "content_bound": true,
+      "expected_next_token_id": 7424,
+      "inventory_id": "F-LLM-04",
+      "next_token_exact": false,
+      "part1_inference_ms": 221.9401320007819,
+      "part1_load_ms": 5010.570313999779,
+      "part1_model_sha256": "3e6088cd086b8d0d02fa947ffafa59d21486a7b714af8cb9be67acb7b4935cdd",
+      "part1_output_tensor_sha256": "4311c760e8719b28bb68dc822005741de7409aa41c16989017d2aab974dfa2c1",
+      "part2_inference_ms": 212.91485799974907,
+      "part2_input_tensor_sha256": "4311c760e8719b28bb68dc822005741de7409aa41c16989017d2aab974dfa2c1",
+      "part2_load_ms": 4966.46795200013,
+      "part2_model_sha256": "436518bf2d079288e6d9714269ebb623a4c2eedd6e8b5a648095c380a7bdf7a3"
+    },
+    {
+      "actual_backend": "X5_BPU_PART1_AND_PART2_WITH_CPU_EMBED_NORM_LM_HEAD",
+      "actual_next_token_id": 88582,
+      "claim_boundary": "One fixed next-token contract only; not general free generation or FP32 hidden-state parity.",
+      "content_bound": true,
+      "expected_next_token_id": 7481,
+      "inventory_id": "F-LLM-05",
+      "next_token_exact": false,
+      "part1_inference_ms": 225.09255400018446,
+      "part1_load_ms": 4963.329056000475,
+      "part1_model_sha256": "9607eb1ac92ce320ae8761215664a0f640d3ede098209fa572411d314c3809aa",
+      "part1_output_tensor_sha256": "ce54a7777f257fcd1d1b926d64e205c7dd9fdb9997b51e514000be5437e4e361",
+      "part2_inference_ms": 217.83998099999735,
+      "part2_input_tensor_sha256": "ce54a7777f257fcd1d1b926d64e205c7dd9fdb9997b51e514000be5437e4e361",
+      "part2_load_ms": 4753.726988999915,
+      "part2_model_sha256": "6ef7b7356721ddf3d6c53754f3abb78a386e6d3a9734664f7505c82dba17eac9"
+    }
+  ],
+  "claim_boundaries": {
+    "F_PROC_03": "QUALITY_LIMITED_NOT_PROMOTED",
+    "SIM_ONLY": [
+      "F-PKG-01",
+      "F-PKG-02",
+      "F-PKG-03",
+      "F-PKG-04"
+    ],
+    "board_results_are_separate_overlay": true,
+    "bpu_llm": "All six bins executed on actual X5 BPU, but three logical models remain BOARD_EXPERIMENTAL because fixed next-token IDs diverged; no general free-generation claim.",
+    "fleet_audit_state_before_final_oneshot": "DEPLOYED_OFF",
+    "official_pc_acceptance_x5_board_verified_remains": 0,
+    "official_pc_registry_and_acceptance_immutable": true,
+    "pc_acceptance_hash_discrepancy": {
+      "assessment": "Workspace acceptance is byte-identical to acceptance.json embedded in both frozen release ZIPs, but differs from the hash still documented in AGENTS/ledger/README; no baseline file was rewritten during board closeout.",
+      "documented_sha256": "aa03341e9bc44c5e47e63935035cebaafa4900e18f0afb3a6af6583eb6330668",
+      "embedded_release_acceptance_sha256": {
+        "x5-icmat-foundry-50model-pc-c7aff501602bde2f.zip": "128a9d14050af63882054cccd9c3b30e41f8acda190719e0c25af280cf47a9ce",
+        "x5-icmat-foundry-50model-x5-staging-c5fa215a58168c0c.zip": "128a9d14050af63882054cccd9c3b30e41f8acda190719e0c25af280cf47a9ce"
+      },
+      "workspace_actual_sha256": "128a9d14050af63882054cccd9c3b30e41f8acda190719e0c25af280cf47a9ce"
+    },
+    "pc_compilation_not_board_performance": true,
+    "production_services_not_modified": true,
+    "x5_validated_means_fixed_task_contract_on_demand_not_simultaneous_residency": true
+  },
+  "created_at": "2026-08-04T09:18:44.818308+00:00",
+  "exceptions": {
+    "board_experimental": [
+      {
+        "inventory_id": "F-KNW-03",
+        "reason": "ACTUAL_INT8_TASK_GATE_DIVERGENCE"
+      },
+      {
+        "inventory_id": "F-LLM-03",
+        "reason": "FIXED_NEXT_TOKEN_MISMATCH"
+      },
+      {
+        "inventory_id": "F-LLM-04",
+        "reason": "FIXED_NEXT_TOKEN_MISMATCH"
+      },
+      {
+        "inventory_id": "F-LLM-05",
+        "reason": "FIXED_NEXT_TOKEN_MISMATCH"
+      }
+    ],
+    "board_rejected": [
+      {
+        "inventory_id": "F-KNW-01",
+        "missing_companion_assets": [
+          "config.json",
+          "tokenizer.json"
+        ],
+        "reason": "STAGING_RUNTIME_ASSET_INCOMPLETE"
+      },
+      {
+        "inventory_id": "F-KNW-02",
+        "missing_companion_assets": [
+          "config.json",
+          "tokenizer.json"
+        ],
+        "reason": "STAGING_RUNTIME_ASSET_INCOMPLETE"
+      },
+      {
+        "inventory_id": "F-KNW-04",
+        "missing_companion_assets": [
+          "config.json",
+          "tokenizer.json"
+        ],
+        "reason": "STAGING_RUNTIME_ASSET_INCOMPLETE"
+      }
+    ]
+  },
+  "final_noninterference": {
+    "camera_devices": "crw-rw-r--+ 1 root video 81, 0 Aug 26  2025 /dev/video0\ncrw-rw-r--+ 1 root video 81, 1 Aug 26  2025 /dev/video1",
+    "candidate_processes": "",
+    "candidate_systemd_units": "",
+    "checks": {
+      "failed": 0,
+      "passed": 33
+    },
+    "endpoint_status": {
+      "aggregated_status": 200,
+      "bpu_slot_health": 200,
+      "dashboard": 200,
+      "local_llm_health": 200,
+      "pl_camera": 200,
+      "pl_numeric": 200,
+      "xrd_camera": 200,
+      "xrd_numeric": 200
+    },
+    "final_resources_kib": {
+      "\tbpu0": 500,
+      "\tcpu0": 300,
+      "\tcpu1": 300,
+      "\tcpu2": 300,
+      "\tcpu3": 300,
+      "\tcpu4": 300,
+      "\tcpu5": 300,
+      "\tcpu6": 300,
+      "\tcpu7": 300,
+      "\tddr": 266,
+      "\tgc8000": 200,
+      "CmaFree": 24924,
+      "CmaTotal": 391168,
+      "MemAvailable": 3985388,
+      "SwapFree": 0,
+      "SwapTotal": 2097148
+    },
+    "production_service_state": "xrd_platform=active\nLISTEN 0      512        127.0.0.1:9000      0.0.0.0:*    users:((\"llama-server\",pid=7073,fd=3))                                               \nLISTEN 0      512        127.0.0.1:9001      0.0.0.0:*    users:((\"llama-server\",pid=7270,fd=3))                                               \nLISTEN 0      512        127.0.0.1:9002      0.0.0.0:*    users:((\"llama-server\",pid=7462,fd=3))                                               \nLISTEN 0      512        127.0.0.1:9003      0.0.0.0:*    users:((\"llama-server\",pid=7642,fd=3))                                               \nLISTEN 0      128          0.0.0.0:8081      0.0.0.0:*    users:((\"python3\",pid=3812,fd=3))                                                    \nLISTEN 0      128          0.0.0.0:8080      0.0.0.0:*    users:((\"python3\",pid=1378,fd=32))                                                   \nLISTEN 0      128          0.0.0.0:5001      0.0.0.0:*    users:((\"python3\",pid=4433,fd=3))                                                    \nLISTEN 0      128          0.0.0.0:5000      0.0.0.0:*    users:((\"python3\",pid=3329,fd=5))                                                    \nLISTEN 0      128          0.0.0.0:8888      0.0.0.0:*    users:((\"python3\",pid=5081,fd=3))                                                    \nLISTEN 0      5               [::]:8888         [::]:*",
+    "receipt": {
+      "bytes": 31399,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/final_noninterference_receipt.v1.json",
+      "sha256": "4813fb264f836fa46baee0ba5444b8ab6e7f2dcb22e50b9ae73290cb48420d2a"
+    },
+    "release_service_files": "",
+    "result": "PASS"
+  },
+  "fleet_audit_ready": true,
+  "frozen_production_baseline": [
+    {
+      "inventory_id": "E-MDL-01",
+      "model_id": "Qwen2-0.5B-generic",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-02",
+      "model_id": "Qwen2.5-1.5B-NIR-SFT",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-03",
+      "model_id": "Qwen3-1.7B-NIR",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-04",
+      "model_id": "R1-Distill-Qwen-1.5B",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-05",
+      "model_id": "Qwen2-0.5B-NIR",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-06",
+      "model_id": "Qwen2-0.5B-verdict",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-07",
+      "model_id": "xrd_mlp_classify",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-08",
+      "model_id": "xrd_mlp_fine",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-09",
+      "model_id": "pl_mlp_classify",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-10",
+      "model_id": "yolo_xrd_detect",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    },
+    {
+      "inventory_id": "E-MDL-11",
+      "model_id": "pl_detect",
+      "status": "FROZEN_PRODUCTION_BASELINE_PRESERVED_NOT_REBENCHMARKED"
+    }
+  ],
+  "new_candidate_models": [
+    {
+      "details": {
+        "actual_backend": null,
+        "backend": "NO_EXECUTABLE_LOADER",
+        "inference_ms": null,
+        "input_tensor_sha256": null,
+        "load_ms": null,
+        "missing_companion_assets": [
+          "config.json",
+          "tokenizer.json"
+        ],
+        "model_sha256": "3c9f31665447c8911517620762200d2245a2518d6e7208acc78cd9db317e21ad",
+        "output_tensor_sha256": null,
+        "reason": "STAGING_RUNTIME_ASSET_INCOMPLETE"
+      },
+      "evidence": [
+        {
+          "bytes": 4272,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-KNW-01.board_receipt.v1.json",
+          "sha256": "044f913aad51682f1ad98966497d816150f2b80994bd7adb5ed548054e0e7c7b"
+        }
+      ],
+      "family": "KNW",
+      "final_board_status": "BOARD_REJECTED",
+      "inventory_id": "F-KNW-01",
+      "model_id": "ICMat-DenseRetriever-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": null,
+        "backend": "NO_EXECUTABLE_LOADER",
+        "inference_ms": null,
+        "input_tensor_sha256": null,
+        "load_ms": null,
+        "missing_companion_assets": [
+          "config.json",
+          "tokenizer.json"
+        ],
+        "model_sha256": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+        "output_tensor_sha256": null,
+        "reason": "STAGING_RUNTIME_ASSET_INCOMPLETE"
+      },
+      "evidence": [
+        {
+          "bytes": 4270,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-KNW-02.board_receipt.v1.json",
+          "sha256": "50994fcd9e9d459e9baca501ae45f6eae06f96b5e3fac56d6fe957822e3ba509"
+        }
+      ],
+      "family": "KNW",
+      "final_board_status": "BOARD_REJECTED",
+      "inventory_id": "F-KNW-02",
+      "model_id": "ICMat-CrossEncoder-Reranker-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 2.3250069618225098,
+          "mean_abs_diff": 2.3250069618225098,
+          "nrmse": 0.522689745847672,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": false
+        },
+        "inference_ms": 0.979,
+        "input_tensor_sha256": "ab623742423bcb13ad5f94f7d8e03f0c59cba280e7b580f643b41d18cbaade30",
+        "load_ms": 73.996,
+        "model_sha256": "9b342ae17347170bca341c00cecffd283ca61c49b985784fecfc3ace65f9ea3d",
+        "output_tensor_sha256": "594eeca77964bd2012a6c308a2138b8e8c68917acd5738cbbabfbcbd98e6407c"
+      },
+      "evidence": [
+        {
+          "bytes": 6104,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-KNW-03.board_receipt.v1.json",
+          "sha256": "c0bf9aca8eef882e53f0c3b33ccc93aba0038653bd1151cb7520d796970d835e"
+        },
+        {
+          "bytes": 12592,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-KNW-03.hrt_recovery_receipt.v1.json",
+          "sha256": "1b827df10a2845c68299eef477b02553d7c0f57183d9da829cdd9f1a702827ab"
+        }
+      ],
+      "family": "KNW",
+      "final_board_status": "BOARD_EXPERIMENTAL",
+      "inventory_id": "F-KNW-03",
+      "model_id": "ICMat-ChemEntity-Linker-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": null,
+        "backend": "NO_EXECUTABLE_LOADER",
+        "inference_ms": null,
+        "input_tensor_sha256": null,
+        "load_ms": null,
+        "missing_companion_assets": [
+          "config.json",
+          "tokenizer.json"
+        ],
+        "model_sha256": "ebc79588dd73ccfb6a3f6078519cfbf512c5305384c5ea1845bc71cd32216e86",
+        "output_tensor_sha256": null,
+        "reason": "STAGING_RUNTIME_ASSET_INCOMPLETE"
+      },
+      "evidence": [
+        {
+          "bytes": 4268,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-KNW-04.board_receipt.v1.json",
+          "sha256": "f8b88795d2b07087a9694f15a7f069ff2b9d827d6572b632ac92f8ec92d5528a"
+        }
+      ],
+      "family": "KNW",
+      "final_board_status": "BOARD_REJECTED",
+      "inventory_id": "F-KNW-04",
+      "model_id": "ICMat-CitationNLI-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "llama.cpp CPU llama-server",
+        "inference_ms": 15750.184018000255,
+        "input_tensor_sha256": null,
+        "load_ms": 13618.800729999748,
+        "missing_companion_assets": null,
+        "model_sha256": "6c0be1a47b50823dcf838951f5784932bbfbf6d7cc48c8797dbbed132d9aec9b",
+        "output_tensor_sha256": null,
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5738,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-LLM-01.board_receipt.v1.json",
+          "sha256": "6b76b2383bad0dcbc1e2dd6b2e810d8c832241edb387d04a6a246fcbd173bf25"
+        }
+      ],
+      "family": "LLM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-LLM-01",
+      "model_id": "ICMat-Qwen3-0.6B-XRDPL-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "llama.cpp CPU llama-server",
+        "inference_ms": 77826.8812590004,
+        "input_tensor_sha256": null,
+        "load_ms": 39777.739387999645,
+        "missing_companion_assets": null,
+        "model_sha256": "03c7dae9a26844c5cc802f10aa1d178c6f66ab25e2e541fbed237f8ffa43e0d3",
+        "output_tensor_sha256": null,
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5151,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-LLM-02.board_receipt.v1.json",
+          "sha256": "a73ad49aa2f8c9fbe49b2a632e314694770fd42f0310bce8c2fb2e5af226f290"
+        }
+      ],
+      "family": "LLM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-LLM-02",
+      "model_id": "ICMat-Qwen3-1.7B-EvidenceQA-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "X5_BPU_PART1_AND_PART2_WITH_CPU_EMBED_NORM_LM_HEAD",
+        "actual_next_token_id": 48380,
+        "claim_boundary": "One fixed next-token contract only; not general free generation or FP32 hidden-state parity.",
+        "content_bound": true,
+        "expected_next_token_id": 4913,
+        "next_token_exact": false,
+        "part1_inference_ms": 213.060676999703,
+        "part1_load_ms": 5308.1679739998435,
+        "part1_model_sha256": "93f32882458cf3cf230c70f4a0e77855f7a54bc128db4afa1541e4050988874f",
+        "part1_output_tensor_sha256": "2c344abddea0a17af4b14e4432432a493080b836e1514dcebfff71e952853fd4",
+        "part2_inference_ms": 217.9788510002254,
+        "part2_input_tensor_sha256": "2c344abddea0a17af4b14e4432432a493080b836e1514dcebfff71e952853fd4",
+        "part2_load_ms": 4637.197303999528,
+        "part2_model_sha256": "acf2224e06c32055703c5984413e352edecd6ac9a1ada550ba2d2846ef7ecb5e"
+      },
+      "evidence": [
+        {
+          "bytes": 9169,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-LLM-03.board_receipt.v1.json",
+          "sha256": "b1b842e55a6f89aa71b704aae0732d079c7f3184d11b33c41c2b8e81ed04bd5c"
+        },
+        {
+          "bytes": 6796,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/bpu_llm_part2_recovery_v1/model_receipts/F-LLM-03.part2_recovery_receipt.v1.json",
+          "sha256": "90da06cb7fc0904c38d167ed3f13c9c898d620279209a06d3012c3dc3498f7ba"
+        }
+      ],
+      "family": "LLM",
+      "final_board_status": "BOARD_EXPERIMENTAL",
+      "inventory_id": "F-LLM-03",
+      "model_id": "ICMat-Characterization-Qwen2.5-0.5B-BPU",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "X5_BPU_PART1_AND_PART2_WITH_CPU_EMBED_NORM_LM_HEAD",
+        "actual_next_token_id": 1071,
+        "claim_boundary": "One fixed next-token contract only; not general free generation or FP32 hidden-state parity.",
+        "content_bound": true,
+        "expected_next_token_id": 7424,
+        "next_token_exact": false,
+        "part1_inference_ms": 221.9401320007819,
+        "part1_load_ms": 5010.570313999779,
+        "part1_model_sha256": "3e6088cd086b8d0d02fa947ffafa59d21486a7b714af8cb9be67acb7b4935cdd",
+        "part1_output_tensor_sha256": "4311c760e8719b28bb68dc822005741de7409aa41c16989017d2aab974dfa2c1",
+        "part2_inference_ms": 212.91485799974907,
+        "part2_input_tensor_sha256": "4311c760e8719b28bb68dc822005741de7409aa41c16989017d2aab974dfa2c1",
+        "part2_load_ms": 4966.46795200013,
+        "part2_model_sha256": "436518bf2d079288e6d9714269ebb623a4c2eedd6e8b5a648095c380a7bdf7a3"
+      },
+      "evidence": [
+        {
+          "bytes": 9169,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-LLM-04.board_receipt.v1.json",
+          "sha256": "286689992841bff1138f869fed75326eadb37c4e7cb3c0beb05ab3e45ed9676f"
+        },
+        {
+          "bytes": 6790,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/bpu_llm_part2_recovery_v1/model_receipts/F-LLM-04.part2_recovery_receipt.v1.json",
+          "sha256": "fa6f21afa4fd242203d97a7f2099d33c77f54b71b485540b1a9a98c92bac1b1d"
+        }
+      ],
+      "family": "LLM",
+      "final_board_status": "BOARD_EXPERIMENTAL",
+      "inventory_id": "F-LLM-04",
+      "model_id": "ICMat-Process-Qwen2.5-0.5B-BPU",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "X5_BPU_PART1_AND_PART2_WITH_CPU_EMBED_NORM_LM_HEAD",
+        "actual_next_token_id": 88582,
+        "claim_boundary": "One fixed next-token contract only; not general free generation or FP32 hidden-state parity.",
+        "content_bound": true,
+        "expected_next_token_id": 7481,
+        "next_token_exact": false,
+        "part1_inference_ms": 225.09255400018446,
+        "part1_load_ms": 4963.329056000475,
+        "part1_model_sha256": "9607eb1ac92ce320ae8761215664a0f640d3ede098209fa572411d314c3809aa",
+        "part1_output_tensor_sha256": "ce54a7777f257fcd1d1b926d64e205c7dd9fdb9997b51e514000be5437e4e361",
+        "part2_inference_ms": 217.83998099999735,
+        "part2_input_tensor_sha256": "ce54a7777f257fcd1d1b926d64e205c7dd9fdb9997b51e514000be5437e4e361",
+        "part2_load_ms": 4753.726988999915,
+        "part2_model_sha256": "6ef7b7356721ddf3d6c53754f3abb78a386e6d3a9734664f7505c82dba17eac9"
+      },
+      "evidence": [
+        {
+          "bytes": 9170,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-LLM-05.board_receipt.v1.json",
+          "sha256": "e6313dd0c2d1d07a0b8f5db6a57bd0b376cdfda4360b245605d98c7bceec8588"
+        },
+        {
+          "bytes": 6793,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/bpu_llm_part2_recovery_v1/model_receipts/F-LLM-05.part2_recovery_receipt.v1.json",
+          "sha256": "ac29df7031e41f71f5a72d6ddb95791f03a92a2983daf325c0399bb9430212c7"
+        }
+      ],
+      "family": "LLM",
+      "final_board_status": "BOARD_EXPERIMENTAL",
+      "inventory_id": "F-LLM-05",
+      "model_id": "ICMat-Reliability-Qwen2.5-0.5B-BPU",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9999092626382691,
+          "max_abs_diff": 0.04409289360046387,
+          "mean_abs_diff": 0.022021395713090898,
+          "nrmse": 0.03263722559332192,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.127,
+        "input_tensor_sha256": "d57cf65fea372d9f744a450e44c535ce679e8d387c8755738af62f3db1cd6ca0",
+        "load_ms": 112.914,
+        "model_sha256": "e71d263a9a0dbcf88268065353a17959f942f70789a2541910ca56e92bcd566f",
+        "output_tensor_sha256": "7060de33ed1d968793aaba8005f1bf22aa55f51af4ecfe52ad9abb6b6b72caf7"
+      },
+      "evidence": [
+        {
+          "bytes": 6550,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-01.board_receipt.v1.json",
+          "sha256": "4e77c8365948d28be33a66bb08e49850cbcaa2417e5558d5ba15d3e43c82cbe9"
+        },
+        {
+          "bytes": 13148,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-MAT-01.hrt_recovery_receipt.v1.json",
+          "sha256": "e16bb2704894a4d74baa10eddb291768c2d39d2616181e59c48dd4833b4cf9af"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-01",
+      "model_id": "ICMat-PropNet-v2-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.12439823150634766,
+          "mean_abs_diff": 0.12439823150634766,
+          "nrmse": 0.012846301639760764,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.014,
+        "input_tensor_sha256": "c66f4c4bc644eaaebf23e976b96f75c5c825472b63e1f1b3e6ec17f0f673c0be",
+        "load_ms": 99.175,
+        "model_sha256": "060fb1b88ef76548f9dd03e677227c193206920982951430ba1cfda6862ced21",
+        "output_tensor_sha256": "4a9d18ae77f41b9cb674abd4aac73fb0e0541d3d549166f43b38da12a663514e"
+      },
+      "evidence": [
+        {
+          "bytes": 6104,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-02.board_receipt.v1.json",
+          "sha256": "bb9b437001ed0f2e4ae03ebddadc26055688c42bfb8749f80d99b7cdd08d5e86"
+        },
+        {
+          "bytes": 12654,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-MAT-02.hrt_recovery_receipt.v1.json",
+          "sha256": "048fad07a8053ff2f764ec78769d1f56718b27e31767b73d401d718cd6113486"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-02",
+      "model_id": "ICMat-ComputationalStability-Ranker-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.013517618179321289,
+          "mean_abs_diff": 0.013517618179321289,
+          "nrmse": 0.038150802727348034,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.054,
+        "input_tensor_sha256": "15e46eb52bba4d2427b5e2ac7d5a61a6304f4381d5485c07568843f23b693ced",
+        "load_ms": 129.079,
+        "model_sha256": "cd00615f0f1fd5a149a634d6c5075a74a88635d29f8a1d0127ff1d6caf82467f",
+        "output_tensor_sha256": "9f64b4d5ecb6605799265c64e592263e49f383a2c092bb7082e8bc649844e738"
+      },
+      "evidence": [
+        {
+          "bytes": 6116,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-03.board_receipt.v1.json",
+          "sha256": "6d6372786ade4952b6e62913aa4674f609b76ea1b27b075527bb64ccc2a015c6"
+        },
+        {
+          "bytes": 12668,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-MAT-03.hrt_recovery_receipt.v1.json",
+          "sha256": "a64243413b136e713f38523ce3f47504ed08e05af569661e8443669c5cf3b1e6"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-03",
+      "model_id": "ICMat-TopologicalSpillage-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.02074497938156128,
+          "mean_abs_diff": 0.02074497938156128,
+          "nrmse": 0.023860429891231112,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.08,
+        "input_tensor_sha256": "0d4f5457bc215249298c6a64542e18b5e0ee83356c9719b561b2e6696f54306e",
+        "load_ms": 88.411,
+        "model_sha256": "b1af1e888fe1d1190c670e5dcf09ad8a55d2b41b282012b1765e0b7fd24f3e80",
+        "output_tensor_sha256": "1ebddb44238eade6a50acbec8603fd79a15b94a32c86fc594ddaa66514c6b22f"
+      },
+      "evidence": [
+        {
+          "bytes": 6110,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-04.board_receipt.v1.json",
+          "sha256": "03abb696250b6548b31fc0832bd787af8f7b753c51ca7083a0cfcbe9b434ce8e"
+        },
+        {
+          "bytes": 12648,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-MAT-04.hrt_recovery_receipt.v1.json",
+          "sha256": "c048a3baa834a31be924d0e20529b83a7198d8686a27d46a66dfca5fbb49c2d0"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-04",
+      "model_id": "ICMat-SolarSLME-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9999962079311941,
+          "max_abs_diff": 0.014280080795288086,
+          "mean_abs_diff": 0.00781393051147461,
+          "nrmse": 0.004024385137910308,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.049,
+        "input_tensor_sha256": "11b3b2ae095ed67c7b878a91e91174ee9cfa58e2a6eef41814f372c3acdbfd3a",
+        "load_ms": 126.535,
+        "model_sha256": "bca9c60131311432ee1b7df2a93228db55fa677e4f8c94ef9e8c1ae9f57d2fa7",
+        "output_tensor_sha256": "e396ceb53956390bc9acd482147b298cfd25782738df36315c22dd080b818ac3"
+      },
+      "evidence": [
+        {
+          "bytes": 6240,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-05.board_receipt.v1.json",
+          "sha256": "dc95b491bab340c32204bdba5976e0c8b2a7c3e15f15dc7280553260585a47be"
+        },
+        {
+          "bytes": 12792,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-MAT-05.hrt_recovery_receipt.v1.json",
+          "sha256": "4a989ba754aff785a638ac9ef013b5cdac2de15e1b59fdbeb54352c8f01dd841"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-05",
+      "model_id": "ICMat-ElasticProperty-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 3.079910000451491,
+        "input_tensor_sha256": "9245d0cde0a3646c23c8268adaf32e3a4320253c5eaca8c47d3fe824e247b219",
+        "load_ms": 56.52850300066348,
+        "missing_companion_assets": null,
+        "model_sha256": "79674721853592efaf3f0d4e5588b62bc40f95a85c465d1441e40c015abf81dd",
+        "output_tensor_sha256": "17d59153c656a8c30f3adb94a3fc05d3bd8d7930b4096a9f1e4c6cfc1ae2418d",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5869,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-06.board_receipt.v1.json",
+          "sha256": "e484c2f5908b30692733ebde5461461d4e571256280b3e12007999e2f713078a"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-06",
+      "model_id": "ICMat-PiezoResponse-Graph-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 1.4997049993326073,
+        "input_tensor_sha256": "8735a90acc8dda5ed4a77d83b4557bb379ed1c740cd5cd924a5e9d909a9b54fd",
+        "load_ms": 33.91938599997957,
+        "missing_companion_assets": null,
+        "model_sha256": "49bbd63003ac76e52082e7711da5a49d538e19d1a071538f3aa59063365851d4",
+        "output_tensor_sha256": "10a694e504b72daf540809cdf692adff2ab5e260016d5ced96cd682faff86ab9",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5953,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-07.board_receipt.v1.json",
+          "sha256": "75292d158c8e419c657ed3c8f72495a09d2af3302969d2005aaa6c52a86003bb"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-07",
+      "model_id": "ICMat-CarrierMass-Graph-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 1.2865810003859224,
+        "input_tensor_sha256": "98f1afdd79b71fafa63725c327e6716e5fe9a8c98eb97fda75c0907dba570124",
+        "load_ms": 20.064164999894274,
+        "missing_companion_assets": null,
+        "model_sha256": "34eca3a681216bc07bf11f7543655ce3d7b57c5db2bd61d640bf825ab5d09e99",
+        "output_tensor_sha256": "d0ad17333b23a02d62c8eb33b3d050e2aa789fc5a46e434b2bf5f0cc020669a3",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5875,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-MAT-08.board_receipt.v1.json",
+          "sha256": "03589d1f5ce371aed69924f36bcdeacc5438fe8c7172c8f6a81c25bcff72b74f"
+        }
+      ],
+      "family": "MAT",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-MAT-08",
+      "model_id": "ICMat-IRIntensity-Graph-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9998996889401379,
+          "max_abs_diff": 0.017968416213989258,
+          "mean_abs_diff": 0.01204061508178711,
+          "nrmse": 0.014506520245940124,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.061,
+        "input_tensor_sha256": "91d6a0a604e010a96ad13f3ba881e4d30c5fc7eb23f4e2f148d809b11098ff53",
+        "load_ms": 108.473,
+        "model_sha256": "993e265d471fc4f058fc1f8ebcabe657e3e09a9ab183e917348f5d887ce03adc",
+        "output_tensor_sha256": "9038c0da21375a7b09278c525659f34331ae101be1fa109cfef6576fb24279dc"
+      },
+      "evidence": [
+        {
+          "bytes": 6244,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PKG-01.board_receipt.v1.json",
+          "sha256": "b1b877debceea258d31ba718270de1b14d2dce85e19bec852bf10437deb6b758"
+        },
+        {
+          "bytes": 12792,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PKG-01.hrt_recovery_receipt.v1.json",
+          "sha256": "b55b4b786653b2506a6f49aa758de93cd9fcdf10da833811719dd4e5358939eb"
+        }
+      ],
+      "family": "PKG",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PKG-01",
+      "model_id": "Encapsulant-CureKinetics-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.0036468952894210815,
+          "mean_abs_diff": 0.0036468952894210815,
+          "nrmse": 0.07184611646072281,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.017,
+        "input_tensor_sha256": "15fd6d256b4b9f9103625ae94798cabb7ce016410aa7f2ab29d825ecd0314734",
+        "load_ms": 81.91,
+        "model_sha256": "2fd4ea1360eb94e03a3ec09eafedf5ffbb64901352148c6c503aa23a0e25270f",
+        "output_tensor_sha256": "9372f7695bd595a95643e39586e3bd2614b22474ebe9896d1429515e4bf65aa0"
+      },
+      "evidence": [
+        {
+          "bytes": 6113,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PKG-02.board_receipt.v1.json",
+          "sha256": "7e7d76f906a5be8aa585abfcb69b0a652dd7ef678991049b5f1d6a69fda1d9c3"
+        },
+        {
+          "bytes": 12662,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PKG-02.hrt_recovery_receipt.v1.json",
+          "sha256": "8234c86ee6686d8721de13c0c4cb4c0e363f210c703e3bf769bd87779df3d7dd"
+        }
+      ],
+      "family": "PKG",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PKG-02",
+      "model_id": "Thermoset-ResidualStress-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9999864196595888,
+          "max_abs_diff": 0.010603487491607666,
+          "mean_abs_diff": 0.00574183464050293,
+          "nrmse": 0.009780107131018817,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 0.998,
+        "input_tensor_sha256": "4847e6487467a07cc4ac144b3902a972a6abef48af0d6d9376da92511de4c428",
+        "load_ms": 84.783,
+        "model_sha256": "3db6b0f2f2ff3ee772153f45d757d26e2ea7eb9e494240284e604fcabb0b2b2a",
+        "output_tensor_sha256": "bd0b77ee27f3b6dc9c542e178ce92b7c04cb7e1eb97411a446d4ae8eff0151f3"
+      },
+      "evidence": [
+        {
+          "bytes": 6346,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PKG-03.board_receipt.v1.json",
+          "sha256": "f736870f591041711f9d7371bc2442e15cd73afac6a819e4332bf6e591bb9267"
+        },
+        {
+          "bytes": 12892,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PKG-03.hrt_recovery_receipt.v1.json",
+          "sha256": "eec4056128ca4bb6113b59291ad5b8004e9fa253863d1f99c66a981430a3999f"
+        }
+      ],
+      "family": "PKG",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PKG-03",
+      "model_id": "Package-Warpage-FEA-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 1.3822470000377507,
+        "input_tensor_sha256": "6818b20f5c5bc87b85d901c8ec02e64b0f81f609a76b4d3755c479a4b8534840",
+        "load_ms": 65.05477900009282,
+        "missing_companion_assets": null,
+        "model_sha256": "cc399d5597468dc04f1fe579cd3ac0e2dc8ae8333d3bb820935beb76c0412121",
+        "output_tensor_sha256": "923c4ec4aa570084b5c8c056a5d48d5662207a97b2a0aebb7e51fcdce9a477a5",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5933,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PKG-04.board_receipt.v1.json",
+          "sha256": "ce3555445e665015e99f710e14b02f6e10e4030777002a8d67868c7260010f7b"
+        }
+      ],
+      "family": "PKG",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PKG-04",
+      "model_id": "HybridBond-CuMechanics-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.0011296272277832031,
+          "mean_abs_diff": 0.0011296272277832031,
+          "nrmse": 0.0001562566783404942,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 0.985,
+        "input_tensor_sha256": "4a9be04cd8878435ebcf682ea8e38e1220e3ea929ad8223aa729110aae07157d",
+        "load_ms": 101.639,
+        "model_sha256": "fd692d5343deef89ed81d441b8c738e51b81b7f3438a17d27975afa7dc91dada",
+        "output_tensor_sha256": "796e3f44059d7032592c6a46885986001d62bc9fc1f9fb02e907ce06ff06ba56"
+      },
+      "evidence": [
+        {
+          "bytes": 6109,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-01.board_receipt.v1.json",
+          "sha256": "9589e1c5a877d17ece1024ca2b10f9e5af2ed0fcd3f275ee05042c499730cf65"
+        },
+        {
+          "bytes": 12659,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PROC-01.hrt_recovery_receipt.v1.json",
+          "sha256": "a5eb977d6bb72227a5504542b4eb6b526003487b32aedc2836402d504738b32b"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-01",
+      "model_id": "FabYield-X5-v2",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9999397475743634,
+          "max_abs_diff": 0.03385114669799805,
+          "mean_abs_diff": 0.007902193504378374,
+          "nrmse": 0.012535619249655442,
+          "shape_compatible": true,
+          "sign_agreement": 0.9791666666666666,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.157,
+        "input_tensor_sha256": "6f7b0bfb7bcc9d53141474b87f7565cc34afce53e6ce42a3946f5be32fb7aaec",
+        "load_ms": 110.814,
+        "model_sha256": "3cca54d3f3199bf50bc5ba6a0d2b5b4bbda7b09f1de93c1172851d16c07b91b5",
+        "output_tensor_sha256": "85cb7c9ed98bbd839ba62ffa1eb2c6bce5cc7cab040b0da7852a21010ef197d8"
+      },
+      "evidence": [
+        {
+          "bytes": 7633,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-02.board_receipt.v1.json",
+          "sha256": "6fb8ef69f8359606eff925356ba6dafbaf9ad104719b66bbd1e53f7b98468133"
+        },
+        {
+          "bytes": 14183,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PROC-02.hrt_recovery_receipt.v1.json",
+          "sha256": "9d60293c9e188294c760cce2d3b5a946aa3f410af03f066e8772145feb881f99"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-02",
+      "model_id": "SECOM-MaskedImputer-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9975110060751142,
+          "max_abs_diff": 0.0012091526295989752,
+          "mean_abs_diff": 0.0004834089109756272,
+          "nrmse": 0.07519824312796117,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.079,
+        "input_tensor_sha256": "bd50165adff92a4b8d89ab8a88190866d21ca44b0ce739fa5c015de8ab2ac775",
+        "load_ms": 118.402,
+        "model_sha256": "8d5899d1f1766be53e1ed7a4fbd8ba4383073e4034216a180ad17000dca16138",
+        "output_tensor_sha256": "ef6b53a11cb3a264ef3b2125ef98c8b967c1a3d52a8c6e2556d60b6db93e6815"
+      },
+      "evidence": [
+        {
+          "bytes": 7724,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-03.board_receipt.v1.json",
+          "sha256": "55aa967406c81adc9805a69a461dc3d20530e3f4f2b8365398c42b4dde12c48e"
+        },
+        {
+          "bytes": 14269,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PROC-03.hrt_recovery_receipt.v1.json",
+          "sha256": "edac1fa2cbc46614fee94c27c5ef4ca5bbdad1952a3408e86edb5b081e664544"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-03",
+      "model_id": "PVD-Thickness17-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": false,
+          "cosine": 0.9999504401513546,
+          "max_abs_diff": 1.7076568603515625,
+          "mean_abs_diff": 0.3585303121556838,
+          "nrmse": 0.015003569919629456,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "DENSE_OUTPUT_COSINE_NRMSE_SIGN",
+          "task_gate_pass": true
+        },
+        "inference_ms": 5.622,
+        "input_tensor_sha256": "ef13ed2d25439d63ad48ea9c40e81adb440d6034e70c0a131c41edf5a16ec659",
+        "load_ms": 117.661,
+        "model_sha256": "df1fb1b7973f7cfac5fd9ea363040a6e84fb19a00c49ca9dfbcd35b198d6ff1b",
+        "output_tensor_sha256": "12aa95d9c6c6dd46a3d56ad7c6f2ac7543ff8f7a71abeb7c8d6e127309d2ab9d"
+      },
+      "evidence": [
+        {
+          "bytes": 7431,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-04.board_receipt.v1.json",
+          "sha256": "4b5abd6151aa63c4e572fc2bf70ab87a15970e7a19b1f23a7a1f7677e3640153"
+        },
+        {
+          "bytes": 15247,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PROC-04.hrt_recovery_receipt.v1.json",
+          "sha256": "8c10be79c010da435f4485277a56c224219d78b1275c0dce3df29a2c56eff1e4"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-04",
+      "model_id": "ThermalField-Equipment-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.13765716552734375,
+          "mean_abs_diff": 0.13765716552734375,
+          "nrmse": 0.0027716541335711534,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.104,
+        "input_tensor_sha256": "97da6b780ada3ddd8a99b6e80f50e674a839f308e16d431692d994fd8a477cc6",
+        "load_ms": 120.69,
+        "model_sha256": "a957f7801adb0f37d3a2649066230f1498f130fa145030ccc0d7ce0655341c1a",
+        "output_tensor_sha256": "5d0e06bd7729cd27de84680be203b5e85223ae6b076d062da159c64580867db5"
+      },
+      "evidence": [
+        {
+          "bytes": 6111,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-05.board_receipt.v1.json",
+          "sha256": "93b5f4b1bdf901b7a645dd0b73f8c8bc19f3658d10e88b5b5bde3b3d49aa8059"
+        },
+        {
+          "bytes": 13803,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PROC-05.hrt_recovery_receipt.v1.json",
+          "sha256": "baa40897e20db71cae40abecf47a2b1b53377ecee9b35043b165860233b4078a"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-05",
+      "model_id": "TCIR-EquipmentFusion-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.019030943512916565,
+          "mean_abs_diff": 0.019030943512916565,
+          "nrmse": 0.9625826241797136,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 0.981,
+        "input_tensor_sha256": "6cd9ddaa77d1f8e0d238df64eb1cc3511a4bbbaa8332688e21434e8ab0115650",
+        "load_ms": 105.113,
+        "model_sha256": "76c326708d43beb12eb16f1ab16ddd6dc3e66956fc92fab44a3bf9f52e07ac3e",
+        "output_tensor_sha256": "a58e0689eb2ec4cdbeef441a573e47e1c564a9859e6c553e925ce63ae40d8d6b"
+      },
+      "evidence": [
+        {
+          "bytes": 6127,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-06.board_receipt.v1.json",
+          "sha256": "34c29312ba8969dc622cd99fb0576f9e0a6e8b70670c8ddb240a8707188fb01b"
+        },
+        {
+          "bytes": 12667,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-PROC-06.hrt_recovery_receipt.v1.json",
+          "sha256": "4ee4fdf9d612e3571b560022555f3e2481f464e3d0128730657a16ee873a4303"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-06",
+      "model_id": "PTC-PowerChain-Observer-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 1.3934970002082991,
+        "input_tensor_sha256": "ddacb44ec24cd99af7d3c09d95c51898afd2d850bbd0b37477b82b9d877f5b87",
+        "load_ms": 39.49508300047455,
+        "missing_companion_assets": null,
+        "model_sha256": "cac008543bf044d881a4bc015ac3f562882d1244b84c691f66cc5aea2407b45a",
+        "output_tensor_sha256": "b74af8782a9bdc56b45607b6db5b3780de46d6e92b977ec8924088fce627c454",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5868,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-07.board_receipt.v1.json",
+          "sha256": "b495038cf9a8333345e9a0e96826ebec6815783dee8636b13563bfbb711b6153"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-07",
+      "model_id": "SECOM-TemporalDrift-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 1.5663300000596792,
+        "input_tensor_sha256": "7fefe5674ca355aeb887aa4a0d7565a3b149a33d05e94c193fb248ce590c6b55",
+        "load_ms": 42.518328000369365,
+        "missing_companion_assets": null,
+        "model_sha256": "4ee302cba6e4b20f84a36a09716091a35809aac394dc0e1c717b08f5391d8e4b",
+        "output_tensor_sha256": "4cd59ce91b732d89f559c6abf8dee0a5286701012964c90c7b17cc02c1b29e0d",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 6618,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-08.board_receipt.v1.json",
+          "sha256": "b5110435fb58e406240bdabda024523651e4fc74fec6c7f80588258c553e6333"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-08",
+      "model_id": "PVD-ProcessDomainOOD-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 1.363538000077824,
+        "input_tensor_sha256": "382c3010e2e2cb7fc92ee4f666cdcc586bbd4c35b394eeb50ce65b86897b04f2",
+        "load_ms": 25.05582300000242,
+        "missing_companion_assets": null,
+        "model_sha256": "03f923c6514111115e6a2312445d9919699649ff2862c3fd45cdfcaae9077c1d",
+        "output_tensor_sha256": "efcca1421d97965455a5aeab3bd5a494160301ef3088fa71a90adc6703fe9f37",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5870,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-PROC-09.board_receipt.v1.json",
+          "sha256": "68ace5dac46f764ea71e1f7e5b00e50e0b0cc4dd48c6ac26a904f26ed976f6e8"
+        }
+      ],
+      "family": "PROC",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-PROC-09",
+      "model_id": "SECOM-ProcessAnomaly-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "backend": "hobot_dnn.pyeasy_dnn",
+        "inference_ms": 1.5795389999766485,
+        "input_tensor_sha256": "9d5ac3c29d14c39ff0efc16fec55974a517a1f94fe005d333b351ddf95763bdb",
+        "load_ms": 77.41581299978861,
+        "missing_companion_assets": null,
+        "model_sha256": "7bcf1a1f92953ba9855b8c3f152f8a8bf612aaa55d316f1be6197d52b1441760",
+        "output_tensor_sha256": "c384e7772602e53257a210b3d05b456ea0496c6f645741290d0b96ecb2cc6011",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 6588,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-SEM-01.board_receipt.v1.json",
+          "sha256": "32bbc81bf85e4e1a84040a5e51a2084c71088dcdcc5e770217ac7e45056589c8"
+        }
+      ],
+      "family": "SEM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-SEM-01",
+      "model_id": "Carinthia-SEM-Defect6-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9999877133510511,
+          "max_abs_diff": 0.4426918029785156,
+          "mean_abs_diff": 0.19728306631441228,
+          "nrmse": 0.012693382159563376,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "DENSE_OUTPUT_COSINE_NRMSE_SIGN",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.716,
+        "input_tensor_sha256": "9d5ac3c29d14c39ff0efc16fec55974a517a1f94fe005d333b351ddf95763bdb",
+        "load_ms": 112.567,
+        "model_sha256": "e7e60dbe767a6139ae1a0384961239b736f855b15e9794bc24b24ffbf781136a",
+        "output_tensor_sha256": "28dc8eef3f40879c103d10f5a3c79a05910dc145cb96c9a7ee85fc02cf5952a2"
+      },
+      "evidence": [
+        {
+          "bytes": 7608,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-SEM-02.board_receipt.v1.json",
+          "sha256": "d8bfb13f79724d050fbd867f8f2c333749db466b7de8144467e582beff799766"
+        },
+        {
+          "bytes": 14090,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-SEM-02.hrt_recovery_receipt.v1.json",
+          "sha256": "91a807e8c6f3e9594560eff6915405fa59ab8ce31a61669c3f4f97e428ec3fdf"
+        }
+      ],
+      "family": "SEM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-SEM-02",
+      "model_id": "CarinthiaS-SEM-Segment-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "backend": "hobot_dnn.pyeasy_dnn",
+        "inference_ms": 1.8476640007065726,
+        "input_tensor_sha256": "059ee92c6b9f385f0226e672a29f020ca23fed2da925a4a5ce8f85154dedf6a0",
+        "load_ms": 109.84206200009794,
+        "missing_companion_assets": null,
+        "model_sha256": "bdee4208bac05e38f9c749cba90640846ac71087635b17357b41137982fd96b1",
+        "output_tensor_sha256": "4db4afc34e9f1cb2fcf2952b75274b3fe78cabcd4ac434f1ee105af5706f5e4a",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 7558,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-SEM-03.board_receipt.v1.json",
+          "sha256": "23fab69ce745a31972a57d8806c097ebef68d6dcd2303d498356bcf1ff7b84b5"
+        }
+      ],
+      "family": "SEM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-SEM-03",
+      "model_id": "NIST-SEM-RobustSegment-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 1.0,
+          "max_abs_diff": 0.014728277921676636,
+          "mean_abs_diff": 0.014728277921676636,
+          "nrmse": 0.035355477076613635,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SCALAR_ABS_OR_REL_10_PERCENT",
+          "task_gate_pass": true
+        },
+        "inference_ms": 0.951,
+        "input_tensor_sha256": "c6554203cf778a243d7f0878b8c344cc121da03699e7302b5a454c86861184aa",
+        "load_ms": 128.87,
+        "model_sha256": "37760ae539b711faaa97dbab0de1f509e02fb1fa98f0cbea9cff663283fd1c12",
+        "output_tensor_sha256": "3793c577b8129eb22ee04fb1ad039c672bf5da6552746f76965ae0f27e62237e"
+      },
+      "evidence": [
+        {
+          "bytes": 6114,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-SEM-04.board_receipt.v1.json",
+          "sha256": "40fa9b894b8b5314179b2a1ccfcfef0e45e2662a6d3223d24d262ed23f233922"
+        },
+        {
+          "bytes": 12616,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-SEM-04.hrt_recovery_receipt.v1.json",
+          "sha256": "de5c5e251c57af2c58b1b0bb48351a8378921c6e3459c1955382910bb44bc1ee"
+        }
+      ],
+      "family": "SEM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-SEM-04",
+      "model_id": "NIST-EUV-CDProxy-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 940.7320299997082,
+        "input_tensor_sha256": "2960787bee8a8e142ff9194a4caf1eaa36e46baaec3d1a8aebe8e11e738b394f",
+        "load_ms": 2122.168347999832,
+        "missing_companion_assets": null,
+        "model_sha256": "26887576cd96da848ac43f493e3cdfa7441febb92dc9141a82d15131b6172e9a",
+        "output_tensor_sha256": "75ab2d750295ebccd32a3dd6fca71e204c28f865b224429f6c9e270677d05b6f",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 6731,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-SEM-05.board_receipt.v1.json",
+          "sha256": "643d8f4b97ac14139b40a0663cf0f6f25292d96beaa656948baedab7fa1c6c33"
+        }
+      ],
+      "family": "SEM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-SEM-05",
+      "model_id": "DINOv2-SEM-OOD-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "CPU",
+        "backend": "onnxruntime.CPUExecutionProvider",
+        "inference_ms": 3.8362010000128066,
+        "input_tensor_sha256": "1007d829460fb028bc7e76d8951e2751ff8504b494e4be0beef803ee0e84c1e2",
+        "load_ms": 56.979217999469256,
+        "missing_companion_assets": null,
+        "model_sha256": "4b5d0158985c95120e596e9fc0f35f75a916594abfebdba970ae9525f64ab1cb",
+        "output_tensor_sha256": "20a4ed124f9ab27284eb0243409d07bfdd8264385fbd4a52aa8d50e593119a1a",
+        "reason": null
+      },
+      "evidence": [
+        {
+          "bytes": 5903,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-SEM-06.board_receipt.v1.json",
+          "sha256": "e4a2b60b07389487cc9e2c221ce5249f568221f8ad32571d67f82f7fe5f3ddbc"
+        }
+      ],
+      "family": "SEM",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-SEM-06",
+      "model_id": "NIST-SEM-ImageQuality-CPU",
+      "primary_backend": "CPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9999512895929297,
+          "max_abs_diff": 0.004505738615989685,
+          "mean_abs_diff": 0.000368339855413069,
+          "nrmse": 0.010093146015494502,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "DENSE_OUTPUT_COSINE_NRMSE_SIGN",
+          "task_gate_pass": true
+        },
+        "inference_ms": 0.995,
+        "input_tensor_sha256": "338b3db52f386eda52c91d16c5da8b3631be491203da2aa2e373fe3684401e59",
+        "load_ms": 96.632,
+        "model_sha256": "fa4a6004bbb1b12a97dce025a2c48c7c0a17762e78ee8f075138871e938b052d",
+        "output_tensor_sha256": "b000060bcac5e46591835ce528cb37622018b0c14898fe7c94d98faabcb3ac96"
+      },
+      "evidence": [
+        {
+          "bytes": 7653,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-XRD-01.board_receipt.v1.json",
+          "sha256": "f04f533bb79fa276c6da60ce2731a9354274c2825c9248ea57af3d1338826a17"
+        },
+        {
+          "bytes": 14184,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-XRD-01.hrt_recovery_receipt.v1.json",
+          "sha256": "d578f7207f8fedee64a92dd4ea66cddf97706c337a8e72ce8d730b3d605d8df9"
+        }
+      ],
+      "family": "XRD",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-XRD-01",
+      "model_id": "XRD-DenoisePeakRestore-X5",
+      "primary_backend": "BPU"
+    },
+    {
+      "details": {
+        "actual_backend": "BPU",
+        "differential": {
+          "argmax_equal": true,
+          "cosine": 0.9994449185633679,
+          "max_abs_diff": 0.014609672129154205,
+          "mean_abs_diff": 0.0047250025236280635,
+          "nrmse": 0.03331560884091093,
+          "shape_compatible": true,
+          "sign_agreement": 1.0,
+          "task_gate": "SMALL_VECTOR_ARGMAX_COSINE_NRMSE",
+          "task_gate_pass": true
+        },
+        "inference_ms": 1.095,
+        "input_tensor_sha256": "8756678a9eb3cb188fff48ff580f2ae8aa99d5be36413652f3a6ffc50854d164",
+        "load_ms": 117.847,
+        "model_sha256": "02cfc7db6957a04258367f9fd6758826d474d3ba05f519dd3fecb16e59af4a3f",
+        "output_tensor_sha256": "483a5de94968548d797c66c1e1435a18213c303dd88dae22784f05f5108d1f17"
+      },
+      "evidence": [
+        {
+          "bytes": 7639,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/model_receipts/F-XRD-02.board_receipt.v1.json",
+          "sha256": "2a3e998ae1002e739abccd2d7d93031cef594ee92032cebcbf6d8ac68942ebbb"
+        },
+        {
+          "bytes": 14166,
+          "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/model_receipts/F-XRD-02.hrt_recovery_receipt.v1.json",
+          "sha256": "9bc08a1a46b2b7fd803cfdc8f59a3c316f5fb57cd60e40780b7ce3950dc6ee96"
+        }
+      ],
+      "family": "XRD",
+      "final_board_status": "X5_VALIDATED",
+      "inventory_id": "F-XRD-02",
+      "model_id": "XRD-PhaseEmbedding-X5",
+      "primary_backend": "BPU"
+    }
+  ],
+  "schema": "x5_icmat_foundry.board_phase_acceptance.v1",
+  "source_artifacts": [
+    {
+      "bytes": 26363,
+      "path": "icmat_foundry/finals_50model/contracts/model_registry.v3.json",
+      "sha256": "a2293bce08d6de380dbbbcf8876381e946d329692bc07dc98dec88199d2f7ef2"
+    },
+    {
+      "bytes": 392776,
+      "path": "icmat_foundry/finals_50model/evidence/final_acceptance/final_acceptance.v1.json",
+      "sha256": "128a9d14050af63882054cccd9c3b30e41f8acda190719e0c25af280cf47a9ce"
+    },
+    {
+      "bytes": 3798449433,
+      "path": "icmat_foundry/finals_50model/releases/x5-icmat-foundry-50model-x5-staging-c5fa215a58168c0c.zip",
+      "sha256": "c5fa215a58168c0cb7274c2b1cf6d66bcd0f3c1e70d3f4cf13749e9b57dafb52"
+    },
+    {
+      "bytes": 37250,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/validation_bundle_v2/bundle_manifest.json",
+      "sha256": "1876806da25a31b7683eddaacb702ac1d6c7973a4af055b252bd233055c2a9c8"
+    },
+    {
+      "bytes": 13713,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/execution_v1/board_session_receipt.v1.json",
+      "sha256": "af609e5501ceaf667216fbf60d1aa7c7159b9514cee468b426e04c9c436dd451"
+    },
+    {
+      "bytes": 7108,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/hrt_recovery_v1/hrt_recovery_session.v1.json",
+      "sha256": "dd3d13e1fa87b3b3489f5b8578bee869a1832131aaceb78a4a8360bbca501ad1"
+    },
+    {
+      "bytes": 2463,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/bpu_llm_part2_recovery_v1/bpu_llm_part2_recovery_session.v1.json",
+      "sha256": "7bee67cf8db0afd595a31ffe914a867f576803ec2298678a14b0191c9aa7f30e"
+    },
+    {
+      "bytes": 7311,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/bpu_llm_part2_recovery_v1/final_board_state_overlay.v1.json",
+      "sha256": "eece8a960d95c495b49dfcf15e6748b31fa1de55de030752e10c3af8af981d55"
+    },
+    {
+      "bytes": 31399,
+      "path": "icmat_foundry/finals_50model/evidence/x5_board_20260804/final_noninterference_receipt.v1.json",
+      "sha256": "4813fb264f836fa46baee0ba5444b8ab6e7f2dcb22e50b9ae73290cb48420d2a"
+    }
+  ],
+  "target_identity": {
+    "address": "192.0.2.103",
+    "host_key_sha256": "79fc15d37314f1abeae2b07952695f666c993272453fc582b6e571e42dd4212f",
+    "hostname": "xrd-ai",
+    "user": "sunrise"
+  }
+}

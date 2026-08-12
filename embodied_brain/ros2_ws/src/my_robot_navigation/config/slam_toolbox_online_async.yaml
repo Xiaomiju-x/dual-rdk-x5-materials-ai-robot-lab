@@ -1,0 +1,73 @@
+# slam_toolbox online async 模式参数 (实时建图 + 定位)
+# 参考 slam_toolbox 官方 mapper_params_online_async.yaml, 按本机器人调整
+
+slam_toolbox:
+  ros__parameters:
+
+    # === 求解器 ===
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+    # === 帧 ===
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_footprint
+    scan_topic: /scan
+
+    # === 模式 ===
+    mode: mapping        # 'mapping' (建图) | 'localization' (用已有地图定位)
+    use_map_saver: true
+
+    # === 阈值 / 频率 ===
+    debug_logging: false
+    throttle_scans: 1                  # 每 N 帧扫描处理一次, 1=不丢帧
+    scan_queue_size: 1                 # async mode: process the freshest scan only
+    transform_publish_period: 0.05     # 20 Hz 发 map→odom TF
+    map_update_interval: 1.0           # 1s 更新地图一次 (CPU 紧张时调到 5.0)
+    resolution: 0.05                   # 5cm 分辨率, 室内够用
+    max_laser_range: 8.0               # LD14 标 25m 但远距离回波弱, 8m 够
+    minimum_time_interval: 0.1         # 低速建图保留足够扫描约束
+    transform_timeout: 0.3
+    tf_buffer_duration: 30.0
+    stack_size_to_use: 40000000        # 40MB
+    enable_interactive_mode: false
+
+    # === 扫描匹配 ===
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_travel_distance: 0.05       # 低速走 5cm 插入 keyframe
+    minimum_travel_heading: 0.052       # 转约 3° 插入 keyframe
+    scan_buffer_size: 10
+    scan_buffer_maximum_scan_distance: 10.0
+    link_match_minimum_response_fine: 0.2
+    link_scan_maximum_distance: 1.5
+    loop_search_maximum_distance: 3.0
+    do_loop_closing: true
+    loop_match_minimum_chain_size: 10
+    loop_match_maximum_variance_coarse: 3.0
+    loop_match_minimum_response_coarse: 0.45
+    loop_match_minimum_response_fine: 0.55
+
+    # === Correlation Search Space ===
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1
+
+    # === Loop Closure Search ===
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # === Scan Matcher ===
+    distance_variance_penalty: 0.5
+    angle_variance_penalty: 1.0
+    fine_search_angle_offset: 0.00349   # 0.2°
+    coarse_search_angle_offset: 0.349   # 20°
+    coarse_angle_resolution: 0.0349     # 2°
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_response_expansion: false

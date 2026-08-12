@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-08-02T18:49:06.810103+00:00",
+  "family_id": "RND-MAT-03",
+  "fit_count_before_test": 8,
+  "post_test_retuning_allowed": false,
+  "ranked_configuration_ids": [
+    "v1_wide",
+    "v0_compact",
+    "v2_dropout",
+    "v3_tail_mse"
+  ],
+  "receipt_sha256": "0c08ecb9f5934b8eeb877a6eb2748c3a78705ba35acb655e1db79c6d1527c707",
+  "schema": "x5_icmat_foundry.post50_selection_lock.v1",
+  "test_opened": false
+}

@@ -1,0 +1,69 @@
+{
+  "checkpoint": {
+    "bytes": 157582,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-XRD-01/grid_v6_full_wide_r0.pt",
+    "sha256": "d4178721cdb828fcdbd01067022b8486a5c131f9c8c59c57f53caf97b297238e"
+  },
+  "configuration": {
+    "id": "v6_full_wide",
+    "w_contrast": 0.08,
+    "w_diff": 0.2,
+    "w_peak": 0.12,
+    "width": 28
+  },
+  "created_at": "2026-08-02T17:23:42.348703+00:00",
+  "extra": {
+    "epochs": 4,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.6104121506214142,
+        "selection_score": 0.061814634450737455
+      },
+      {
+        "epoch": 2,
+        "loss": 0.5504241771996021,
+        "selection_score": 0.0850611045741175
+      },
+      {
+        "epoch": 3,
+        "loss": 0.4811100363731384,
+        "selection_score": 0.08458401498854161
+      },
+      {
+        "epoch": 4,
+        "loss": 0.4331340603530407,
+        "selection_score": 0.08209783286929132
+      }
+    ],
+    "test_split_observed": false
+  },
+  "family_id": "RND-XRD-01",
+  "fit_id": "grid_v6_full_wide_r0",
+  "fit_seconds": 72.98072520000005,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 37370,
+  "receipt_sha256": "5cac7d6fbbf3b4c09e15f9dc27a2ab8c8f07cee89843955b9a0e8ae9b2c17ee1",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20265863,
+  "selection_metrics": {
+    "profile": {
+      "mae": 0.019183862954378128,
+      "mean_cosine": 0.6718773245811462,
+      "peak_f1": 0.5281845700728136,
+      "peak_precision": 0.623768115942029,
+      "peak_recall": 0.45800227014755956,
+      "rmse": 0.05922303348779678
+    },
+    "retrieval": {
+      "median_rank": 37.0,
+      "mrr": 0.1157438816311261,
+      "top1": 0.048,
+      "top5": 0.152
+    },
+    "selection_score": 0.061814634450737455
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

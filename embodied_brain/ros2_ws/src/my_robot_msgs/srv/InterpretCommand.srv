@@ -1,0 +1,24 @@
+# 解析"中文人话"指令 → 结构化 DispatchTask goal
+# 实现: my_robot_agents/command_interpreter_node
+#
+# 三档 backend (启动时 ros param 选): rule | local | remote
+#   rule:   Python 正则匹配 5-10 条固定指令 (默认, 不用网络)
+#   local:  本地 llama-server (Qwen3-0.6B / Gemma 4 1B INT4 GGUF, 后期可启)
+#   remote: 调 AI 脑 dashboard:8888 现有 LLM (Qwen2.5-1.5B SFT v2)
+
+string utterance     # 人话, e.g. "去 1 号试剂柜取 SYGO 1 号瓶送到 1 号炉子"
+string context_json  # 可选, JSON 字符串, 含当前位置/任务历史
+---
+bool success
+string reason        # 失败原因, e.g. "ambiguous_target" / "unknown_bottle_id"
+string backend_used  # rule | local | remote (实际生效的 backend)
+
+# 解析出的 task 字段, 跟 my_robot_msgs/DispatchTask.action 的 goal 一致
+string task_id       # 由 interpreter 生成 uuid
+string task_type     # fetch_sample | deliver_to_furnace | monitor_furnace | patrol | home
+string bottle_id
+string from_location
+string to_location
+uint8 priority
+float32 timeout_s
+string raw_response  # backend 原始输出 (LLM 时是 JSON, rule 时是 matched pattern)

@@ -1,0 +1,153 @@
+{
+  "checkpoint": {
+    "bytes": 96558,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold0_v1_lowrank3.pt",
+    "sha256": "4c5ae124a33c0f50c17b0036d03dfa87e532fb507f40635433e147a096294807"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 64,
+    "id": "v1_lowrank3",
+    "latent": true,
+    "rank": 3
+  },
+  "created_at": "2026-08-02T16:52:17.933569+00:00",
+  "extra": {
+    "epochs": 19,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.3866852397720019,
+        "selection_score": 0.019407678861171007
+      },
+      {
+        "epoch": 2,
+        "loss": 0.34067929287751514,
+        "selection_score": 0.017831334844231606
+      },
+      {
+        "epoch": 3,
+        "loss": 0.29385123029351234,
+        "selection_score": 0.016194454859942198
+      },
+      {
+        "epoch": 4,
+        "loss": 0.2633891738951206,
+        "selection_score": 0.016379136126488447
+      },
+      {
+        "epoch": 5,
+        "loss": 0.24500241378943124,
+        "selection_score": 0.016348135191947222
+      },
+      {
+        "epoch": 6,
+        "loss": 0.22896048799157143,
+        "selection_score": 0.01604044158011675
+      },
+      {
+        "epoch": 7,
+        "loss": 0.21366578340530396,
+        "selection_score": 0.015965552534908056
+      },
+      {
+        "epoch": 8,
+        "loss": 0.19756227110822996,
+        "selection_score": 0.016578204929828644
+      },
+      {
+        "epoch": 9,
+        "loss": 0.18850657219688097,
+        "selection_score": 0.015877426136285067
+      },
+      {
+        "epoch": 10,
+        "loss": 0.17853687206904092,
+        "selection_score": 0.015380829107016325
+      },
+      {
+        "epoch": 11,
+        "loss": 0.175593468050162,
+        "selection_score": 0.01564300525933504
+      },
+      {
+        "epoch": 12,
+        "loss": 0.16656503702203432,
+        "selection_score": 0.016009303275495768
+      },
+      {
+        "epoch": 13,
+        "loss": 0.1604172152777513,
+        "selection_score": 0.016578261274844408
+      },
+      {
+        "epoch": 14,
+        "loss": 0.15459184348583221,
+        "selection_score": 0.015299508813768625
+      },
+      {
+        "epoch": 15,
+        "loss": 0.14899694671233496,
+        "selection_score": 0.015995070338249207
+      },
+      {
+        "epoch": 16,
+        "loss": 0.14582369104027748,
+        "selection_score": 0.01585838757455349
+      },
+      {
+        "epoch": 17,
+        "loss": 0.14554642451306185,
+        "selection_score": 0.015432530082762241
+      },
+      {
+        "epoch": 18,
+        "loss": 0.1436788613597552,
+        "selection_score": 0.015617940109223127
+      },
+      {
+        "epoch": 19,
+        "loss": 0.1369221849987904,
+        "selection_score": 0.015902525279670954
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold0_v1_lowrank3",
+  "fit_seconds": 1.852011400000265,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 22595,
+  "receipt_sha256": "483fc8e508b0174c295720fa72849d13cfa95b329bd70d04c31db6d8011dd6dd",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20260804,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.010118984617292881,
+      "r2": 0.9154946016888897,
+      "rmse": 0.03437628969550133
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.010032140649855137,
+        "r2": 0.3696217439020464,
+        "rmse": 0.024242090061306953,
+        "uniformity_mae": 0.002257373882457614,
+        "worst_point_mae": 0.012514302507042885
+      },
+      "WTi": {
+        "mae": 0.010361048392951488,
+        "r2": 0.17599076863301333,
+        "rmse": 0.05326874181628227,
+        "uniformity_mae": 0.0022195244673639536,
+        "worst_point_mae": 0.014080094173550606
+      }
+    },
+    "selection_score": 0.015299508813768625,
+    "worst_domain_mae": 0.010361048392951488
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    立柱 + 顶层托盘. 按草图: 底盘后方右侧立一根 0.9m 高的方柱, 顶端连一个小托盘.
+    LD14 雷达 / 小米云台 / 顶层托盘 (放 AI 脑 4K 相机) 都挂在这上面.
+
+    维度待按实物量测.
+  -->
+
+  <xacro:macro name="pillar_xacro" params="
+      length:=0.04
+      width:=0.04
+      height:=0.90
+      tray_x:=0.30
+      tray_y:=0.30
+      tray_z:=0.02
+      mount_x:=-0.15
+      mount_y:=0.10">
+
+    <!-- 立柱 link -->
+    <link name="pillar_link">
+      <visual>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="aluminum"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="0.5" x="${length}" y="${width}" z="${height}"/>
+    </link>
+
+    <!-- pillar 接到 base_link 后部右侧 -->
+    <joint name="base_to_pillar" type="fixed">
+      <parent link="base_link"/>
+      <child link="pillar_link"/>
+      <origin xyz="${mount_x} ${mount_y} 0.05" rpy="0 0 0"/>
+    </joint>
+
+    <!-- 顶层托盘 link (放 AI 脑 4K 相机的位置, 物理上挂车上但归 AI 脑用) -->
+    <link name="top_tray_link">
+      <visual>
+        <origin xyz="${tray_x/4} 0 ${tray_z/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${tray_x} ${tray_y} ${tray_z}"/>
+        </geometry>
+        <material name="white"/>
+      </visual>
+      <collision>
+        <origin xyz="${tray_x/4} 0 ${tray_z/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${tray_x} ${tray_y} ${tray_z}"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="0.3" x="${tray_x}" y="${tray_y}" z="${tray_z}"/>
+    </link>
+
+    <!-- 托盘连到立柱中段 (大约 0.55m 高) -->
+    <joint name="pillar_to_top_tray" type="fixed">
+      <parent link="pillar_link"/>
+      <child link="top_tray_link"/>
+      <origin xyz="0 0 0.55" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

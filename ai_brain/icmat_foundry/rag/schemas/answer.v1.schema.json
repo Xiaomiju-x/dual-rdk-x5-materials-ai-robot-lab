@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xrd.local/schemas/icmat-rag-answer.v1.schema.json",
+  "title": "ICMat RAG Answer v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "namespace",
+    "status",
+    "answer_text",
+    "claims",
+    "evidence_summary",
+    "unknown_reason"
+  ],
+  "properties": {
+    "schema": {"const": "icmat.rag.answer.v1"},
+    "namespace": {
+      "enum": [
+        "phosphor_xrd_pl",
+        "electronic_materials_property",
+        "fab_process_metrology_yield",
+        "opto_packaging_reliability"
+      ]
+    },
+    "status": {"enum": ["SUPPORTED", "UNKNOWN"]},
+    "answer_text": {"type": "string", "minLength": 1},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim_id",
+          "text",
+          "citation_chunk_ids",
+          "evidence_requirement"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}$"
+          },
+          "text": {"type": "string", "minLength": 1},
+          "citation_chunk_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^icmch1:[0-9a-f]{64}$"}
+          },
+          "evidence_requirement": {
+            "enum": [
+              "any",
+              "literature_knowledge",
+              "real_measurement",
+              "structured_dataset",
+              "source_metadata"
+            ]
+          }
+        }
+      }
+    },
+    "evidence_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "literature_knowledge",
+        "real_measurement",
+        "structured_dataset",
+        "source_metadata"
+      ],
+      "properties": {
+        "literature_knowledge": {"type": "integer", "minimum": 0},
+        "real_measurement": {"type": "integer", "minimum": 0},
+        "structured_dataset": {"type": "integer", "minimum": 0},
+        "source_metadata": {"type": "integer", "minimum": 0}
+      }
+    },
+    "unknown_reason": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "minLength": 1}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "SUPPORTED"}}},
+      "then": {
+        "properties": {
+          "claims": {"minItems": 1},
+          "unknown_reason": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "UNKNOWN"}}},
+      "then": {
+        "properties": {
+          "claims": {"maxItems": 0},
+          "unknown_reason": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  ]
+}

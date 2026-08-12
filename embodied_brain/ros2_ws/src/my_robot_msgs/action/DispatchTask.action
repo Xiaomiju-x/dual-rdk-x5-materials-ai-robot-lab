@@ -1,0 +1,52 @@
+# AI 脑 → 具身脑 顶层任务 dispatch action
+# 实现: my_robot_bridge 收到 HTTP / DDS task 后, 转 ROS2 action server (在 my_robot_agents 实现)
+
+# === Goal ===
+string task_id              # uuid, 由 AI 脑生成
+string task_type            # 'fetch_sample' | 'deliver_to_furnace' | 'patrol' | 'monitor_furnace' | 'home'
+
+# task_type='pickup_fixture_stationary' is an explicitly armed fixture-only acceptance task.
+# task_type='fetch_sample' 时填:
+string bottle_id            # e.g. "SYGO-1"
+string from_location        # e.g. "shelf_1_slot_3"
+
+# task_type='deliver_to_furnace' / 'monitor_furnace' 时填:
+string to_location          # e.g. "furnace_1"
+
+# 通用
+uint8 PRIORITY_LOW    = 1
+uint8 PRIORITY_NORMAL = 2
+uint8 PRIORITY_HIGH   = 3
+uint8 priority
+
+float32 timeout_s           # 整体超时, 0=无限
+
+---
+
+# === Result ===
+bool success
+string message              # 失败原因 / 成功描述
+geometry_msgs/Pose final_pose
+float32 elapsed_s
+string completion_class     # simulated | nav_reported | f407_reported | physical | unverified | failed | canceled
+bool actuator_sequence_completed
+bool physical_completed
+bool base_motion_requested  # true only after a Nav2 goal send was requested
+string physical_confirmation # canonical JSON; empty unless independent hardware evidence passed
+
+---
+
+# === Feedback (周期返回进度) ===
+uint8 stage
+uint8 STAGE_PLANNING       = 1   # Nav2 规划中
+uint8 STAGE_NAVIGATING     = 2   # 移动中
+uint8 STAGE_AT_LOCATION    = 3   # 到达
+uint8 STAGE_VISUAL_SERVO   = 4   # 视觉伺服
+uint8 STAGE_LIFT_MOVING    = 5   # 升降台动作
+uint8 STAGE_GRABBING       = 6   # 电磁铁吸/释放
+uint8 STAGE_RETURNING      = 7   # 返回
+uint8 STAGE_COMPLETED      = 8   # 完成
+
+float32 progress_pct       # 0~100
+string stage_message       # 当前阶段人话描述
+geometry_msgs/Pose current_pose

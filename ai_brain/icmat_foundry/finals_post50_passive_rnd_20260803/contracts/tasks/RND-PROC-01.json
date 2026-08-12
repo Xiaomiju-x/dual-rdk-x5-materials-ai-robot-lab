@@ -1,0 +1,25 @@
+{
+  "domains": {
+    "AlCu": {
+      "input_width": 97,
+      "rows": 4848
+    },
+    "WTi": {
+      "input_width": 108,
+      "rows": 1740
+    }
+  },
+  "family_id": "RND-PROC-01",
+  "model_output": "17 finite thickness values only; no PASS/HOLD/routing/decision output",
+  "receipt_sha256": "c6ebee7225cf2b8f06267fcc7b57f87c2f16c1a5efdd236ba9b9c62dbdfa2fad",
+  "schema": "x5_icmat_foundry.post50_task_contract.v1",
+  "source_doi": "10.5281/zenodo.16881338",
+  "source_license": "CC-BY-4.0",
+  "split": "four ordered-row proxy folds inside first 85%; final 15% confirmation",
+  "task": "predict 17 PVD thickness measurements from per-domain sensor vectors",
+  "truth_boundary": [
+    "row order is a drift proxy, not recorded equipment time",
+    "17 outputs are structured measurements; measurement coordinates are unavailable",
+    "no fab production accuracy claim"
+  ]
+}

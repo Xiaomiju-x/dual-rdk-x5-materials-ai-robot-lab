@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "candidate_id": "x5-tribev-flow-shadow-v1",
+  "enabled_by_default": false,
+  "authority": {
+    "cmd_vel": false,
+    "cmd_vel_safe": false,
+    "f407": false,
+    "tf": false,
+    "map_to_odom": false
+  },
+  "topics": {
+    "namespace": "/x5_triflow_shadow",
+    "future_occupancy": "/x5_triflow_shadow/future_occupancy",
+    "occupancy_flow": "/x5_triflow_shadow/occupancy_flow",
+    "trajectory_tokens": "/x5_triflow_shadow/trajectory_tokens",
+    "sensor_health": "/x5_triflow_shadow/sensor_health",
+    "trust_state": "/x5_triflow_shadow/trust_state",
+    "evidence": "/x5_triflow_shadow/evidence"
+  },
+  "input_policy": {
+    "lidar_required_for_candidate": true,
+    "depth_optional": true,
+    "vision_optional": true,
+    "vision_live_states": [
+      "live_camera"
+    ],
+    "vision_max_age_s": 1.5,
+    "cached_or_fixture_is_live": false
+  },
+  "resource_design_gates": {
+    "vehicle_added_rss_mib": 300,
+    "vehicle_added_cma_target_mib": 96,
+    "vehicle_added_cma_hard_limit_mib": 160,
+    "vehicle_cma_reserve_mib": 150,
+    "tiny_occ_flow_p95_ms": 10.0,
+    "tiny_occ_flow_hz": 5.0
+  },
+  "failure_behavior": {
+    "candidate_failure_state": "MONITOR_OFFLINE",
+    "block_validated_demo": false,
+    "restart_validated_services": false,
+    "continue_candidate_episode_after_transport_loss": false
+  }
+}

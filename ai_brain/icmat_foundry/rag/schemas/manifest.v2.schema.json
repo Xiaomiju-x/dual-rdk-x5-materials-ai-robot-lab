@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xrd.local/schemas/icmat-rag-manifest.v2.schema.json",
+  "title": "ICMat RAG Namespace Manifest v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "manifest_id",
+    "created_at",
+    "selection_policy",
+    "fusion_policy",
+    "answer_policy",
+    "namespaces"
+  ],
+  "properties": {
+    "schema": {"const": "icmat.rag.manifest.v2"},
+    "manifest_id": {"type": "string", "pattern": "^icmrag2:[0-9a-f]{64}$"},
+    "created_at": {"type": "string", "minLength": 1},
+    "selection_policy": {"const": "researcher_explicit"},
+    "fusion_policy": {"const": "same_namespace_only_rrf_v1"},
+    "answer_policy": {"const": "citation_fail_closed_unknown_v1"},
+    "namespaces": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "namespace",
+          "source_mode",
+          "chunk_count",
+          "chunk_set_sha256",
+          "bm25_descriptor_sha256",
+          "evidence_counts",
+          "source_assets"
+        ],
+        "properties": {
+          "namespace": {
+            "enum": [
+              "phosphor_xrd_pl",
+              "electronic_materials_property",
+              "fab_process_metrology_yield",
+              "opto_packaging_reliability"
+            ]
+          },
+          "source_mode": {
+            "enum": [
+              "legacy_readonly",
+              "licensed_metadata_seed",
+              "licensed_metadata_and_fulltext_readonly"
+            ]
+          },
+          "chunk_count": {"type": "integer", "minimum": 0},
+          "chunk_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bm25_descriptor_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "evidence_counts": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "literature_knowledge",
+              "real_measurement",
+              "structured_dataset",
+              "source_metadata"
+            ],
+            "properties": {
+              "literature_knowledge": {"type": "integer", "minimum": 0},
+              "real_measurement": {"type": "integer", "minimum": 0},
+              "structured_dataset": {"type": "integer", "minimum": 0},
+              "source_metadata": {"type": "integer", "minimum": 0}
+            }
+          },
+          "source_assets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source_id",
+                "source_uri",
+                "sha256",
+                "access_mode",
+                "license_id"
+              ],
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}$"
+                },
+                "source_uri": {"type": "string", "minLength": 1},
+                "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                "access_mode": {
+                  "enum": [
+                    "legacy_readonly",
+                    "metadata_readonly",
+                    "licensed_fulltext_readonly"
+                  ]
+                },
+                "license_id": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

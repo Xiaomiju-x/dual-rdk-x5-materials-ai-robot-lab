@@ -1,0 +1,452 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:xrd:dual-arm-successor:schema:shadow-episode:v1",
+  "title": "DualArm Shadow Episode v1",
+  "description": "Read-only POST_RUN_REPLAY episode for the frozen dual-arm v3 evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "episode_id",
+    "created_at",
+    "replay_mode",
+    "motion_authority",
+    "execution_allowed",
+    "actuator_commands_issued",
+    "source_run",
+    "task",
+    "state_layout",
+    "camera_streams",
+    "state_samples",
+    "action_chunks",
+    "outcome"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "shadow_episode_v1"
+    },
+    "episode_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "replay_mode": {
+      "const": "POST_RUN_REPLAY"
+    },
+    "motion_authority": {
+      "const": false
+    },
+    "execution_allowed": {
+      "const": false
+    },
+    "actuator_commands_issued": {
+      "const": 0
+    },
+    "source_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_name",
+        "terminal_state",
+        "result_path",
+        "result_sha256",
+        "evidence_copy_root",
+        "copy_manifest_sha256"
+      ],
+      "properties": {
+        "baseline_name": {
+          "const": "FINALS_PART3_FROZEN_V3"
+        },
+        "terminal_state": {
+          "const": "CLOSED_LOOP_DONE"
+        },
+        "result_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "evidence_copy_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "copy_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "instruction",
+        "language"
+      ],
+      "properties": {
+        "task_id": {
+          "enum": [
+            "SINGLE_ARM_REDUNDANCY",
+            "DUAL_ARM_BAG_GRIND",
+            "FINALS_PART3_COMBINED"
+          ]
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$"
+        }
+      }
+    },
+    "state_layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dimension",
+        "ordering",
+        "joint_unit",
+        "g23_unit"
+      ],
+      "properties": {
+        "dimension": {
+          "const": 13
+        },
+        "ordering": {
+          "const": [
+            "arm01_j1",
+            "arm01_j2",
+            "arm01_j3",
+            "arm01_j4",
+            "arm01_j5",
+            "arm01_j6",
+            "arm01_g23",
+            "arm02_j1",
+            "arm02_j2",
+            "arm02_j3",
+            "arm02_j4",
+            "arm02_j5",
+            "arm02_j6"
+          ]
+        },
+        "joint_unit": {
+          "const": "degree"
+        },
+        "g23_unit": {
+          "const": "raw_value"
+        }
+      }
+    },
+    "camera_streams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm01_wrist",
+        "arm02_overhead"
+      ],
+      "properties": {
+        "arm01_wrist": {
+          "$ref": "#/$defs/arm01Camera"
+        },
+        "arm02_overhead": {
+          "$ref": "#/$defs/arm02Camera"
+        }
+      }
+    },
+    "state_samples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/stateSample"
+      }
+    },
+    "action_chunks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/labeledActionChunk"
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "both_arms_at_start",
+        "bag_state",
+        "label_source"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "SUCCESS",
+            "FAILURE",
+            "PARTIAL",
+            "UNKNOWN"
+          ]
+        },
+        "both_arms_at_start": {
+          "type": "boolean"
+        },
+        "bag_state": {
+          "$ref": "#/$defs/bagState"
+        },
+        "label_source": {
+          "$ref": "#/$defs/labelSource"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 4096
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "stage": {
+      "enum": [
+        "PRE_RUN",
+        "SINGLE_ARM_OBSERVE_OUTBOUND",
+        "APRILTAG_OBSERVE",
+        "SINGLE_ARM_RETURN_START",
+        "DUAL_ARM_PICK_APPROACH",
+        "DUAL_ARM_PICK_GRASP",
+        "DUAL_ARM_BAG_TRANSPORT",
+        "DUAL_ARM_DISH_DROP",
+        "ARM01_CLEAR_TOP",
+        "DUAL_ARM_GRIND_CONCURRENT",
+        "DUAL_ARM_RETURN_START",
+        "COMPLETED",
+        "UNKNOWN"
+      ]
+    },
+    "bagState": {
+      "enum": [
+        "EMPTY",
+        "PRESENT",
+        "UNKNOWN"
+      ]
+    },
+    "labelSource": {
+      "enum": [
+        "FROZEN_LOG",
+        "HUMAN_AUDIT",
+        "DETERMINISTIC_DERIVATION",
+        "UNKNOWN"
+      ]
+    },
+    "vector13": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "items": false
+    },
+    "cameraFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "timestamp_ns",
+        "relative_path",
+        "sha256",
+        "width",
+        "height",
+        "encoding"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timestamp_ns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encoding": {
+          "enum": [
+            "JPEG",
+            "PNG"
+          ]
+        }
+      }
+    },
+    "arm01Camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "camera_id",
+        "role",
+        "acquisition",
+        "frames"
+      ],
+      "properties": {
+        "camera_id": {
+          "const": "arm01_wrist"
+        },
+        "role": {
+          "const": "APRILTAG_OBSERVATION"
+        },
+        "acquisition": {
+          "const": "EVIDENCE_COPY"
+        },
+        "frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cameraFrame"
+          }
+        }
+      }
+    },
+    "arm02Camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "camera_id",
+        "role",
+        "acquisition",
+        "frames"
+      ],
+      "properties": {
+        "camera_id": {
+          "const": "arm02_overhead"
+        },
+        "role": {
+          "const": "DISH_AND_GRIND_OBSERVATION"
+        },
+        "acquisition": {
+          "const": "EVIDENCE_COPY"
+        },
+        "frames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cameraFrame"
+          }
+        }
+      }
+    },
+    "stateSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "timestamp_ns",
+        "stage",
+        "label_source",
+        "state_13d"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timestamp_ns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "label_source": {
+          "$ref": "#/$defs/labelSource"
+        },
+        "state_13d": {
+          "$ref": "#/$defs/vector13"
+        }
+      }
+    },
+    "actionStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relative_time_ms",
+        "action_13d"
+      ],
+      "properties": {
+        "relative_time_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "action_13d": {
+          "$ref": "#/$defs/vector13"
+        }
+      }
+    },
+    "labeledActionChunk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chunk_id",
+        "start_timestamp_ns",
+        "stage",
+        "label_source",
+        "disposition",
+        "steps"
+      ],
+      "properties": {
+        "chunk_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+        },
+        "start_timestamp_ns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stage": {
+          "$ref": "#/$defs/stage"
+        },
+        "label_source": {
+          "$ref": "#/$defs/labelSource"
+        },
+        "disposition": {
+          "const": "RECORDED_FACT_ONLY"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/actionStep"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "checkpoint": null,
+  "configuration": {
+    "alpha": 100.0,
+    "kind": "ridge_teacher"
+  },
+  "created_at": "2026-08-02T16:55:45.872411+00:00",
+  "extra": {
+    "teacher_only": true
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "repair_teacher_fold0",
+  "fit_seconds": 0.007781600000271283,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 3723,
+  "receipt_sha256": "4d066532e3a97f3e98d1097e526e0876b3be18d4de4d28c82d7c975f68660f15",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20260803,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.009000544436275959,
+      "r2": 0.9883954238127917,
+      "rmse": 0.01173891220241785
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.00835460890084505,
+        "r2": 0.08372969408876896,
+        "rmse": 0.010660207830369473,
+        "uniformity_mae": 0.0015854702796787024,
+        "worst_point_mae": 0.014175575226545334
+      },
+      "WTi": {
+        "mae": 0.010800996795296669,
+        "r2": -0.8527829249055592,
+        "rmse": 0.014323067851364613,
+        "uniformity_mae": 0.007211714051663876,
+        "worst_point_mae": 0.019877459853887558
+      }
+    },
+    "selection_score": 0.014401042833924294,
+    "worst_domain_mae": 0.010800996795296669
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

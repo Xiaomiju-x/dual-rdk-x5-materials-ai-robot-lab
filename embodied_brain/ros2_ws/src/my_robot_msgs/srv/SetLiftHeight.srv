@@ -1,0 +1,10 @@
+# 设升降台到指定高度 (阻塞等待到位)
+# 实现: my_robot_agents/pickup_agent 内部调用, 或 AI 脑通过 bridge 直接调
+
+float32 target_height_m   # 目标高度 (米), 当前部署安全范围 [0, 0.20]
+float32 timeout_s         # 超时 (秒), 0 = 不超时
+bool wait_for_arrival     # true=阻塞到位才返回, false=立即返回
+---
+bool success
+float32 reached_height_m  # F407 报告高度; 当前无编码器/限位时为开环步数换算, 非独立实测
+string message            # 错误信息 (e.g. "limit_switch_triggered" / "timeout" / "not_homed")

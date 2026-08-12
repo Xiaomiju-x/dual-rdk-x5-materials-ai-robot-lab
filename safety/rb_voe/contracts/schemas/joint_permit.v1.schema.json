@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/joint-permit-v1",
+  "title": "JointPermit.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "permit_id", "attempt_id", "case_id", "intent_id", "plan_epoch",
+    "option_id", "challenge_id", "challenge_nonce", "sample_lineage_sha256", "macro_id",
+    "macro_contract_sha256", "roles", "zones", "command_envelope_sha256",
+    "required_capability_hashes", "required_local_gates", "fallback", "operator_armed",
+    "release_manifest_sha256", "key_domain", "authority_domain", "issued_at_ms",
+    "start_expires_at_ms", "execution_timeout_ms", "internal_micro_retry_budget", "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-joint-permit-v1"},
+    "permit_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "attempt_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "case_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "intent_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "plan_epoch": {"type": "integer", "minimum": 0},
+    "option_id": {"type": "string", "enum": [
+      "E_VERIFY_IDENTITY", "E_VERIFY_RUNTIME", "E_XRD_SAME_HOLDER",
+      "E_PL_CROSSCHECK", "E_REPREP_XRD", "E_BLINDED_ASSAY", "E_QUARANTINE"
+    ]},
+    "challenge_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "challenge_nonce": {"type": "string", "minLength": 1, "maxLength": 512},
+    "sample_lineage_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "macro_id": {"type": "string", "enum": [
+      "NAV_FETCH", "DOCK", "MATERIAL_FIXTURE_TRANSFER", "GRIND_CHUNK",
+      "HOLDER_LOAD", "NAV_RETURN", "ACQUIRE_XRD"
+    ]},
+    "macro_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "roles": {
+      "type": "object", "minProperties": 1, "additionalProperties": false,
+      "properties": {
+        "embodied": {"const": "station_reservation_and_veto"},
+        "arm01": {"type": "string", "enum": [
+          "material_fixture_executor", "frozen_outside_grind_zone"
+        ]},
+        "arm02": {"type": "string", "enum": [
+          "grind_executor", "frozen_outside_grind_zone"
+        ]},
+        "holder_loader": {"type": "string", "enum": [
+          "independent_loader", "human_in_loop_load"
+        ]},
+        "assay": {"type": "string", "enum": [
+          "instrument_trigger", "human_in_loop_trigger", "external_truth_observer"
+        ]},
+        "operator": {"const": "supervised_trial_operator"}
+      }
+    },
+    "zones": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "ZONE_IDENTITY", "ZONE_TRANSIT", "ZONE_DOCK", "ZONE_GRIND",
+        "ZONE_XRD", "ZONE_PL", "ZONE_QUARANTINE"
+      ]}
+    },
+    "command_envelope_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "required_capability_hashes": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "required_local_gates": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 128}
+    },
+    "fallback": {"const": "SAFE_ABORT_AND_HOLD"},
+    "operator_armed": {"type": "boolean"},
+    "release_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "key_domain": {"type": "string", "enum": [
+      "RB_VOE_SUPERVISED_TRIAL_PERMIT_ED25519_V1",
+      "RB_VOE_PRODUCTION_PERMIT_ED25519_V1"
+    ]},
+    "authority_domain": {"type": "string", "enum": [
+      "SUPERVISED_TRIAL_AUTH", "PRODUCTION_POLICY_CERT"
+    ]},
+    "issued_at_ms": {"type": "integer", "minimum": 0},
+    "start_expires_at_ms": {"type": "integer", "minimum": 0},
+    "execution_timeout_ms": {"type": "integer", "exclusiveMinimum": 0},
+    "internal_micro_retry_budget": {"type": "integer", "minimum": 0},
+    "signature": {"type": "string", "minLength": 1, "maxLength": 4096}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"authority_domain": {"const": "SUPERVISED_TRIAL_AUTH"}},
+        "required": ["authority_domain"]
+      },
+      "then": {
+        "properties": {
+          "key_domain": {"const": "RB_VOE_SUPERVISED_TRIAL_PERMIT_ED25519_V1"},
+          "operator_armed": {"const": true}
+        }
+      },
+      "else": {
+        "properties": {
+          "key_domain": {"const": "RB_VOE_PRODUCTION_PERMIT_ED25519_V1"}
+        }
+      }
+    }
+  ]
+}

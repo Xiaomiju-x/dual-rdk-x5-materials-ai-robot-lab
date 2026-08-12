@@ -1,0 +1,36 @@
+# 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 — PC 端开发 / 预处理 / 训练依赖
+# 对应 Windows/Linux Python 3.11+ (新机 2026-06-30 起用 conda env `xrd`/`cimc` Python 3.11; 旧机曾用 mace_env venv 3.12 / .venv-mace 3.11)
+# X5 无需此文件 (X5 只要 requirements.txt)
+
+-r runtime.txt
+
+# --- 机器学习基础 ---
+torch>=2.4,<3           # 新机 RTX 4050 6GB (旧机 RTX 4060 8GB); conda env xrd 实测 2.6.0+cu124 (--index-url cu124)
+onnx>=1.16,<2           # PC-side ONNX export for Fly-MB / Lab-FSD BPU mapping
+scikit-learn>=1.3,<2
+matplotlib>=3.7,<4
+
+# --- 物理模拟 / 晶体结构 ---
+pymatgen>=2024.1        # M2.1 服务端 CIF 预处理 + Composition 匹配
+mp-api>=0.43,<1         # Materials Project 查询 (tools/mp_cif_fetch.py)
+ase>=3.22,<4            # MACE 结构读取
+
+# --- MACE-MPA-0 ML 势能面 (Phase 1.1) ---
+mace-torch>=0.3.8       # Batatia et al. 2024, MatBench F1=0.96
+matcalc>=0.1            # matcalc.PESCalculator universal 接口
+
+# --- DashScope / Qwen ---
+dashscope>=1.14         # text-embedding-v3, qwen-vl-max
+transformers>=4.44,<5   # DEPLOYMENT_NOTES.md Plan C 指定 4.44
+
+# --- Tokenization / YOLO ---
+ultralytics>=8.1,<9     # xrd_vision / spectrum_vision YOLO 训练/推理
+
+# --- 测试 ---
+pytest>=8.0,<9
+pytest-cov>=4.1,<6
+jsonschema>=4.23,<5    # RB-VoE Draft 2020-12 schema meta-validation
+ruff>=0.15,<1          # RB-VoE deterministic core lint gate
+
+# --- 可选 GPU 加速 (5090 租机场景) ---
+# unsloth                # Phase 2.1 Qwen LoRA 微调, pip install 偶尔失败, 用 wheel

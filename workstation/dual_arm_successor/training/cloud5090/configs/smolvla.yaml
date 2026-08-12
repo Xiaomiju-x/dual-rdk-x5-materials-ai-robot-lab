@@ -1,0 +1,26 @@
+schema_version: xrd-smolvla-cloud5090-config-v1
+enabled_by_default: false
+default_mode: dry_run
+require_explicit_enable_flag: true
+require_real_episode_gate: true
+require_local_model_path: true
+network_downloads_allowed: false
+model_family: SmolVLA
+policy_type: smolvla
+training:
+  steps: 20000
+  initial_batch_size: 16
+  minimum_batch_size: 1
+  gradient_accumulation: 1
+  save_freq: 2000
+  log_freq: 50
+reference_only:
+  xr0:
+    status: REFERENCE_ONLY
+    url: https://robotics.xiaomi.com/xiaomi-robotics-0.html
+  openvla_oft:
+    status: REFERENCE_ONLY
+    url: https://openvla-oft.github.io/
+  xr_u0:
+    status: WORLD_MODEL_REFERENCE_ONLY
+    url: https://robotics.xiaomi.com/xiaomi-robotics-u0.html

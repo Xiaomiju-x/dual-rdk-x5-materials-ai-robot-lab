@@ -1,0 +1,26 @@
+{
+  "claim_boundary": "not experimental XRD and not instrument accuracy",
+  "family_id": "RND-XRD-01",
+  "forbidden_outputs": [
+    "PASS",
+    "HOLD",
+    "RETAKE",
+    "model_route",
+    "robot_action"
+  ],
+  "model_outputs": [
+    "restored_profile",
+    "peak_logits",
+    "phase_embedding"
+  ],
+  "receipt_sha256": "80354f0efacf4b6f5fddacb313a9bfa0e408d0d95409008397078c8a0a744284",
+  "sample_counts": {
+    "test": 500,
+    "train": 3800,
+    "tune": 500
+  },
+  "schema": "x5_icmat_foundry.post50_task_contract.v1",
+  "source": "JARVIS-DFT theoretical XRD plus deterministic synthetic degradation",
+  "split": "formula and approximate structure-family disjoint existing split",
+  "task": "joint XRD profile restoration, peak heatmap, and exact-phase embedding"
+}

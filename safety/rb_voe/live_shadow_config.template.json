@@ -1,0 +1,91 @@
+{
+  "schema_version": "xrd-rb-voe-live-shadow-config-v4",
+  "release_id": "x5-rb-voe-r2-prep-ab-v1",
+  "known_hosts_file": "/home/rdk/rb_voe/live_known_hosts",
+  "known_hosts_sha256": "79fc15d37314f1abeae2b07952695f666c993272453fc582b6e571e42dd4212f",
+  "bootstrap_manifest_file": "/home/rdk/rb_voe/bootstrap/bootstrap_manifest.json",
+  "targets": {
+    "ai_x5": {
+      "base_url": "http://127.0.0.1:8888"
+    },
+    "embodied_x5": {
+      "host": "192.0.2.85",
+      "user": "sunrise",
+      "host_key_alias": "192.0.2.85",
+      "remote_script": "/home/rdk/tools/rb_voe_embodied_snapshot.py"
+    },
+    "arm01": {
+      "host": "192.0.2.64",
+      "user": "er",
+      "host_key_alias": "192.0.2.64",
+      "remote_script": "/home/rdk/dual_arm/rb_voe_arm_readonly_probe.py"
+    },
+    "arm02": {
+      "host": "192.0.2.136",
+      "user": "er",
+      "host_key_alias": "192.0.2.136",
+      "remote_script": "/home/rdk/dual_arm/rb_voe_arm_readonly_probe.py"
+    }
+  },
+  "expected": {
+    "ai_device_id": "machine-sha256:REPLACE_WITH_CURRENT_AI_MACHINE_SHA256",
+    "ai_boot_id": "REPLACE_WITH_CURRENT_AI_BOOT_ID",
+    "ai_runtime_artifact_set_sha256": "REPLACE_WITH_CURRENT_AI_RUNTIME_ARTIFACT_SET_SHA256",
+    "embodied_device_id": "embodied-x5:REPLACE_WITH_EMBODIED_DEVICE_DIGEST",
+    "embodied_boot_id": "REPLACE_WITH_CURRENT_EMBODIED_BOOT_ID",
+    "embodied_required_artifact_sha256": {
+      "collector_script": "315a40f4a86873694b5e86b7d6bf29c07e3973876a1fa7c3531555671a9dc7a9",
+      "body_contour": "REPLACE_WITH_MEASURED_BODY_CONTOUR_SHA256",
+      "full_launch": "62e1a92378bd3f7f7cff9eefbfcb770feff595692cae2aed7192932848ee7458",
+      "nav2_params": "568fd06dda966c5119c540281db201d0f38548d79ca3d9cfb55f60d081a394d2",
+      "collision_monitor_config": "94ba1f6a5e7c543694086cf13d0801955788268822b2dd683e4f7b72d74300c1",
+      "lab_fsd_config": "df36b4f27adfc3872e40ec6f01c9b62757f4112283df391f737dd260bb8040cb",
+      "ekf_config": "b479b220cc05acecda8df3b5b9a31171e0fb6cb261583a032baa7538e4ba0598",
+      "saved_map_yaml": "73e915619d9c86059a1e99befd5d878875965369a7f8ce0582890d9a20a9df9d",
+      "saved_map_pgm": "868451418dbf65c86089e831cf5bd8f5c821b5ed860992d7899273ad93dde5ac",
+      "tiny_occ_risk_bin": "3b1a96483351f72746fdcacfb179b69f4527076046e5dd73d5bcae7688d99c90",
+      "mppi_cost_bin": "fe54f08d12285cf66c37ee7168b51a6762bb086b30a681a12f18374d8eea853d"
+    },
+    "arm_machine_id_sha256": {
+      "arm01": "REPLACE_WITH_ARM01_MACHINE_SHA256",
+      "arm02": "REPLACE_WITH_ARM02_MACHINE_SHA256"
+    },
+    "arm_boot_id": {
+      "arm01": "REPLACE_WITH_CURRENT_ARM01_BOOT_ID",
+      "arm02": "REPLACE_WITH_CURRENT_ARM02_BOOT_ID"
+    },
+    "arm_probe_script_sha256": "75707dc8dd5265965ec2fdddb73a8ee81f1c7615b9cb1fc387c6e5421ed89d8c",
+    "bootstrap_evidence": {
+      "schema_version": "xrd-rb-voe-live-bootstrap-binding-v1",
+      "run_id": "REPLACE_WITH_BOOTSTRAP_RUN_ID",
+      "run_nonce_sha256": "REPLACE_WITH_BOOTSTRAP_RUN_NONCE_SHA256",
+      "snapshot_sha256": {
+        "ai_x5": "REPLACE_WITH_AI_BOOTSTRAP_SNAPSHOT_SHA256",
+        "embodied_x5": "REPLACE_WITH_EMBODIED_BOOTSTRAP_SNAPSHOT_SHA256",
+        "arm01": "REPLACE_WITH_ARM01_BOOTSTRAP_SNAPSHOT_SHA256",
+        "arm02": "REPLACE_WITH_ARM02_BOOTSTRAP_SNAPSHOT_SHA256"
+      },
+      "observed_at_ms": {
+        "ai_x5": "REPLACE_WITH_AI_BOOTSTRAP_OBSERVED_AT_MS",
+        "embodied_x5": "REPLACE_WITH_EMBODIED_BOOTSTRAP_OBSERVED_AT_MS",
+        "arm01": "REPLACE_WITH_ARM01_BOOTSTRAP_OBSERVED_AT_MS",
+        "arm02": "REPLACE_WITH_ARM02_BOOTSTRAP_OBSERVED_AT_MS"
+      }
+    }
+  },
+  "overhead": {
+    "record": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_a0_record.json",
+    "acquisition_manifest": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_a0_acquisition.json",
+    "raw_frame": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_a0_frame.jpg",
+    "frame_bundle_artifact": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_a0_input_frames.json",
+    "result_json": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_a0_result.json",
+    "camera_service_identity_artifact": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/camera_service_identity.json",
+    "capture_pipeline_artifact": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_camera_service.py",
+    "inference_pipeline_artifact": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/overhead_bag_presence_x5.py",
+    "replay_ledger_dir": "/home/rdk/rb_voe_evidence/dual_arm/_A0_RUN_SCOPE_/replay_ledger",
+    "task_kind": "BAG_DROP_IN_GRINDING_DISH",
+    "result_schema": "xrd-overhead-bag-presence-v2",
+    "success_state": "BAG_PRESENT"
+  },
+  "config_sha256": "9e644840bcc8dba1b80362905b39b92e730135b96684e26ce489a55eca182cef"
+}

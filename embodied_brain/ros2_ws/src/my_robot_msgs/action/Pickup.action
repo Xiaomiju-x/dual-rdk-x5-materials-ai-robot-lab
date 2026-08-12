@@ -1,0 +1,31 @@
+# 完整取料动作 (子任务, 由 DispatchTask 调用)
+# 流程: Nav2 到货架前 → 升降台预升 → 视觉伺服 → 升降台精对位 → 电磁铁吸 → 升降台抬起 → done
+
+# === Goal ===
+string bottle_id              # 目标瓶子 ID
+geometry_msgs/Pose shelf_pose # 货架前停车位姿 (map frame)
+float32 expected_height_m     # 货架格子的预期高度 (m), home 后基于这个粗对位
+
+---
+
+# === Result ===
+bool success
+string failure_reason         # 'navigation_failed' / 'tag_not_found' / 'electromagnet_no_response' / 'timeout' / 'lift_jammed'
+geometry_msgs/Pose final_grasp_pose
+
+---
+
+# === Feedback ===
+uint8 sub_stage
+uint8 SUB_NAVIGATING       = 1
+uint8 SUB_LIFT_PREPOSITION = 2
+uint8 SUB_VISUAL_SEARCH    = 3
+uint8 SUB_VISUAL_SERVO     = 4
+uint8 SUB_LIFT_FINE        = 5
+uint8 SUB_MAGNET_ON        = 6
+uint8 SUB_LIFT_RAISE       = 7
+uint8 SUB_DONE             = 8
+
+float32 servo_error_x_px    # 当前视觉伺服误差 (像素)
+float32 servo_error_y_px
+float32 lift_height_m

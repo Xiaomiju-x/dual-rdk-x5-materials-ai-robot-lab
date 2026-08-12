@@ -1,0 +1,172 @@
+{
+  "schema_version": "site31.browser_evidence.v1",
+  "release": "site32-global-commercial-v1.13-20260720",
+  "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+  "completed_at": "2026-07-20T00:22:39.490Z",
+  "browser": "Codex In-app Browser (Chromium); the unchanged layout matrix also retains the v1.12 standalone Microsoft Edge/Playwright results",
+  "base_url": "http://127.0.0.1:29196/",
+  "target": "Fresh localhost Site32 v1.13 immutable hotfix candidate; desktop/laptop validation only, with no X5, Pi, robot, arm, instrument or device-control surface used",
+  "checks": [
+    {
+      "key": "desktop_viewport_matrix",
+      "state": "pass",
+      "evidence": "The 1280x720 v1.13 candidate was freshly validated in Chromium. The 1366x768, 1440x900, 1536x864 and 1920x1080 v1.12 matrix remains applicable because this hotfix changes only renderer ownership plus release/cache identifiers; HTML and CSS layout assets are unchanged. Defense mode retained all 26 destinations with no horizontal overflow."
+    },
+    {
+      "key": "route_and_aria_current",
+      "state": "pass",
+      "evidence": "Global Benchmark settled to body view/routeSettled=benchmark; exactly one navigation destination exposed aria-current=page and the live region announced the matching Chinese view."
+    },
+    {
+      "key": "theater_01_04",
+      "state": "pass",
+      "evidence": "The four-step demonstration was started and manually exercised. The previously critical 02 SLAM/shadow to 03 dual-arm transition settled to arm with no pointer lock or transition residue; step 04 settled and Exit returned to home."
+    },
+    {
+      "key": "keyboard_and_skip_link",
+      "state": "pass",
+      "evidence": "Standalone Edge real-keyboard Tab focused the skip link and Enter moved focus to #main. The in-app browser also verified the visible skip target and main tabindex=-1 contract."
+    },
+    {
+      "key": "localization",
+      "state": "pass",
+      "evidence": "Chinese was restored as the default. Defense/Benchmark/Studio/Materials/Command/Batch Queue switched to English and back to 答辩防御/全球对标/科学工作室/材料图鉴/云端指挥/批次队列 without stale labels."
+    },
+    {
+      "key": "zoom_equivalent",
+      "state": "pass",
+      "evidence": "At 960x540 (200-percent desktop zoom equivalent), all 26 destinations remained visible, More stayed inside the viewport, and document/navigation overflow remained zero."
+    },
+    {
+      "key": "console",
+      "state": "pass",
+      "evidence": "The fresh v1.13 home and Defense-mode renderer regression produced zero browser console entries. The broader desktop, menu, route, theater, localization, search and evidence-detail checks remain unchanged from v1.12; standalone Edge previously produced only the deliberate offline API negative-control error."
+    },
+    {
+      "key": "same_origin_offline_probe",
+      "state": "pass",
+      "evidence": "With Service Worker control established, versioned site32.css returned HTTP 200 and 31,678 bytes offline; uncached /api/public_status failed offline as expected, so API state was not silently served as static cache."
+    },
+    {
+      "key": "research_search_v2",
+      "state": "pass",
+      "evidence": "YAG:Cr3+ with material filtering returned one curated material result, enabled sharing and introduced no horizontal overflow."
+    },
+    {
+      "key": "search_url_roundtrip",
+      "state": "pass",
+      "evidence": "A fresh navigation to /?q=YAG%3ACr3%2B&kind=material&source=curated restored query, kind, source and the matching result."
+    },
+    {
+      "key": "evidence_object_detail",
+      "state": "pass",
+      "evidence": "The direct evidence permalink opened ev:xrd:release_integrity with six tabs, source/validation/citation fields, a populated limitations view and zero horizontal overflow."
+    },
+    {
+      "key": "tri_mode_background_boundary",
+      "state": "pass",
+      "evidence": "Default Full mode kept the animated liquid-glass background. After an explicit switch to Defense, 40 samples over 8 seconds were identical: mode=defense, #c3d display=block at 638x500, #scene2d display=none, one scene hint, one scene focus and no legacy GLTF control. Full/Defense/Minimal round-trip switching returned to a single stable real-rig scene."
+    },
+    {
+      "key": "more_menu",
+      "state": "pass",
+      "evidence": "The top-right More button uniquely resolved, changed aria-expanded to true, exposed a 520x599 two-column menu at 1366x768, and displayed all three mode radios."
+    },
+    {
+      "key": "full_experience_visual_contract",
+      "state": "pass",
+      "evidence": "The fresh v1.13 Defense screenshot shows a nonblank Three.js laboratory scene. DOM and timed sampling prove one real-rig presentation surface: the real canvas stayed visible, the 2D fallback stayed hidden and no legacy renderer UI was created."
+    },
+    {
+      "key": "authority_boundary",
+      "state": "pass",
+      "evidence": "Validation used localhost GET/navigation, presentation controls, language, search and offline cache probes only. No command, SSH, robot, arm, instrument, edge-device or private network endpoint was invoked."
+    }
+  ],
+  "viewport_matrix": [
+    {
+      "docOverflow": 0,
+      "mode": "defense",
+      "moreRight": 1270,
+      "motion": "paused",
+      "navVisible": 26,
+      "overlaps": [],
+      "size": [
+        1280,
+        720
+      ],
+      "stripHeight": 112,
+      "stripOverflow": 0
+    },
+    {
+      "docOverflow": 0,
+      "mode": "defense",
+      "moreRight": 1356,
+      "motion": "paused",
+      "navVisible": 26,
+      "overlaps": [],
+      "size": [
+        1366,
+        768
+      ],
+      "stripHeight": 112,
+      "stripOverflow": 0
+    },
+    {
+      "docOverflow": 0,
+      "mode": "defense",
+      "moreRight": 1426,
+      "motion": "paused",
+      "navVisible": 26,
+      "overlaps": [],
+      "size": [
+        1440,
+        900
+      ],
+      "stripHeight": 112,
+      "stripOverflow": 0
+    },
+    {
+      "docOverflow": 0,
+      "mode": "defense",
+      "moreRight": 1522,
+      "motion": "paused",
+      "navVisible": 26,
+      "overlaps": [],
+      "size": [
+        1536,
+        864
+      ],
+      "stripHeight": 112,
+      "stripOverflow": 0
+    },
+    {
+      "docOverflow": 0,
+      "mode": "defense",
+      "moreRight": 1906,
+      "motion": "paused",
+      "navVisible": 26,
+      "overlaps": [],
+      "size": [
+        1920,
+        1080
+      ],
+      "stripHeight": 112,
+      "stripOverflow": 0
+    }
+  ],
+  "screenshots": [
+    "static/quality/screenshots/site32_v113_defense_home_stable_1280x720.png",
+    "static/quality/screenshots/site32_v112_full_1366x768.png",
+    "static/quality/screenshots/site32_v112_full_menu_1366x768.png",
+    "static/quality/screenshots/site32_v112_defense_1366x768.png",
+    "static/quality/screenshots/site32_v112_minimal_1366x768.png"
+  ],
+  "manual_residuals": [
+    "NVDA/VoiceOver and a formal WCAG-EM manual audit are not attached.",
+    "Real-user Core Web Vitals p75 requires production RUM after deployment.",
+    "No penetration test, commercial certification or third-party global ranking was performed.",
+    "Cloudflare WAF/rate-limit remains manual-check unless control-plane evidence is supplied."
+  ],
+  "claim_boundary": "Internal release evidence for the public read-only research portal; not a physical safety certificate, hardware acceptance, accessibility certification, penetration test, commercial certification or proof of global ranking."
+}

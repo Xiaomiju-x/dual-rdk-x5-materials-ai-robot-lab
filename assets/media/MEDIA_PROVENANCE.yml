@@ -1,0 +1,173 @@
+schema_version: 1
+manifest_date: "2026-08-13"
+status: public_release
+owner: "荧光具身智研 / Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration"
+capture_credit: "Team-provided project media; individual photographer attribution was not supplied."
+publication_authorization: >-
+  The project owner explicitly requested that these reviewed derivatives be included
+  in the public project release. Original phone files remain outside this repository.
+rights_statement: >-
+  Team-produced project documentation media, published for project presentation.
+  This manifest does not override the repository NOTICE or third-party rights.
+privacy_review:
+  performed: true
+  method: "dense contact sheets plus manual visual inspection"
+  checked_for:
+    - faces
+    - name_badges
+    - QR_codes
+    - credentials_and_API_keys
+    - local_paths_and_device_addresses
+    - precise_location_metadata
+  result: pass
+  note: "Hands/forearms may appear; no identifiable face is shown."
+excluded_sources:
+  - source_file: "1786549518111.jpg"
+    source_sha256: "5e4698ec5da49bf320e6eeb3da7451b202d36d31f699758b05fa1823aa0d7dca"
+    reason: "Project poster contains a QR code; excluded rather than masking or altering documentary content."
+  - source_file: "1786549518099.jpg"
+    source_sha256: "45b2f14d374fb97b271a89fa3ae80125d20dec1f2c03743adcddaebe3a3b091a"
+    reason: "Contains an identifiable teammate; no portrait-release record was available for this publication pass."
+
+photos:
+  - file: "photos/embodied-platform-front.webp"
+    sha256: "a54438fb5cbb069fae7d555635498efa3a358ddabf9982eca50ef4229b8c97bf"
+    bytes: 201182
+    dimensions: "891x1600"
+    source_file: "1786549518038.jpg"
+    source_sha256: "68b69b98a87655c9f6fc9413d9857e895e387331173f046de10020d8e2653e13"
+    crop_box_pixels: [430, 80, 2640, 4050]
+    transform: "Crop device; RGB; longest edge 1600 px; WebP quality 84, method 6; metadata omitted."
+    scene: "Front view of the mobile embodied laboratory-assistant platform."
+  - file: "photos/embodied-platform-sensor-deck.webp"
+    sha256: "e27dd346480691a634d640e9a1bbc62beb2632b8794160bdbb6a516dd6d07528"
+    bytes: 151898
+    dimensions: "1120x1600"
+    source_file: "1786549518067.jpg"
+    source_sha256: "3223169e04298de9dc8437b400d6d6dfb7d09145f9f5d213fb3e3c74368f81ab"
+    crop_box_pixels: [280, 100, 2940, 3900]
+    transform: "Crop device; RGB; longest edge 1600 px; WebP quality 84, method 6; metadata omitted."
+    scene: "Sensor deck and local display on the embodied platform."
+  - file: "photos/embodied-platform-three-quarter.webp"
+    sha256: "c721ad9cf68ee14d970ffbefd2333dd16bc77da309a60f7a05dc94b28585a429"
+    bytes: 152906
+    dimensions: "938x1600"
+    source_file: "1786549518082.jpg"
+    source_sha256: "12e7a0c1acc96cf7a04744e51e7b493fc7357c611953ed704a5b6b933e483805"
+    crop_box_pixels: [350, 0, 2750, 4096]
+    transform: "Crop device; RGB; longest edge 1600 px; WebP quality 84, method 6; metadata omitted."
+    scene: "Three-quarter view of the mobile embodied platform."
+  - file: "photos/dual-arm-workcell.webp"
+    sha256: "b1dc19c25d0e3b035f32cff830fcf6b8c4bb788ef517e6fc97422f0d31d1fcc6"
+    bytes: 152420
+    dimensions: "1600x1162"
+    source_file: "1786549518120.jpg"
+    source_sha256: "f0bf25bd7981a3620738357f042147c758ceb60f02df3bc6b2e0b9826f2ea4d8"
+    crop_box_pixels: [350, 500, 2760, 2250]
+    transform: "Crop workcell above project poster/QR region; RGB; longest edge 1600 px; WebP quality 84, method 6; metadata omitted."
+    scene: "Dual-arm workcell and experiment fixtures."
+
+screenshots:
+  - file: "screenshots/public-site-archived-dashboard.jpg"
+    sha256: "1952967970e4b3c340cd2944bf81d023e6d327d45d5643c036ce7fcdc2a2c85a"
+    bytes: 133849
+    dimensions: "1280x720"
+    format: "JPEG/JFIF"
+    source_page: "public_site_static/index.html"
+    source_page_sha256: "3b735f85339395c475caae474a8bf80482ddaf43da8618e7dc838867dc3de217"
+    archive_snapshot_date: "2026-07-09"
+    capture_date: "2026-08-13"
+    transform: >-
+      Browser viewport capture of the repository's local archived static page;
+      1280x720 JPEG; no generated or retouched content; EXIF, ICC and XMP absent.
+    narrative_boundary: >-
+      This is the Site27 archived offline snapshot dated 2026-07-09. It does not
+      show or establish the current online state of xiaomiju.xyz, and it was not
+      captured by bypassing the portal's access controls. Status values visible in
+      the archive are historical/static presentation data, not live telemetry.
+
+videos:
+  - file: "videos/dashboard-xrd-pipeline.mp4"
+    sha256: "777c52f66e8cdd01c8920e7f4014f399fbebfa92cb7c2da8fb85cfeb1f3cc8b3"
+    bytes: 12305616
+    dimensions: "1920x1080"
+    duration_seconds: 19.0
+    frame_rate: 30
+    video_codec: "H.264 High Profile, yuv420p"
+    audio: none
+    source_file: "VID_20260812_233448.mp4"
+    source_sha256: "ed57a108cee15f8aa0ec4abba6912275573b29f98518404c94ffe994bc3ad8ae"
+    source_interval: "00:00:05.000-00:00:24.000"
+    transform: "Trim; scale to 1920x1080; 30 fps; libx264 CRF 23; strip audio, chapters, phone/location metadata; fast-start MP4."
+    poster_file: "posters/dashboard-xrd-pipeline.webp"
+    poster_sha256: "798e983b08d4e36b95a3fa6f5b476f62b9f44db957d59873d4120a3ecaec045d"
+    poster_frame: "output 00:00:08.000"
+    narrative_boundary: >-
+      Recorded demonstration of the XRD visual-analysis dashboard on project hardware.
+      On-screen scores and latency are this demonstration's UI readouts, not a general benchmark.
+  - file: "videos/embodied-bottle-lift-assisted.mp4"
+    sha256: "eb43fa63a49e681e74e02e3e1aa9e28212b51ef133dfd3e3a68b7fc6d79c6c16"
+    bytes: 11709833
+    dimensions: "1080x1920"
+    duration_seconds: 18.0
+    frame_rate: 30
+    video_codec: "H.264 High Profile, yuv420p"
+    audio: none
+    source_file: "VID_20260812_233201.mp4"
+    source_sha256: "a4fae69ad932e75ff17b9ed44711e0cb2a22bcbdac0be1fb29c204e9a3e5b912"
+    source_interval: "00:00:24.000-00:00:42.000"
+    transform: "Trim after setup; apply source display orientation; scale to 1080x1920; 30 fps; libx264 CRF 23; strip audio, chapters, phone/location metadata; fast-start MP4."
+    poster_file: "posters/embodied-bottle-lift-assisted.webp"
+    poster_sha256: "7732833f8852783bf4bf278f2685889ca9d7166e3e8f16201985481f0ee629e9"
+    poster_frame: "output 00:00:10.000"
+    narrative_boundary: >-
+      The clip begins after a person has positioned the receiving fixture and the
+      bottle is already attached to the lift mechanism. It demonstrates the lift
+      and platform hardware; it must not be described as autonomous bottle pickup,
+      autonomous navigation, or an end-to-end autonomous laboratory workflow.
+  - file: "videos/dual-arm-hardware-demo.mp4"
+    sha256: "6cd5107d9d77dd48d047d59b4315c97ae6f7bc2b780b04b5b856e8dcb68a4e6a"
+    bytes: 10948911
+    dimensions: "1080x1920"
+    duration_seconds: 24.0
+    frame_rate: 30
+    video_codec: "H.264 High Profile, yuv420p"
+    audio: none
+    source_file: "VID_20260812_231219.mp4"
+    source_sha256: "ebd3a84ba11445c43451481b8727feb5ef6f979e6dd61e87ac90a4cb43568bb6"
+    source_interval: "00:00:58.000-00:01:22.000"
+    transform: "Trim; apply source display orientation so the workcell is upright; scale to 1080x1920; 30 fps; libx264 CRF 23; strip audio, chapters, phone/location metadata; fast-start MP4."
+    poster_file: "posters/dual-arm-hardware-demo.webp"
+    poster_sha256: "ba8bb95ecb5373510d03992f9dcbd9fd28d0869318752019822cd678c70716af"
+    poster_frame: "output 00:00:14.000"
+    narrative_boundary: >-
+      Real-hardware dual-arm workcell demonstration. This media is evidence that
+      physical hardware moved in the recorded fixture; it is not evidence of a
+      learned policy, unattended operation, or task-level generalization.
+
+validation:
+  stills:
+    format: "WebP"
+    count: 7
+    exif_entries: 0
+    xmp_present: false
+    icc_profile_bytes: 0
+  screenshots:
+    format: "JPEG/JFIF"
+    count: 1
+    exif_entries: 0
+    xmp_present: false
+    icc_profile_bytes: 0
+    faces_or_QR_codes_found: false
+    credentials_or_local_paths_found: false
+  videos:
+    audio_streams: 0
+    full_decode_errors: 0
+    max_file_size_mib: 11.736
+    all_under_25_mib: true
+    phone_or_location_metadata_found: false
+  visual_review:
+    faces_found: false
+    QR_codes_found: false
+    credentials_or_paths_found: false
+    orientation_checked: true

@@ -1,0 +1,154 @@
+{
+  "checkpoint": {
+    "bytes": 187866,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/teacher_v3_boundary_distance_r0.pt",
+    "sha256": "eb5000f829977b9126c6addea093e080b8b6b414f1444c4110dedcb0bf35a384"
+  },
+  "configuration": {
+    "augment": 0.02,
+    "id": "v3_boundary_distance",
+    "kind": "teacher",
+    "w_boundary": 0.1,
+    "w_distance": 0.1,
+    "width": 5
+  },
+  "created_at": "2026-08-02T18:05:21.210175+00:00",
+  "extra": {
+    "effective_target_epochs": 22,
+    "epochs": 22,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.1849084847113664,
+        "score": 0.500246639114369
+      },
+      {
+        "epoch": 2,
+        "loss": 0.9713168039041407,
+        "score": 0.5526793660536226
+      },
+      {
+        "epoch": 3,
+        "loss": 0.6968973910107332,
+        "score": 0.5173728987888001
+      },
+      {
+        "epoch": 4,
+        "loss": 0.6551198827869752,
+        "score": 0.5834978869586485
+      },
+      {
+        "epoch": 5,
+        "loss": 0.6245007076684166,
+        "score": 0.6020903383840139
+      },
+      {
+        "epoch": 6,
+        "loss": 0.6092927482198266,
+        "score": 0.46169757112359505
+      },
+      {
+        "epoch": 7,
+        "loss": 0.6244213944024378,
+        "score": 0.5117627477103454
+      },
+      {
+        "epoch": 8,
+        "loss": 0.586642474526226,
+        "score": 0.6361987767195564
+      },
+      {
+        "epoch": 9,
+        "loss": 0.511091024273693,
+        "score": 0.6993490622293722
+      },
+      {
+        "epoch": 10,
+        "loss": 0.5174616578191814,
+        "score": 0.6564431484281363
+      },
+      {
+        "epoch": 11,
+        "loss": 0.493225238405832,
+        "score": 0.7126905321009004
+      },
+      {
+        "epoch": 12,
+        "loss": 0.4228711407078375,
+        "score": 0.6182306930137701
+      },
+      {
+        "epoch": 13,
+        "loss": 0.5153346041051468,
+        "score": 0.6934859470123467
+      },
+      {
+        "epoch": 14,
+        "loss": 0.4504135017937953,
+        "score": 0.6676598820124866
+      },
+      {
+        "epoch": 15,
+        "loss": 0.404194767079731,
+        "score": 0.6819794121177435
+      },
+      {
+        "epoch": 16,
+        "loss": 0.3444584349889566,
+        "score": 0.868142746260118
+      },
+      {
+        "epoch": 17,
+        "loss": 0.272320754309692,
+        "score": 0.8055240691245676
+      },
+      {
+        "epoch": 18,
+        "loss": 0.28025214152761024,
+        "score": 0.8363355127081495
+      },
+      {
+        "epoch": 19,
+        "loss": 0.24595895144018795,
+        "score": 0.8854652179719582
+      },
+      {
+        "epoch": 20,
+        "loss": 0.23347100674515903,
+        "score": 0.8644207970248233
+      },
+      {
+        "epoch": 21,
+        "loss": 0.21572619344633404,
+        "score": 0.8235758230192074
+      },
+      {
+        "epoch": 22,
+        "loss": 0.22353384887227917,
+        "score": 0.9442639510987036
+      }
+    ],
+    "optimizer_state_restored": false,
+    "prior_receipt_archive": "trials_archive/RND-SEM-01_phase2_batch96_extended",
+    "resumed_from_epoch": 6,
+    "training_batch_size": 32
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "teacher_v3_boundary_distance_r0",
+  "fit_seconds": 146.40860580000117,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 40204,
+  "receipt_sha256": "aa412751d87f74b555b4f3c39305fbbb784dc370dee3aaf6e43ddd3c99eeb924",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267833,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.26781340711175616,
+    "dice": 0.8773105993207646,
+    "foreground_iou": 0.7814369111866948,
+    "score": 0.9442639510987036,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

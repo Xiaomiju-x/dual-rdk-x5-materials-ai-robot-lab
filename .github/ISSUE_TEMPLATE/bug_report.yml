@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible software or documentation defect.
+title: "[Bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: Do not post credentials, private data, or physical access details. Use SECURITY.md for vulnerabilities.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Reproduction tier
+      options:
+        - Tier 0 — documentation/media
+        - Tier 1 — offline synthetic/mock
+        - Tier 2 — licensed model/data evaluation
+        - Tier 3 — X5 fixed-input inference, no motion
+        - Tier 4 — physical robot (do not share private access details)
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include exact commands, sanitized logs, OS, Python/Node version, and expected output.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed credentials, private addresses, faces, and other personal data.
+          required: true
+        - label: No unplanned physical motion occurred while reproducing this issue.
+          required: true

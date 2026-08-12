@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "kind": "x5-board-receipt",
+  "collection": {
+    "mode": "actual_board",
+    "host": "embodied-x5",
+    "captured_at": "2026-07-29T08:00:00+00:00",
+    "commands_read_only": true,
+    "services_restarted": [],
+    "network_changed": false
+  },
+  "compatibility": {
+    "target": "bayes-e",
+    "detected_runtimes": [
+      {
+        "name": "hobot_dnn",
+        "version": "1.2.8",
+        "available": true
+      },
+      {
+        "name": "hbm_runtime",
+        "version": null,
+        "available": false
+      }
+    ],
+    "selected_runtime": "hobot_dnn",
+    "decision": "compatible",
+    "placeholders": []
+  },
+  "execution": {
+    "measurement_source": "actual_board_runtime",
+    "actual_backend": "hobot_dnn",
+    "compiler_estimate": false,
+    "model": {
+      "artifact_sha256": "90e01859991c2eabaf71147de299123c656569ef1115df049d03e25f1471fdf9",
+      "loaded_sha256": "90e01859991c2eabaf71147de299123c656569ef1115df049d03e25f1471fdf9"
+    },
+    "outputs": [
+      {
+        "name": "occupancy",
+        "bytes": 49152,
+        "expected_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "actual_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      {
+        "name": "flow",
+        "bytes": 32768,
+        "expected_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "actual_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    ],
+    "latency_ms": {
+      "source": "actual_board_runtime",
+      "samples": 250,
+      "p50": 2.1,
+      "p95": 4.8,
+      "p99": 6.2
+    }
+  },
+  "resources": {
+    "baseline": {
+      "pss_mib": 320.0,
+      "mem_available_mib": 3900.0,
+      "bpu_ion_mib": 60.0,
+      "cma_free_mib": 600.0,
+      "temperature_c": 52.0
+    },
+    "during": {
+      "pss_mib": 500.0,
+      "mem_available_mib": 3500.0,
+      "bpu_ion_mib": 100.0,
+      "cma_free_mib": 540.0,
+      "temperature_c": 67.0
+    },
+    "after": {
+      "pss_mib": 322.0,
+      "mem_available_mib": 3850.0,
+      "bpu_ion_mib": 61.0,
+      "cma_free_mib": 598.0,
+      "temperature_c": 55.0
+    },
+    "throttled_any": false,
+    "frequency_dropped": false
+  },
+  "load_recovery": {
+    "cycles": [
+      {"cycle": 1, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 2, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 3, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 4, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 5, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 6, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 7, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 8, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 9, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 10, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 11, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 12, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 13, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 14, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 15, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 16, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 17, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 18, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 19, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 20, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 21, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 22, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 23, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 24, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 25, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 26, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 27, "settle_s": 1.1, "pss_mib_after": 320.6, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.4, "process_exited": true, "model_unloaded": true},
+      {"cycle": 28, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.4, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true},
+      {"cycle": 29, "settle_s": 1.2, "pss_mib_after": 320.7, "bpu_ion_mib_after": 60.6, "cma_free_mib_after": 599.3, "process_exited": true, "model_unloaded": true},
+      {"cycle": 30, "settle_s": 1.0, "pss_mib_after": 320.5, "bpu_ion_mib_after": 60.5, "cma_free_mib_after": 599.5, "process_exited": true, "model_unloaded": true}
+    ],
+    "orphan_processes": []
+  },
+  "ros_graph": {
+    "scope": "candidate_only",
+    "candidate_nodes": [
+      "/x5_finals_cortex/shadow"
+    ],
+    "allowed_publisher_prefixes": [
+      "/x5_finals_cortex/"
+    ],
+    "publishers": [
+      {
+        "node": "/x5_finals_cortex/shadow",
+        "topic": "/x5_finals_cortex/status",
+        "type": "std_msgs/msg/String"
+      },
+      {
+        "node": "/x5_finals_cortex/shadow",
+        "topic": "/x5_finals_cortex/latency",
+        "type": "std_msgs/msg/Float32"
+      }
+    ],
+    "services": [],
+    "actions": [],
+    "tf_publishers": [],
+    "serial_access": []
+  },
+  "frozen_manifest": {
+    "available": true,
+    "contract_id": "xrd-embodied-finals-repechage-freeze-v1",
+    "firmware_build_id": 2026071907,
+    "validated_entry": "bash ~/tools/finals_lift_nav_demo.sh",
+    "declared_file_count": 12,
+    "manifest_sha256": "f62729be0099ead851c6e5430c3bff08d473b4478e849fc52e172841a0527213",
+    "calculated_manifest_sha256": "f62729be0099ead851c6e5430c3bff08d473b4478e849fc52e172841a0527213",
+    "manifest_hash_match": true,
+    "files": [
+      {"path": "embodied_brain/evidence/navigation_commissioning/finals_lift_nav_demo_20260719_202724.json", "expected_sha256": "3772a4cd0a7c8f048d6bd00a82182c454c9a7890dd939bf8643f68aad794bd7c", "actual_sha256": "3772a4cd0a7c8f048d6bd00a82182c454c9a7890dd939bf8643f68aad794bd7c", "match": true},
+      {"path": "embodied_brain/ros2_ws/src/my_robot_drivers/include/my_robot_drivers/serial_protocol.hpp", "expected_sha256": "cf388ede5ecf10be5f9bb3e8bea4cc5c973bdc8a47bac162775761a8c9af7465", "actual_sha256": "cf388ede5ecf10be5f9bb3e8bea4cc5c973bdc8a47bac162775761a8c9af7465", "match": true},
+      {"path": "embodied_brain/ros2_ws/src/my_robot_drivers/src/serial_f407_node.cpp", "expected_sha256": "4350bb3ac3381048f3442612c78b3d222efdf176789d597c5215876b3b479027", "actual_sha256": "4350bb3ac3381048f3442612c78b3d222efdf176789d597c5215876b3b479027", "match": true},
+      {"path": "embodied_brain/ros2_ws/src/my_robot_navigation/config/lab_fsd_shadow.yaml", "expected_sha256": "df36b4f27adfc3872e40ec6f01c9b62757f4112283df391f737dd260bb8040cb", "actual_sha256": "df36b4f27adfc3872e40ec6f01c9b62757f4112283df391f737dd260bb8040cb", "match": true},
+      {"path": "embodied_brain/stm32_f407/App/bsp_lift.c", "expected_sha256": "762a302306b269f5bb95d3013ade07a64de5f70a38b1341b0524c7ff11bc4fee", "actual_sha256": "762a302306b269f5bb95d3013ade07a64de5f70a38b1341b0524c7ff11bc4fee", "match": true},
+      {"path": "embodied_brain/stm32_f407/App/bsp_lift.h", "expected_sha256": "8fd156d4b259fe4ce886a9bc2df710f8526f98c96e95f920e2714535af92a5ef", "actual_sha256": "8fd156d4b259fe4ce886a9bc2df710f8526f98c96e95f920e2714535af92a5ef", "match": true},
+      {"path": "embodied_brain/stm32_f407/App/main.c", "expected_sha256": "897ec64478808b5c147b2598d3221399f88b4872d00ee08c6800fd4632d4d415", "actual_sha256": "897ec64478808b5c147b2598d3221399f88b4872d00ee08c6800fd4632d4d415", "match": true},
+      {"path": "embodied_brain/stm32_f407/App/proto.c", "expected_sha256": "c2622465601d6cd2eb03f1ef968166a7346a5a8c7569841b8ac562ca648c4f36", "actual_sha256": "c2622465601d6cd2eb03f1ef968166a7346a5a8c7569841b8ac562ca648c4f36", "match": true},
+      {"path": "embodied_brain/stm32_f407/App/proto.h", "expected_sha256": "65aa68ffbd578c468a8d7d325f653dcbeaeb818a87fb5b366d3ea4b05a6dbc6b", "actual_sha256": "65aa68ffbd578c468a8d7d325f653dcbeaeb818a87fb5b366d3ea4b05a6dbc6b", "match": true},
+      {"path": "embodied_brain/stm32_f407/firmware_images/finals_1907_full_flow_passed_user_confirmed_20260719/a_2026071907.hex", "expected_sha256": "76ffacdc85659cb0381dcc9daaa5a6a0b1157f5f351d6cf8987ee96c3f068050", "actual_sha256": "76ffacdc85659cb0381dcc9daaa5a6a0b1157f5f351d6cf8987ee96c3f068050", "match": true},
+      {"path": "embodied_brain/tools/finals_lift_nav_demo.py", "expected_sha256": "ee56f5cf012fe1427a701a8d39d30d2f5988c4f3540e3748ae0cb144947edf50", "actual_sha256": "ee56f5cf012fe1427a701a8d39d30d2f5988c4f3540e3748ae0cb144947edf50", "match": true},
+      {"path": "embodied_brain/tools/finals_lift_nav_demo.sh", "expected_sha256": "3598de623e84e69781aeb75856ca1fd280aada9ec25562169557281cf487145e", "actual_sha256": "3598de623e84e69781aeb75856ca1fd280aada9ec25562169557281cf487145e", "match": true}
+    ],
+    "all_match": true
+  }
+}

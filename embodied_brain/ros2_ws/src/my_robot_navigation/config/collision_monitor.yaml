@@ -1,0 +1,69 @@
+collision_monitor:
+  ros__parameters:
+    use_sim_time: false
+    enabled: true
+    base_frame_id: "base_footprint"
+    odom_frame_id: "odom"
+    # Nav2 Humble already routes controller -> /cmd_vel_nav -> velocity_smoother
+    # -> /cmd_vel.  Keep that stock chain intact and publish a distinct final
+    # actuator topic so the smoother cannot bypass Collision Monitor.
+    cmd_vel_in_topic: "/cmd_vel"
+    cmd_vel_out_topic: "/cmd_vel_safe"
+    state_topic: "/collision_monitor/state"
+    transform_tolerance: 0.5
+    source_timeout: 1.0
+    base_shift_correction: true
+    stop_pub_timeout: 1.0
+    enable_stamped_cmd_vel: false
+    use_realtime_priority: false
+
+    polygons: ["FrontStop", "BodyStop", "FrontSlow"]
+    FrontStop:
+      type: "polygon"
+      points: [0.55, 0.32, 0.55, -0.32, 0.02, -0.32, 0.02, 0.32]
+      action_type: "stop"
+      min_points: 3
+      trigger_consecutive_points: 1
+      release_consecutive_points: 2
+      visualize: true
+      polygon_pub_topic: "/collision_monitor/front_stop"
+      enabled: true
+    BodyStop:
+      type: "circle"
+      radius: 0.34
+      action_type: "stop"
+      min_points: 3
+      trigger_consecutive_points: 1
+      release_consecutive_points: 2
+      visualize: true
+      polygon_pub_topic: "/collision_monitor/body_stop"
+      enabled: true
+    FrontSlow:
+      type: "polygon"
+      points: [0.95, 0.45, 0.95, -0.45, -0.05, -0.45, -0.05, 0.45]
+      action_type: "slowdown"
+      min_points: 4
+      slowdown_ratio: 0.35
+      trigger_consecutive_points: 1
+      release_consecutive_points: 3
+      visualize: true
+      polygon_pub_topic: "/collision_monitor/front_slow"
+      enabled: true
+
+    observation_sources: ["scan_lidar", "scan_depth"]
+    scan_lidar:
+      type: "scan"
+      topic: "/scan"
+      source_timeout: 1.0
+      enabled: true
+    scan_depth:
+      type: "scan"
+      topic: "/scan_depth"
+      source_timeout: 1.2
+      enabled: true
+
+lifecycle_manager_collision_monitor:
+  ros__parameters:
+    use_sim_time: false
+    autostart: true
+    node_names: ["collision_monitor"]

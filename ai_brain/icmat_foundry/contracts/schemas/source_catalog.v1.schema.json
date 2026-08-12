@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "icmat_source_catalog.v1",
+  "title": "X5-ICMat Foundry source catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "created_at",
+    "status",
+    "claim_boundary",
+    "records"
+  ],
+  "properties": {
+    "schema": {
+      "const": "icmat_source_catalog.v1"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "LICENSE_REVIEWED",
+        "ACQUISITION_FROZEN"
+      ]
+    },
+    "claim_boundary": {
+      "type": "string",
+      "minLength": 20
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceRecord"
+      }
+    }
+  },
+  "$defs": {
+    "sourceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "domain",
+        "name",
+        "source_type",
+        "primary_url",
+        "publisher",
+        "checked_at",
+        "license_status",
+        "license_name",
+        "license_url",
+        "redistribution",
+        "intended_use",
+        "split_group",
+        "risk_flags",
+        "claim_boundary",
+        "status"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]+$"
+        },
+        "domain": {
+          "enum": [
+            "phosphor_xrd_pl",
+            "electronic_materials",
+            "fab_metrology_yield",
+            "optoelectronics_packaging_reliability",
+            "foundation_model"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "source_type": {
+          "enum": [
+            "official_dataset",
+            "official_docs",
+            "official_model",
+            "paper",
+            "standard",
+            "internal_published"
+          ]
+        },
+        "primary_url": {
+          "type": "string",
+          "pattern": "^(https://|repo://)"
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 2
+        },
+        "checked_at": {
+          "type": "string",
+          "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+        },
+        "license_status": {
+          "enum": [
+            "verified_open",
+            "verified_restricted",
+            "terms_review_required",
+            "internal_only"
+          ]
+        },
+        "license_name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "license_url": {
+          "type": "string",
+          "pattern": "^(https://|repo://)"
+        },
+        "redistribution": {
+          "enum": [
+            "allowed_with_attribution",
+            "derived_artifacts_only",
+            "prohibited",
+            "pending_review"
+          ]
+        },
+        "intended_use": {
+          "type": "string",
+          "minLength": 10
+        },
+        "reuse_gate": {
+          "enum": [
+            "ALLOW_TRAIN_REDISTRIBUTE",
+            "RETRIEVAL_PRIVATE_ONLY",
+            "METADATA_LINK_ONLY",
+            "REJECT"
+          ]
+        },
+        "split_group": {
+          "type": "string",
+          "minLength": 2
+        },
+        "doi": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "model_repo_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "model_revision": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "download_url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "download_name": {
+          "type": "string",
+          "pattern": "^[^/\\\\]+$"
+        },
+        "expected_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expected_md5": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{32}$"
+        },
+        "expected_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risk_flags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "claim_boundary": {
+          "type": "string",
+          "minLength": 20
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "approved_for_download",
+            "downloaded",
+            "frozen",
+            "blocked"
+          ]
+        }
+      }
+    }
+  }
+}

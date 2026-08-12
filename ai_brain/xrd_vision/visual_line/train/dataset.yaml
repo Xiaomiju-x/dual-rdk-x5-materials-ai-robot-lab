@@ -1,0 +1,7 @@
+# YOLOv8 dataset config for XRD graph detection
+path: ./dataset
+train: images/train
+val: images/val
+
+nc: 1
+names: ['xrd_graph']

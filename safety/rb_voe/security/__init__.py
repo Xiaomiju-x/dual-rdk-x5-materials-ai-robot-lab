@@ -1,0 +1,41 @@
+"""Fail-closed authorization helpers for bounded physical submacros."""
+
+from rb_voe.security.permit_guard import (
+    PHYSICAL_AUTHORITY_DOMAIN,
+    PHYSICAL_CHALLENGE_KEY_DOMAIN,
+    PHYSICAL_CHALLENGE_SIGNATURE_DOMAIN,
+    PHYSICAL_PERMIT_KEY_DOMAIN,
+    PHYSICAL_PERMIT_SIGNATURE_DOMAIN,
+    R1_PHYSICAL_ADMISSION_REASON,
+    DurableReplayStore,
+    PermitConsumeResult,
+    PermitReplayGuard,
+    RejectingChallengeSignatureVerifier,
+    RejectingPermitSignatureVerifier,
+    ReplayStoreError,
+    SimulationSignatureVerifier,
+    TestOnlyChallengeSignatureVerifier,
+    TestOnlyPermitSignatureVerifier,
+    TrustedPhysicalAdmissionContext,
+    validate_simulation_permit,
+)
+
+__all__ = [
+    "DurableReplayStore",
+    "PHYSICAL_AUTHORITY_DOMAIN",
+    "PHYSICAL_CHALLENGE_KEY_DOMAIN",
+    "PHYSICAL_CHALLENGE_SIGNATURE_DOMAIN",
+    "PHYSICAL_PERMIT_KEY_DOMAIN",
+    "R1_PHYSICAL_ADMISSION_REASON",
+    "PHYSICAL_PERMIT_SIGNATURE_DOMAIN",
+    "PermitConsumeResult",
+    "PermitReplayGuard",
+    "RejectingChallengeSignatureVerifier",
+    "RejectingPermitSignatureVerifier",
+    "ReplayStoreError",
+    "SimulationSignatureVerifier",
+    "TestOnlyChallengeSignatureVerifier",
+    "TestOnlyPermitSignatureVerifier",
+    "TrustedPhysicalAdmissionContext",
+    "validate_simulation_permit",
+]

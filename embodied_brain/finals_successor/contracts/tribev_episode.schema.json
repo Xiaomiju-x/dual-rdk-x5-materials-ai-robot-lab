@@ -1,0 +1,745 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/x5-tribev-episode.v1.json",
+  "title": "X5-TriBEV-Flow NPZ Episode Metadata",
+  "description": "Schema for the JSON object stored in the scalar Unicode NPZ member metadata_json. History is stored oldest-to-newest for strict timestamp audit, then reversed to newest-first (t0 first) before flattening to TinyOccFlow input 1x40x64x64. Binary member shapes and cross-array truth constraints are additionally enforced by dataset.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "episode_id",
+    "session_id",
+    "scenario_id",
+    "source",
+    "generator",
+    "grid",
+    "history",
+    "future",
+    "trajectory_tokens",
+    "sensors",
+    "arrays",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "x5-tribev-episode.v1"
+    },
+    "episode_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "session_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "scenario_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "license_id",
+        "contains_personal_data",
+        "consent_status"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "real",
+            "synthetic",
+            "replay"
+          ]
+        },
+        "license_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "contains_personal_data": {
+          "type": "boolean"
+        },
+        "consent_status": {
+          "enum": [
+            "not_applicable",
+            "obtained",
+            "institutional_approval",
+            "restricted",
+            "pending",
+            "unknown"
+          ]
+        },
+        "raw_session_uri": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "raw_session_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "calibration_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "ros_topics": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^/"
+          }
+        },
+        "privacy_controls": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "private_storage",
+              "access_control",
+              "face_blur",
+              "body_blur",
+              "audio_disabled",
+              "retention_limit",
+              "consent_notice",
+              "no_public_release"
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "contains_personal_data": {
+                "const": true
+              }
+            },
+            "required": [
+              "contains_personal_data"
+            ]
+          },
+          "then": {
+            "required": [
+              "privacy_controls"
+            ],
+            "properties": {
+              "consent_status": {
+                "not": {
+                  "const": "not_applicable"
+                }
+              },
+              "privacy_controls": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "code_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "labeler_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scenario_spec": {
+          "type": "object"
+        }
+      }
+    },
+    "grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frame_id",
+        "height",
+        "width",
+        "resolution_m",
+        "x_min_m",
+        "x_max_m",
+        "y_min_m",
+        "y_max_m",
+        "row_axis",
+        "column_axis"
+      ],
+      "properties": {
+        "frame_id": {
+          "const": "base_link"
+        },
+        "height": {
+          "const": 64
+        },
+        "width": {
+          "const": 64
+        },
+        "resolution_m": {
+          "const": 0.1
+        },
+        "x_min_m": {
+          "const": -1.2
+        },
+        "x_max_m": {
+          "const": 5.2
+        },
+        "y_min_m": {
+          "const": -3.2
+        },
+        "y_max_m": {
+          "const": 3.2
+        },
+        "row_axis": {
+          "const": "+x_forward"
+        },
+        "column_axis": {
+          "const": "+y_left"
+        }
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "channel_names",
+        "reference",
+        "model_input_shape",
+        "model_flatten_order",
+        "storage_order",
+        "model_history_order"
+      ],
+      "properties": {
+        "count": {
+          "const": 5
+        },
+        "reference": {
+          "const": "last_history_frame"
+        },
+        "model_input_shape": {
+          "const": [
+            1,
+            40,
+            64,
+            64
+          ]
+        },
+        "model_flatten_order": {
+          "const": "reverse_chronological_frame_major_then_channel"
+        },
+        "storage_order": {
+          "const": "oldest_to_newest_strict_timestamp_order"
+        },
+        "model_history_order": {
+          "const": "newest_to_oldest_t0_first"
+        },
+        "channel_names": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "prefixItems": [
+            {
+              "const": "lidar_occupancy"
+            },
+            {
+              "const": "lidar_visibility"
+            },
+            {
+              "const": "depth_near"
+            },
+            {
+              "const": "depth_mid"
+            },
+            {
+              "const": "depth_far"
+            },
+            {
+              "const": "camera_semantic_risk"
+            },
+            {
+              "const": "sensor_validity_fraction"
+            },
+            {
+              "const": "fused_occupancy"
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "future": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "flow_definition",
+        "horizons_s"
+      ],
+      "properties": {
+        "count": {
+          "const": 3
+        },
+        "flow_definition": {
+          "type": "string",
+          "minLength": 20
+        },
+        "horizons_s": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": 0.4
+            },
+            {
+              "const": 0.8
+            },
+            {
+              "const": 1.2
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "trajectory_tokens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "count",
+        "label_semantics",
+        "omega_rad_s"
+      ],
+      "properties": {
+        "count": {
+          "const": 9
+        },
+        "label_semantics": {
+          "const": "probability_distribution_over_fixed_arc_tokens"
+        },
+        "omega_rad_s": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "prefixItems": [
+            {
+              "const": -0.8
+            },
+            {
+              "const": -0.55
+            },
+            {
+              "const": -0.3
+            },
+            {
+              "const": -0.12
+            },
+            {
+              "const": 0.0
+            },
+            {
+              "const": 0.12
+            },
+            {
+              "const": 0.3
+            },
+            {
+              "const": 0.55
+            },
+            {
+              "const": 0.8
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "sensors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "names",
+        "provenance_states",
+        "live_4k_rule"
+      ],
+      "properties": {
+        "names": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "const": "lidar"
+            },
+            {
+              "const": "depth"
+            },
+            {
+              "const": "vision_4k"
+            }
+          ],
+          "items": false
+        },
+        "provenance_states": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "prefixItems": [
+            {
+              "const": "live_sensor"
+            },
+            {
+              "const": "live_camera"
+            },
+            {
+              "const": "synthetic"
+            },
+            {
+              "const": "modality_dropout"
+            },
+            {
+              "const": "unavailable"
+            },
+            {
+              "const": "cached_camera"
+            },
+            {
+              "const": "fixture_prior"
+            }
+          ],
+          "items": false
+        },
+        "live_4k_rule": {
+          "type": "string",
+          "minLength": 20
+        }
+      }
+    },
+    "arrays": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "episode_id",
+        "session_id",
+        "scenario_id",
+        "metadata_json",
+        "timestamps_ns",
+        "history_offsets_s",
+        "future_timestamps_ns",
+        "future_horizons_s",
+        "tribev_input",
+        "future_occupancy",
+        "future_flow_m",
+        "dynamic_mask",
+        "uncertainty_target",
+        "trajectory_soft_labels",
+        "trajectory_token_omega_rad_s",
+        "sensor_validity",
+        "sensor_age_s",
+        "sensor_provenance",
+        "vision_image_supplied"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/scalarUnicode"
+        },
+        "episode_id": {
+          "$ref": "#/$defs/scalarUnicode"
+        },
+        "session_id": {
+          "$ref": "#/$defs/scalarUnicode"
+        },
+        "scenario_id": {
+          "$ref": "#/$defs/scalarUnicode"
+        },
+        "metadata_json": {
+          "$ref": "#/$defs/scalarUnicode"
+        },
+        "timestamps_ns": {
+          "$ref": "#/$defs/int64History"
+        },
+        "history_offsets_s": {
+          "$ref": "#/$defs/float32History"
+        },
+        "future_timestamps_ns": {
+          "$ref": "#/$defs/int64Future"
+        },
+        "future_horizons_s": {
+          "$ref": "#/$defs/float32Future"
+        },
+        "tribev_input": {
+          "$ref": "#/$defs/tribevInput"
+        },
+        "future_occupancy": {
+          "$ref": "#/$defs/futureGrid"
+        },
+        "future_flow_m": {
+          "$ref": "#/$defs/futureFlow"
+        },
+        "dynamic_mask": {
+          "$ref": "#/$defs/futureGrid"
+        },
+        "uncertainty_target": {
+          "$ref": "#/$defs/futureGrid"
+        },
+        "trajectory_soft_labels": {
+          "$ref": "#/$defs/trajectoryFloat"
+        },
+        "trajectory_token_omega_rad_s": {
+          "$ref": "#/$defs/trajectoryFloat"
+        },
+        "sensor_validity": {
+          "$ref": "#/$defs/sensorUint8"
+        },
+        "sensor_age_s": {
+          "$ref": "#/$defs/sensorFloat"
+        },
+        "sensor_provenance": {
+          "$ref": "#/$defs/sensorUnicode"
+        },
+        "vision_image_supplied": {
+          "$ref": "#/$defs/uint8History"
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scalarUnicode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dtype",
+        "shape"
+      ],
+      "properties": {
+        "dtype": {
+          "const": "unicode"
+        },
+        "shape": {
+          "const": []
+        }
+      }
+    },
+    "int64History": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "int64"
+        },
+        "shape": {
+          "const": [
+            5
+          ]
+        }
+      }
+    },
+    "float32History": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            5
+          ]
+        }
+      }
+    },
+    "uint8History": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "uint8"
+        },
+        "shape": {
+          "const": [
+            5
+          ]
+        }
+      }
+    },
+    "int64Future": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "int64"
+        },
+        "shape": {
+          "const": [
+            3
+          ]
+        }
+      }
+    },
+    "float32Future": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            3
+          ]
+        }
+      }
+    },
+    "tribevInput": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            5,
+            8,
+            64,
+            64
+          ]
+        }
+      }
+    },
+    "futureGrid": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            3,
+            64,
+            64
+          ]
+        }
+      }
+    },
+    "futureFlow": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            3,
+            2,
+            64,
+            64
+          ]
+        }
+      }
+    },
+    "trajectoryFloat": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            9
+          ]
+        }
+      }
+    },
+    "sensorUint8": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "uint8"
+        },
+        "shape": {
+          "const": [
+            5,
+            3
+          ]
+        }
+      }
+    },
+    "sensorFloat": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "float32"
+        },
+        "shape": {
+          "const": [
+            5,
+            3
+          ]
+        }
+      }
+    },
+    "sensorUnicode": {
+      "$ref": "#/$defs/arraySpec",
+      "properties": {
+        "dtype": {
+          "const": "unicode"
+        },
+        "shape": {
+          "const": [
+            5,
+            3
+          ]
+        }
+      }
+    },
+    "arraySpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dtype",
+        "shape"
+      ],
+      "properties": {
+        "dtype": {
+          "type": "string"
+        },
+        "shape": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Cross-array rules that JSON Schema cannot express are mandatory: timestamps are strictly ordered; soft labels sum to one; invalid source channels are zero; channel 7 is either zero outside ego-warped coverage or the current history frame's three-source validity fraction; channel 8 is same-frame fused occupancy from channels 1/3/4/5/6 and never reads future labels; flow is zero outside dynamic_mask; and real 4K requires validity=1, provenance=live_camera, image_supplied=1. dataset.py enforces these rules with allow_pickle=False."
+}

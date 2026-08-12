@@ -1,0 +1,16 @@
+[Unit]
+Description=XRD AI Analysis Web Demo
+After=network.target
+
+[Service]
+User=sunrise
+WorkingDirectory=/home/rdk/xrd1
+ExecStart=/usr/bin/python3 web_demo.py --port 8080
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

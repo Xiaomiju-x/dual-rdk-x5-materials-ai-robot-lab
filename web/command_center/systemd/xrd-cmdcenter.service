@@ -1,0 +1,64 @@
+[Unit]
+Description=Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration public research portal
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=xrd-cmdcenter
+Group=xrd-cmdcenter
+SupplementaryGroups=xrd-auth-readers
+WorkingDirectory=/home/rdk/cmdcenter
+Environment=HOME=/var/lib/xrd-cmdcenter
+Environment=XRD_CMD_DB_PATH=/var/lib/xrd-cmdcenter/data.db
+Environment=XRD_AUTH_DIR=/var/lib/xrd-auth
+Environment=XRD_CMD_RUNTIME=1
+EnvironmentFile=/etc/xrd-cmdcenter/secrets.env
+ExecStartPre=/usr/bin/test -r /home/rdk/cmdcenter/app.py
+ExecStartPre=/usr/bin/test -r /var/lib/xrd-auth/users.json
+ExecStartPre=/usr/bin/test -r /var/lib/xrd-auth/logins.jsonl
+ExecStartPre=/usr/bin/test -w /var/lib/xrd-cmdcenter
+ExecStartPre=/usr/bin/test -w /home/rdk/cmdcenter/reports
+ExecStart=/home/rdk/cmdcenter/.venv/bin/gunicorn --worker-class gthread --workers 1 --threads 4 --bind 127.0.0.1:29100 --timeout 120 --graceful-timeout 8 --keep-alive 5 --access-logfile - --error-logfile - --capture-output app:create_app()
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=3
+TimeoutStopSec=15
+KillSignal=SIGTERM
+UMask=0077
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+PrivateIPC=true
+ProtectSystem=strict
+ProtectHome=tmpfs
+BindReadOnlyPaths=/home/rdk/cmdcenter
+BindReadOnlyPaths=-/home/rdk/mirrors
+BindReadOnlyPaths=/var/log/xrd-auth/logins.jsonl:/var/lib/xrd-auth/logins.jsonl
+BindReadOnlyPaths=-/etc/xrd-cmdcenter/alert_email.json:/home/rdk/cmdcenter/alert_email.json
+BindPaths=/var/lib/xrd-cmdcenter/reports:/home/rdk/cmdcenter/reports
+InaccessiblePaths=/home/rdk/cmdcenter/secrets.env
+ReadOnlyPaths=/var/lib/xrd-auth /var/log/xrd-auth /etc/xrd-cmdcenter
+ReadWritePaths=/var/lib/xrd-cmdcenter /home/rdk/cmdcenter/reports
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+ProtectClock=true
+ProtectHostname=true
+ProtectProc=invisible
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+RestrictRealtime=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+RemoveIPC=true
+
+[Install]
+WantedBy=multi-user.target

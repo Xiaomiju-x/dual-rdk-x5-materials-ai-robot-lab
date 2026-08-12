@@ -1,0 +1,45 @@
+{
+  "schema": "x5_icmat_foundry.post50_training_plan.v1",
+  "plan_id": "post50-passive-rnd-20260803",
+  "confirmed_by_user": true,
+  "workspace_root": "D:/xrd-smart-lab",
+  "official_accounting_unchanged": true,
+  "official_model_count": 50,
+  "new_rnd_model_families": 8,
+  "core_fit_target": 144,
+  "conditional_fit_cap": 16,
+  "total_fit_cap": 160,
+  "registered_candidate_weight_cap": 70,
+  "locked_families": [
+    {"model_id": "RND-PROC-01", "name": "HERO-VM17", "fits": 40, "conditional": false},
+    {"model_id": "RND-SEM-01", "name": "SEM-BoundaryDistill", "fits": 32, "conditional": false},
+    {"model_id": "RND-XRD-01", "name": "XRD-PeakJoint", "fits": 32, "conditional": false},
+    {"model_id": "RND-MAT-01", "name": "FluoHost-IQE", "fits": 16, "conditional": false},
+    {"model_id": "RND-MAT-02", "name": "FluoHost-Lifetime", "fits": 16, "conditional": false},
+    {"model_id": "RND-MAT-03", "name": "IRIntensity-v2", "fits": 8, "conditional": false},
+    {"model_id": "RND-MAT-04", "name": "DielectricPair", "fits": 8, "conditional": true},
+    {"model_id": "RND-MAT-05", "name": "Thermoelectric4", "fits": 8, "conditional": true}
+  ],
+  "test_policy": {
+    "selection_uses_test": false,
+    "test_runs_after_configuration_freeze": true,
+    "post_test_retuning": false,
+    "known_legacy_test_metrics_are_disclosed": true
+  },
+  "forbidden_actions": [
+    "network_access",
+    "x5_access",
+    "openexplorer_run",
+    "official_registry_write",
+    "official_acceptance_write",
+    "official_release_repack",
+    "production_write",
+    "service_registration",
+    "autostart",
+    "listening_port",
+    "camera_access",
+    "robot_action",
+    "model_routing",
+    "decision_enforcement"
+  ]
+}

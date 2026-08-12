@@ -1,0 +1,28 @@
+schema_version: 1
+last_updated: "2026-08-13"
+competition:
+  name_zh: "第九届（2026）全国大学生嵌入式芯片与系统设计竞赛"
+  division: "芯片应用赛道"
+  topic: "地瓜机器人赛题"
+team:
+  name_zh: "荧光具身智研"
+regional:
+  region: "西南赛区"
+  result: "第1名"
+  status: "team_confirmed"
+  source_url: null
+  evidence_path: null
+  evidence_sha256: null
+national:
+  stage: "全国总决赛"
+  status: "pending_official_announcement"
+  result: null
+  source_url: null
+  evidence_path: null
+  evidence_sha256: null
+  announced_at: null
+publication_rules:
+  regional_text_zh: "西南赛区一等奖（队伍确认，官方排名来源待补）"
+  national_pending_text_zh: "奖项待组委会正式公布"
+  require_official_source_for_national_result: true
+  forbid_predicted_award: true

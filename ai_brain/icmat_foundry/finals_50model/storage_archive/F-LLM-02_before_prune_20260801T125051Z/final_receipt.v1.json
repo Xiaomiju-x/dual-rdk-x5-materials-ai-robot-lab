@@ -1,0 +1,52 @@
+{
+  "artifact_tree_sha256": "44519403483d73de8271b36607cbba3a4292d641c2cb909cf076560b0f65c817",
+  "claims": {
+    "fixed_validation_executed": true,
+    "production_integrated": false,
+    "real_adapter_trained": true,
+    "status_ceiling": "PC_RUNNABLE_X5_PENDING",
+    "x5_accessed": false,
+    "x5_verified": false
+  },
+  "created_at": "2026-08-01T12:45:13.821773Z",
+  "evidence_files": {
+    "cpu_smoke_20260801_204258.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cpu_smoke_20260801_204258.stdout.log": "7c6786c95146487b6b6d8e0c94d2a1d1da049fa8281473052d9b091f9ba1f9e9",
+    "gguf_receipt.v1.json": "d5304711804c168a4a82da278c5b5e66020818c4ef38fa43759aacf8c306d70f",
+    "gguf_receipt.v1.json.sha256": "cd37ce3199ba7bc088b8913733533f2d7454a38a0bd8688809bcf2f3f73b70cd",
+    "llama_cpp_cpu_smoke_prompt.txt": "cc4f4ef906c29df71447cd05dab4956f9ff4307c3fa23f63f8a967d6f8401fbb",
+    "merge_receipt.v1.json": "917174b07bc492255fd2652c3d10f76e9e9e3b11ef3e7819cb57965aecc8b60f",
+    "run_all.stderr.log": "ba8045592ae7a3b7c7de7ff3587b22c28f6e7c1718d3c5360edaf1d80582221c",
+    "run_all.stdout.log": "b05546a602f10ef9a1f7d9f4aab6af84682cc417b04b17656bddc6986f2adec9",
+    "training_receipt.v1.json": "924238d31e6823c5f3bd1393cc628bce2640c2036022c2986438725a71fde8b1",
+    "validation_contract_postaudit.v1.json": "3b40ae184aecf0cca8d962e68aa21842f96898d8cf7d6b684e70009346961634",
+    "validation_contract_postaudit.v1.json.sha256": "8cdbde7579b194497145a2e3f5a8b206b955f1a4e8938944d5cddb590991234d",
+    "validation_predictions.jsonl": "a83314b72b5917382f509dc8685b8442d655bf5102539ce44bbe436f771e2da2",
+    "validation_receipt.v1.json": "1fea96ff2d579fabbd3db06d3ba2fa4b5b8bb2eece348d1d7ea8e5942656b94f"
+  },
+  "identity": {
+    "base_commit": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "base_config_sha256": "1ddb5b89ebc90dcb417a45c213d818577e65976454d29385c8f6140771d95197",
+    "base_weights": {
+      "model-00001-of-00002.safetensors": "169ad53ec313c3a34b06c0809216e4fc072cce444a5d4ff2b59690d064130ed5",
+      "model-00002-of-00002.safetensors": "912becff8d60672aa8628ef08c05898d9adf17c2ad4ae3caf99b065622fdeff9"
+    },
+    "forbidden_training_corpus": "legacy_25228_chunk_rag",
+    "forbidden_training_corpus_used": false,
+    "license": "Apache-2.0",
+    "train": {
+      "path": "evaluation\\icmat_foundry\\llm\\icmat_qwen05b_evidence_pointer_sft_v8_pretrain_20260731_r4\\train.jsonl",
+      "rows": 250,
+      "sha256": "674ea8cf77b2d61eac31a76d8b0c6af8178b0da93b0d6af6c7b3bb75d95a821c"
+    },
+    "validation": {
+      "path": "evaluation\\icmat_foundry\\llm\\icmat_qwen05b_evidence_pointer_sft_v8_pretrain_20260731_r4\\validation.jsonl",
+      "rows": 150,
+      "sha256": "1ad3013670f90178e0372f1425b30cd867c38ef11551fc0cfb0f6c4e099becf4"
+    }
+  },
+  "model_id": "F-LLM-02",
+  "model_name": "ICMat-Qwen3-1.7B-EvidenceQA-CPU",
+  "schema": "icmat_evidenceqa_17b_final_receipt.v1",
+  "status": "PC_RUNNABLE_X5_PENDING"
+}

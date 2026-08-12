@@ -1,0 +1,39 @@
+# /etc/systemd/system/cockpit_bridge.service — NavCockpit ↔ ROS2 桥 (第 3 期, 2026-06-12)
+# 上行 2Hz 真遥测 + 地图, 下行命令长轮询; 安全层 (围栏/限速/estop) 在本节点内强制执行.
+# 安装:
+#   sudo cp ~/ros2_ws/src/my_robot_bringup/config/cockpit_bridge.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now cockpit_bridge
+[Unit]
+Description=cockpit_bridge — NavCockpit 真数据桥 (ROS2 ↔ :8890)
+# ⚠ 别 After=embodied_brain.service (它 WantedBy=multi-user.target, 见 2026-06-10 排序环教训)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sunrise
+Group=sunrise
+EnvironmentFile=-/etc/embodied_brain.env
+Environment=EB_COCKPIT_BACKEND=http://127.0.0.1:8890
+
+# 等 ROS 栈 / backend 起来 (长轮询自愈, 不依赖严格顺序)
+ExecStartPre=/bin/sleep 12
+# tros 必须 source — ai_msgs (hobot_yolo_world 检测消息) 在 /opt/tros/humble
+ExecStart=/bin/bash -lc 'source /opt/ros/humble/setup.bash && \
+    source /opt/tros/humble/setup.bash && \
+    source /home/rdk/ros2_ws/install/setup.bash && \
+    exec ros2 run my_robot_agents cockpit_bridge'
+
+KillMode=mixed
+KillSignal=SIGINT
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=8
+MemoryMax=400M
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cockpit_bridge
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    通用 macro: inertial 和 material color.
+    所有 link 共用, 避免每个文件重复写惯量盒子.
+  -->
+
+  <!-- 颜色定义 -->
+  <material name="black">
+    <color rgba="0.05 0.05 0.05 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="0.95 0.95 0.95 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="purple">
+    <color rgba="0.55 0.45 0.85 1.0"/>
+  </material>
+  <material name="aluminum">
+    <color rgba="0.75 0.75 0.78 1.0"/>
+  </material>
+  <material name="orbbec_black">
+    <color rgba="0.10 0.10 0.10 1.0"/>
+  </material>
+  <material name="lidar_teal">
+    <color rgba="0.55 0.85 0.85 1.0"/>
+  </material>
+  <material name="xiaomi_white">
+    <color rgba="0.96 0.96 0.96 1.0"/>
+  </material>
+  <material name="usb_cam_pink">
+    <color rgba="0.85 0.55 0.65 1.0"/>
+  </material>
+  <material name="electromagnet_red">
+    <color rgba="0.85 0.20 0.20 1.0"/>
+  </material>
+
+  <!-- 长方体 inertial macro (盒子) -->
+  <xacro:macro name="box_inertial" params="mass x y z">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="${mass * (y*y + z*z) / 12.0}" ixy="0.0" ixz="0.0"
+        iyy="${mass * (x*x + z*z) / 12.0}" iyz="0.0"
+        izz="${mass * (x*x + y*y) / 12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- 圆柱体 inertial macro -->
+  <xacro:macro name="cylinder_inertial" params="mass radius length">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="${mass * (3*radius*radius + length*length) / 12.0}" ixy="0.0" ixz="0.0"
+        iyy="${mass * (3*radius*radius + length*length) / 12.0}" iyz="0.0"
+        izz="${mass * radius*radius / 2.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- 球体 inertial macro -->
+  <xacro:macro name="sphere_inertial" params="mass radius">
+    <inertial>
+      <mass value="${mass}"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="${2.0 * mass * radius*radius / 5.0}" ixy="0.0" ixz="0.0"
+        iyy="${2.0 * mass * radius*radius / 5.0}" iyz="0.0"
+        izz="${2.0 * mass * radius*radius / 5.0}"/>
+    </inertial>
+  </xacro:macro>
+</robot>

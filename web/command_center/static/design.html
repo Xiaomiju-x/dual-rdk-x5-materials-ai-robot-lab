@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>设计系统 · 智研指挥中心</title>
+<link rel="icon" type="image/svg+xml" href="/icon.svg"/>
+<link rel="stylesheet" href="/style.css"/>
+<style>
+  /* 本页专属布局 — token 值全部从 :root 现取, 改 style.css 本页自动跟随 (自文档) */
+  body{ overflow:auto; }
+  .dz{ position:relative; z-index:5; max-width:1080px; margin:0 auto; padding:34px 22px 80px; }
+  .dz h1{ font-size:1.6rem; font-weight:800; margin-bottom:6px; }
+  .dz .sub{ color:var(--ink2); font-size:.84rem; margin-bottom:30px; line-height:1.7; }
+  .dz h2{ font-size:1.02rem; font-weight:800; margin:34px 0 14px; display:flex; align-items:center; gap:8px; }
+  .dz h2::before{ content:""; width:5px; height:18px; border-radius:3px;
+    background:linear-gradient(180deg,var(--violet),var(--blue)); }
+  .tk-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
+  .sw{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m);
+    overflow:hidden; box-shadow:var(--sh-1); }
+  .sw .c{ height:64px; }
+  .sw .m{ padding:8px 10px; }
+  .sw .m b{ font-size:.74rem; display:block; }
+  .sw .m code{ font-family:var(--mono); font-size:.64rem; color:var(--ink3); }
+  .row{ display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; }
+  .chipx{ background:var(--surface); border:1px solid var(--line); padding:14px 18px;
+    box-shadow:var(--sh-1); font-size:.74rem; color:var(--ink2); }
+  .shx{ width:150px; height:74px; background:var(--surface); border-radius:var(--r-m);
+    display:flex; align-items:center; justify-content:center; font-size:.72rem; color:var(--ink2); }
+  .demo-btn{ display:inline-flex; align-items:center; gap:7px; padding:9px 16px; border-radius:10px;
+    font-size:.8rem; font-weight:700; cursor:pointer; border:1px solid var(--line); background:var(--surface);
+    transition:transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out); }
+  .demo-btn:hover{ transform:translateY(-2px); box-shadow:var(--sh-2); }
+  .demo-btn.pri{ color:#fff; border:none; background:linear-gradient(120deg,var(--violet),var(--blue));
+    box-shadow:0 5px 16px rgba(99,102,241,.32); }
+  .tbl{ width:100%; border-collapse:collapse; font-size:.76rem; background:var(--surface);
+    border:1px solid var(--line); border-radius:var(--r-m); overflow:hidden; }
+  .tbl th{ text-align:left; padding:9px 12px; background:var(--bg1); font-size:.68rem; color:var(--ink2); }
+  .tbl td{ padding:9px 12px; border-top:1px solid var(--line); }
+  .tbl code{ font-family:var(--mono); font-size:.7rem; color:var(--cyan); }
+  .ease-demo{ width:46px; height:46px; border-radius:var(--r-m); margin-top:8px;
+    background:linear-gradient(135deg,var(--violet),var(--blue)); }
+  .ease-box:hover .ease-demo{ transform:translateX(110px); }
+  .ease-box{ width:210px; background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--r-m); padding:12px; cursor:pointer; box-shadow:var(--sh-1); }
+  .ease-box b{ font-size:.72rem; } .ease-box code{ font-size:.62rem; color:var(--ink3); display:block; }
+  .badge-l{ display:inline-flex; align-items:center; gap:6px; border-radius:var(--r-pill);
+    padding:4px 12px; font-size:.7rem; font-weight:700; }
+  .b-real{ background:rgba(5,150,105,.1); color:var(--emerald); }
+  .b-mir{ background:rgba(8,145,178,.1); color:var(--cyan); }
+  .b-sim{ background:rgba(217,119,6,.12); color:var(--amber); }
+  .back{ position:fixed; top:14px; left:16px; z-index:60; }
+</style>
+</head>
+<body>
+<div class="aurora"></div>
+<a class="act lbl back" href="/">← 返回指挥中心</a>
+<div class="dz">
+  <h1>🎨 设计系统</h1>
+  <p class="sub">
+    平台四端 (门户 / AI 脑 / 车载脑 NavCockpit / 机械臂 WorkCockpit) 的统一设计语言。
+    本页所有色块与示例<b>直接消费 <code>/style.css :root</code> 的 token 现值</b> —— 改 token 本页自动更新, 即文档即真相。
+    基调: <b>浅色 · 鲜艳 · 诚实</b>。
+  </p>
+
+  <h2>品牌六色</h2>
+  <div class="tk-grid">
+    <div class="sw"><div class="c" style="background:var(--violet)"></div><div class="m"><b>Violet · AI 脑</b><code>--violet</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--blue)"></div><div class="m"><b>Blue · 车载脑</b><code>--blue</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--cyan)"></div><div class="m"><b>Cyan · 数据/镜像</b><code>--cyan</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--amber)"></div><div class="m"><b>Amber · 机械臂/仿真</b><code>--amber</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--emerald)"></div><div class="m"><b>Emerald · 正常/真机</b><code>--emerald</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--rose)"></div><div class="m"><b>Rose · 告警/亮点</b><code>--rose</code></div></div>
+  </div>
+
+  <h2>墨阶与表面</h2>
+  <div class="tk-grid">
+    <div class="sw"><div class="c" style="background:var(--ink)"></div><div class="m"><b>主文字</b><code>--ink</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--ink2)"></div><div class="m"><b>次级文字</b><code>--ink2</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--ink3)"></div><div class="m"><b>弱文字</b><code>--ink3</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--ink4)"></div><div class="m"><b>禁用/装饰</b><code>--ink4</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--bg0); border-bottom:1px solid var(--line)"></div><div class="m"><b>页面底</b><code>--bg0</code></div></div>
+    <div class="sw"><div class="c" style="background:var(--surface); border-bottom:1px solid var(--line)"></div><div class="m"><b>卡面</b><code>--surface</code></div></div>
+  </div>
+
+  <h2>圆角阶</h2>
+  <div class="row">
+    <div class="chipx" style="border-radius:var(--r-s)">--r-s · 8px<br>小件/输入框</div>
+    <div class="chipx" style="border-radius:var(--r-m)">--r-m · 12px<br>卡片/按钮</div>
+    <div class="chipx" style="border-radius:var(--r-l)">--r-l · 18px<br>大容器/hero</div>
+    <div class="chipx" style="border-radius:var(--r-pill)">--r-pill<br>徽章/胶囊</div>
+  </div>
+
+  <h2>阴影阶</h2>
+  <div class="row">
+    <div class="shx" style="box-shadow:var(--sh-1)">--sh-1 静置</div>
+    <div class="shx" style="box-shadow:var(--sh-2)">--sh-2 悬浮</div>
+    <div class="shx" style="box-shadow:var(--sh-3)">--sh-3 浮层</div>
+  </div>
+
+  <h2>动效阶 <span style="font-size:.7rem;font-weight:400;color:var(--ink3)">(hover 色块看缓动差异; 系统开"减弱动态效果"时全平台自动降级)</span></h2>
+  <div class="row">
+    <div class="ease-box"><b>--ease-out</b><code>cubic-bezier(.22,1,.36,1) · 常规进出</code>
+      <div class="ease-demo" style="transition:transform var(--t-slow) var(--ease-out)"></div></div>
+    <div class="ease-box"><b>--ease-spring</b><code>cubic-bezier(.34,1.56,.64,1) · 强调/弹性</code>
+      <div class="ease-demo" style="transition:transform var(--t-slow) var(--ease-spring)"></div></div>
+  </div>
+  <table class="tbl" style="margin-top:12px">
+    <tr><th>token</th><th>值</th><th>用途</th></tr>
+    <tr><td><code>--t-fast</code></td><td>0.15s</td><td>hover / 按压反馈</td></tr>
+    <tr><td><code>--t-med</code></td><td>0.28s</td><td>面板展开 / 元素进出</td></tr>
+    <tr><td><code>--t-slow</code></td><td>0.5s</td><td>页面级过渡 / 强调动画</td></tr>
+  </table>
+
+  <h2>真实性徽章 (平台诚实语言, 详见 U9)</h2>
+  <div class="row">
+    <span class="badge-l b-real">● 真机实测</span>
+    <span class="badge-l b-mir">◐ 镜像真算</span>
+    <span class="badge-l b-sim">○ 仿真演示</span>
+  </div>
+  <p class="sub" style="margin-top:10px">三级语义全平台统一: <b>真机实测</b>=数据来自设备真硬件; <b>镜像真算</b>=算法是真的、跑在 VPS 镜像 (如 predict_engine); <b>仿真演示</b>=明确标注的 sim/mock, 不冒充真数据。</p>
+
+  <h2>液态玻璃材质 (lg1-20260703)</h2>
+  <p class="sub" style="margin-bottom:14px">
+    全站统一 Liquid Glass 配方: <code>backdrop-filter: blur(--lg-blur) saturate(--lg-sat)</code> +
+    白渐变 tint (<code>--lg-tint</code>) + 顶缘镜面高光/底缘密度影 (<code>--lg-inset</code>) + 白 rim (<code>--lg-rim</code>) +
+    hover 光泽扫过。玻璃背后必须有鲜艳动态内容 (荧光晶体/光谱丝带背景舞台) 折射才成立。
+    下面示例直接消费 token 现值:</p>
+  <div class="row">
+    <div style="width:230px;height:120px;border-radius:var(--r-l);background:var(--lg-tint);
+      backdrop-filter:blur(var(--lg-blur)) saturate(var(--lg-sat));-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(var(--lg-sat));
+      border:1px solid var(--lg-rim);box-shadow:var(--lg-shadow), var(--lg-inset);
+      display:flex;align-items:center;justify-content:center;font-size:.74rem;color:var(--ink2)">
+      --lg-tint · 面板玻璃</div>
+    <div style="width:230px;height:120px;border-radius:var(--r-l);background:var(--lg-tint-strong);
+      backdrop-filter:blur(32px) saturate(190%);-webkit-backdrop-filter:blur(32px) saturate(190%);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:0 24px 70px rgba(40,45,110,.22), inset 0 1px 0 rgba(255,255,255,.95), inset 0 -16px 34px -26px rgba(31,45,90,.38);
+      display:flex;align-items:center;justify-content:center;font-size:.74rem;color:var(--ink2)">
+      --lg-tint-strong · 浮层玻璃</div>
+  </div>
+
+  <h2>组件示例</h2>
+  <div class="row">
+    <button class="demo-btn pri">▶ 主操作</button>
+    <button class="demo-btn">次级操作</button>
+    <span class="badge-l" style="background:rgba(37,99,235,.1);color:var(--blue)">chip 信息</span>
+    <span class="badge-l" style="background:rgba(225,29,72,.1);color:var(--rose)">chip 告警</span>
+  </div>
+
+  <h2>四端 token 映射表</h2>
+  <table class="tbl">
+    <tr><th>语义</th><th>门户 (本表)</th><th>NavCockpit / WorkCockpit (Vue)</th><th>AI 脑 (注入 CSS)</th></tr>
+    <tr><td>主文字</td><td><code>--ink</code></td><td><code>--ink-primary</code></td><td><code>body.light-theme</code> 色值对齐 #0f172a</td></tr>
+    <tr><td>次文字</td><td><code>--ink2</code></td><td><code>--ink-secondary / --ink-tertiary</code></td><td>#475569</td></tr>
+    <tr><td>边线</td><td><code>--line</code></td><td><code>--line-border / --line-divider</code></td><td>rgba(15,23,42,.09)</td></tr>
+    <tr><td>品牌强调</td><td><code>--violet/--blue/--cyan/--amber</code></td><td><code>--accent-*</code> 系列</td><td>_G2_CSS 渐变同源</td></tr>
+    <tr><td>正常/警告/错误</td><td><code>--ok/--warn/--err</code></td><td><code>chip-ok / chip-warn / chip-err</code></td><td>verdict 五级色</td></tr>
+  </table>
+  <p class="sub" style="margin-top:26px">📐 本页由 Wave 1 (U1) 建立 · 入口: 页脚 / Ctrl+K 搜 "design"</p>
+</div>
+</body>
+</html>

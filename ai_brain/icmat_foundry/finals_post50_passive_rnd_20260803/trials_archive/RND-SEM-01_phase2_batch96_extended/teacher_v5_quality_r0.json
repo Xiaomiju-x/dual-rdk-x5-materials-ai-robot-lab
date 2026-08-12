@@ -1,0 +1,58 @@
+{
+  "checkpoint": {
+    "bytes": 298922,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/teacher_v5_quality_r0.pt",
+    "sha256": "4a1a0cee2e207ea35d3bfa50213af83a4c0bec6786b663b832948ffadc79d819"
+  },
+  "configuration": {
+    "augment": 0.03,
+    "id": "v5_quality",
+    "kind": "teacher",
+    "w_boundary": 0.14,
+    "w_distance": 0.1,
+    "width": 7
+  },
+  "created_at": "2026-08-02T17:46:01.205527+00:00",
+  "extra": {
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.1912817709586199,
+        "score": 0.3031387905600249
+      },
+      {
+        "epoch": 2,
+        "loss": 1.0136542583213133,
+        "score": 0.5270656603969165
+      },
+      {
+        "epoch": 3,
+        "loss": 0.7121992391698501,
+        "score": 0.4974868229087385
+      },
+      {
+        "epoch": 4,
+        "loss": 0.6512389410944546,
+        "score": 0.46329741259176893
+      }
+    ]
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "teacher_v5_quality_r0",
+  "fit_seconds": 28.82288309999967,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 68374,
+  "receipt_sha256": "ce9dff4877c9741a575e63d018a4f18821f80ef014d038f06ac222da64351802",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20267853,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.048139936907284964,
+    "dice": 0.5150306761700952,
+    "foreground_iou": 0.3468296431668848,
+    "score": 0.5270656603969165,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

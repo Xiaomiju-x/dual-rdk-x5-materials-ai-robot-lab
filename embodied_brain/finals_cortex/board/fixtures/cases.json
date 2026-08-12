@@ -1,0 +1,68 @@
+{
+  "no_go": [
+    {
+      "id": "output_hash_mismatch",
+      "set": {
+        "execution.outputs.0.actual_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "expected_failed_gate": "execution.output_hashes"
+    },
+    {
+      "id": "missing_field",
+      "delete": [
+        "execution.latency_ms.p95"
+      ],
+      "expected_failed_gate": "schema.required_fields"
+    },
+    {
+      "id": "compiler_estimate_impersonation",
+      "set": {
+        "execution.measurement_source": "compiler_estimate",
+        "execution.latency_ms.source": "compiler_estimate",
+        "execution.compiler_estimate": true,
+        "execution.latency_ms.p50": 0.1261,
+        "execution.latency_ms.p95": 0.1261,
+        "execution.latency_ms.p99": 0.1261
+      },
+      "expected_failed_gate": "execution.actual_measurement"
+    },
+    {
+      "id": "resource_limit",
+      "set": {
+        "resources.during.pss_mib": 700.1,
+        "resources.during.mem_available_mib": 2400.0,
+        "resources.during.bpu_ion_mib": 180.0,
+        "resources.during.cma_free_mib": 100.0
+      },
+      "expected_failed_gate": "resources.pss"
+    },
+    {
+      "id": "forbidden_interface",
+      "set": {
+        "ros_graph.publishers": [
+          {
+            "node": "/x5_finals_cortex/shadow",
+            "topic": "/cmd_vel",
+            "type": "geometry_msgs/msg/Twist"
+          }
+        ],
+        "ros_graph.services": [
+          {
+            "node": "/x5_finals_cortex/shadow",
+            "service": "/reset_f407"
+          }
+        ],
+        "ros_graph.tf_publishers": [
+          "/x5_finals_cortex/shadow"
+        ],
+        "ros_graph.serial_access": [
+          {
+            "node": "/x5_finals_cortex/shadow",
+            "device": "/dev/F407"
+          }
+        ]
+      },
+      "expected_failed_gate": "ros.authority"
+    }
+  ]
+}

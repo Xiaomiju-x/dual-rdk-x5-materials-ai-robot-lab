@@ -1,0 +1,91 @@
+{
+  "checkpoint": {
+    "bytes": 79256,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-MAT-03/grid_v2_dropout.pt",
+    "sha256": "ade406fd868f8813c2ae5bf34c2f6c0ec41091408d7971c99c2413c6b0728c6c"
+  },
+  "configuration": {
+    "dropout": 0.1,
+    "hidden": 96,
+    "id": "v2_dropout",
+    "loss": "huber"
+  },
+  "created_at": "2026-08-02T18:49:05.568937+00:00",
+  "extra": {
+    "epochs": 11,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.41492148240407306,
+        "val_log1p_mae": 1.8730628490447998
+      },
+      {
+        "epoch": 2,
+        "loss": 0.39726971586545307,
+        "val_log1p_mae": 1.8411550521850586
+      },
+      {
+        "epoch": 3,
+        "loss": 0.3872407078742981,
+        "val_log1p_mae": 1.8714532852172852
+      },
+      {
+        "epoch": 4,
+        "loss": 0.3802658021450043,
+        "val_log1p_mae": 1.9085155725479126
+      },
+      {
+        "epoch": 5,
+        "loss": 0.37282166878382367,
+        "val_log1p_mae": 1.8920139074325562
+      },
+      {
+        "epoch": 6,
+        "loss": 0.3653487265110016,
+        "val_log1p_mae": 1.8769354820251465
+      },
+      {
+        "epoch": 7,
+        "loss": 0.3584114710489909,
+        "val_log1p_mae": 1.8812123537063599
+      },
+      {
+        "epoch": 8,
+        "loss": 0.35256046056747437,
+        "val_log1p_mae": 1.8949161767959595
+      },
+      {
+        "epoch": 9,
+        "loss": 0.34689855575561523,
+        "val_log1p_mae": 1.887073278427124
+      },
+      {
+        "epoch": 10,
+        "loss": 0.33981462319691974,
+        "val_log1p_mae": 1.8769910335540771
+      },
+      {
+        "epoch": 11,
+        "loss": 0.3340437412261963,
+        "val_log1p_mae": 1.8820782899856567
+      }
+    ]
+  },
+  "family_id": "RND-MAT-03",
+  "fit_id": "grid_v2_dropout",
+  "fit_seconds": 0.2960781000001589,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 19105,
+  "receipt_sha256": "7ab56624d78ec82ee97e8bdefd6ce5758bebe7c30c3147d42653eb3a43fa05ba",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20271805,
+  "selection_metrics": {
+    "log1p_mae": 1.8411550521850586,
+    "mae": 201.4863739013672,
+    "r2": -0.19327247585944995,
+    "rmse": 488.4937438964844
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

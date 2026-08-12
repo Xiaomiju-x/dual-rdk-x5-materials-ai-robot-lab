@@ -1,0 +1,102 @@
+{
+  "checkpoint": {
+    "bytes": 130900,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/student_top0_v4_robust_r1.pt",
+    "sha256": "d0eace35a7fd495f30a2884a99cac709c9b3a9a9ff8a628c8164ba1fb02e0b9e"
+  },
+  "configuration": {
+    "augment": 0.05,
+    "distilled": true,
+    "kind": "student",
+    "width": 5
+  },
+  "created_at": "2026-08-02T18:22:01.342264+00:00",
+  "extra": {
+    "effective_target_epochs": 12,
+    "epochs": 12,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.5331001193216531,
+        "score": 0.5954875902470712
+      },
+      {
+        "epoch": 2,
+        "loss": 0.673106335767425,
+        "score": 0.5923964408592398
+      },
+      {
+        "epoch": 3,
+        "loss": 0.5996324352108606,
+        "score": 0.6185454672880824
+      },
+      {
+        "epoch": 4,
+        "loss": 0.560166874144337,
+        "score": 0.6295534748743621
+      },
+      {
+        "epoch": 5,
+        "loss": 0.5306607868411753,
+        "score": 0.636503064260363
+      },
+      {
+        "epoch": 6,
+        "loss": 0.5173287778207571,
+        "score": 0.612396465020558
+      },
+      {
+        "epoch": 7,
+        "loss": 0.4713947306765188,
+        "score": 0.6269601875206924
+      },
+      {
+        "epoch": 8,
+        "loss": 0.48386895036933447,
+        "score": 0.7081912586066483
+      },
+      {
+        "epoch": 9,
+        "loss": 0.4753624138855698,
+        "score": 0.7396241525873478
+      },
+      {
+        "epoch": 10,
+        "loss": 0.4131999903976327,
+        "score": 0.765011486697432
+      },
+      {
+        "epoch": 11,
+        "loss": 0.4070772561106351,
+        "score": 0.7807945080624712
+      },
+      {
+        "epoch": 12,
+        "loss": 0.4011329914083575,
+        "score": 0.8140088379681542
+      }
+    ],
+    "optimizer_state_restored": false,
+    "prior_receipt_archive": null,
+    "resumed_from_epoch": 0,
+    "training_batch_size": 32
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "student_top0_v4_robust_r1",
+  "fit_seconds": 74.25425969999924,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 29511,
+  "receipt_sha256": "d477c96e89df426e4b9cbb66d351460542ff8b8fd96f08ded27286d95c6f6123",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20268804,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.1796636509962813,
+    "dice": 0.7690929252190838,
+    "foreground_iou": 0.6248184985745961,
+    "score": 0.8140088379681542,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

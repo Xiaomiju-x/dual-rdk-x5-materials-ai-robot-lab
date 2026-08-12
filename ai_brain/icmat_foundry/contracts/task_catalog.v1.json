@@ -1,0 +1,145 @@
+{
+  "schema": "icmat_task_catalog.v1",
+  "created_at": "2026-07-28T00:00:00+08:00",
+  "selection_policy": "researcher_explicit",
+  "production_integration_allowed": false,
+  "tasks": [
+    {
+      "task_id": "icmat_structured_extraction",
+      "model_id": "ICMat-Qwen-0.5B",
+      "role": "structured_llm",
+      "runtime_priority": 1,
+      "deployment_target": "cpu_and_bpu_candidate",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "qwen25_05b_instruct",
+        "icmat_rag_namespaces"
+      ],
+      "metrics": [
+        "json_schema_valid_rate",
+        "entity_micro_f1",
+        "citation_precision",
+        "refusal_precision"
+      ],
+      "fallback": "existing_cpu_llm_or_structured_unknown",
+      "status": "planned"
+    },
+    {
+      "task_id": "icmat_grounded_qa",
+      "model_id": "ICMat-Qwen-1.5B",
+      "role": "rag_llm",
+      "runtime_priority": 2,
+      "deployment_target": "cpu_adapter",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "qwen25_15b_instruct",
+        "icmat_rag_namespaces"
+      ],
+      "metrics": [
+        "answer_correctness",
+        "citation_precision",
+        "citation_recall",
+        "unknown_recall"
+      ],
+      "fallback": "existing_hybrid_rag",
+      "status": "planned"
+    },
+    {
+      "task_id": "icmat_failure_reasoning",
+      "model_id": "ICMat-R1-1.5B",
+      "role": "reasoning_llm",
+      "runtime_priority": 3,
+      "deployment_target": "cpu_adapter",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "deepseek_r1_distill_qwen_15b",
+        "icmat_rag_namespaces"
+      ],
+      "metrics": [
+        "evidence_supported_step_rate",
+        "unsafe_assertion_rate",
+        "next_action_accuracy",
+        "unknown_recall"
+      ],
+      "fallback": "existing_r1_distill_slot_or_unknown",
+      "status": "planned"
+    },
+    {
+      "task_id": "electronic_material_property_screening",
+      "model_id": "ICMat-PropNet",
+      "role": "property_screening",
+      "runtime_priority": 1,
+      "deployment_target": "cpu_and_bpu_candidate",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "nist_jarvis_dft"
+      ],
+      "metrics": [
+        "group_mae",
+        "component_macro_mae",
+        "coverage_at_90",
+        "ood_recall",
+        "cpu_bpu_drift"
+      ],
+      "fallback": "cpu_model_or_unknown",
+      "status": "bpu_binary"
+    },
+    {
+      "task_id": "semiconductor_process_quality",
+      "model_id": "FabYield-X5",
+      "role": "process_quality",
+      "runtime_priority": 1,
+      "deployment_target": "cpu_and_bpu_candidate",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "uci_secom"
+      ],
+      "metrics": [
+        "group_macro_f1",
+        "balanced_accuracy",
+        "auprc",
+        "expected_calibration_error",
+        "cpu_bpu_drift"
+      ],
+      "fallback": "cpu_model_or_review",
+      "status": "frozen"
+    },
+    {
+      "task_id": "sem_image_metrology",
+      "model_id": "SEM-Metrology-X5",
+      "role": "sem_metrology",
+      "runtime_priority": 2,
+      "deployment_target": "bpu_int8_candidate",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "nist_chips_sem_metrology"
+      ],
+      "metrics": [
+        "source_group_iou",
+        "boundary_f1",
+        "image_quality_error",
+        "cpu_bpu_drift"
+      ],
+      "fallback": "cpu_opencv_or_manual_review",
+      "status": "frozen"
+    },
+    {
+      "task_id": "spectra_quality_review",
+      "model_id": "Spectra-QC-X5",
+      "role": "spectra_quality",
+      "runtime_priority": 4,
+      "deployment_target": "bpu_int8_candidate",
+      "resident_policy": "manual_swap_load",
+      "source_ids": [
+        "frozen_phosphor_xrd_pl"
+      ],
+      "metrics": [
+        "group_macro_f1",
+        "ood_recall",
+        "cpu_bpu_drift"
+      ],
+      "fallback": "existing_four_lines_unchanged",
+      "status": "frozen"
+    }
+  ]
+}

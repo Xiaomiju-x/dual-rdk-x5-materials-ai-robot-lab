@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xrd.local/schemas/passive_report.v1.schema.json",
+  "title": "RB-VoE Passive Audit Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "report_id",
+    "bundle_audit_id",
+    "status",
+    "started_at",
+    "completed_at",
+    "source",
+    "bindings",
+    "binding_assessment",
+    "differential",
+    "authority",
+    "findings",
+    "report_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "passive_report.v1"
+    },
+    "report_id": {
+      "$ref": "#/$defs/audit_id"
+    },
+    "bundle_audit_id": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/audit_id"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "AUDIT_PASS",
+        "AUDIT_HOLD",
+        "AUDIT_INVALID"
+      ]
+    },
+    "started_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "completed_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "bindings": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/bindings"
+        }
+      ]
+    },
+    "binding_assessment": {
+      "$ref": "#/$defs/binding_assessment"
+    },
+    "differential": {
+      "$ref": "#/$defs/differential"
+    },
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "report_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "audit_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_sha256",
+        "model_sha256",
+        "preprocess_sha256",
+        "calibration_sha256",
+        "runtime_sha256",
+        "output_sha256",
+        "threshold_profile_sha256"
+      ],
+      "properties": {
+        "input_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "model_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "preprocess_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "calibration_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runtime_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "threshold_profile_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundle_path_sha256",
+        "bundle_file_sha256",
+        "claimed_bundle_sha256",
+        "bundle_seal_verified"
+      ],
+      "properties": {
+        "bundle_path_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bundle_file_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "claimed_bundle_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "bundle_seal_verified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "binding_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_hashes_bound_by_bundle",
+        "artifact_contents_opened",
+        "threshold_profile_content_verified",
+        "actual_output_content_verified"
+      ],
+      "properties": {
+        "artifact_hashes_bound_by_bundle": {
+          "type": "boolean"
+        },
+        "artifact_contents_opened": {
+          "const": false
+        },
+        "threshold_profile_content_verified": {
+          "type": "boolean"
+        },
+        "actual_output_content_verified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_absolute_error",
+        "mean_absolute_error",
+        "root_mean_square_error",
+        "violation_count",
+        "violation_fraction",
+        "allowed_violation_fraction",
+        "elementwise_pass",
+        "mean_absolute_error_pass",
+        "root_mean_square_error_pass"
+      ],
+      "properties": {
+        "max_absolute_error": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mean_absolute_error": {
+          "type": "number",
+          "minimum": 0
+        },
+        "root_mean_square_error": {
+          "type": "number",
+          "minimum": 0
+        },
+        "violation_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "violation_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "allowed_violation_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "elementwise_pass": {
+          "type": "boolean"
+        },
+        "mean_absolute_error_pass": {
+          "type": "boolean"
+        },
+        "root_mean_square_error_pass": {
+          "type": "boolean"
+        }
+      }
+    },
+    "differential": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "performed",
+        "differential_claim_allowed",
+        "equivalence_claim_allowed",
+        "reason",
+        "profile_id",
+        "profile_sha256",
+        "reference_cpu_observation_sha256",
+        "actual_bpu_observation_sha256",
+        "vector_length",
+        "metrics"
+      ],
+      "properties": {
+        "performed": {
+          "type": "boolean"
+        },
+        "differential_claim_allowed": {
+          "type": "boolean"
+        },
+        "equivalence_claim_allowed": {
+          "type": "boolean"
+        },
+        "reason": {
+          "enum": [
+            "WITHIN_PROFILE",
+            "OUTSIDE_PROFILE",
+            "DUAL_OUTPUTS_NOT_SUPPLIED",
+            "VECTOR_LENGTH_MISMATCH",
+            "AUDIT_INVALID"
+          ]
+        },
+        "profile_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "profile_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "reference_cpu_observation_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "actual_bpu_observation_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "vector_length": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 8192
+        },
+        "metrics": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/metrics"
+            }
+          ]
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_authority",
+        "network_touched",
+        "subprocess_used",
+        "inference_invoked",
+        "device_accessed",
+        "hardware_touched",
+        "business_mutated",
+        "production_files_opened"
+      ],
+      "properties": {
+        "execution_authority": {
+          "const": false
+        },
+        "network_touched": {
+          "const": false
+        },
+        "subprocess_used": {
+          "const": false
+        },
+        "inference_invoked": {
+          "const": false
+        },
+        "device_accessed": {
+          "const": false
+        },
+        "hardware_touched": {
+          "const": false
+        },
+        "business_mutated": {
+          "const": false
+        },
+        "production_files_opened": {
+          "const": false
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]{2,95}$"
+        },
+        "severity": {
+          "enum": [
+            "INFO",
+            "HOLD",
+            "INVALID"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    }
+  }
+}

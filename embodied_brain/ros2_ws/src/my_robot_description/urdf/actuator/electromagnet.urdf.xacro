@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    电磁铁 (吸盘). 挂在升降臂末端, 通电吸住瓶顶预绑铁片.
+    控制信号: F407 GPIO 高 = 通电吸住, 低 = 断电释放. 不是关节, 没有自由度.
+
+    URDF 里就是一个 fixed link, 不发布 joint state.
+    电磁铁状态 (on/off) 由 my_robot_agents/pickup_agent 通过 std_msgs/Bool 控制
+    (走 serial → F407 → GPIO).
+  -->
+
+  <xacro:macro name="electromagnet_xacro" params="
+      parent
+      xyz:='0 0 0'
+      rpy:='0 0 0'
+      radius:=0.03
+      length:=0.04">
+
+    <link name="electromagnet_link">
+      <visual>
+        <origin xyz="0 0 ${-length/2}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+        <material name="electromagnet_red"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${-length/2}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial mass="0.1" radius="${radius}" length="${length}"/>
+    </link>
+
+    <joint name="${parent}_to_electromagnet" type="fixed">
+      <parent link="${parent}"/>
+      <child link="electromagnet_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

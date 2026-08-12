@@ -1,0 +1,614 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:xrd:dual-arm-successor:schema:model-receipt:v1",
+  "title": "DualArm Shadow Model Receipt v1",
+  "description": "Auditable receipt for a non-controlling DualArm-ShadowVLA model artifact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "created_at",
+    "candidate_name",
+    "maturity",
+    "motion_authority",
+    "execution_allowed",
+    "actuator_commands_issued",
+    "model",
+    "input_contract",
+    "output_contract",
+    "provenance",
+    "training",
+    "artifacts",
+    "evaluation",
+    "x5_status",
+    "non_interference"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "model_receipt_v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "candidate_name": {
+      "enum": [
+        "DualArm-ShadowVLA",
+        "X5-BiSkill Shadow"
+      ]
+    },
+    "maturity": {
+      "enum": [
+        "REFERENCE_ONLY",
+        "CONTRACT_VALIDATED",
+        "OFFLINE_REPLAY",
+        "GPU_TRAINED",
+        "BPU_COMPILED",
+        "X5_BOARD_VALIDATED"
+      ]
+    },
+    "motion_authority": {
+      "const": false
+    },
+    "execution_allowed": {
+      "const": false
+    },
+    "actuator_commands_issued": {
+      "const": 0
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_id",
+        "model_family",
+        "version",
+        "parameter_count",
+        "purpose"
+      ],
+      "properties": {
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_family": {
+          "enum": [
+            "SMOLVLA",
+            "COMPACT_ACT",
+            "TINY_ACT",
+            "OPENVLA_OFT_TEACHER",
+            "XR0_TEACHER",
+            "X5_BISKILL_STUDENT",
+            "WORLD_MODEL",
+            "ENSEMBLE"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameter_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "purpose": {
+          "enum": [
+            "OFFLINE_TEACHER",
+            "ACTION_CHUNK_BASELINE",
+            "WORLD_MODEL",
+            "X5_SHADOW_STUDENT",
+            "EVIDENCE_ENSEMBLE"
+          ]
+        }
+      }
+    },
+    "input_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "episode_schema",
+        "state_dimension",
+        "state_ordering",
+        "camera_ids",
+        "replay_mode"
+      ],
+      "properties": {
+        "episode_schema": {
+          "const": "shadow_episode_v1"
+        },
+        "state_dimension": {
+          "const": 13
+        },
+        "state_ordering": {
+          "const": [
+            "arm01_j1",
+            "arm01_j2",
+            "arm01_j3",
+            "arm01_j4",
+            "arm01_j5",
+            "arm01_j6",
+            "arm01_g23",
+            "arm02_j1",
+            "arm02_j2",
+            "arm02_j3",
+            "arm02_j4",
+            "arm02_j5",
+            "arm02_j6"
+          ]
+        },
+        "camera_ids": {
+          "const": [
+            "arm01_wrist",
+            "arm02_overhead"
+          ]
+        },
+        "replay_mode": {
+          "const": "POST_RUN_REPLAY"
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prediction_schema",
+        "outputs"
+      ],
+      "properties": {
+        "prediction_schema": {
+          "const": "shadow_prediction_v1"
+        },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "STAGE",
+              "NEXT_SKILL",
+              "ACTION_CHUNK_13D",
+              "OOD",
+              "WORLD_MODEL",
+              "SYNC_SCORE",
+              "SUCCESS_PROBABILITY"
+            ]
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/provenanceItem"
+      }
+    },
+    "training": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "performed",
+        "compute",
+        "dataset_receipts",
+        "config_sha256"
+      ],
+      "properties": {
+        "performed": {
+          "type": "boolean"
+        },
+        "compute": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/computeDevice"
+          }
+        },
+        "dataset_receipts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/datasetReceipt"
+          }
+        },
+        "config_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "checkpoint_step": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "split_method",
+        "episode_count",
+        "metrics"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_RUN",
+            "PASS",
+            "FAIL",
+            "PARTIAL"
+          ]
+        },
+        "split_method": {
+          "enum": [
+            "NONE",
+            "BY_EPISODE",
+            "BY_SESSION"
+          ]
+        },
+        "episode_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metric"
+          }
+        }
+      }
+    },
+    "x5_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conversion_status",
+        "board_validation_status",
+        "compiler_estimate_is_board_measurement",
+        "bpu_forward_count",
+        "latency_ms"
+      ],
+      "properties": {
+        "conversion_status": {
+          "enum": [
+            "NOT_STARTED",
+            "ONNX_READY",
+            "BPU_COMPILED",
+            "FAILED"
+          ]
+        },
+        "board_validation_status": {
+          "enum": [
+            "NOT_RUN",
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "compiler_estimate_is_board_measurement": {
+          "const": false
+        },
+        "bpu_forward_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "latency_ms": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "mean",
+                "p95",
+                "measured_on_x5"
+              ],
+              "properties": {
+                "mean": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "p95": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "measured_on_x5": {
+                  "type": "boolean"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "float_int8_cosine": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": -1,
+          "maximum": 1
+        }
+      }
+    },
+    "non_interference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_scan_passed",
+        "frozen_hashes_unchanged",
+        "robot_sdk_imports",
+        "device_writes",
+        "paired_runs_completed",
+        "status"
+      ],
+      "properties": {
+        "source_scan_passed": {
+          "type": "boolean"
+        },
+        "frozen_hashes_unchanged": {
+          "type": "boolean"
+        },
+        "robot_sdk_imports": {
+          "const": 0
+        },
+        "device_writes": {
+          "const": 0
+        },
+        "paired_runs_completed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "enum": [
+            "NOT_RUN",
+            "PASS",
+            "FAIL"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenanceItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "artifact_type",
+        "source_url",
+        "revision",
+        "license_id",
+        "license_url",
+        "sha256",
+        "redistribution_allowed",
+        "notice_required",
+        "verified_at",
+        "usage_status"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "enum": [
+            "CODE",
+            "MODEL_WEIGHT",
+            "DATASET",
+            "PAPER",
+            "CONFIG"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "license_url": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "redistribution_allowed": {
+          "type": "boolean"
+        },
+        "notice_required": {
+          "type": "boolean"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "usage_status": {
+          "enum": [
+            "REFERENCE_ONLY",
+            "USED_FOR_TRAINING",
+            "BUNDLED",
+            "REJECTED"
+          ]
+        }
+      }
+    },
+    "computeDevice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "device_type",
+        "device_name",
+        "memory_gb",
+        "role"
+      ],
+      "properties": {
+        "device_type": {
+          "enum": [
+            "CPU",
+            "GPU",
+            "BPU"
+          ]
+        },
+        "device_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "memory_gb": {
+          "type": "number",
+          "minimum": 0
+        },
+        "role": {
+          "enum": [
+            "TRAINING",
+            "EXPORT",
+            "INFERENCE",
+            "COMPILATION"
+          ]
+        }
+      }
+    },
+    "datasetReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "manifest_sha256",
+        "episode_count",
+        "camera_ids",
+        "state_dimension",
+        "split_unit"
+      ],
+      "properties": {
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "episode_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "camera_ids": {
+          "const": [
+            "arm01_wrist",
+            "arm02_overhead"
+          ]
+        },
+        "state_dimension": {
+          "const": 13
+        },
+        "split_unit": {
+          "enum": [
+            "EPISODE",
+            "SESSION"
+          ]
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_type",
+        "relative_path",
+        "sha256",
+        "size_bytes"
+      ],
+      "properties": {
+        "artifact_type": {
+          "enum": [
+            "CHECKPOINT",
+            "ONNX",
+            "BAYES_E_BIN",
+            "CONFIG",
+            "TOKENIZER",
+            "CALIBRATION_SET",
+            "REPORT"
+          ]
+        },
+        "relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value",
+        "unit",
+        "higher_is_better"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "higher_is_better": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

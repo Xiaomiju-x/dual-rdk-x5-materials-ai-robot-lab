@@ -1,0 +1,92 @@
+{
+  "checkpoint": {
+    "bytes": 87906,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/final_lite.pt",
+    "sha256": "6c79c274cdd22cacb572d5c6244bda945ead0de643fd557bbf1b5e5e53321660"
+  },
+  "configuration": {
+    "augment": 0.03,
+    "distilled": true,
+    "kind": "student",
+    "width": 4
+  },
+  "created_at": "2026-08-02T18:46:33.867518+00:00",
+  "extra": {
+    "effective_target_epochs": 12,
+    "epochs": 10,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.654420575292984,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 2,
+        "loss": 1.638759163346621,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 3,
+        "loss": 1.6307751400635975,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 4,
+        "loss": 1.625972296931956,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 5,
+        "loss": 1.6242696011420523,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 6,
+        "loss": 1.624371577017378,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 7,
+        "loss": 1.6234182249201405,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 8,
+        "loss": 1.6237000769907886,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 9,
+        "loss": 1.624269978834851,
+        "score": 0.05401367394416058
+      },
+      {
+        "epoch": 10,
+        "loss": 1.622998827754861,
+        "score": 0.05401367394416058
+      }
+    ],
+    "optimizer_state_restored": false,
+    "prior_receipt_archive": null,
+    "resumed_from_epoch": 0,
+    "training_batch_size": 32
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "final_lite",
+  "fit_seconds": 53.880627300000924,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 18933,
+  "receipt_sha256": "8f846078374157732ba079c1082dadece4b63059a14181601906240408e17d1e",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20269705,
+  "selection_metrics": {
+    "boundary_f1_exact": 2.2547405920948794e-05,
+    "dice": 0.054008037092680344,
+    "foreground_iou": 0.02775351699531759,
+    "score": 0.05401367394416058,
+    "threshold": 0.35
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

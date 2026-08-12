@@ -1,0 +1,102 @@
+{
+  "checkpoint": {
+    "bytes": 130110,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-SEM-01/final_robust.pt",
+    "sha256": "33f820e7f2729c160880663887a908b90416ee0dd09d5b0d9f95b47106449bf5"
+  },
+  "configuration": {
+    "augment": 0.06,
+    "distilled": true,
+    "kind": "student",
+    "width": 5
+  },
+  "created_at": "2026-08-02T18:45:39.863838+00:00",
+  "extra": {
+    "effective_target_epochs": 12,
+    "epochs": 12,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 1.3986255827516612,
+        "score": 0.49122823614126243
+      },
+      {
+        "epoch": 2,
+        "loss": 0.8950074970132054,
+        "score": 0.5611630751555611
+      },
+      {
+        "epoch": 3,
+        "loss": 0.7533677798686641,
+        "score": 0.6157541008609134
+      },
+      {
+        "epoch": 4,
+        "loss": 0.7095800118871255,
+        "score": 0.6168276364458453
+      },
+      {
+        "epoch": 5,
+        "loss": 0.6330742027499888,
+        "score": 0.6182812088237472
+      },
+      {
+        "epoch": 6,
+        "loss": 0.5777139091255641,
+        "score": 0.6200980959877057
+      },
+      {
+        "epoch": 7,
+        "loss": 0.5301266740454306,
+        "score": 0.7217889993938251
+      },
+      {
+        "epoch": 8,
+        "loss": 0.5149206150286268,
+        "score": 0.7671843770250381
+      },
+      {
+        "epoch": 9,
+        "loss": 0.49337736155727124,
+        "score": 0.8188805562568925
+      },
+      {
+        "epoch": 10,
+        "loss": 0.489858611385421,
+        "score": 0.7619973602642833
+      },
+      {
+        "epoch": 11,
+        "loss": 0.470136286008476,
+        "score": 0.8301390872597687
+      },
+      {
+        "epoch": 12,
+        "loss": 0.45568519978239985,
+        "score": 0.8071849347756209
+      }
+    ],
+    "optimizer_state_restored": false,
+    "prior_receipt_archive": null,
+    "resumed_from_epoch": 0,
+    "training_batch_size": 32
+  },
+  "family_id": "RND-SEM-01",
+  "fit_id": "final_robust",
+  "fit_seconds": 74.7820871999993,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 29511,
+  "receipt_sha256": "c1204abee344172726e89015fa74570367028f0fec8bb6838f42ce4d00cc234f",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20269704,
+  "selection_metrics": {
+    "boundary_f1_exact": 0.11775534049072993,
+    "dice": 0.8007002521370862,
+    "foreground_iou": 0.667640208064302,
+    "score": 0.8301390872597687,
+    "threshold": 0.65
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

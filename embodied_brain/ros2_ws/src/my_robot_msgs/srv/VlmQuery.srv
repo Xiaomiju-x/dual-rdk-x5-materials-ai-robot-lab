@@ -1,0 +1,23 @@
+# 视觉语言模型查询 (SmolVLM-256M on X5)
+# 实现: my_robot_agents/smolvlm_node
+#
+# 模式:
+#   - image_topic 非空 → 服务从该 topic 抓最新一帧
+#   - image_b64 非空  → 直接用 base64 图
+#   - 都为空           → 用启动时配的默认 image_topic
+#
+# 后端在 launch arg backend 选: hybrid (vision CPU + decoder CPU, 33s/query, 语义稳定)
+# 或 full_bpu (全 BPU, 0.49s/decoder forward, 但 INT8 PTQ 精度需 QAT)
+
+string prompt          # 问题, e.g. "describe this", "what number is on the LCD?"
+string image_b64       # 可选, 直接传图 (base64 编码 PNG/JPG)
+string image_topic     # 可选, 从该 topic 抓最新一帧 (默认启动时的配置)
+uint16 max_new_tokens  # 默认 30
+---
+bool success
+string answer          # VLM 回答文本 (可能是中文或英文, 依 prompt 定)
+float32 build_ms       # 视觉编码 + 注入 + tokenize 耗时
+float32 decode_ms      # 解码总耗时
+uint16 tokens_generated
+string backend_used    # hybrid | full_bpu
+string error_msg       # 失败时的原因

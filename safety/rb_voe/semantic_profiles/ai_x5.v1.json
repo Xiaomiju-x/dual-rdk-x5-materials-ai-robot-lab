@@ -1,0 +1,23 @@
+{
+  "schema_version": "xrd-rb-voe-semantic-profile-v1",
+  "profile_id": "ai_x5.v1",
+  "subsystem": "ai_x5",
+  "manifest_schema_version": "xrd-rb-voe-ai-capability-v1",
+  "read_mode": "LIVE_READONLY",
+  "maturity": "SHADOW_VALIDATED",
+  "capabilities": [
+    "ai_x5.xrd_vision.bpu_derived",
+    "ai_x5.xrd_numerical.bpu_derived",
+    "ai_x5.spectrum_vision.bpu_derived",
+    "ai_x5.spectrum_numerical.bpu_derived"
+  ],
+  "required_backends": {
+    "ai_x5.xrd_vision.bpu_derived": "hobot_dnn.Bayes-e.INT8",
+    "ai_x5.xrd_numerical.bpu_derived": "hobot_dnn.Bayes-e.INT8",
+    "ai_x5.spectrum_vision.bpu_derived": "hobot_dnn.Bayes-e.INT8",
+    "ai_x5.spectrum_numerical.bpu_derived": "hobot_dnn.Bayes-e.INT8"
+  },
+  "execution_authority": false,
+  "r3_permit_ready": false,
+  "profile_sha256": "13b9e406438709106d3d48af6deb3b1ef10558c54a18e602da0420606138bb84"
+}

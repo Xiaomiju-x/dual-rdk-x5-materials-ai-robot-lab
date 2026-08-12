@@ -1,17 +1,10 @@
-# Project Map
+# 项目地图（兼容入口）
 
-## AI Brain
+本文件保留用于兼容旧链接。新的文档与模块地图见：
 
-The full local system uses a dashboard service plus four analysis lines: XRD vision, XRD numerical, PL vision, and PL numerical. The public bundle does not include the core prediction engine or model files. It includes only public-facing UI and report assets.
+- [文档中心](README.md)
+- [系统架构](architecture/SYSTEM_ARCHITECTURE.md)
+- [模块导航](README.md#模块导航)
+- [证据索引](evidence/EVIDENCE_INDEX.md)
 
-## Embodied Brain
-
-The full system runs SLAM, LiDAR, depth camera ingestion, odometry, and Lab-FSD shadow planning on the vehicle-side RDK X5. The public bundle includes interface-level shadow planner code, not the full deployment scripts or live robot control endpoints.
-
-## Workstation
-
-The full workstation contains dual myCobot fixed stations and STM32F407-controlled end effectors. The public bundle includes non-core visualization, collision interlock, mock telemetry, and skill replay code; real motion scripts and private network configuration are excluded.
-
-## Evidence Site
-
-The public bundle includes static frontend assets and generated report figures so the review side can inspect UI complexity and evidence-chain design without receiving server credentials or private data.
+旧版本“只包含非核心展示材料”的描述已经过期；当前公开版本包含 AI 脑、具身脑、双机械臂、固件、指挥中心和安全审计源码，但仍排除凭据、个人/设备身份和不可再分发资产。

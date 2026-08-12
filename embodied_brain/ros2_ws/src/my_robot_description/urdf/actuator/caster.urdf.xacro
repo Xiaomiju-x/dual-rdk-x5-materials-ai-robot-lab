@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    万向轮 (caster wheel). 球形, 无控制, 跟随被动滚动.
+    Nav2 上没有反馈这一关节, 但 URDF 里要给一个 fixed joint 让 TF 树连通.
+  -->
+
+  <xacro:macro name="caster_xacro" params="
+      caster_name
+      parent
+      xyz
+      radius:=0.025">
+
+    <link name="${caster_name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${radius}"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${radius}"/>
+        </geometry>
+      </collision>
+      <xacro:sphere_inertial mass="0.05" radius="${radius}"/>
+    </link>
+
+    <!-- fixed (passive 万向, 不需要发关节状态) -->
+    <joint name="${caster_name}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${caster_name}_link"/>
+      <origin xyz="${xyz}" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

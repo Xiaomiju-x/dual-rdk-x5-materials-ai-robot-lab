@@ -1,0 +1,9 @@
+# YOLOv8 dataset config for Round 4 spectrum_vision
+# 单类: 识别论文里的 PL 光谱图
+
+path: ../dataset
+train: images/train
+val: images/val
+
+nc: 1
+names: ['pl_spectrum']

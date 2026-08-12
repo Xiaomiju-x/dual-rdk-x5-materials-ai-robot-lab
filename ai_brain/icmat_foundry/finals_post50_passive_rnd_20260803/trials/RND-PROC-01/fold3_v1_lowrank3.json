@@ -1,0 +1,98 @@
+{
+  "checkpoint": {
+    "bytes": 96558,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold3_v1_lowrank3.pt",
+    "sha256": "21e70c6dd8022f9522d4c12c3994d049b81df41ef02949da84c7c441eaa2000d"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 64,
+    "id": "v1_lowrank3",
+    "latent": true,
+    "rank": 3
+  },
+  "created_at": "2026-08-02T16:53:10.504635+00:00",
+  "extra": {
+    "epochs": 8,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.22230755557355128,
+        "selection_score": 2.5855571627616882
+      },
+      {
+        "epoch": 2,
+        "loss": 0.18504158995653452,
+        "selection_score": 4.197824716567993
+      },
+      {
+        "epoch": 3,
+        "loss": 0.1736200428322742,
+        "selection_score": 7.2199547290802
+      },
+      {
+        "epoch": 4,
+        "loss": 0.15529400737662064,
+        "selection_score": 8.420125722885132
+      },
+      {
+        "epoch": 5,
+        "loss": 0.15134329662511223,
+        "selection_score": 11.75474214553833
+      },
+      {
+        "epoch": 6,
+        "loss": 0.14169569980157048,
+        "selection_score": 10.63374376296997
+      },
+      {
+        "epoch": 7,
+        "loss": 0.13486689682069578,
+        "selection_score": 11.457512617111206
+      },
+      {
+        "epoch": 8,
+        "loss": 0.12631524158151528,
+        "selection_score": 13.23444938659668
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold3_v1_lowrank3",
+  "fit_seconds": 1.3538283999996565,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 22595,
+  "receipt_sha256": "6880fdd203f15d5be2e7a01cab01f75450d9e258184d8e6a7ee88646171fbec8",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20261104,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.8985287547111511,
+      "r2": -1090.9340306836816,
+      "rmse": 3.593454122543335
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.009790324606001377,
+        "r2": 0.04020615451304521,
+        "rmse": 0.012544198893010616,
+        "uniformity_mae": 0.0021725238766521215,
+        "worst_point_mae": 0.014906137250363827
+      },
+      "WTi": {
+        "mae": 3.374056816101074,
+        "r2": -337934.60331789387,
+        "rmse": 6.99146842956543,
+        "uniformity_mae": 4.037624835968018,
+        "worst_point_mae": 7.668288230895996
+      }
+    },
+    "selection_score": 2.5855571627616882,
+    "worst_domain_mae": 3.374056816101074
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

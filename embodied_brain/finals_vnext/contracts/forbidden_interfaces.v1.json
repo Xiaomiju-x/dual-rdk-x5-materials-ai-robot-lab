@@ -1,0 +1,30 @@
+{
+  "schema_version": "x5-finals-vnext-forbidden-interfaces/1.0",
+  "forbidden_publishers": [
+    "/cmd_vel",
+    "/cmd_vel_safe",
+    "/tf",
+    "/tf_static",
+    "/map",
+    "/odom"
+  ],
+  "forbidden_prefixes": [
+    "/f407",
+    "/serial_f407"
+  ],
+  "allowed_publish_prefix": "/x5_finals_vnext/",
+  "forbidden_source_import_fragments": [
+    "serial_f407",
+    "serial_protocol",
+    "geometry_msgs.msg.Twist",
+    "nav2_msgs.action",
+    "rclpy.action"
+  ],
+  "must_not_modify": [
+    "embodied_brain/tools/finals_lift_nav_demo.sh",
+    "embodied_brain/tools/finals_lift_nav_demo.py",
+    "embodied_brain/stm32_f407",
+    "embodied_brain/ros2_ws/src/my_robot_drivers",
+    "embodied_brain/ros2_ws/src/my_robot_navigation/config/lab_fsd_shadow.yaml"
+  ]
+}

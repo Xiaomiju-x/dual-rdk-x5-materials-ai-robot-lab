@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/decision-receipt-v1",
+  "title": "DecisionReceipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_id", "case_id", "plan_epoch", "decision",
+    "failure_core_closed", "selected_option", "terminal_evidence_sha256",
+    "release_certificate_sha256", "previous_record_sha256", "created_at_ms"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-decision-receipt-v1"},
+    "receipt_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "case_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "plan_epoch": {"type": "integer", "minimum": 0},
+    "decision": {"type": "string", "enum": [
+      "GO", "REVISE", "DROP", "NEXT_EVIDENCE", "HOLD", "QUARANTINE"
+    ]},
+    "failure_core_closed": {"type": "boolean"},
+    "selected_option": {"type": ["string", "null"], "enum": [
+      "E_VERIFY_IDENTITY", "E_VERIFY_RUNTIME", "E_XRD_SAME_HOLDER",
+      "E_PL_CROSSCHECK", "E_REPREP_XRD", "E_BLINDED_ASSAY", "E_QUARANTINE", null
+    ]},
+    "terminal_evidence_sha256": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "release_certificate_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "previous_record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "created_at_ms": {"type": "integer", "minimum": 0}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"decision": {"const": "NEXT_EVIDENCE"}},
+        "required": ["decision"]
+      },
+      "then": {"properties": {"selected_option": {"type": "string"}}}
+    },
+    {
+      "if": {
+        "properties": {"decision": {"enum": ["HOLD", "QUARANTINE"]}},
+        "required": ["decision"]
+      },
+      "then": {"properties": {"selected_option": {"type": "null"}}}
+    },
+    {
+      "if": {
+        "properties": {"decision": {"enum": ["GO", "REVISE", "DROP"]}},
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "failure_core_closed": {"const": true},
+          "terminal_evidence_sha256": {"minItems": 1}
+        }
+      }
+    }
+  ]
+}

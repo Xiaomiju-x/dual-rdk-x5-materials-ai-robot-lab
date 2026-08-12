@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/physical-evidence-capsule-v1",
+  "title": "PhysicalEvidenceCapsule.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "capsule_id", "case_id", "attempt_id", "permit_id",
+    "permit_sha256", "challenge_id", "challenge_nonce", "sample_lineage_sha256",
+    "macro_id", "acquisition_id", "status", "source_id", "source_boot_id",
+    "source_session_id", "source_manifest_sha256", "actual_backend", "artifact_sha256",
+    "calibration_sha256", "started_at_ms", "ended_at_ms", "payload_sha256",
+    "external_truth", "hardware_touched", "failure_code", "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-physical-evidence-v1"},
+    "capsule_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "case_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "attempt_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "permit_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "permit_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "challenge_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "challenge_nonce": {"type": "string", "minLength": 1, "maxLength": 512},
+    "sample_lineage_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "macro_id": {"type": "string", "enum": [
+      "NAV_FETCH", "DOCK", "MATERIAL_FIXTURE_TRANSFER", "GRIND_CHUNK",
+      "HOLDER_LOAD", "NAV_RETURN", "ACQUIRE_XRD"
+    ]},
+    "acquisition_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "status": {"type": "string", "enum": [
+      "SUCCEEDED", "FAILED", "VETOED", "TIMED_OUT", "SAFE_ABORTED", "NOT_READY"
+    ]},
+    "source_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "source_boot_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "source_session_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "actual_backend": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_sha256": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 128},
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "calibration_sha256": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 128},
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "started_at_ms": {"type": "integer", "minimum": 0},
+    "ended_at_ms": {"type": "integer", "minimum": 0},
+    "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "external_truth": {"type": "boolean"},
+    "hardware_touched": {"type": "boolean"},
+    "failure_code": {"type": ["string", "null"], "enum": [
+      "SAMPLE_IDENTITY_UNRESOLVED", "XRD_PEAK_ALIASING", "PREPARATION_HETEROGENEITY_SUSPECTED",
+      "CORRELATED_EVIDENCE_DOUBLE_COUNTED", "BPU_RUNTIME_UNQUALIFIED",
+      "TRANSPORT_CAPABILITY_STALE", "GRIND_MACRO_NOT_ELIGIBLE", "TARGET_ONLY", "NOT_READY",
+      "CAPABILITY_MANIFEST_MISSING", "CAPABILITY_MANIFEST_STALE", "CAPABILITY_MANIFEST_NOT_READY",
+      "CAPABILITY_HASH_MISMATCH", "CHALLENGE_STALE", "CHALLENGE_BINDING_MISMATCH",
+      "BOOT_SESSION_CHANGED", "LOCAL_GATE_REJECTED", "EXECUTION_TIMEOUT",
+      "IDENTITY_CUSTODY_BROKEN", "EXTERNAL_OUTCOME_MISSING", "SAFE_ABORT_AND_HOLD",
+      "REPAIR_EVIDENCE", "FALLBACK_FORBIDDEN", null
+    ]},
+    "signature": {"type": "string", "minLength": 1, "maxLength": 4096}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "SUCCEEDED"}}, "required": ["status"]},
+      "then": {"properties": {"failure_code": {"type": "null"}}},
+      "else": {"properties": {"failure_code": {"type": "string"}}}
+    },
+    {
+      "if": {
+        "properties": {"external_truth": {"const": true}},
+        "required": ["external_truth"]
+      },
+      "then": {
+        "properties": {
+          "status": {"const": "SUCCEEDED"},
+          "hardware_touched": {"const": true}
+        }
+      }
+    }
+  ]
+}

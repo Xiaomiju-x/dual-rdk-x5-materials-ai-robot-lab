@@ -1,0 +1,13 @@
+{
+  "schema_version": "xrd-rb-voe-semantic-profile-v1",
+  "profile_id": "assay_station.v1",
+  "subsystem": "assay_station",
+  "manifest_schema_version": "xrd-rb-voe-assay-station-capability-v1",
+  "read_mode": "TARGET_ONLY",
+  "maturity": "TARGET_ONLY",
+  "capabilities": [],
+  "required_backends": {},
+  "execution_authority": false,
+  "r3_permit_ready": false,
+  "profile_sha256": "9d77a8d48ffdeee65efda4f35812a9e78350f083f934622c4529643c387c0f80"
+}

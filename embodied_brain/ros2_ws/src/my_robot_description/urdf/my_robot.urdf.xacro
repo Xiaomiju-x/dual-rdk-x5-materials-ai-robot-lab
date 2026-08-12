@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="embodied_brain_cart">
+  <!--
+    顶层 URDF. 实例化所有 link macro, 组装成完整机器人.
+    维度都是占位, 实物到位后按量测调整.
+
+    TF 树规划:
+      base_footprint
+        └─ base_link
+            ├─ left_wheel_link
+            ├─ right_wheel_link
+            ├─ front_caster_link
+            ├─ imu_link
+            ├─ depth_camera_link
+            │     └─ depth_camera_optical_frame
+            └─ pillar_link
+                ├─ top_tray_link
+                │     └─ laser_link
+                ├─ pt_base_link
+                │     └─ pt_pan_link
+                │           └─ pt_tilt_link
+                │                 └─ pt_camera_link
+                │                       └─ pt_camera_optical_frame
+                └─ lift_link  (prismatic, 沿 z)
+                      ├─ lift_camera_link
+                      │     └─ lift_camera_optical_frame
+                      └─ electromagnet_link
+  -->
+
+  <!-- 全局参数, $(arg use_xiaomi_pt) launch 时可改 -->
+  <xacro:arg name="use_xiaomi_pt" default="true"/>
+
+  <!-- 引入通用 macro -->
+  <xacro:include filename="$(find my_robot_description)/urdf/common.urdf.xacro"/>
+
+  <!-- 引入主体 -->
+  <xacro:include filename="$(find my_robot_description)/urdf/base.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/pillar.urdf.xacro"/>
+
+  <!-- 引入传感器 -->
+  <xacro:include filename="$(find my_robot_description)/urdf/sensor/imu.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/sensor/laser.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/sensor/depth_camera.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/sensor/lift_camera.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/sensor/pt_camera.urdf.xacro"/>
+
+  <!-- 引入执行器 -->
+  <xacro:include filename="$(find my_robot_description)/urdf/actuator/wheel.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/actuator/caster.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/actuator/lift_stage.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/actuator/electromagnet.urdf.xacro"/>
+
+  <!-- ============== 实例化 ============== -->
+
+  <!-- 主体: 底盘 + 立柱 + 顶层托盘 -->
+  <!-- 2026-07-19 measured body: 0.50 m long x 0.40 m wide; lower deck is 0.10 m above ground. -->
+  <xacro:base_xacro
+      length="0.50"
+      width="0.40"
+      height="0.05"
+      wheel_radius="0.04"
+      base_ground_clearance="0.10"/>
+  <xacro:pillar_xacro
+      length="0.04"
+      width="0.04"
+      height="0.90"
+      tray_x="0.30"
+      tray_y="0.30"
+      tray_z="0.02"
+      mount_x="-0.15"
+      mount_y="0.10"/>
+
+  <!-- 驱动轮 (左右) -->
+  <xacro:wheel_xacro wheel_name="left_wheel"  parent="base_link" xyz="0  0.16 0"/>
+  <xacro:wheel_xacro wheel_name="right_wheel" parent="base_link" xyz="0 -0.16 0"/>
+
+  <!-- 万向轮 (前) -->
+  <xacro:caster_xacro caster_name="front_caster" parent="base_link" xyz="0.17 0 -0.015" radius="0.025"/>
+
+  <!-- IMU (在底盘几何中心略上方) -->
+  <xacro:imu_xacro parent="base_link" xyz="0 0 0.03"/>
+
+  <!-- 深度相机 (底盘前部正中, 略低朝前看, frame 旋转 0 — 看正前) -->
+  <!-- Front-centre Astra: optical housing centre measured 0.10 m above ground. -->
+  <xacro:depth_camera_xacro
+      parent="base_link"
+      xyz="0.25 0 0"
+      rpy="0 0 0"/>
+
+  <!-- LD14: centred over the chassis, measured 0.50 m above ground. -->
+  <xacro:laser_xacro
+      parent="base_link"
+      xyz="0 0 0.40"
+      rpy="0 0 0"/>
+
+  <!-- 监控云台 (立柱顶端) -->
+  <xacro:pt_camera_xacro
+      parent="pillar_link"
+      xyz="0 0 0.92"
+      rpy="0 0 0"
+      use_xiaomi="$(arg use_xiaomi_pt)"/>
+
+  <!-- 升降臂 (沿立柱滑动, 初始位置 z=0.20 m, 即立柱 0.20m 高度) -->
+  <xacro:lift_stage_xacro
+      parent="pillar_link"
+      arm_length="0.20"
+      arm_width="0.10"
+      arm_thickness="0.02"
+      max_travel="0.60"
+      mount_xyz="0 0 0.20"/>
+
+  <!-- 升降臂上的 200W USB 摄像头 (装在臂末端朝下) -->
+  <xacro:lift_camera_xacro
+      parent="lift_link"
+      xyz="0.18 0 0.02"
+      rpy="0 ${pi/2} 0"/>
+
+  <!-- 电磁铁 (装在臂末端, 朝下) -->
+  <xacro:electromagnet_xacro
+      parent="lift_link"
+      xyz="0.18 0 0"
+      rpy="0 0 0"/>
+
+</robot>

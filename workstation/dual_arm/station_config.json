@@ -1,0 +1,170 @@
+{
+  "schema_version": "xrd-dual-arm-station-finals-v2",
+  "updated_at": "2026-07-18",
+  "purpose": "Static finals contract for the validated v3 dual-arm overlap flow and its read-only RB-VoE preflight.",
+  "maturity": "FINALS_V3_CHOREOGRAPHY_LIVE_VALIDATED_CURRENT_WRAPPER_LOCAL_ONLY",
+  "network": {
+    "lan": "xrd-lab_5G",
+    "topology": "single_lan_fixed_ipv4",
+    "pc_network_control": "operator_only",
+    "automatic_pc_network_changes_allowed": false,
+    "automatic_discovery_or_cache_allowed": false,
+    "orchestrator_transport": "direct_fixed_lan_only",
+    "known_hosts": {
+      "path": "rb_voe/live_known_hosts",
+      "sha256": "79fc15d37314f1abeae2b07952695f666c993272453fc582b6e571e42dd4212f",
+      "strict_host_key_checking": true,
+      "host_key_algorithm": "ssh-ed25519"
+    },
+    "targets": {
+      "arm01": {
+        "user": "er",
+        "address": "192.0.2.64",
+        "hostname": "mycobot-arm-01",
+        "wlan0_mac": "e4:5f:01:bf:de:a7",
+        "cpu_serial": "1000000092fb92d3"
+      },
+      "arm02": {
+        "user": "er",
+        "address": "192.0.2.136",
+        "hostname": "er",
+        "wlan0_mac": "98:fe:54:0c:94:07",
+        "cpu_serial": "10000000f08c41fc"
+      },
+      "ai_x5": {
+        "user": "sunrise",
+        "address": "192.0.2.103",
+        "hostname": "xrd-ai",
+        "wlan0_mac": "b4:2f:03:31:97:b9"
+      }
+    }
+  },
+  "edge_environment": {
+    "finals_state_verified_at": "2026-07-18",
+    "runtime_power_state": "NOT_ASSERTED_BY_STATIC_CONTRACT",
+    "runtime_recheck_required_before_motion": true,
+    "arm01_workcockpit": {
+      "unit": "xrd-workcockpit.service",
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "arm02_automatic_ager_reboot_entry_present": false,
+    "arm02_overhead_camera_service": {
+      "unit": "xrd-overhead-camera.service",
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "robot_serial_owner_required_before_motion": "none",
+    "camera_owner_required_before_motion": "none"
+  },
+  "arms": {
+    "arm01": {
+      "physical_side": "left",
+      "competition_role": "main_bag_transfer",
+      "hostname": "mycobot-arm-01",
+      "fixed_address": "192.0.2.64",
+      "wlan0_mac": "e4:5f:01:bf:de:a7",
+      "cpu_serial": "1000000092fb92d3",
+      "declared_tool_role": "blue_g23_powder_bag_gripper",
+      "physical_tool_presence_verified": false,
+      "robot_serial_port": "/dev/ttyAMA0"
+    },
+    "arm02": {
+      "physical_side": "right",
+      "competition_role": "secondary_grinding",
+      "hostname": "er",
+      "fixed_address": "192.0.2.136",
+      "wlan0_mac": "98:fe:54:0c:94:07",
+      "cpu_serial": "10000000f08c41fc",
+      "declared_tool_role": "red_grinding_rod_gripper",
+      "physical_tool_presence_verified": false,
+      "robot_serial_port": "/dev/ttyAMA0"
+    }
+  },
+  "finals_motion_profile": {
+    "profile": "v3_overlap",
+    "live_validation_date": "2026-07-18",
+    "live_validation_status": "CHOREOGRAPHY_DUAL_ARM_RETURNED_TO_START",
+    "live_validated_predecessor_orchestrator_sha256": "2c40e81f5fe47ca0036f2ab53ce646ab23f59d2c88223c256862cd25b4202b62",
+    "default_grind_cycles": 4,
+    "orchestrator": {
+      "path": "workstation/dual_arm/run_dual_arm_bag_grind.ps1",
+      "sha256": "0c224675ab2b38a64387b84eb790414ddca53ba78e3d8cb32dbd7548d4b05e65",
+      "validation_status": "LOCAL_PLAN_ONLY_NOT_LIVE_RUN"
+    },
+    "arm01_motion_entrypoint": {
+      "path": "/home/rdk/arm01_compact_front_transfer.py",
+      "sha256": "1e385eb813a89a484ac59aa69f1c7ec82a86b9ed2164f1efb761bd78891b2993"
+    },
+    "arm02_motion_entrypoint": {
+      "path": "/home/rdk/xrd/workstation/dual_arm/arm02_direct_grind_closed_loop.py",
+      "sha256": "4952d62719c4eeb5939e3544cf928cd2266367c9c215d49c44bf5a041b0e486d"
+    },
+    "arm01_named_points_deg": {
+      "COMPACT_DISH_BRANCH": [-148.79, -90.0, 90.0, 90.0, 18.63, -59.15],
+      "COMPACT_START_BRANCH": [142.55, -90.0, 90.0, 90.0, 18.63, -59.15],
+      "OBSERVE": [107.57, -142.73, 32.25, 68.46, 88.85, -97.2]
+    },
+    "arm02_named_points_deg": {
+      "RIGHT_START": [5.09, -111.53, -52.29, -49.57, 45.79, 157.76],
+      "RIGHT_GRIND_WORK": [-78.22, -122.87, -125.94, -48.42, 37.88, 157.76]
+    },
+    "bag_landing_confirmation": "OPERATOR_VISUAL_REQUIRED",
+    "runtime_identity_owner_and_hash_recheck_required": true
+  },
+  "cameras": {
+    "arm01_wrist": {
+      "owner": "arm01",
+      "device": "/dev/video0",
+      "hardware": "lightweight_microdia_usb_camera",
+      "mount": "eye_in_hand",
+      "role": "apriltag_id_2_redundancy_gate",
+      "processor": "ai_x5_cpu_opencv",
+      "finals_replay_result": "4_OF_4_TAG_ID_2",
+      "chessboard_intrinsics_calibrated": false
+    },
+    "arm02_overhead": {
+      "owner": "arm02",
+      "device": "/dev/video0",
+      "usb_id": "1bcf:0d1a",
+      "stream_url": "http://192.0.2.136:8892/snapshot.jpg",
+      "mount": "fixed_eye_to_hand",
+      "role": "empty_dish_and_bag_state_gate",
+      "processor": "ai_x5_cpu_opencv",
+      "finals_replay_result": "6_OF_6_EMPTY_AND_6_OF_6_BAG_PRESENT"
+    }
+  },
+  "vision_contract": {
+    "arm01_apriltag": {
+      "dictionary": "DICT_APRILTAG_36h11",
+      "required_id": 2,
+      "motion_output_allowed": false,
+      "high_precision_6d_calibration_claim_allowed": false
+    },
+    "arm02_bag_state": {
+      "authoritative_runtime": "CPU_OPENCV",
+      "bag_color_ratio_min": 0.012,
+      "largest_component_ratio_min": 0.008,
+      "bpu_runtime_evidence_role": "AUXILIARY_GENERIC_SEMANTIC_ONLY",
+      "motion_output_allowed": false
+    }
+  },
+  "safety_authority": {
+    "motion_authorized_by_static_config": false,
+    "explicit_execute_switch_required": true,
+    "serial_access_allowed_during_readonly_preflight": false,
+    "camera_open_allowed_during_readonly_preflight": false,
+    "collision_model_physically_calibrated": false,
+    "physical_tool_presence_verified": false,
+    "fail_closed_on_missing_identity_owner_or_artifact": true,
+    "requires_new_operator_confirmation_for_any_motion": true
+  },
+  "finals_artifact_bundle": {
+    "orchestrator_path": "workstation/dual_arm/run_dual_arm_bag_grind.ps1",
+    "orchestrator_sha256": "0c224675ab2b38a64387b84eb790414ddca53ba78e3d8cb32dbd7548d4b05e65",
+    "arm01_motion_sha256": "1e385eb813a89a484ac59aa69f1c7ec82a86b9ed2164f1efb761bd78891b2993",
+    "arm02_motion_sha256": "4952d62719c4eeb5939e3544cf928cd2266367c9c215d49c44bf5a041b0e486d",
+    "current_orchestrator_live_validated": false,
+    "physical_tool_presence_verified": false
+  }
+}

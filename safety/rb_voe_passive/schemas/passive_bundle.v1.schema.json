@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xrd.local/schemas/passive_bundle.v1.schema.json",
+  "title": "RB-VoE Passive Sealed Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "audit_id",
+    "created_at",
+    "producer",
+    "sealed",
+    "bindings",
+    "differential",
+    "bundle_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "passive_bundle.v1"
+    },
+    "audit_id": {
+      "$ref": "#/$defs/audit_id"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "producer": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:/-]{2,127}$"
+    },
+    "sealed": {
+      "const": true
+    },
+    "bindings": {
+      "$ref": "#/$defs/bindings"
+    },
+    "differential": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/differential"
+        }
+      ]
+    },
+    "bundle_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "audit_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{2,63}$"
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_sha256",
+        "model_sha256",
+        "preprocess_sha256",
+        "calibration_sha256",
+        "runtime_sha256",
+        "output_sha256",
+        "threshold_profile_sha256"
+      ],
+      "properties": {
+        "input_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "model_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "preprocess_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "calibration_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runtime_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "output_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "threshold_profile_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "numeric_diff_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile_id",
+        "absolute_tolerance",
+        "relative_tolerance",
+        "max_violation_fraction",
+        "max_mean_absolute_error",
+        "max_root_mean_square_error",
+        "profile_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "numeric_diff_profile.v1"
+        },
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{2,95}$"
+        },
+        "absolute_tolerance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1e100
+        },
+        "relative_tolerance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1e100
+        },
+        "max_violation_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "max_mean_absolute_error": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e100
+            }
+          ]
+        },
+        "max_root_mean_square_error": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1e100
+            }
+          ]
+        },
+        "profile_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "model_sha256",
+        "runtime_sha256",
+        "values",
+        "observation_sha256"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "REFERENCE_CPU",
+            "ACTUAL_BPU"
+          ]
+        },
+        "model_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "runtime_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8192,
+          "items": {
+            "type": "number",
+            "minimum": -1e100,
+            "maximum": 1e100
+          }
+        },
+        "observation_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "differential": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "reference_cpu",
+        "actual_bpu"
+      ],
+      "properties": {
+        "profile": {
+          "$ref": "#/$defs/numeric_diff_profile"
+        },
+        "reference_cpu": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/observation"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "REFERENCE_CPU"
+                }
+              }
+            }
+          ]
+        },
+        "actual_bpu": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/observation"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "ACTUAL_BPU"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

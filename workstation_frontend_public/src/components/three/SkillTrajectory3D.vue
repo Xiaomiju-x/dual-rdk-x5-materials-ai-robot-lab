@@ -17,7 +17,6 @@ let scene: THREE.Scene, cam: THREE.PerspectiveCamera
 let pathG: THREE.Group | null = null
 let marker: THREE.Mesh | null = null
 let raf = 0
-let span = 0.4
 let progress = 0 // 0..1 along dense path
 
 const orbit = { r: 0.9, th: 0.9, ph: 0.95, cx: 0, cy: 0.12, cz: 0 }
@@ -70,7 +69,8 @@ function rebuild() {
   start.position.set(pts[0][0], pts[0][1], pts[0][2]); pathG.add(start)
   const end = new THREE.Mesh(new THREE.SphereGeometry(0.013, 14, 12),
     new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xdc2626, emissiveIntensity: 0.6 }))
-  end.position.set(pts.at(-1)![0], pts.at(-1)![1], pts.at(-1)![2]); pathG.add(end)
+  const last = pts[pts.length - 1]
+  end.position.set(last[0], last[1], last[2]); pathG.add(end)
 
   // base 柱 (臂基座 → 显示尺度参照)
   const base = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.025, 0.04, 16),
@@ -98,7 +98,6 @@ function rebuild() {
   orbit.cx = cx; orbit.cy = cy; orbit.cz = cz
   let maxd = 0.2
   for (const p of pts) maxd = Math.max(maxd, Math.hypot(p[0] - cx, p[1] - cy, p[2] - cz))
-  span = maxd
   orbit.r = maxd * 2.6 + 0.18
   progress = 0
 }

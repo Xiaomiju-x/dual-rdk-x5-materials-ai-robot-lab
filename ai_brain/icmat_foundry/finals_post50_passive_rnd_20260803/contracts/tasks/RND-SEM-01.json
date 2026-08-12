@@ -1,0 +1,27 @@
+{
+  "family_id": "RND-SEM-01",
+  "forbidden_outputs": [
+    "PASS",
+    "HOLD",
+    "model_route",
+    "robot_action"
+  ],
+  "model_output": "mask logits only for deployed student",
+  "receipt_sha256": "45897f6b71089892baf24f6860f7ac418a34ac94bb5f47dbca1b3029a9bd4374",
+  "schema": "x5_icmat_foundry.post50_task_contract.v1",
+  "source": {
+    "class_archive_sha256": "02436de8c2d6b0c7eabdcdcf133ab5f17e59a0e3de56ebffc4cb6b2acb771490",
+    "dataset": "Carinthia SEM + Carinthia-S",
+    "license": "CC BY 4.0",
+    "rows": 4591,
+    "segmentation_archive_sha256": "e7cc8507657611f89db33345d50fc7951e8784045684888dc997ac5298b7a3a2",
+    "split_counts": {
+      "test": 688,
+      "train": 3215,
+      "val": 688
+    },
+    "split_policy": "stratified by class and grouped by exact image SHA-256"
+  },
+  "task": "real public SEM defect-region segmentation with boundary-aware teacher and static mask student",
+  "test_policy": "grouped SHA test opened only after 32 fit selection lock"
+}

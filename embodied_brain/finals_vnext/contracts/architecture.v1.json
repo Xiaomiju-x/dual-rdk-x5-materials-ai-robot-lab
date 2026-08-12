@@ -1,0 +1,88 @@
+{
+  "schema_version": "x5-finals-vnext-architecture/1.0",
+  "candidate_id": "x5-tribev-flow-v2-shadow",
+  "status": "PC_ACCEPTED_BOARD_PENDING",
+  "shadow_only": true,
+  "authorities": {
+    "cmd_vel": false,
+    "cmd_vel_safe": false,
+    "tf": false,
+    "map_to_odom": false,
+    "f407_serial": false,
+    "services": false,
+    "actions": false
+  },
+  "validated_baseline": {
+    "entry": "bash ~/tools/finals_lift_nav_demo.sh",
+    "firmware_build_id": 2026071907,
+    "distance_m": 0.5,
+    "frozen_manifest_self_sha256": "f62729be0099ead851c6e5430c3bff08d473b4478e849fc52e172841a0527213",
+    "frozen_manifest_file_sha256": "25c2de08fececb20c63dd4e93e558b6a8b09b6c3a6009ef698c829e5139e8909",
+    "frozen_paths_sha256": "def1401315932bc9ca6f536173e2fdac5b2cfc74d437b504865b5bc8dc19df59"
+  },
+  "base_candidate": {
+    "name": "TinyOccFlow-v5r1",
+    "model_selection_sha256": "4b6c85a40b63e6a8a71106f1c817d9b6d3b4d2ebb53908b72ed6119d00e37642",
+    "bayes_e_bin_sha256": "90e01859991c2eabaf71147de299123c656569ef1115df049d03e25f1471fdf9",
+    "reuse_policy": "extend_without_modifying_finals_successor"
+  },
+  "model_contract": {
+    "input_name": "tribev_v2_features",
+    "input_shape": [1, 60, 64, 64],
+    "history_frames": 5,
+    "channels_per_frame": 12,
+    "trajectory_candidates": 15,
+    "future_horizons_s": [0.4, 0.8, 1.2],
+    "outputs": [
+      "future_occupancy",
+      "flow",
+      "dynamic_uncertainty",
+      "trajectory_risk_logits",
+      "sensor_reliability_logits"
+    ],
+    "output_shapes": {
+      "future_occupancy": [1, 3, 64, 64],
+      "flow": [1, 6, 32, 32],
+      "dynamic_uncertainty": [1, 6, 64, 64],
+      "trajectory_risk_logits": [1, 15, 1, 1],
+      "sensor_reliability_logits": [1, 4, 1, 1]
+    },
+    "sensor_reliability_names": [
+      "lidar_geometry",
+      "depth_geometry",
+      "vision_semantics",
+      "odometry_alignment"
+    ]
+  },
+  "frame_channels": [
+    "lidar_occupancy",
+    "lidar_visibility",
+    "depth_hit_low",
+    "depth_hit_mid",
+    "depth_hit_high",
+    "depth_free",
+    "depth_unknown",
+    "depth_closing_rate",
+    "camera_semantic_risk",
+    "camera_visibility",
+    "sensor_validity_fraction",
+    "fused_occupancy"
+  ],
+  "pc_acceptance": {
+    "receipt": "embodied_brain/finals_vnext/evidence/pc_acceptance.v2.json",
+    "onnx_sha256": "eef470db65e00bc8ba1887d3ab80470bd7df01ce17175413c1e0a84f300a935e",
+    "bayes_e_bin_sha256": "7c131aad52cec62c2e526d41f407bdeaf103ad1fd683abcf532deadeac87b29c",
+    "compiled_bpu_nodes": 34,
+    "compiled_cpu_nodes": 0,
+    "metrics_scope": "synthetic_only",
+    "board_runtime_validated": false
+  },
+  "board_phase": {
+    "automatic_service": false,
+    "deploy_root": "~/xrd_candidates/finals_vnext/<content_sha>",
+    "namespace": "/x5_finals_vnext",
+    "requires_explicit_power_on_confirmation": true,
+    "requires_identity_check": true,
+    "requires_non_interference_regression": true
+  }
+}

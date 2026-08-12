@@ -1,0 +1,44 @@
+{
+  "schema_version": "x5-embodied-cortex-evidence-boundary/1.0",
+  "candidate_status": "PC_FOUNDATION_IMPLEMENTED_REAL_DATA_AND_BOARD_PENDING",
+  "source_states": [
+    "live_camera",
+    "cached_camera",
+    "recorded_replay",
+    "synthetic_fixture",
+    "missing",
+    "invalid"
+  ],
+  "freshness_states": [
+    "fresh",
+    "stale",
+    "expired",
+    "clock_unverified"
+  ],
+  "label_classes": [
+    "human_ground_truth",
+    "instrument_ground_truth",
+    "teacher_pseudo_label",
+    "synthetic_oracle",
+    "unlabeled"
+  ],
+  "allowed_claims_pc_phase": [
+    "offline algorithm implementation",
+    "synthetic or recorded-replay test results with explicit source labels",
+    "ONNX or Bayes-e compiler evidence when separately verified",
+    "static non-interference and frozen-baseline evidence"
+  ],
+  "forbidden_claims_until_board_receipt": [
+    "actual X5 BPU latency",
+    "sustained TOPS utilization",
+    "actual X5 memory or thermal performance",
+    "real-time 4K semantic BEV",
+    "real navigation accuracy",
+    "autonomous-driving control",
+    "physical pickup success",
+    "functional-safety certification"
+  ],
+  "tesla_boundary": "Public BEV, occupancy-flow, temporal memory and planning-oriented ideas may be adapted; Tesla source code, weights, data, architecture equivalence and FSD replication must not be claimed.",
+  "task_verification_boundary": "Without independent object-presence, lift-limit or load evidence, only control-state and temporal-order verification is allowed; physical success remains unverified.",
+  "failure_behavior": "MONITOR_OFFLINE"
+}

@@ -1,0 +1,811 @@
+{
+  "schema_version": "site31.gate_evidence.v1",
+  "release": "site32-global-commercial-v1.13-20260720",
+  "generated_at": 1784507139,
+  "phase": "preflight",
+  "gate": "pass",
+  "dimensions": {
+    "security": {
+      "max_points": 12.0,
+      "earned_points": 9.8,
+      "ratio": 0.8167,
+      "state": "verified-partial"
+    },
+    "accessibility": {
+      "max_points": 6.0,
+      "earned_points": 5.3,
+      "ratio": 0.8833,
+      "state": "verified-partial"
+    }
+  },
+  "checks": [
+    {
+      "domain": "security",
+      "key": "release.asset_manifest",
+      "label": "Release asset manifest integrity",
+      "state": "verified",
+      "max_points": 0.0,
+      "earned_points": 0.0,
+      "critical": true,
+      "evidence": "release=site32-global-commercial-v1.13-20260720; digest=612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44; files=122",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "release.site32_r0_evidence_contract",
+      "label": "Site32 R0 candidate evidence contract",
+      "state": "verified",
+      "max_points": 0.0,
+      "earned_points": 0.0,
+      "critical": true,
+      "evidence": "browser/origin/style/site32_r0_baseline candidate binding; failures=none",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "app.method_boundary",
+      "label": "匿名与 judge 写方法 fail closed",
+      "state": "verified",
+      "max_points": 1.4,
+      "earned_points": 1.4,
+      "critical": true,
+      "evidence": "method matrix=[('POST', '/api/config', 405), ('PUT', '/api/site31_portal', 405), ('PATCH', '/api/site31_portal', 405), ('DELETE', '/api/site31_portal', 405)]; judge=403; cross-origin=403",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "app.host_body_boundary",
+      "label": "Host 白名单与请求体上限",
+      "state": "verified",
+      "max_points": 0.8,
+      "earned_points": 0.8,
+      "critical": true,
+      "evidence": "bad_host=421; max_body=2097152",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "browser.security_headers",
+      "label": "浏览器安全响应头矩阵",
+      "state": "verified",
+      "max_points": 1.2,
+      "earned_points": 1.2,
+      "critical": true,
+      "evidence": "headers=['content-security-policy', 'cross-origin-opener-policy', 'cross-origin-resource-policy', 'origin-agent-cluster', 'permissions-policy', 'referrer-policy', 'strict-transport-security', 'x-content-type-options', 'x-frame-options', 'x-permitted-cross-domain-policies']; csp=['base-uri', 'block-all-mixed-content', 'form-action', 'frame-ancestors', 'manifest-src', 'object-src', 'upgrade-insecure-requests', 'worker-src']",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "public.redaction_no_actuation",
+      "label": "公开字段脱敏与无物理执行入口",
+      "state": "verified",
+      "max_points": 1.2,
+      "earned_points": 1.2,
+      "critical": true,
+      "evidence": "public API statuses={'/api/public_manifest': 200, '/api/assets': 200, '/api/trust_center': 200, '/api/hardening': 200}; hits=none",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "gateway.sso_auth",
+      "label": "SSO 登录、角色与安全跳转回归",
+      "state": "verified",
+      "max_points": 1.1,
+      "earned_points": 1.1,
+      "critical": false,
+      "evidence": "auth security smoke: ok (66 checks)",
+      "residual_risk": "Caddy identity-header copy/strip configuration must be rechecked after gateway changes."
+    },
+    {
+      "domain": "security",
+      "key": "auth.session_redirect",
+      "label": "Cookie、爆破锁定与重定向防护",
+      "state": "verified",
+      "max_points": 0.8,
+      "earned_points": 0.8,
+      "critical": false,
+      "evidence": "auth source controls + isolated Flask regression",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "offline.cache_integrity",
+      "label": "Service Worker 只读白名单",
+      "state": "verified",
+      "max_points": 0.6,
+      "earned_points": 0.6,
+      "critical": true,
+      "evidence": "GET-only, same-origin static cache; private/API traffic excluded; {'mode': 'r4-static-only', 'checks': {'same_origin_get_only': True, 'private_request_bypass': True, 'private_response_rejection': True, 'bad_response_rejection': True, 'explicit_core_inventory': True, 'no_api_in_core': True}}",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "offline.same_origin_probe",
+      "label": "离线提示以非缓存同源探测为准",
+      "state": "verified",
+      "max_points": 0.0,
+      "earned_points": 0.0,
+      "critical": true,
+      "evidence": "uncached HEAD probe bypasses Service Worker snapshots and avoids navigator.onLine false positives",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "release.audit_rollback",
+      "label": "版本一致性、审计与回滚",
+      "state": "verified",
+      "max_points": 0.7,
+      "earned_points": 0.7,
+      "critical": true,
+      "evidence": "bindings={'release': 'site32-global-commercial-v1.13-20260720', 'major': 32, 'query_assets': ['style.css', 'i18n.js', 'app.js', 'twin.js', 'r4.css', 'r4.js', 'r4-performance.js', 'r4-accessibility.js', 'site32.css', 'site32.js'], 'missing_or_mismatched_queries': [], 'split_query_releases': [], 'sw_release': 'site32-global-commercial-v1.13-20260720', 'sw_core_missing': [], 'i18n_release': 'site32-global-commercial-v1.13-20260720', 'i18n_asset_release': 'site32-global-commercial-v1.13-20260720', 'release_tokens': ['site32-global-commercial-v1.13-20260720'], 'critical_missing': [], 'critical_hash_invalid': [], 'critical_assets_sha256': '2679f4dea82e2906943bf18caf6b45a556ee02e3c13276e1947b766b3df6f1a5'}; exact-tree promote and rollback hooks present",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "origin.loopback_systemd",
+      "label": "Loopback origin 与 systemd 沙箱",
+      "state": "verified",
+      "max_points": 0.8,
+      "earned_points": 0.8,
+      "critical": true,
+      "evidence": "unit hardening=present; phase=preflight",
+      "residual_risk": ""
+    },
+    {
+      "domain": "security",
+      "key": "transport.tls_secret_posture",
+      "label": "HTTPS/HSTS 与敏感响应缓存边界",
+      "state": "verified",
+      "max_points": 0.7,
+      "earned_points": 0.7,
+      "critical": false,
+      "evidence": "HTTPS test-client response includes HSTS; auth and sensitive APIs use no-store",
+      "residual_risk": "Certificate-chain and edge TLS policy require live operator/edge evidence."
+    },
+    {
+      "domain": "security",
+      "key": "origin.vps_firewall",
+      "label": "VPS 防火墙、loopback origin 与身份伪造负测",
+      "state": "verified",
+      "max_points": 0.0,
+      "earned_points": 0.0,
+      "critical": true,
+      "evidence": "phase=preflight; origin evidence=verified",
+      "residual_risk": "Port 80 is also used by the existing FRP service; this is outside the cmdcenter origin binding."
+    },
+    {
+      "domain": "security",
+      "key": "dependency.self_hosted_inventory",
+      "label": "关键前端依赖自托管与静态清单",
+      "state": "verified",
+      "max_points": 0.5,
+      "earned_points": 0.5,
+      "critical": false,
+      "evidence": "three/app/twin are self-hosted; no CDN runtime dependency in index",
+      "residual_risk": "Continuous CVE/SBOM scanning is not yet attached."
+    },
+    {
+      "domain": "security",
+      "key": "edge.waf_rate_limit",
+      "label": "Cloudflare WAF 与边缘速率限制",
+      "state": "manual-check",
+      "max_points": 1.2,
+      "earned_points": 0.0,
+      "critical": false,
+      "evidence": "requires Cloudflare dashboard/API rule evidence",
+      "residual_risk": "Application controls do not replace verified edge managed rules or rate limiting."
+    },
+    {
+      "domain": "security",
+      "key": "external.assurance",
+      "label": "外部渗透、持续漏洞扫描与独立复核",
+      "state": "manual-check",
+      "max_points": 1.0,
+      "earned_points": 0.0,
+      "critical": false,
+      "evidence": "no independent report attached",
+      "residual_risk": "Internal tests are not an independent penetration test or security certification."
+    },
+    {
+      "domain": "accessibility",
+      "key": "document.semantics",
+      "label": "语言、跳转链接、地标与状态区域",
+      "state": "verified",
+      "max_points": 0.9,
+      "earned_points": 0.9,
+      "critical": true,
+      "evidence": "lang=zh-CN; landmarks=4; live_regions=['routeAnnouncer', 'appearanceAnnouncer', 'homeSearchSummary', 'homeSearchStatus', 'researchCommonsSummary', 'researchCommonsList', 'rbVoeExplain', 'toast']",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "controls.names_ids",
+      "label": "控件可访问名称与唯一 ID",
+      "state": "verified",
+      "max_points": 1.0,
+      "earned_points": 1.0,
+      "critical": true,
+      "evidence": "controls=245; unnamed=[]; nonsemantic_clicks=[]; duplicate_ids=[]",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "focus.current_route",
+      "label": "可见焦点、skip link 与当前路由",
+      "state": "verified",
+      "max_points": 0.8,
+      "earned_points": 0.8,
+      "critical": false,
+      "evidence": "focus-visible + forced-colors + aria-current route state",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "motion.transparency",
+      "label": "减少动态与透明效果",
+      "state": "verified",
+      "max_points": 0.8,
+      "earned_points": 0.8,
+      "critical": false,
+      "evidence": "CSS reduced motion/transparency and JS deterministic route path",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "status.route_announcement",
+      "label": "路由状态播报且不抢焦点",
+      "state": "verified",
+      "max_points": 0.6,
+      "earned_points": 0.6,
+      "critical": false,
+      "evidence": "polite atomic live region + document title update",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "layout.zoom_readability",
+      "label": "宽屏笔记本、缩放与长文本可读性",
+      "state": "verified",
+      "max_points": 0.7,
+      "earned_points": 0.7,
+      "critical": false,
+      "evidence": "stable overflow rules and 1366px desktop breakpoint; browser matrix remains release evidence",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "browser.keyboard_matrix",
+      "label": "真实浏览器键盘、五档宽屏与等效 200% 缩放矩阵",
+      "state": "verified",
+      "max_points": 0.5,
+      "earned_points": 0.5,
+      "critical": true,
+      "evidence": "browser evidence valid=True; sha256=a7ebbd3e63d0ad0b43be74620c16da9fc0ceca4a5495a68212125f27c10e3855; binding={'completed_at': '2026-07-20T00:22:39.490Z', 'age_s': 179.4, 'max_age_s': 86400, 'future_skew_s': -179.4, 'release_not_before': '2026-07-20T00:14:11+00:00', 'newer_than_release': True, 'base_url': 'http://127.0.0.1:29196/', 'observed_checks': ['authority_boundary', 'console', 'desktop_viewport_matrix', 'evidence_object_detail', 'full_experience_visual_contract', 'keyboard_and_skip_link', 'localization', 'more_menu', 'research_search_v2', 'route_and_aria_current', 'same_origin_offline_probe', 'search_url_roundtrip', 'theater_01_04', 'tri_mode_background_boundary', 'zoom_equivalent'], 'missing_checks': [], 'release_matches': True, 'manifest_matches': True}",
+      "residual_risk": ""
+    },
+    {
+      "domain": "accessibility",
+      "key": "external.screen_reader",
+      "label": "NVDA/VoiceOver 与 WCAG-EM 人工审计",
+      "state": "manual-check",
+      "max_points": 0.7,
+      "earned_points": 0.0,
+      "critical": false,
+      "evidence": "no independent/manual screen-reader report attached",
+      "residual_risk": "Core automated checks do not prove complete WCAG 2.2 AA conformance."
+    }
+  ],
+  "summary": {
+    "verified": 22,
+    "manual_check": 3,
+    "failed": 0,
+    "critical_failures": []
+  },
+  "browser_evidence": {
+    "valid": true,
+    "sha256": "a7ebbd3e63d0ad0b43be74620c16da9fc0ceca4a5495a68212125f27c10e3855",
+    "browser": "Codex In-app Browser (Chromium); the unchanged layout matrix also retains the v1.12 standalone Microsoft Edge/Playwright results",
+    "completed_at": "2026-07-20T00:22:39.490Z",
+    "base_url": "http://127.0.0.1:29196/",
+    "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+    "age_s": 179.4,
+    "max_age_s": 86400,
+    "future_skew_s": -179.4,
+    "release_not_before": "2026-07-20T00:14:11+00:00",
+    "newer_than_release": true,
+    "observed_checks": [
+      "authority_boundary",
+      "console",
+      "desktop_viewport_matrix",
+      "evidence_object_detail",
+      "full_experience_visual_contract",
+      "keyboard_and_skip_link",
+      "localization",
+      "more_menu",
+      "research_search_v2",
+      "route_and_aria_current",
+      "same_origin_offline_probe",
+      "search_url_roundtrip",
+      "theater_01_04",
+      "tri_mode_background_boundary",
+      "zoom_equivalent"
+    ],
+    "missing_checks": [],
+    "release_matches": true,
+    "manifest_matches": true
+  },
+  "asset_manifest": {
+    "valid": true,
+    "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+    "artifact_sha256": "4eb3fd056d008458d34d7a78313cc5dee815f663f37f4eb90b7e1647fabfa5c0",
+    "critical_assets_sha256": "2679f4dea82e2906943bf18caf6b45a556ee02e3c13276e1947b766b3df6f1a5",
+    "critical_assets": [
+      {
+        "path": "app.py",
+        "sha256": "f8b0e92e9e2be62a4af7af2cb938951e94a39909a020f397f84bcd9b42dcace0",
+        "size": 455178
+      },
+      {
+        "path": "assets.json",
+        "sha256": "4d262600570bcf2e7a284b6ae55bd0e832ed8aacba3344520ade7c26d457a0b4",
+        "size": 5046
+      },
+      {
+        "path": "static/index.html",
+        "sha256": "d319347f60482ab32ca08396fc8d10c59a72ed9cd1c283416e4a11af62437424",
+        "size": 157399
+      },
+      {
+        "path": "static/style.css",
+        "sha256": "d92d554e65defcb3a1e13a0f4ba83aa3edf4a228b4a1f30e052cb126913f3116",
+        "size": 382108
+      },
+      {
+        "path": "static/app.js",
+        "sha256": "fe303f1cb1a4e656ffb6eee6d911957378e25e32f2a294dd5a1f34d90da16457",
+        "size": 450188
+      },
+      {
+        "path": "static/i18n.js",
+        "sha256": "272ff91105b0c32b6e4d33949c0fef859d15cf02051d7d0e7809e92d6ae793c7",
+        "size": 26510
+      },
+      {
+        "path": "static/twin.js",
+        "sha256": "63f5146726bac42eb412053712b072ee9e1d6eb9e4ea02874f45d3648ba94240",
+        "size": 28397
+      },
+      {
+        "path": "static/sw.js",
+        "sha256": "87a1c8f0db3fb23f2a3e789c48058e73ecfa2ccedd47fb88fead35f45b99062c",
+        "size": 6715
+      },
+      {
+        "path": "static/r4.css",
+        "sha256": "15041ce4b5ac11a655aceb5249cac8a826c5a2a96fbf1166ec990e8ba1778647",
+        "size": 7371
+      },
+      {
+        "path": "static/r4.js",
+        "sha256": "08a921b645abb56c420b4bbc199474624254d01e551256bf741f739092a3ec0f",
+        "size": 23389
+      },
+      {
+        "path": "static/r4-performance.js",
+        "sha256": "2d5c0c0c4b3ff1304af6568b8f959062b56a9ce7bf967b3085d6322d333b4ae0",
+        "size": 8590
+      },
+      {
+        "path": "static/r4-accessibility.js",
+        "sha256": "a759393b6f26470b4ef85cdc1a2adcbe47e42e17379c324c6bc597d2a252a7b1",
+        "size": 21265
+      },
+      {
+        "path": "requirements-production.txt",
+        "sha256": "cad583ed24338ca564fef25fa65bb05742cf19527946bac3875def49e804d965",
+        "size": 46
+      },
+      {
+        "path": "systemd/xrd-cmdcenter.service",
+        "sha256": "09cbea1e87669d35146a1f991187a77d9123875d93b03c52470dc2ed5e147a93",
+        "size": 2222
+      },
+      {
+        "path": "cmdcenter/__init__.py",
+        "sha256": "d280f6dadb9e216932983224d3459d7ada37e96e1340d82eb896603bc1873fef",
+        "size": 325
+      },
+      {
+        "path": "cmdcenter/access.py",
+        "sha256": "ee86e68181ef3c6c51ab87fd151d4f71157f0baf07c9043d3fa5594f00f31e81",
+        "size": 7731
+      },
+      {
+        "path": "cmdcenter/config.py",
+        "sha256": "af49028ce629bab1460e9b5fd3cc844c7a970de2538b98a32a226f48b843f3bd",
+        "size": 3404
+      },
+      {
+        "path": "cmdcenter/public_dto.py",
+        "sha256": "132a677d82a97b77d3bd3eb6a41f5d0065e660fc8afd9722d6903c584e9b673d",
+        "size": 8267
+      },
+      {
+        "path": "cmdcenter/release.py",
+        "sha256": "9ef49782301489814c95c2fb25ae5d0c31d9aeece949034c13759f986e9cfa91",
+        "size": 1571
+      },
+      {
+        "path": "cmdcenter/route_contract.py",
+        "sha256": "f36c599ef65d3296ee3765e3af492c94b93d2420e2a27c83a7d7e58f5f9a8524",
+        "size": 4950
+      },
+      {
+        "path": "cmdcenter/runtime.py",
+        "sha256": "73592b293e88a7b52e9330d9309ab67bdbf0b6839c8c774e15fd25efb2fbdbb4",
+        "size": 1067
+      },
+      {
+        "path": "cmdcenter/storage.py",
+        "sha256": "279086db68026707fd84ffa233b3046ea78e847c50029c1a9e06980f73009db5",
+        "size": 9159
+      },
+      {
+        "path": "cmdcenter/site32_blueprint.py",
+        "sha256": "7d20c0a1770bcf02fa003d246b607dffa196746f30dc523bf5d3f6df4fb21d65",
+        "size": 2406
+      },
+      {
+        "path": "static/site32.css",
+        "sha256": "d141035592dddb649ff3c6e3150e72140d6edfa49e4d31d9ad7b750f4e3fe7b7",
+        "size": 31678
+      },
+      {
+        "path": "static/site32.js",
+        "sha256": "a4b7c0020c4fe7f3d3f55862b4b8e8edddf32f3ceaf72cd5e611c0b05fb95d20",
+        "size": 2726
+      },
+      {
+        "path": "static/src/site32/release.js",
+        "sha256": "f3c12c35c602ce2a137a03898737bb5a7bfab42cc495ca55df8446f1e2838ba6",
+        "size": 198
+      },
+      {
+        "path": "static/src/site32/runtime.js",
+        "sha256": "fe69efe6c6aafa3a1993181e056e19659b752509eaf924508fab7097cfd32d31",
+        "size": 490
+      },
+      {
+        "path": "tools/deploy_staged.sh",
+        "sha256": "45b7ef0f867154e9c53c254cf2e91d3485f141ea5b6cc0fe3562eae57e6eaa44",
+        "size": 20912
+      },
+      {
+        "path": "tools/rollback.sh",
+        "sha256": "7cf121e0eb25ce4c7036a4ca764adaa755f0a35f1e4a83bf4dddd0ec375c0034",
+        "size": 15431
+      },
+      {
+        "path": "tools/site31_asset_manifest.py",
+        "sha256": "e8bc643f61ad1f665c6b83697a23a33910ae8dcb01e0d5db066be5a48849bd20",
+        "size": 19872
+      },
+      {
+        "path": "tools/site31_gate_audit.py",
+        "sha256": "3c5fa449608607cdae7dd82f33d1cb93aa27b7ab6dc76fa39cdaddafc3ef080e",
+        "size": 50414
+      },
+      {
+        "path": "tools/site31_smoke.py",
+        "sha256": "cfa690e3edaa8287156bdcf4a37b7bd194f110365d783b2340c099065f342d23",
+        "size": 8069
+      },
+      {
+        "path": "tools/site32_service_isolation.sh",
+        "sha256": "ea3f0fcda7d20077da2cb736ed4d87baae5606b710f3b681f8397c6286dcdad6",
+        "size": 33375
+      },
+      {
+        "path": "tools/site32_style_audit.py",
+        "sha256": "9611ca7f9e31160f0f39c31eb13fdace0e82ae2fcfd717456f647572a3e7dd14",
+        "size": 38583
+      },
+      {
+        "path": "static/src/site32/a11y.js",
+        "sha256": "1ace8e7999c192f6afbb124a83129ca34324920ad4dbdad43da377f1f3d221a3",
+        "size": 2472
+      },
+      {
+        "path": "static/src/site32/appearance.js",
+        "sha256": "174bd524dd23dbef6c1e0720e68988985e98f33fe9a73e9e870c0a10f7b7daed",
+        "size": 5216
+      },
+      {
+        "path": "static/src/site32/motion.js",
+        "sha256": "5f95337c3e0896c7aebf950d078ab439ffda62ca4928d5b482d366f71ea6442b",
+        "size": 3465
+      },
+      {
+        "path": "static/src/site32/router.js",
+        "sha256": "8fbe8ec19cc7466dbc9d810b241c5afa84cf3d93a4174ca1e0feb54712a38760",
+        "size": 3238
+      },
+      {
+        "path": "static/src/site32/search.js",
+        "sha256": "68bd620fb865e8ac10e17dbc5ca6443a4366447656b90243f25638766873d35a",
+        "size": 4414
+      },
+      {
+        "path": "static/src/site32/state.js",
+        "sha256": "09d14febee01b0d3d21da9e52912e8721dfd9f088fee07bf5f513fc62e728954",
+        "size": 2976
+      },
+      {
+        "path": "static/src/site32/telemetry.js",
+        "sha256": "d263a9b10557c1ff423640b52bf91e95778f13f53464941e946f07dff19b7440",
+        "size": 2929
+      },
+      {
+        "path": "static/src/site32/theater.js",
+        "sha256": "5509ca39e085733f089c1597f5e0515d7f868016e32736228252615ff45b16c1",
+        "size": 2830
+      },
+      {
+        "path": "tools/site32_state_bridge.py",
+        "sha256": "8e4f28ed36231da6802d1711aa92c20cf113c9982a9ca3c950288cd9eca4cc65",
+        "size": 5182
+      },
+      {
+        "path": "cmdcenter/research_search.py",
+        "sha256": "52b0036a693361f6593641cec3fe6f4c8b43bf244eb1f3bcf0d0fe40545e12c6",
+        "size": 21083
+      },
+      {
+        "path": "tools/deploy.sh",
+        "sha256": "82cf918873ea69ab90a7560a9f1b957219ec168ea0e237b84baaaf9b13255006",
+        "size": 385
+      },
+      {
+        "path": "tools/site32_environment_matrix.py",
+        "sha256": "4a3d4d3734ba57adcbdc3913d49cb1a23cef5d7383d34c8909121e556220ce1f",
+        "size": 22593
+      },
+      {
+        "path": "tools/site32_round1_baseline.py",
+        "sha256": "eda7d81c453c05cd035ceab640ac7b6698c89688d659d72683524677578df1ed",
+        "size": 6431
+      },
+      {
+        "path": "tools/test_site32_deploy_environment_gate.py",
+        "sha256": "e711434faa3736c5d355ac574c8f8bede812ed5d9cac3ffb2d80a6cd927bc7c9",
+        "size": 5014
+      },
+      {
+        "path": "tools/test_site32_environment_matrix.py",
+        "sha256": "5744e1b70e29578fca64cff46b8ba5ad7d2c1b4a4fad3bb3e6020598000e3763",
+        "size": 17464
+      },
+      {
+        "path": "tools/test_site32_gate_evidence_contract.py",
+        "sha256": "b18997feaed9c0ad5e790f9f37ce5d875860781298402638bd824f9e6a4e2f50",
+        "size": 8264
+      },
+      {
+        "path": "tools/test_site32_research_search.py",
+        "sha256": "e5fdfea04d9632c33390025995eb2e2a6a486ea083c6ec7f735bbdc74d9759a4",
+        "size": 8523
+      },
+      {
+        "path": "tools/test_site32_public_research_contract.py",
+        "sha256": "8d67bdbc09f48bcad55286ccba698cd014d7f3445e5b610d64451dc82833ca06",
+        "size": 10793
+      },
+      {
+        "path": "tools/test_site32_requirements_contract.py",
+        "sha256": "173b4cd2dab08462ecd4aa6e70233e689ca0cc3cad89ba4240b6ca68b9e77cdd",
+        "size": 4861
+      },
+      {
+        "path": "tools/test_site32_rollback_contract.py",
+        "sha256": "eb7fbdeac172234213dbafda062887dfb022ec217e3d7adf0ff4c8fdc335fc52",
+        "size": 9659
+      },
+      {
+        "path": "tools/test_site32_round1_baseline.py",
+        "sha256": "04a0bb83c899013aea418e6d8ba27b481a3dcf2b1fd63707327aab59dd5d3816",
+        "size": 13211
+      },
+      {
+        "path": "tools/test_site32_runtime_manifest_integrity.py",
+        "sha256": "a2226e6e8d391cf1883b52a9fa83cf5065a649255cda5eb21bb98661dea122fb",
+        "size": 9024
+      },
+      {
+        "path": "tools/test_site32_sw_precache_contract.py",
+        "sha256": "f780f47b12eeedfda1cdea0d7d1aa4708722db2120d65fc52f468a23d501babf",
+        "size": 6569
+      },
+      {
+        "path": "tools/test_site32_visual_mode_contract.py",
+        "sha256": "853ac044eb82c4497f82ae7fba1b080b0c78c4243ce640faf86ed1c3de90a523",
+        "size": 8809
+      },
+      {
+        "path": "cmdcenter/research_collections.py",
+        "sha256": "1e38b7fd043d2ebe0b9ed61c9da1599a8b7ed531380b6c8d4d77af08dc4dac04",
+        "size": 17857
+      },
+      {
+        "path": "tools/test_site32_research_collections.py",
+        "sha256": "594d952151a8ffe5cb19ab01f7b08f52177e09afba9783e5080b217fb88f57c6",
+        "size": 7323
+      },
+      {
+        "path": "tools/test_site32_research_commons_frontend.py",
+        "sha256": "b31a46684732c2f470ce2a2f732dcc6c4732e0b26f77370ef84fda902aaa2f5c",
+        "size": 3486
+      },
+      {
+        "path": "cmdcenter/rb_voe_public.py",
+        "sha256": "f65e66f55844fc402004ede2b606da622d0151d199fdabf89742420880978222",
+        "size": 4679
+      },
+      {
+        "path": "public_evidence/rb_voe_r1_public.json",
+        "sha256": "b5d5ce274c4ff1d624338e052b43906cdf9956d3d79918c12e1012cad43740bf",
+        "size": 3729
+      },
+      {
+        "path": "tools/export_rb_voe_public.py",
+        "sha256": "4bfe55f6a802b4723161ee666e6cbf4002ee5a37d7bc3886f8903b5816a238ab",
+        "size": 6894
+      },
+      {
+        "path": "tools/test_rb_voe_public_contract.py",
+        "sha256": "e52c5f49db3f9bdb52899b7f8ac6472fc97d0da73a505ef2a21e08a6ebc29d88",
+        "size": 4277
+      }
+    ],
+    "detail": "release=site32-global-commercial-v1.13-20260720; digest=612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44; files=122"
+  },
+  "origin_evidence": {
+    "valid": true,
+    "sha256": "047b6c12d9597f2a03eee35d7fb2bf0f54f942f48d39444586f462ae0892336e",
+    "completed_at": "2026-07-20T00:22:39.490Z",
+    "source": "attached VPS read-only audit",
+    "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+    "age_s": 179.4,
+    "max_age_s": 86400,
+    "future_skew_s": -179.4,
+    "release_not_before": "2026-07-20T00:14:11+00:00",
+    "newer_than_release": true,
+    "observed_checks": [
+      "auth_service_isolation",
+      "caddy_forward_auth",
+      "cmdcenter_service_isolation",
+      "loopback_origins",
+      "predecessor_integrity",
+      "spoofed_identity_rejected",
+      "ufw_default_deny"
+    ],
+    "missing_checks": [],
+    "release_matches": true,
+    "manifest_required": true,
+    "manifest_matches": true
+  },
+  "site32_evidence_contract": {
+    "schema_version": "site32.gate_evidence_contract.v1",
+    "required": true,
+    "phase": "preflight",
+    "release": "site32-global-commercial-v1.13-20260720",
+    "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+    "artifacts": {
+      "browser": {
+        "path": "web/command_center/static/quality/site31_browser_evidence.json",
+        "exists": true,
+        "readable": true,
+        "sha256": "a7ebbd3e63d0ad0b43be74620c16da9fc0ceca4a5495a68212125f27c10e3855",
+        "release": "site32-global-commercial-v1.13-20260720",
+        "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+        "release_matches": true,
+        "manifest_matches": true,
+        "valid": true,
+        "validation": {
+          "completed_at": "2026-07-20T00:22:39.490Z",
+          "age_s": 179.4,
+          "max_age_s": 86400,
+          "future_skew_s": -179.4,
+          "release_not_before": "2026-07-20T00:14:11+00:00",
+          "newer_than_release": true,
+          "base_url": "http://127.0.0.1:29196/",
+          "observed_checks": [
+            "authority_boundary",
+            "console",
+            "desktop_viewport_matrix",
+            "evidence_object_detail",
+            "full_experience_visual_contract",
+            "keyboard_and_skip_link",
+            "localization",
+            "more_menu",
+            "research_search_v2",
+            "route_and_aria_current",
+            "same_origin_offline_probe",
+            "search_url_roundtrip",
+            "theater_01_04",
+            "tri_mode_background_boundary",
+            "zoom_equivalent"
+          ],
+          "missing_checks": [],
+          "release_matches": true,
+          "manifest_matches": true
+        }
+      },
+      "origin": {
+        "path": "web/command_center/static/quality/site31_origin_evidence.json",
+        "exists": true,
+        "readable": true,
+        "sha256": "047b6c12d9597f2a03eee35d7fb2bf0f54f942f48d39444586f462ae0892336e",
+        "release": "site32-global-commercial-v1.13-20260720",
+        "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+        "release_matches": true,
+        "manifest_matches": true,
+        "valid": true,
+        "validation": {
+          "completed_at": "2026-07-20T00:22:39.490Z",
+          "age_s": 179.4,
+          "max_age_s": 86400,
+          "future_skew_s": -179.4,
+          "release_not_before": "2026-07-20T00:14:11+00:00",
+          "newer_than_release": true,
+          "observed_checks": [
+            "auth_service_isolation",
+            "caddy_forward_auth",
+            "cmdcenter_service_isolation",
+            "loopback_origins",
+            "predecessor_integrity",
+            "spoofed_identity_rejected",
+            "ufw_default_deny"
+          ],
+          "missing_checks": [],
+          "release_matches": true,
+          "manifest_required": true,
+          "manifest_matches": true
+        }
+      },
+      "style": {
+        "path": "web/command_center/static/quality/site32_style_audit.json",
+        "exists": true,
+        "readable": true,
+        "sha256": "8a481b4296373d909c527c3acdaac9ccd3fc3c888823f6ad698815cee4c0e3aa",
+        "release": "site32-global-commercial-v1.13-20260720",
+        "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+        "release_matches": true,
+        "manifest_matches": true,
+        "valid": true,
+        "validation": {
+          "ok": true,
+          "exit_code": 0,
+          "style_ok": true
+        }
+      },
+      "baseline": {
+        "path": "web/command_center/static/quality/site32_r0_baseline.json",
+        "exists": true,
+        "readable": true,
+        "sha256": "124d4b8c0cc2af3d544d7d1482e239e56f3882a9df981e4709871fd7ff1bd64d",
+        "release": "site32-global-commercial-v1.13-20260720",
+        "manifest_digest": "612e4eb069e7cbd3f807908538a62c2cf6c46a2b6a396909d6f75b6e1c7cbd44",
+        "release_matches": true,
+        "manifest_matches": true,
+        "valid": true,
+        "validation": {
+          "identity_only": true
+        }
+      }
+    },
+    "failures": [],
+    "valid": true
+  },
+  "claim_boundary": "Internal release evidence only; not a penetration test, WCAG certification, Cloudflare configuration proof, or third-party global ranking.",
+  "artifact_sha256": "ebe3c2b87437c2fd97b67f7c3a4ce8b9b7f96509ae97246f16e226412088b8c5"
+}

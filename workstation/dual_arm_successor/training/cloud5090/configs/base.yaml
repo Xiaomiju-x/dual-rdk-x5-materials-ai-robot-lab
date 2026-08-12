@@ -1,0 +1,48 @@
+schema_version: xrd-dual-arm-cloud5090-config-v1
+project: X5-BiVLA-ShadowCortex
+truthfulness:
+  shadow_only: true
+  motion_authority: false
+  hardware_control_entrypoints: false
+  deployment_eligible_by_training_alone: false
+hardware:
+  require_cuda: true
+  required_gpu_name_contains: RTX 5090
+  minimum_vram_gib: 28
+dataset:
+  allowed_schemas:
+    - xrd-arm-train-jsonl-v2
+    - xrd-dual-arm-train-jsonl-v1
+  allowed_dimensions: [7, 13]
+  min_real_episodes: 30
+  min_rows: 720
+  min_image_coverage_for_smolvla: 0.95
+  min_task_coverage_for_smolvla: 0.95
+  readiness_schemas:
+    - xrd-arm-real-dataset-readiness-v3
+    - xrd-dual-arm-real-dataset-readiness-v1
+  split_seed: 20260730
+  validation_fraction: 0.2
+training:
+  seeds: [20260730, 20260731, 20260732]
+  epochs: 20
+  initial_batch_size: 64
+  minimum_batch_size: 1
+  gradient_accumulation: 1
+  num_workers: 4
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  amp: true
+tiny_act:
+  history_len: 8
+  chunk_len: 8
+  hidden_dim: 192
+  transformer_heads: 6
+  transformer_layers: 3
+  dropout: 0.1
+world_model:
+  history_len: 8
+  hidden_dim: 192
+  recurrent_layers: 2
+  dropout: 0.1
+  stage_loss_weight: 0.2

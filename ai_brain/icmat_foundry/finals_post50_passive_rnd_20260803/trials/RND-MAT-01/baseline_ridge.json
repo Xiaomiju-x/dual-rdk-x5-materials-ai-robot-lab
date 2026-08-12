@@ -1,0 +1,26 @@
+{
+  "checkpoint": null,
+  "configuration": {
+    "kind": "ridge"
+  },
+  "created_at": "2026-08-02T18:47:48.128473+00:00",
+  "extra": {
+    "baseline": true
+  },
+  "family_id": "RND-MAT-01",
+  "fit_id": "baseline_ridge",
+  "fit_seconds": 0.007941100000607548,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": null,
+  "receipt_sha256": "20117a1441c4a3253c91f4bc5f77d803532d97677e08000f444214dac4fde1e6",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20260803,
+  "selection_metrics": {
+    "mae": 28.870180130004883,
+    "r2": -0.3718640020532664,
+    "rmse": 32.38420867919922
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

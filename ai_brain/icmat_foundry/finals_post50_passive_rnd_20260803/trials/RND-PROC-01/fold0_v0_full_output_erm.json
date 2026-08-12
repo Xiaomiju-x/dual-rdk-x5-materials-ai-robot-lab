@@ -1,0 +1,153 @@
+{
+  "checkpoint": {
+    "bytes": 104442,
+    "path": "icmat_foundry/finals_post50_passive_rnd_20260803/trials/RND-PROC-01/fold0_v0_full_output_erm.pt",
+    "sha256": "aa1b841b247396f23fcc52aca921ef37b974aff3fcd50a870de7caf58a0add0d"
+  },
+  "configuration": {
+    "distill": false,
+    "group_dro": false,
+    "hidden": 64,
+    "id": "v0_full_output_erm",
+    "latent": false,
+    "rank": 17
+  },
+  "created_at": "2026-08-02T16:52:16.003246+00:00",
+  "extra": {
+    "epochs": 19,
+    "history": [
+      {
+        "epoch": 1,
+        "loss": 0.38750102867682773,
+        "selection_score": 0.019047223962843418
+      },
+      {
+        "epoch": 2,
+        "loss": 0.33579324930906296,
+        "selection_score": 0.01694029290229082
+      },
+      {
+        "epoch": 3,
+        "loss": 0.2884046137332916,
+        "selection_score": 0.016029369086027145
+      },
+      {
+        "epoch": 4,
+        "loss": 0.25571656847993535,
+        "selection_score": 0.016348470002412796
+      },
+      {
+        "epoch": 5,
+        "loss": 0.23499834537506104,
+        "selection_score": 0.01612046780064702
+      },
+      {
+        "epoch": 6,
+        "loss": 0.2147890900572141,
+        "selection_score": 0.016181886661797762
+      },
+      {
+        "epoch": 7,
+        "loss": 0.20266820738712946,
+        "selection_score": 0.016132850665599108
+      },
+      {
+        "epoch": 8,
+        "loss": 0.18874381482601166,
+        "selection_score": 0.01564230676740408
+      },
+      {
+        "epoch": 9,
+        "loss": 0.18300227696696916,
+        "selection_score": 0.01589298527687788
+      },
+      {
+        "epoch": 10,
+        "loss": 0.16935817524790764,
+        "selection_score": 0.016819088719785213
+      },
+      {
+        "epoch": 11,
+        "loss": 0.16255990912516913,
+        "selection_score": 0.015345409512519836
+      },
+      {
+        "epoch": 12,
+        "loss": 0.15931401401758194,
+        "selection_score": 0.015838682651519775
+      },
+      {
+        "epoch": 13,
+        "loss": 0.14978241920471191,
+        "selection_score": 0.015606337692588568
+      },
+      {
+        "epoch": 14,
+        "loss": 0.14480690409739813,
+        "selection_score": 0.014940493740141392
+      },
+      {
+        "epoch": 15,
+        "loss": 0.13947682455182076,
+        "selection_score": 0.016485182102769613
+      },
+      {
+        "epoch": 16,
+        "loss": 0.1349574706206719,
+        "selection_score": 0.015397686045616865
+      },
+      {
+        "epoch": 17,
+        "loss": 0.13544689118862152,
+        "selection_score": 0.015323986764997244
+      },
+      {
+        "epoch": 18,
+        "loss": 0.12976091044644514,
+        "selection_score": 0.01620315946638584
+      },
+      {
+        "epoch": 19,
+        "loss": 0.12862030727167925,
+        "selection_score": 0.01563832676038146
+      }
+    ],
+    "teacher_distillation": false
+  },
+  "family_id": "RND-PROC-01",
+  "fit_id": "fold0_v0_full_output_erm",
+  "fit_seconds": 2.6434814000003826,
+  "network_used": false,
+  "official_registry_member": false,
+  "parameter_count": 24610,
+  "receipt_sha256": "393bd6037174b981ab071d3605f30d57398cad5958c1c7f8f20cf58fee1f4a80",
+  "schema": "x5_icmat_foundry.post50_fit_receipt.v1",
+  "seed": 20260803,
+  "selection_metrics": {
+    "combined": {
+      "mae": 0.009737216867506504,
+      "r2": 0.9065669955488892,
+      "rmse": 0.036146555095911026
+    },
+    "per_domain": {
+      "AlCu": {
+        "mae": 0.009497084654867649,
+        "r2": 0.31867605247784514,
+        "rmse": 0.02520265430212021,
+        "uniformity_mae": 0.0017531950725242496,
+        "worst_point_mae": 0.013254865072667599
+      },
+      "WTi": {
+        "mae": 0.010406553745269775,
+        "r2": 0.0771277903000428,
+        "rmse": 0.05637378618121147,
+        "uniformity_mae": 0.0021985857747495174,
+        "worst_point_mae": 0.014492363668978214
+      }
+    },
+    "selection_score": 0.014940493740141392,
+    "worst_domain_mae": 0.010406553745269775
+  },
+  "test_observed": false,
+  "x5_contacted": false
+}

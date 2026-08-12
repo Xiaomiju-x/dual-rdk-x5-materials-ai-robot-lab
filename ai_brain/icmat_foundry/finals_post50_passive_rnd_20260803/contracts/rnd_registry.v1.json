@@ -1,0 +1,942 @@
+{
+  "accounting_scope": "ISOLATED_POST50_PC_RND_ONLY",
+  "candidate_weight_cap": 70,
+  "candidates": [
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 68286,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_lite/model.pt",
+          "sha256": "4eeeedf3422e892a7fbe91fd147a147ded1e58a4493755e85e8615653ec5a166"
+        },
+        "fixture": {
+          "bytes": 919,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_lite/fixed_fixture.npz",
+          "sha256": "187a927eb930a81eac67164d6ddfb2ca9a406921828c49b71b21b0e954525e72"
+        },
+        "onnx": {
+          "bytes": 68312,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_lite/model_static_opset11_ir7.onnx",
+          "sha256": "e73e229daccc688b54104ff5c2afa3bb970e7c1b846d13286eb2403425561f00"
+        },
+        "preprocessing": {
+          "bytes": 6133,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_lite/preprocessing.npz",
+          "sha256": "da4f96281289a09bcf5784421a6baa4ea833cb906689a1d6112d3b1cdb04ee1f"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_EXPERIMENTAL",
+      "candidate_id": "RND-PROC-01:recovery_lite",
+      "deployed": false,
+      "family_id": "RND-PROC-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "recovery_lite",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 97214,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_quality/model.pt",
+          "sha256": "0c498bc15f15b2741baf8aa5d68e908c5f037f1194533034a6bf6284073abc58"
+        },
+        "fixture": {
+          "bytes": 920,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_quality/fixed_fixture.npz",
+          "sha256": "08c870cd4938783c726cb5ba53c30ca7dd7049a888b1561bc86187c21cf924fd"
+        },
+        "onnx": {
+          "bytes": 97244,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_quality/model_static_opset11_ir7.onnx",
+          "sha256": "13004f47b8a0d6f375e258e4ee7823fed86f093293eb10f311e8e956ad1bab9a"
+        },
+        "preprocessing": {
+          "bytes": 6133,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_quality/preprocessing.npz",
+          "sha256": "da4f96281289a09bcf5784421a6baa4ea833cb906689a1d6112d3b1cdb04ee1f"
+        }
+      },
+      "candidate_class": "RND_USABLE_EXPERIMENTAL",
+      "candidate_id": "RND-PROC-01:recovery_quality",
+      "deployed": false,
+      "family_id": "RND-PROC-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "recovery_quality",
+      "variant_role": "PRIMARY_LOCKED_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 167358,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_robust/model.pt",
+          "sha256": "244cde041d49ba7f5647f3064e963bf8eb16ff5d27b258e0c42038fedc7052e0"
+        },
+        "fixture": {
+          "bytes": 919,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_robust/fixed_fixture.npz",
+          "sha256": "0e345d99cd6cd6f8f08fb1f919ce095dac9dc329e724bb63282def4390a6f130"
+        },
+        "onnx": {
+          "bytes": 167388,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_robust/model_static_opset11_ir7.onnx",
+          "sha256": "881e57e5ccc28466e6248edc09ffe59b44b212fe5d13d260da566412fc39b82f"
+        },
+        "preprocessing": {
+          "bytes": 6133,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-PROC-01/recovery_robust/preprocessing.npz",
+          "sha256": "da4f96281289a09bcf5784421a6baa4ea833cb906689a1d6112d3b1cdb04ee1f"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_EXPERIMENTAL",
+      "candidate_id": "RND-PROC-01:recovery_robust",
+      "deployed": false,
+      "family_id": "RND-PROC-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "recovery_robust",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 87932,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/lite/model.pt",
+          "sha256": "02c16ec2c71f5782fb496e96a0ac1ef242970e489cb143953b25608525026222"
+        },
+        "fixture": {
+          "bytes": 8425,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/lite/fixed_fixture.npz",
+          "sha256": "bca3810f18717f01c5c4f5633ee74eb0817978d23ebad23d026fbe0f23e8d402"
+        },
+        "onnx": {
+          "bytes": 83255,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/lite/model_static_opset11_ir7.onnx",
+          "sha256": "07468e5e2aae9ac2129da000e156fa57938c585294ac16c69c1262b99c3545fb"
+        },
+        "preprocessing": {
+          "bytes": 216,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/lite/preprocessing.npz",
+          "sha256": "56c1b306c69df83063aca6f4d001349146c13c385a85729fe29439bbe824354d"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_VARIANT",
+      "candidate_id": "RND-SEM-01:lite",
+      "deployed": false,
+      "family_id": "RND-SEM-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "lite",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 130876,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/quality/model.pt",
+          "sha256": "51a20183951a7a9a455365e19eccfaec7f469aff77213f29319028cc1acffc6f"
+        },
+        "fixture": {
+          "bytes": 59346,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/quality/fixed_fixture.npz",
+          "sha256": "c3dcdc5e0d17a6e7e70920b99d62ab3b84281008e894152510fd33207bae3274"
+        },
+        "onnx": {
+          "bytes": 125567,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/quality/model_static_opset11_ir7.onnx",
+          "sha256": "63bba7f913d703273cb79e1edbc07a557239bde585ac5c27b429141fbe328ade"
+        },
+        "preprocessing": {
+          "bytes": 216,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/quality/preprocessing.npz",
+          "sha256": "fc6e2c7e32fb2517e2e94b086a66a0ec1fd876c3ff280f697a684bf343835f15"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_VARIANT",
+      "candidate_id": "RND-SEM-01:quality",
+      "deployed": false,
+      "family_id": "RND-SEM-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "quality",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 130876,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/robust/model.pt",
+          "sha256": "3b0035424b710e2961e1667cf7ed70bfaace5cfd72d0dec6c47877776b4933df"
+        },
+        "fixture": {
+          "bytes": 59923,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/robust/fixed_fixture.npz",
+          "sha256": "52e2027b332157ff3d7c22c29ff2ab25e877edee7196415dcf581fc9bc901568"
+        },
+        "onnx": {
+          "bytes": 125567,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/robust/model_static_opset11_ir7.onnx",
+          "sha256": "c478ba1e94020739695088bdbc3a5dafaeaf3a34b66e5f3be5e5069cadd69618"
+        },
+        "preprocessing": {
+          "bytes": 216,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-SEM-01/robust/preprocessing.npz",
+          "sha256": "fc6e2c7e32fb2517e2e94b086a66a0ec1fd876c3ff280f697a684bf343835f15"
+        }
+      },
+      "candidate_class": "RND_INNOVATION_ANCHOR",
+      "candidate_id": "RND-SEM-01:robust",
+      "deployed": false,
+      "family_id": "RND-SEM-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "robust",
+      "variant_role": "PRIMARY_LOCKED_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 48396,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/lite/model.pt",
+          "sha256": "055189b58b634e15f47dda9500f10fa79dbce413116f51cd5dea9948d6ecee58"
+        },
+        "fixture": {
+          "bytes": 5109,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/lite/fixed_fixture.npz",
+          "sha256": "54ff9242e57fa5e013138f60e8557f13e05b6728da02ddca00828a54927f6d02"
+        },
+        "onnx": {
+          "bytes": 47300,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/lite/model_static_opset11_ir7.onnx",
+          "sha256": "48326ce3e25890569532870efb40b2eaafb142b8312e5d81aeed7bab75af0c72"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_EXPERIMENTAL",
+      "candidate_id": "RND-XRD-01:lite",
+      "deployed": false,
+      "family_id": "RND-XRD-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "lite",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 100876,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/quality/model.pt",
+          "sha256": "acc798b124e1a8c29760530b74d1318f8118e54565a89d17564aa43719d6f878"
+        },
+        "fixture": {
+          "bytes": 5038,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/quality/fixed_fixture.npz",
+          "sha256": "ec3905d697a5b1335b41803cc75e4a0df3c1254fb357b110b0b3398fe3b9723e"
+        },
+        "onnx": {
+          "bytes": 99701,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/quality/model_static_opset11_ir7.onnx",
+          "sha256": "add45e2406459dd7cc7f9972d5caab9f3412a7e117e93ff0213348192626ec34"
+        }
+      },
+      "candidate_class": "RND_USABLE_EXPERIMENTAL",
+      "candidate_id": "RND-XRD-01:quality",
+      "deployed": false,
+      "family_id": "RND-XRD-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "quality",
+      "variant_role": "PRIMARY_LOCKED_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 100876,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/robust/model.pt",
+          "sha256": "8393b9ba6f4aaa89d5e39b7831db956742fb402ccd28b41a5cd5dc61536319ff"
+        },
+        "fixture": {
+          "bytes": 5019,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/robust/fixed_fixture.npz",
+          "sha256": "9144248396be4ccb77f1816c7b2096a8111fbfad280d732b2ca82d4cff9bb691"
+        },
+        "onnx": {
+          "bytes": 99701,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-XRD-01/robust/model_static_opset11_ir7.onnx",
+          "sha256": "1870dd4db3f73ef1b3629f7d6664f7e477e05cbfe9da3a8ae062f874f78c8632"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_EXPERIMENTAL",
+      "candidate_id": "RND-XRD-01:robust",
+      "deployed": false,
+      "family_id": "RND-XRD-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "robust",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 32658,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/lite/model.pt",
+          "sha256": "65b882cc22ee132a4eed68143665cbd32c5092eb315fabb8d939ac7d31736392"
+        },
+        "fixture": {
+          "bytes": 539,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/lite/fixed_fixture.npz",
+          "sha256": "11156bd663ab5dc5f075e99cf6d6e6bb1148043dff5e08a75fd9a693cf9a717e"
+        },
+        "onnx": {
+          "bytes": 32814,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/lite/model_static_opset11_ir7.onnx",
+          "sha256": "2082e775914fb530b119dee9c3fcfa5a0624b73e1663adf8bdb16eefc00f4a55"
+        },
+        "preprocessing": {
+          "bytes": 462,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/lite/preprocessing.npz",
+          "sha256": "df49b11aae350c9cecf05b383620dabb869f2e16f74696c8dce5afb23a1fe6ff"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_EXPERIMENTAL",
+      "candidate_id": "RND-MAT-01:lite",
+      "deployed": false,
+      "family_id": "RND-MAT-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "lite",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 57106,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/quality/model.pt",
+          "sha256": "50efae08a6272fda2e4ba242ac650261d9eb766c26cc0d3f16b6b7a9af6490a1"
+        },
+        "fixture": {
+          "bytes": 539,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/quality/fixed_fixture.npz",
+          "sha256": "2720f1e90539b486d4c3baa290dcd85856c277d57e758a8b4429330cf72d081a"
+        },
+        "onnx": {
+          "bytes": 57544,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/quality/model_static_opset11_ir7.onnx",
+          "sha256": "9f6888e66d33499b02d6dc45488852a718743af0c390c065161d90cea6c80ae0"
+        },
+        "preprocessing": {
+          "bytes": 462,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-01/quality/preprocessing.npz",
+          "sha256": "df49b11aae350c9cecf05b383620dabb869f2e16f74696c8dce5afb23a1fe6ff"
+        }
+      },
+      "candidate_class": "RND_USABLE_EXPERIMENTAL",
+      "candidate_id": "RND-MAT-01:quality",
+      "deployed": false,
+      "family_id": "RND-MAT-01",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "quality",
+      "variant_role": "PRIMARY_LOCKED_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 32658,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/lite/model.pt",
+          "sha256": "901112bb45cf8285055827a971d88a0e77b58fa449d366b990d73dd063e65c5a"
+        },
+        "fixture": {
+          "bytes": 537,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/lite/fixed_fixture.npz",
+          "sha256": "f6ac699cdfe988ac151052c1acfc6cd012dbff7a42a0f2fb64749683622862f0"
+        },
+        "onnx": {
+          "bytes": 32814,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/lite/model_static_opset11_ir7.onnx",
+          "sha256": "0bd1545beb601ab5b6d292b7a684cccc5237b536d66fc2e04976bb8be5942575"
+        },
+        "preprocessing": {
+          "bytes": 462,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/lite/preprocessing.npz",
+          "sha256": "a05fc3a1f6bb2461f1f0c2474fb3f20e5316e2b26762a2a84f003ceb39212314"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_VARIANT",
+      "candidate_id": "RND-MAT-02:lite",
+      "deployed": false,
+      "family_id": "RND-MAT-02",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "lite",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 83688,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/quality/model.pt",
+          "sha256": "52c4d8b84ce098982223f441d3e377e3eefbcd200c4f532d9e4503312aab9b77"
+        },
+        "fixture": {
+          "bytes": 537,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/quality/fixed_fixture.npz",
+          "sha256": "49a3555314d7415b4592f78ea73fc1b31b4aaf7519507a6621f586338d90d4c4"
+        },
+        "onnx": {
+          "bytes": 81890,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/quality/model_static_opset11_ir7.onnx",
+          "sha256": "c9304f7210ee0077d7cf0e0e9838f1893655f6b8f029b620eb345d92a5f4a6c6"
+        },
+        "preprocessing": {
+          "bytes": 462,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-02/quality/preprocessing.npz",
+          "sha256": "a05fc3a1f6bb2461f1f0c2474fb3f20e5316e2b26762a2a84f003ceb39212314"
+        }
+      },
+      "candidate_class": "RND_VALIDATED",
+      "candidate_id": "RND-MAT-02:quality",
+      "deployed": false,
+      "family_id": "RND-MAT-02",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "quality",
+      "variant_role": "PRIMARY_LOCKED_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 25832,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/lite/model.pt",
+          "sha256": "a3b555b806f338bdf54810ce5d26da77f0dd2eeb4ac35ebe7574049ab0f3677d"
+        },
+        "fixture": {
+          "bytes": 912,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/lite/fixed_fixture.npz",
+          "sha256": "c7b06f2b39f287c017064a7863890d454095e695472378990e6d38349594c482"
+        },
+        "onnx": {
+          "bytes": 24198,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/lite/model_static_opset11_ir7.onnx",
+          "sha256": "92c68ecba582957801bd376ecbf0b24623778f9e109935de969695f4b99e2362"
+        },
+        "preprocessing": {
+          "bytes": 1354,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/lite/preprocessing.npz",
+          "sha256": "df2527d711115497618aba24d4c7f6894d92ba18420920c17446123360d004c6"
+        }
+      },
+      "candidate_class": "RND_SUPPORTING_VARIANT",
+      "candidate_id": "RND-MAT-03:lite",
+      "deployed": false,
+      "family_id": "RND-MAT-03",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "lite",
+      "variant_role": "SUPPORTING_VARIANT",
+      "x5_verified": false
+    },
+    {
+      "artifacts": {
+        "checkpoint": {
+          "bytes": 113384,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/quality/model.pt",
+          "sha256": "068b6c72fb18f35173054525cb23771ab79d899b2244b2ce3233a6075047238e"
+        },
+        "fixture": {
+          "bytes": 912,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/quality/fixed_fixture.npz",
+          "sha256": "bc78475c97d3c5bd03cb8ea9cb67a4a2d43778a8347a881441fce757da0c573d"
+        },
+        "onnx": {
+          "bytes": 111822,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/quality/model_static_opset11_ir7.onnx",
+          "sha256": "58c0f71e8832c47f21c87746bf3d0ed6df2f0c03a950c247558f46d9f65f4737"
+        },
+        "preprocessing": {
+          "bytes": 1354,
+          "path": "icmat_foundry/finals_post50_passive_rnd_20260803/artifacts/RND-MAT-03/quality/preprocessing.npz",
+          "sha256": "df2527d711115497618aba24d4c7f6894d92ba18420920c17446123360d004c6"
+        }
+      },
+      "candidate_class": "RND_VALIDATED",
+      "candidate_id": "RND-MAT-03:quality",
+      "deployed": false,
+      "family_id": "RND-MAT-03",
+      "official_registry_member": false,
+      "onnx_validation": {
+        "fresh_checker_pass": true,
+        "receipt_pass": true
+      },
+      "release_created": false,
+      "states": [
+        "PC_RND_ONLY",
+        "NOT_IN_OFFICIAL_ACCOUNTING",
+        "NOT_RELEASED",
+        "NOT_DEPLOYED",
+        "NOT_X5_VERIFIED",
+        "PASSIVE_MINIMAL_MANUAL"
+      ],
+      "variant_id": "quality",
+      "variant_role": "PRIMARY_LOCKED_VARIANT",
+      "x5_verified": false
+    }
+  ],
+  "canonical_checkpoint_hash_collisions": 0,
+  "conditional_families": {
+    "budget_reallocated_fits": 16,
+    "disposition": "SKIPPED_BUDGET_REALLOCATED"
+  },
+  "created_at": "2026-08-02T18:53:04.415254+00:00",
+  "deployed": false,
+  "execution_policy": "PASSIVE_MINIMAL_MANUAL",
+  "families": [
+    {
+      "candidate_class": "RND_USABLE_EXPERIMENTAL",
+      "exports": [
+        "RND-PROC-01:recovery_lite",
+        "RND-PROC-01:recovery_quality",
+        "RND-PROC-01:recovery_robust"
+      ],
+      "family_id": "RND-PROC-01",
+      "fit_count": 56,
+      "fit_count_match": true,
+      "innovation_gate": {
+        "alcu_not_worse_than_domain_mean": false,
+        "combined_beats_domain_mean": true,
+        "pass": false,
+        "relative_improvement_ge_5pct": false,
+        "wti_not_worse_than_domain_mean": true
+      },
+      "model_name": "HERO-VM17",
+      "pass": true,
+      "primary_variant": "recovery_quality",
+      "receipt": {
+        "bytes": 14045,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-PROC-01/recovery_family_receipt.v1.json",
+        "sha256": "05ba2bb1b2dba8b33e99bb9c34ebf7fc1d9f28cb8cd8cefa45ab7530ff276ea7"
+      },
+      "receipt_seal_pass": true,
+      "restrictions": {
+        "deployed_false": true,
+        "network_used_false": true,
+        "official_registry_member_false": true,
+        "passive_minimal_manual": true,
+        "release_created_false": true,
+        "x5_contacted_false": true,
+        "x5_verified_false": true
+      },
+      "state": "PC_RND_ONLY"
+    },
+    {
+      "candidate_class": "RND_INNOVATION_ANCHOR",
+      "exports": [
+        "RND-SEM-01:lite",
+        "RND-SEM-01:quality",
+        "RND-SEM-01:robust"
+      ],
+      "family_id": "RND-SEM-01",
+      "fit_count": 32,
+      "fit_count_match": true,
+      "innovation_gate": {
+        "boundary_f1_relative_gain_ge_10pct": true,
+        "dice_not_below_0_801": true,
+        "pass": true
+      },
+      "model_name": "SEM-BoundaryDistill",
+      "pass": true,
+      "primary_variant": "robust",
+      "receipt": {
+        "bytes": 17453,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-SEM-01/family_receipt.v1.json",
+        "sha256": "ca9fef1bed04075afab4198fb98903f81f0d73d068b1c6319cadba2cbc221928"
+      },
+      "receipt_seal_pass": true,
+      "restrictions": {
+        "deployed_false": true,
+        "network_used_false": true,
+        "official_registry_member_false": true,
+        "passive_minimal_manual": true,
+        "release_created_false": true,
+        "x5_contacted_false": true,
+        "x5_verified_false": true
+      },
+      "state": "PC_RND_ONLY",
+      "training_extension_evidence": {
+        "bytes": 3678,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-SEM-01/epoch_extension.v1.json",
+        "policy_pass": true,
+        "sha256": "593bfb07389270d4988a748cbeb4ced7767da7483d9be13f884a69159feb4f36"
+      }
+    },
+    {
+      "candidate_class": "RND_USABLE_EXPERIMENTAL",
+      "exports": [
+        "RND-XRD-01:lite",
+        "RND-XRD-01:quality",
+        "RND-XRD-01:robust"
+      ],
+      "family_id": "RND-XRD-01",
+      "fit_count": 32,
+      "fit_count_match": true,
+      "innovation_gate": {
+        "mae_within_2pct_legacy": true,
+        "pass": false,
+        "peak_f1_gt_legacy": false,
+        "top1_within_one_point_legacy": false
+      },
+      "model_name": "XRD-PeakJoint",
+      "pass": true,
+      "primary_variant": "quality",
+      "receipt": {
+        "bytes": 18955,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-XRD-01/family_receipt.v1.json",
+        "sha256": "67cb3f17179c541508e9e4635e5a4855e56bb6f48835ea64972c6e4f7c534db9"
+      },
+      "receipt_seal_pass": true,
+      "restrictions": {
+        "deployed_false": true,
+        "network_used_false": true,
+        "official_registry_member_false": true,
+        "passive_minimal_manual": true,
+        "release_created_false": true,
+        "x5_contacted_false": true,
+        "x5_verified_false": true
+      },
+      "state": "PC_RND_ONLY",
+      "supplemental_evidence": {
+        "bytes": 3005,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-XRD-01/aux_head_diagnostic.v1.json",
+        "seal_and_policy_pass": true,
+        "sha256": "5e735b059758f7614647716f083a196f3d0bb0f2c446b46a8a5a289e9393e44c"
+      }
+    },
+    {
+      "candidate_class": "RND_USABLE_EXPERIMENTAL",
+      "exports": [
+        "RND-MAT-01:lite",
+        "RND-MAT-01:quality"
+      ],
+      "family_id": "RND-MAT-01",
+      "fit_count": 16,
+      "fit_count_match": true,
+      "innovation_gate": {
+        "beats_best_trained_simple": false,
+        "beats_median": true,
+        "pass": false
+      },
+      "model_name": "FluoHost-IQE",
+      "pass": true,
+      "primary_variant": "quality",
+      "receipt": {
+        "bytes": 39895,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-MAT-01/family_receipt.v1.json",
+        "sha256": "3b38789792656673358e9b5eae97d18166571d8da5ec2d6e273f23e7a76b4b47"
+      },
+      "receipt_seal_pass": true,
+      "restrictions": {
+        "deployed_false": true,
+        "network_used_false": true,
+        "official_registry_member_false": true,
+        "passive_minimal_manual": true,
+        "release_created_false": true,
+        "x5_contacted_false": true,
+        "x5_verified_false": true
+      },
+      "state": "PC_RND_ONLY"
+    },
+    {
+      "candidate_class": "RND_VALIDATED",
+      "exports": [
+        "RND-MAT-02:lite",
+        "RND-MAT-02:quality"
+      ],
+      "family_id": "RND-MAT-02",
+      "fit_count": 16,
+      "fit_count_match": true,
+      "innovation_gate": {
+        "beats_best_trained_simple": true,
+        "beats_median": true,
+        "pass": true
+      },
+      "model_name": "FluoHost-Lifetime",
+      "pass": true,
+      "primary_variant": "quality",
+      "receipt": {
+        "bytes": 71322,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-MAT-02/family_receipt.v1.json",
+        "sha256": "d0ec6f2b9ba299f1e0e92cc4f885194f18c2954b740cb517ed77d2772165f049"
+      },
+      "receipt_seal_pass": true,
+      "restrictions": {
+        "deployed_false": true,
+        "network_used_false": true,
+        "official_registry_member_false": true,
+        "passive_minimal_manual": true,
+        "release_created_false": true,
+        "x5_contacted_false": true,
+        "x5_verified_false": true
+      },
+      "state": "PC_RND_ONLY"
+    },
+    {
+      "candidate_class": "RND_VALIDATED",
+      "exports": [
+        "RND-MAT-03:lite",
+        "RND-MAT-03:quality"
+      ],
+      "family_id": "RND-MAT-03",
+      "fit_count": 8,
+      "fit_count_match": true,
+      "innovation_gate": {
+        "log_mae_beats_ridge": true,
+        "pass": true,
+        "raw_mae_beats_median": true
+      },
+      "model_name": "IRIntensity-v2",
+      "pass": true,
+      "primary_variant": "quality",
+      "receipt": {
+        "bytes": 6211,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-MAT-03/family_receipt.v1.json",
+        "sha256": "f7bc849a9a00d9756dba4c8bcad3f2aa18d30606118c12e020350bb0d0f94a70"
+      },
+      "receipt_seal_pass": true,
+      "restrictions": {
+        "deployed_false": true,
+        "network_used_false": true,
+        "official_registry_member_false": true,
+        "passive_minimal_manual": true,
+        "release_created_false": true,
+        "x5_contacted_false": true,
+        "x5_verified_false": true
+      },
+      "state": "PC_RND_ONLY"
+    },
+    {
+      "candidate_class": "SKIPPED_BUDGET_REALLOCATED",
+      "exports": [],
+      "family_id": "RND-MAT-04",
+      "fit_count": 0,
+      "name": "DielectricPair",
+      "pass": true,
+      "planned_fits": 8,
+      "state": "NOT_TRAINED"
+    },
+    {
+      "candidate_class": "SKIPPED_BUDGET_REALLOCATED",
+      "exports": [],
+      "family_id": "RND-MAT-05",
+      "fit_count": 0,
+      "name": "Thermoelectric4",
+      "pass": true,
+      "planned_fits": 8,
+      "state": "NOT_TRAINED"
+    }
+  ],
+  "invalidated_evidence": [
+    {
+      "disposition": "INVALID_PIPELINE",
+      "family_id": "RND-PROC-01",
+      "fit_count": 40,
+      "incident": {
+        "bytes": 924,
+        "path": "icmat_foundry/finals_post50_passive_rnd_20260803/evidence/RND-PROC-01/invalid_pipeline_incident.v1.json",
+        "sha256": "1b5ccbecc40020a4e96729faa59b8a8bdf844ed867d2b66fdb6e6cb52ab9fde4"
+      },
+      "promotion_allowed": false
+    }
+  ],
+  "network_used": false,
+  "official_model_count_unchanged": 50,
+  "official_registry_member": false,
+  "official_registry_path": "icmat_foundry/finals_50model/contracts/model_registry.v3.json",
+  "plan_id": "post50-passive-rnd-20260803",
+  "receipt_sha256": "72604a100defd607dc4e44aac687af7ea8d543bf36b21d65aa07d809ae927bf2",
+  "registered_candidate_weight_count": 15,
+  "release_created": false,
+  "schema": "x5_icmat_foundry.post50_rnd_registry.v1",
+  "x5_contacted": false,
+  "x5_verified_count": 0
+}

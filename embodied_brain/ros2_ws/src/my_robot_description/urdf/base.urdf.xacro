@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    底盘 (purple platform) macro.
+    base_footprint (z=0, 接地面) → base_link (底盘几何中心)
+    维度按草图占位, 实物到位再调整.
+  -->
+
+  <xacro:macro name="base_xacro" params="length:=0.50 width:=0.40 height:=0.05 wheel_radius:=0.04 base_ground_clearance:=0.10">
+
+    <!-- base_footprint: 在地面, 是 robot 的根 frame, Nav2/SLAM 通常从这里出发 -->
+    <link name="base_footprint"/>
+
+    <!-- base_link: 底盘几何中心 (在 base_footprint 之上 wheel_radius 高) -->
+    <link name="base_link">
+      <visual>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="purple"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="3.0" x="${length}" y="${width}" z="${height}"/>
+    </link>
+
+    <!-- footprint → base_link, 抬高一个轮半径 -->
+    <joint name="base_footprint_to_base_link" type="fixed">
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
+      <origin xyz="0 0 ${base_ground_clearance}" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

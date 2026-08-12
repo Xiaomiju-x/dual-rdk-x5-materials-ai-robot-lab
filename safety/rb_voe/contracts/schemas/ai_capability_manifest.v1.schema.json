@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaomiju.xyz/schemas/rb-voe/ai-capability-manifest-v1",
+  "title": "AiCapabilityManifest.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "manifest_id", "subsystem", "maturity", "device_id", "boot_id",
+    "session_id", "release_id", "capabilities", "actual_backends", "artifact_sha256",
+    "calibration_sha256", "stations", "issued_at_ms", "expires_at_ms"
+  ],
+  "properties": {
+    "schema_version": {"const": "xrd-rb-voe-ai-capability-v1"},
+    "manifest_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "subsystem": {"const": "ai_x5"},
+    "maturity": {"type": "string", "enum": [
+      "TARGET_ONLY", "SIMULATED", "REPLAY_VALIDATED", "SHADOW_VALIDATED",
+      "HARDWARE_PILOT", "LOCKED_VALIDATED", "DEMO_ELIGIBLE"
+    ]},
+    "device_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "boot_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "session_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "release_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "capabilities": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"}
+    },
+    "actual_backends": {
+      "type": "object",
+      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 128},
+      "additionalProperties": {"type": "string", "minLength": 1, "maxLength": 128}
+    },
+    "artifact_sha256": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 128},
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "calibration_sha256": {
+      "type": "object",
+      "propertyNames": {"type": "string", "minLength": 1, "maxLength": 128},
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "stations": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "enum": [
+        "STATION_IDENTITY", "STATION_GRIND", "STATION_XRD", "STATION_PL", "STATION_QUARANTINE"
+      ]}
+    },
+    "issued_at_ms": {"type": "integer", "minimum": 0},
+    "expires_at_ms": {"type": "integer", "minimum": 0}
+  },
+  "allOf": [{
+    "if": {"properties": {"maturity": {"const": "TARGET_ONLY"}}, "required": ["maturity"]},
+    "else": {"properties": {
+      "capabilities": {"minItems": 1},
+      "actual_backends": {"minProperties": 1},
+      "artifact_sha256": {"minProperties": 1},
+      "calibration_sha256": {"minProperties": 1},
+      "stations": {"minItems": 1}
+    }}
+  }]
+}

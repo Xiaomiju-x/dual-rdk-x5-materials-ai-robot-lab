@@ -1,0 +1,46 @@
+{
+  "schema": "x5_icmat_foundry.passive_minimal_manual.v1",
+  "candidate_state": "NOT_DEPLOYED",
+  "execution_policy": "PASSIVE_MINIMAL_MANUAL",
+  "automatic_start": false,
+  "production_dependency": false,
+  "service_registration": false,
+  "listening_ports": [],
+  "network_access": false,
+  "camera_access": false,
+  "model_auto_selection": false,
+  "decision_authority": false,
+  "motion_authority": false,
+  "execution_allowed": false,
+  "actuator_commands_issued": 0,
+  "allowed_future_worker_behavior": [
+    "explicit_manual_start",
+    "load_exactly_one_candidate",
+    "read_one_explicit_immutable_input",
+    "write_one_new_content_addressed_receipt",
+    "exit_and_release_own_resources"
+  ],
+  "forbidden_integrations": [
+    "dashboard",
+    "port_8888",
+    "port_8080",
+    "port_8081",
+    "port_5000",
+    "port_5001",
+    "production_cpu_slots",
+    "production_bpu_slots",
+    "bpu_slot_manager.switch",
+    "imx415",
+    "cmd_vel",
+    "f407",
+    "serial",
+    "gpio",
+    "robot_sdk"
+  ],
+  "rb_voe": {
+    "state": "DEPLOYED_OFF",
+    "allowed_mode": "PASSIVE_ONESHOT",
+    "modified_by_this_rnd": false,
+    "post50_board_receipt_support_claimed": false
+  }
+}

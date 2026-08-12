@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+    Pan-Tilt 监控云台. 挂立柱顶端, 监控烧结炉显示屏 (OCR PV/SV/MV).
+
+    两套硬件方案 (用 use_xiaomi 参数切换):
+      - true:  小米智能摄像机 3 云台版 (3K, WiFi, 119×78×78 mm)
+      - false: 备选 1080P USB + S20 二维舵机 (180°+270°, F407 PWM 控)
+        S20 套件 0.56 kg, 数据走 USB 摄像头, 控制走 STM32 PWM.
+
+    云台两个旋转关节 (pan_joint, tilt_joint) 是 continuous;
+    备选时两个关节真的会动, 小米时是 fixed (米家闭源不开放角度反馈).
+  -->
+
+  <xacro:macro name="pt_camera_xacro" params="parent xyz:='0 0 0' rpy:='0 0 0' use_xiaomi:=true">
+
+    <!-- 云台底座 -->
+    <link name="pt_base_link">
+      <visual>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.04" length="0.04"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <xacro:cylinder_inertial mass="0.1" radius="0.04" length="0.04"/>
+    </link>
+
+    <joint name="${parent}_to_pt_base" type="fixed">
+      <parent link="${parent}"/>
+      <child link="pt_base_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- pan (yaw) 旋转关节 -->
+    <link name="pt_pan_link">
+      <visual>
+        <origin xyz="0 0 0.01" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.025" length="0.02"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <xacro:cylinder_inertial mass="0.05" radius="0.025" length="0.02"/>
+    </link>
+
+    <xacro:if value="${use_xiaomi}">
+      <joint name="pt_pan_joint" type="fixed">
+        <parent link="pt_base_link"/>
+        <child link="pt_pan_link"/>
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      </joint>
+    </xacro:if>
+    <xacro:unless value="${use_xiaomi}">
+      <joint name="pt_pan_joint" type="continuous">
+        <parent link="pt_base_link"/>
+        <child link="pt_pan_link"/>
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+      </joint>
+    </xacro:unless>
+
+    <!-- tilt (pitch) 关节 -->
+    <link name="pt_tilt_link">
+      <visual>
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+        <geometry>
+          <xacro:if value="${use_xiaomi}">
+            <!-- 小米球形头 119 mm 高 -->
+            <sphere radius="0.039"/>
+          </xacro:if>
+          <xacro:unless value="${use_xiaomi}">
+            <box size="0.04 0.04 0.04"/>
+          </xacro:unless>
+        </geometry>
+        <material name="xiaomi_white"/>
+      </visual>
+      <xacro:sphere_inertial mass="0.1" radius="0.039"/>
+    </link>
+
+    <xacro:if value="${use_xiaomi}">
+      <joint name="pt_tilt_joint" type="fixed">
+        <parent link="pt_pan_link"/>
+        <child link="pt_tilt_link"/>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      </joint>
+    </xacro:if>
+    <xacro:unless value="${use_xiaomi}">
+      <joint name="pt_tilt_joint" type="continuous">
+        <parent link="pt_pan_link"/>
+        <child link="pt_tilt_link"/>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+      </joint>
+    </xacro:unless>
+
+    <!-- 相机光学 frame (云台的"视点") -->
+    <link name="pt_camera_link"/>
+    <joint name="pt_tilt_to_camera" type="fixed">
+      <parent link="pt_tilt_link"/>
+      <child link="pt_camera_link"/>
+      <origin xyz="0.03 0 0.04" rpy="0 0 0"/>
+    </joint>
+
+    <link name="pt_camera_optical_frame"/>
+    <joint name="pt_camera_link_to_optical_frame" type="fixed">
+      <parent link="pt_camera_link"/>
+      <child link="pt_camera_optical_frame"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

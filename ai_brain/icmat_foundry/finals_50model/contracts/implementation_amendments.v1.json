@@ -1,0 +1,36 @@
+{
+  "amendments": [
+    {
+      "implemented_architecture": "SpatialTextureCNN / Bayes-e BPU candidate",
+      "inventory_id": "F-SEM-01",
+      "quality_evidence": "icmat_foundry/finals_50model/evidence/sem_bank/F-SEM-01/training_receipt.v1.json",
+      "reason": "The first global-pooling CNN collapsed to the majority class; the single bounded repair retained a 2x2 texture layout.",
+      "registry_architecture_summary": "MobileNet/RepViT tiny / X5 BPU"
+    },
+    {
+      "contract_alignment": "RESTORED",
+      "implemented_model_id": "DINOv2-SEM-OOD-CPU",
+      "inventory_id": "F-SEM-05",
+      "quality_evidence": "icmat_foundry/finals_50model/evidence/sem_bank/F-SEM-05/evaluation_receipt.v1.json",
+      "registry_model_id": "DINOv2-SEM-OOD-CPU",
+      "rejected_candidate": "IndependentSEMEmbeddingCNN archived as non-registry evidence"
+    },
+    {
+      "claim_boundary": "Controlled degradation severity is not human MOS, production tool health, or NIST intensity-set accuracy.",
+      "implemented_data_scope": "Carinthia real SEM with controlled degradation",
+      "implemented_model_id": "SEM-ImageQuality-CPU",
+      "inventory_id": "F-SEM-06",
+      "quality_evidence": "icmat_foundry/finals_50model/evidence/sem_bank/F-SEM-06/training_receipt.v1.json",
+      "reason": "The official NIST intensity archive is unavailable locally, so the candidate uses controlled degradation targets on real CC BY 4.0 Carinthia SEM instead of inventing NIST image labels.",
+      "registry_model_id": "NIST-SEM-ImageQuality-CPU",
+      "task_contract_preserved": "SEM image quality and segmentation reliability proxy"
+    }
+  ],
+  "counting_rule_unchanged": true,
+  "created_at": "2026-08-01T12:52:49.413276+00:00",
+  "logical_model_count_delta": 0,
+  "production_integration_allowed": false,
+  "schema": "x5_icmat_foundry.implementation_amendments.v1",
+  "source_registry": "icmat_foundry/finals_50model/contracts/model_registry.v3.json",
+  "x5_contacted": false
+}

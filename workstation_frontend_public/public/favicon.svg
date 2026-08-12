@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#1f4684"/>
+      <stop offset="100%" stop-color="#122a52"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- left arm -->
+    <path d="M110 417 L161 279 L231 177" stroke="#EF9F27" stroke-width="27"/>
+    <!-- right arm -->
+    <path d="M402 417 L351 279 L281 177" stroke="#FFD66B" stroke-width="27"/>
+  </g>
+  <!-- bases -->
+  <rect x="76" y="412" width="69" height="23" rx="11" fill="#EF9F27"/>
+  <rect x="367" y="412" width="69" height="23" rx="11" fill="#FFD66B"/>
+  <!-- elbow joints -->
+  <circle cx="161" cy="279" r="21" fill="#EF9F27"/><circle cx="161" cy="279" r="10" fill="#152f5c"/>
+  <circle cx="351" cy="279" r="21" fill="#FFD66B"/><circle cx="351" cy="279" r="10" fill="#152f5c"/>
+  <!-- shared workpiece -->
+  <circle cx="256" cy="151" r="38" fill="#FFD66B"/>
+  <circle cx="256" cy="151" r="26" fill="#FFF8E8"/>
+</svg>
