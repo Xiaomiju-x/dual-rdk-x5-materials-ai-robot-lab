@@ -30,16 +30,19 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
-import numpy as np
+try:
+    import numpy as np
+except ModuleNotFoundError:  # Allow boundary-only audit/tests without the scientific runtime.
+    np = None
 
 
 @dataclass
 class PLSpectrum:
     """一份解析后的 PL 光谱."""
-    wavelength: np.ndarray          # nm
-    counts: np.ndarray              # raw counts
+    wavelength: Any                 # numpy.ndarray at runtime; Any keeps import dependency-optional
+    counts: Any                     # numpy.ndarray at runtime; Any keeps import dependency-optional
     scan_type: str                  # 'em' | 'ex' | 'pl' | 'unknown'
     start: float
     stop: float
@@ -214,6 +217,8 @@ def _parse_pl_lines(lines: list[str], path: str) -> PLSpectrum:
             skip_reason=f"数据点过少 ({len(xs)})",
         )
 
+    if np is None:
+        return _read_failure(path, RuntimeError("PL 数值解析需要可选依赖 numpy"))
     wavelength = np.array(xs, dtype=np.float64)
     counts = np.array(ys, dtype=np.float64)
 

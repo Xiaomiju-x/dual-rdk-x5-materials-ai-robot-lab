@@ -159,6 +159,14 @@ class PLParserSecurityTests(unittest.TestCase):
         )
 
     def test_parse_pl_bytes_does_not_require_filesystem_access(self) -> None:
+        class _NumpyBoundaryStub:
+            float64 = float
+
+            @staticmethod
+            def array(values, dtype=None):
+                del dtype
+                return list(values)
+
         rows = [
             "Type,Emission Scan,",
             "Start,600,",
@@ -168,9 +176,14 @@ class PLParserSecurityTests(unittest.TestCase):
             "",
             *(f"{value},{value * 2}," for value in range(600, 612)),
         ]
-        spectrum = self.parse_pl.parse_pl_bytes(
-            "\n".join(rows).encode("utf-8"), path="uploaded-em.csv"
-        )
+        original_numpy = self.parse_pl.np
+        self.parse_pl.np = _NumpyBoundaryStub()
+        try:
+            spectrum = self.parse_pl.parse_pl_bytes(
+                "\n".join(rows).encode("utf-8"), path="uploaded-em.csv"
+            )
+        finally:
+            self.parse_pl.np = original_numpy
         self.assertTrue(spectrum.is_valid(), spectrum.skip_reason)
         self.assertEqual("em", spectrum.scan_type)
         self.assertEqual(12, spectrum.n_points())
