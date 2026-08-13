@@ -8,6 +8,7 @@
 | [2026 地瓜机器人赛题页](https://www.socchina.net/wx/details?id=5e7b974c879a4fc5a60e27eff1f2e5f8&value=3) | 赛题归属与公开资料入口 | 本队区域排名或全国奖项 |
 | [地瓜机器人开发者论坛赛题资源](https://forum.d-robotics.cc/t/topic/34303) | 平台与赛题资料 | 竞赛成绩 |
 | [西南赛区公开结果页面](https://www.fpgachina.cn/details?id=e98e50a25c8b499bb03db435dae84044) | 西南赛区公开名单/晋级背景 | 当前未作为“西南赛区一等奖”的充分获奖来源 |
+| 队伍于 2026-08-13 确认的全国总决赛结果 | 全国总决赛二等奖 | `team_confirmed`；组委会官方获奖页面或证书公开件待补 |
 
 全国奖项来源当前为空。组委会正式公布后，把最终官方 URL 和归档证据只写入 [`award_status.yaml`](award_status.yaml)，再由展示生成流程更新 README 与 [AWARDS.md](AWARDS.md)。
 

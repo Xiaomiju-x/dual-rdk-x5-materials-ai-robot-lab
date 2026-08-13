@@ -1,10 +1,10 @@
-# Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration | 2026 National College Student Embedded Chip and System Design Competition · Chip Application Division · D-Robotics Topic | Southwest Regional First Prize
+# Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration | 2026 National College Student Embedded Chip and System Design Competition · Chip Application Division · D-Robotics Topic | Southwest Regional First Prize · National Final Second Prize
 
 **Official Chinese project title:** 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人
 
-> **2026 National College Student Embedded Chip and System Design Competition · Chip Application Division · D-Robotics Topic · Southwest Regional First Prize**
+> **2026 National College Student Embedded Chip and System Design Competition · Chip Application Division · D-Robotics Topic · Southwest Regional First Prize · National Final Second Prize**
 >
-> Team: **荧光具身智研**. The Southwest Regional First Prize is team-confirmed; its official award source is still pending. The national-final award is pending official announcement.
+> Team: **荧光具身智研**. The Southwest Regional First Prize and National Final Second Prize are team-confirmed; official organizing-committee award sources are still pending.
 
 [![Latest project hardware: mobile laboratory assistant and dual-arm workstation](assets/media/hero/project-hardware-hero.webp)](docs/gallery.md)
 
@@ -37,7 +37,7 @@ Team **荧光具身智研** entered the project in the **2026 National College S
 | Stage | Current status | Evidence boundary |
 | --- | --- | --- |
 | Southwest Regional Contest | First Prize | `team_confirmed`; official award source pending |
-| National final | Pending official announcement | No award may be predicted or prefilled |
+| National final | Second Prize | `team_confirmed`; official organizing-committee source pending |
 <!-- AWARD_STATUS:END -->
 
 [Award policy](docs/competition/AWARDS.md) · [Official and public sources](docs/competition/OFFICIAL_SOURCES.md)
@@ -154,4 +154,4 @@ Failures are part of the published engineering record. The release engineering g
 
 Contributions are welcome under [CONTRIBUTING.md](CONTRIBUTING.md). Use [SUPPORT.md](SUPPORT.md) for ordinary questions and [SECURITY.md](SECURITY.md) for private vulnerability reports. Cite a versioned archive using [`CITATION.cff`](CITATION.cff).
 
-The formal project name is **Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration** (Chinese: **基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人**). `XRD` remains only the technical abbreviation for X-ray diffraction and a compatibility-oriented internal identifier; it is not the repository or project name. The project avoids unverifiable “world first” or “fully autonomous” language, does not equate phosphors with all integrated-circuit materials, does not turn replay/simulation into real-loop evidence, and does not predict a national award before an official announcement.
+The formal project name is **Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory Assistant Based on Dual-RDK X5 Heterogeneous Collaboration** (Chinese: **基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人**). `XRD` remains only the technical abbreviation for X-ray diffraction and a compatibility-oriented internal identifier; it is not the repository or project name. The project avoids unverifiable “world first” or “fully autonomous” language, does not equate phosphors with all integrated-circuit materials, and does not turn replay/simulation into real-loop evidence. Award claims retain a `team_confirmed` or `official_verified` evidence boundary.

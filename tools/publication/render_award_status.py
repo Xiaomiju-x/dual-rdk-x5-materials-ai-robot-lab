@@ -117,8 +117,20 @@ def validate(data: dict, root: Path) -> None:
             raise ValueError("pending national status must not prefill a result or evidence")
         return
 
+    if national.get("status") == "team_confirmed":
+        if national.get("result") != "二等奖":
+            raise ValueError("the team-confirmed national result must remain 二等奖")
+        if any(
+            national.get(key) is not None
+            for key in ("source_url", "evidence_path", "evidence_sha256", "announced_at")
+        ):
+            raise ValueError("team-confirmed national status cannot claim official evidence")
+        return
+
     if national.get("status") != "official_verified":
-        raise ValueError("a published national result must use status=official_verified")
+        raise ValueError(
+            "a published national result must use status=team_confirmed or official_verified"
+        )
     if data["publication_rules"].get("require_official_source_for_national_result"):
         required = ("result", "source_url", "evidence_path", "evidence_sha256", "announced_at")
         missing = [key for key in required if not national.get(key)]
@@ -145,6 +157,9 @@ def zh_block(data: dict, boundary_header: str) -> str:
     if national.get("status") == PENDING_STATUS:
         national_result = rules["national_pending_text_zh"]
         national_boundary = "待官方公布：不预测、不预填奖项"
+    elif national.get("status") == "team_confirmed":
+        national_result = national["result"]
+        national_boundary = "`team_confirmed`：队伍确认，组委会官方获奖来源待补"
     else:
         national_result = national["result"]
         national_boundary = source_link("`official_verified`：组委会官方来源", national.get("source_url"))
@@ -173,8 +188,11 @@ def en_block(data: dict) -> str:
     if national.get("status") == PENDING_STATUS:
         national_result = "Pending official announcement"
         national_boundary = "No award may be predicted or prefilled"
+    elif national.get("status") == "team_confirmed":
+        national_result = "Second Prize"
+        national_boundary = "`team_confirmed`; official organizing-committee source pending"
     else:
-        national_result = national["result"]
+        national_result = "Second Prize" if national.get("result") == "二等奖" else national["result"]
         national_boundary = source_link("`official_verified`; official source", national.get("source_url"))
 
     return "\n".join(

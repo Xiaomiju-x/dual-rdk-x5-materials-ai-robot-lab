@@ -15,8 +15,8 @@ regional:
   evidence_sha256: null
 national:
   stage: "全国总决赛"
-  status: "pending_official_announcement"
-  result: null
+  status: "team_confirmed"
+  result: "二等奖"
   source_url: null
   evidence_path: null
   evidence_sha256: null

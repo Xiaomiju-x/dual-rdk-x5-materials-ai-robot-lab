@@ -62,6 +62,7 @@ FORBIDDEN_DIRECTORY_NAMES = frozenset(
 CANONICAL_AWARD_PATH = Path("docs/competition/award_status.yaml")
 PENDING_AWARD_STATUS = "pending_" + "official_announcement"
 ANNOUNCED_AWARD_STATUS = "official_" + "verified"
+TEAM_CONFIRMED_AWARD_STATUS = "team_" + "confirmed"
 
 PRIVATE_V4_NETWORKS = tuple(
     ipaddress.ip_network(value)
@@ -686,7 +687,11 @@ def _check_award_boundary(
 
     national = _parse_simple_yaml_section(text, "national")
     status = national.get("status")
-    if status not in {PENDING_AWARD_STATUS, ANNOUNCED_AWARD_STATUS}:
+    if status not in {
+        PENDING_AWARD_STATUS,
+        TEAM_CONFIRMED_AWARD_STATUS,
+        ANNOUNCED_AWARD_STATUS,
+    }:
         collector.add(
             "BLOCKER",
             "award_status_invalid",
@@ -726,6 +731,30 @@ def _check_award_boundary(
                     "award_pending_boundary",
                     canonical_rel,
                     "Pending national status cannot carry a result or announcement evidence.",
+                )
+                break
+    elif status == TEAM_CONFIRMED_AWARD_STATUS:
+        if pending_count_in_canonical or outside_pending:
+            collector.add(
+                "BLOCKER",
+                "award_confirmed_has_pending",
+                canonical_rel,
+                "A team-confirmed award cannot retain a pending marker.",
+            )
+        if national.get("result") != "二等奖":
+            collector.add(
+                "BLOCKER",
+                "award_team_confirmed_result",
+                canonical_rel,
+                "The team-confirmed national result must remain the confirmed award.",
+            )
+        for key in ("source_url", "evidence_path", "evidence_sha256", "announced_at"):
+            if not _is_yaml_null(national.get(key)):
+                collector.add(
+                    "BLOCKER",
+                    "award_team_confirmed_boundary",
+                    canonical_rel,
+                    "A team-confirmed result cannot claim official evidence.",
                 )
                 break
     else:

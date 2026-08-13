@@ -204,6 +204,37 @@ class PublicationAuditTests(unittest.TestCase):
         result = audit_release.scan_tree(self.root)
         self.assertIn("award_announced_incomplete", self.rules(result))
 
+    def test_team_confirmed_national_award_has_no_official_evidence_claim(self) -> None:
+        target = self.root / "docs" / "competition" / "award_status.yaml"
+        target.write_text(
+            "national:\n"
+            "  status: team_confirmed\n"
+            "  result: 二等奖\n"
+            "  source_url: null\n"
+            "  evidence_path: null\n"
+            "  evidence_sha256: null\n"
+            "  announced_at: null\n",
+            encoding="utf-8",
+        )
+        result = audit_release.scan_tree(self.root)
+        self.assertNotIn("award_status_invalid", self.rules(result))
+        self.assertNotIn("award_team_confirmed_result", self.rules(result))
+        self.assertNotIn("award_team_confirmed_boundary", self.rules(result))
+
+        target.write_text(
+            "national:\n"
+            "  status: team_confirmed\n"
+            "  result: 一等奖\n"
+            "  source_url: https://example.invalid/official\n"
+            "  evidence_path: null\n"
+            "  evidence_sha256: null\n"
+            "  announced_at: null\n",
+            encoding="utf-8",
+        )
+        result = audit_release.scan_tree(self.root)
+        self.assertIn("award_team_confirmed_result", self.rules(result))
+        self.assertIn("award_team_confirmed_boundary", self.rules(result))
+
     def test_ci_compatibility_arguments_are_accepted(self) -> None:
         args = audit_release._build_parser().parse_args(
             ["--root", str(self.root), "--strict"]

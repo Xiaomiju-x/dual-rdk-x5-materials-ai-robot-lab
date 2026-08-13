@@ -50,24 +50,32 @@ class ReleaseMetadataTests(unittest.TestCase):
         en = render_award_status.en_block(self.status)
         self.assertIn("| 西南赛区 | 一等奖 |", zh)
         self.assertIn("| Southwest Regional Contest | First Prize |", en)
+        self.assertIn("| 全国总决赛 | 二等奖 |", zh)
+        self.assertIn("| National final | Second Prize |", en)
+        self.assertEqual("team_confirmed", self.status["national"]["status"])
+        self.assertEqual("二等奖", self.status["national"]["result"])
 
     def test_readme_titles_use_the_formal_project_name(self) -> None:
         readme_zh = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
         readme_en = (REPOSITORY_ROOT / "README_en.md").read_text(encoding="utf-8")
         self.assertEqual(
-            f"# {PROJECT_NAME_ZH}｜{COMPETITION_ZH}·{DIVISION_ZH}·{TOPIC_ZH}｜西南赛区一等奖",
+            f"# {PROJECT_NAME_ZH}｜{COMPETITION_ZH}·{DIVISION_ZH}·{TOPIC_ZH}｜"
+            "西南赛区一等奖·全国总决赛二等奖",
             readme_zh.splitlines()[0],
         )
         self.assertEqual(
             "# Material-Synthesis AI Prediction and Multi-Robot Embodied Laboratory "
             "Assistant Based on Dual-RDK X5 Heterogeneous Collaboration | 2026 "
             "National College Student Embedded Chip and System Design Competition · "
-            "Chip Application Division · D-Robotics Topic | Southwest Regional First Prize",
+            "Chip Application Division · D-Robotics Topic | Southwest Regional First Prize · "
+            "National Final Second Prize",
             readme_en.splitlines()[0],
         )
         self.assertIn(f"**Official Chinese project title:** {PROJECT_NAME_ZH}", readme_en)
         self.assertIn("西南赛区一等奖", readme_zh)
+        self.assertIn("全国总决赛二等奖", readme_zh)
         self.assertIn("Southwest Regional First Prize", readme_en)
+        self.assertIn("National Final Second Prize", readme_en)
 
     def test_readmes_link_all_three_public_demo_videos(self) -> None:
         video_paths = (
