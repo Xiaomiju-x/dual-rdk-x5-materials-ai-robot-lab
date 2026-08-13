@@ -267,7 +267,8 @@ onUnmounted(() => { if (pollTimer !== null) window.clearInterval(pollTimer) })
           <div class="panel-head">
             <span class="section-label">行为树</span>
             <input v-model="name" class="name-input" placeholder="任务名" />
-            <span v-if="run && run.state !== 'idle'" class="chip" :class="{
+            <span
+v-if="run && run.state !== 'idle'" class="chip" :class="{
               'chip-info': run.state === 'running',
               'chip-warn': run.state === 'paused',
               'chip-ok': run.state === 'done',

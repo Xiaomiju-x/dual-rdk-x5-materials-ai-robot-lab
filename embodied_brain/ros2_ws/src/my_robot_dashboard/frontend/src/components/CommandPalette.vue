@@ -189,7 +189,7 @@ function backdropClick(evt: MouseEvent) {
             autocomplete="off"
             @keydown="onKey"
           />
-          <button v-if="isTouch" class="search-close" @click="emit('close')" aria-label="close">×</button>
+          <button v-if="isTouch" class="search-close" aria-label="close" @click="emit('close')">×</button>
           <span v-else class="search-hint mono">esc</span>
         </div>
         <div class="palette-body">

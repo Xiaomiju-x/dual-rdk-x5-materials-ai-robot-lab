@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import VChart from 'vue-echarts'
-import type { EChartsOption } from 'echarts'
+import type {
+  CustomSeriesRenderItemAPI,
+  CustomSeriesRenderItemParams,
+  CustomSeriesRenderItemReturn,
+  EChartsOption,
+  TooltipComponentFormatterCallbackParams,
+} from 'echarts'
 import { ensureEchartsRegistered } from './echartsRegister'
 import type { TimelineEvent } from '@/types/telemetry'
 
@@ -22,6 +28,8 @@ const TRACKS = [
 ] as const
 
 type TrackId = (typeof TRACKS)[number]['id']
+type CustomGroupReturn = Extract<NonNullable<CustomSeriesRenderItemReturn>, { type: 'group' }>
+type CustomElement = CustomGroupReturn['children'][number]
 
 const STATUS_TINT: Record<string, number> = {
   ok: 1.0, info: 0.95, warn: 0.85, err: 0.75, idle: 0.65,
@@ -51,14 +59,17 @@ const option = computed<EChartsOption>(() => {
       borderWidth: 0,
       textStyle: { fontSize: 11, color: '#0b1220' },
       padding: [8, 12],
-      formatter: (p: any) => {
-        const v = p.value
-        const start = new Date(v[1]).toLocaleTimeString()
-        const end = new Date(v[2]).toLocaleTimeString()
-        const dur = Math.max(0, (v[2] - v[1]) / 1000)
-        const status = v[3]
-        const detail = v[4]
-        const label = v[5]
+      formatter: (params: TooltipComponentFormatterCallbackParams) => {
+        const p = Array.isArray(params) ? params[0] : params
+        const v = Array.isArray(p?.value) ? p.value : []
+        const startMs = Number(v[1] ?? 0)
+        const endMs = Number(v[2] ?? 0)
+        const start = new Date(startMs).toLocaleTimeString()
+        const end = new Date(endMs).toLocaleTimeString()
+        const dur = Math.max(0, (endMs - startMs) / 1000)
+        const status = String(v[3] ?? '')
+        const detail = String(v[4] ?? '')
+        const label = String(v[5] ?? '')
         return `
           <div style="font-weight:600;color:#0b1220;margin-bottom:4px">${label}</div>
           <div style="color:#475569;font-size:10px;font-family:JetBrains Mono Variable, monospace">
@@ -100,50 +111,58 @@ const option = computed<EChartsOption>(() => {
     series: [
       {
         type: 'custom',
-        renderItem: (_params: any, api: any): any => {
-          const trackIdx = api.value(0)
+        renderItem: (
+          _params: CustomSeriesRenderItemParams,
+          api: CustomSeriesRenderItemAPI,
+        ): CustomSeriesRenderItemReturn => {
+          const trackIdx = Number(api.value(0))
           const startCoord = api.coord([api.value(1), trackIdx])
           const endCoord = api.coord([api.value(2), trackIdx])
-          const height = api.size([0, 1])[1] * 0.5
+          const size = api.size?.([0, 1])
+          const height = (Array.isArray(size) ? size[1] : Number(size ?? 0)) * 0.5
           const x = startCoord[0]
           const w = Math.max(2, endCoord[0] - startCoord[0])
           const y = startCoord[1] - height / 2
-          const status = api.value(3)
+          const status = String(api.value(3) ?? '')
           const isWarn = status === 'warn' || status === 'err'
+          const children: CustomElement[] = [
+            {
+              type: 'rect',
+              shape: { x, y, width: w, height, r: 4 },
+              style: {
+                fill: String(api.visual('color') ?? '#94a3b8'),
+                opacity: 0.92,
+              },
+            },
+          ]
+          if (isWarn) {
+            children.push({
+              type: 'rect',
+              shape: { x, y, width: 3, height, r: [2, 0, 0, 2] },
+              style: { fill: status === 'err' ? '#b91c1c' : '#b45309' },
+            })
+          }
+          children.push({
+            type: 'text',
+            x: x + 8,
+            y: y + height / 2,
+            style: {
+              text: w > 60 ? String(api.value(5)).slice(0, Math.floor(w / 7)) : '',
+              verticalAlign: 'middle',
+              align: 'left',
+              fontSize: 10,
+              fontFamily: 'Inter Variable, sans-serif',
+              fontWeight: 600,
+              fill: '#ffffff',
+            },
+          })
           return {
             type: 'group',
-            children: [
-              {
-                type: 'rect',
-                shape: { x, y, width: w, height, r: 4 },
-                style: {
-                  fill: api.visual('color'),
-                  opacity: 0.92,
-                },
-              },
-              ...(isWarn ? [{
-                type: 'rect',
-                shape: { x, y, width: 3, height, r: [2, 0, 0, 2] },
-                style: { fill: status === 'err' ? '#b91c1c' : '#b45309' },
-              }] : []),
-              {
-                type: 'text',
-                position: [x + 8, y + height / 2],
-                style: {
-                  text: w > 60 ? String(api.value(5)).slice(0, Math.floor(w / 7)) : '',
-                  textVerticalAlign: 'middle',
-                  textAlign: 'left',
-                  fontSize: 10,
-                  fontFamily: 'Inter Variable, sans-serif',
-                  fontWeight: 600,
-                  fill: '#ffffff',
-                },
-              },
-            ],
+            children,
           }
         },
         encode: { x: [1, 2], y: 0, tooltip: [0, 1, 2, 3, 4, 5] },
-        data: data as any,
+        data,
       },
     ],
   }

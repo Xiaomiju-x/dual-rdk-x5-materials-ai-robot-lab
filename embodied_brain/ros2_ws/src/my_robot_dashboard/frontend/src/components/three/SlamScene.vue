@@ -381,7 +381,7 @@ watch(cinematicActive, () => {
           <div class="hud-line section-label">SLAM Stage</div>
           <div class="hud-line mono">{{ fps.toFixed(1) }} fps · webgl2{{ cinematicActive ? ' · bloom' : '' }}</div>
         </div>
-        <div class="hud-corner hud-tr" v-if="telemetry.packet">
+        <div v-if="telemetry.packet" class="hud-corner hud-tr">
           <div class="hud-line section-label">Pose</div>
           <div class="hud-line mono">
             x {{ telemetry.packet.pose.x.toFixed(2) }} ·
@@ -389,11 +389,11 @@ watch(cinematicActive, () => {
             θ {{ ((telemetry.packet.pose.yaw * 180) / Math.PI).toFixed(0) }}°
           </div>
         </div>
-        <div class="hud-corner hud-bl" v-if="telemetry.packet">
+        <div v-if="telemetry.packet" class="hud-corner hud-bl">
           <div class="hud-line section-label">LD14</div>
           <div class="hud-line mono">270° · 10 Hz · 666 pts</div>
         </div>
-        <div class="hud-corner hud-br" v-if="telemetry.packet">
+        <div v-if="telemetry.packet" class="hud-corner hud-br">
           <div class="hud-line section-label">Velocity</div>
           <div class="hud-line mono">{{ telemetry.packet.velocity.linear.toFixed(2) }} m/s · ω {{ telemetry.packet.velocity.angular.toFixed(2) }}</div>
         </div>

@@ -26,7 +26,7 @@ const current = ref(0)
 const skipped = ref(false)
 const finished = ref(false)
 const telemetry = useTelemetryStore()
-let timers: number[] = []
+const timers: number[] = []
 
 function advance() {
   if (finished.value || skipped.value) return
@@ -70,7 +70,7 @@ const wsReady = computed(() => telemetry.isConnected)
 <template>
   <Teleport to="body">
     <Transition name="boot">
-      <div v-if="!finished" class="boot" @click="skip('tap')" role="status" aria-label="Boot sequence">
+      <div v-if="!finished" class="boot" role="status" aria-label="Boot sequence" @click="skip('tap')">
         <!-- bg layers -->
         <div class="boot-grid" aria-hidden="true"></div>
         <div class="boot-glow" aria-hidden="true"></div>

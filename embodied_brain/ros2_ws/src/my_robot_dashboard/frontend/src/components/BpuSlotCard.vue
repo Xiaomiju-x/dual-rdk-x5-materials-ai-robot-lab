@@ -5,16 +5,16 @@ import { useTelemetryStore } from '@/stores/telemetry'
 import type { BpuSlot } from '@/types/telemetry'
 
 interface Props {
-  slot: BpuSlot
+  bpuSlot: BpuSlot
   accent?: 'blue' | 'teal' | 'emerald' | 'violet' | 'amber' | 'rose'
 }
 const props = withDefaults(defineProps<Props>(), { accent: 'violet' })
 
 const telemetry = useTelemetryStore()
-const samples = computed(() => telemetry.bpuSlotBuffer(props.slot.id))
+const samples = computed(() => telemetry.bpuSlotBuffer(props.bpuSlot.id))
 
 const heatLevel = computed(() => {
-  const u = props.slot.util_pct
+  const u = props.bpuSlot.util_pct
   if (u >= 70) return 'hot'
   if (u >= 35) return 'warm'
   if (u >= 5)  return 'idle'
@@ -28,7 +28,7 @@ const heatColor = computed(() => ({
   cold: '#64748b',
 }[heatLevel.value]))
 
-const isActive = computed(() => props.slot.util_pct >= 5)
+const isActive = computed(() => props.bpuSlot.util_pct >= 5)
 </script>
 
 <template>
@@ -39,23 +39,23 @@ const isActive = computed(() => props.slot.util_pct >= 5)
           <span class="glyph-inner" :class="{ pulse: isActive }"></span>
         </span>
         <div>
-          <div class="bpu-label">{{ slot.label }}</div>
-          <div class="bpu-model mono">{{ slot.model }}</div>
+          <div class="bpu-label">{{ bpuSlot.label }}</div>
+          <div class="bpu-model mono">{{ bpuSlot.model }}</div>
         </div>
       </div>
-      <span class="bpu-size mono">{{ slot.size_mb.toFixed(2) }} MB</span>
+      <span class="bpu-size mono">{{ bpuSlot.size_mb.toFixed(2) }} MB</span>
     </div>
 
     <div class="bpu-util-row">
-      <span class="util-num">{{ slot.util_pct.toFixed(0) }}</span>
+      <span class="util-num">{{ bpuSlot.util_pct.toFixed(0) }}</span>
       <span class="util-unit">%</span>
       <span class="util-tone mono" :class="`tone-${heatLevel}`">{{ heatLevel }}</span>
-      <span class="latency mono">{{ slot.last_ms.toFixed(2) }} ms</span>
+      <span class="latency mono">{{ bpuSlot.last_ms.toFixed(2) }} ms</span>
     </div>
 
     <div class="heat-bar">
-      <div class="heat-fill" :style="{ width: `${slot.util_pct}%`, background: `linear-gradient(90deg, ${heatColor}aa, ${heatColor})` }"></div>
-      <div class="heat-glow" :style="{ width: `${slot.util_pct}%`, background: heatColor, opacity: isActive ? 0.5 : 0.0 }"></div>
+      <div class="heat-fill" :style="{ width: `${bpuSlot.util_pct}%`, background: `linear-gradient(90deg, ${heatColor}aa, ${heatColor})` }"></div>
+      <div class="heat-glow" :style="{ width: `${bpuSlot.util_pct}%`, background: heatColor, opacity: isActive ? 0.5 : 0.0 }"></div>
     </div>
 
     <div class="bpu-spark">

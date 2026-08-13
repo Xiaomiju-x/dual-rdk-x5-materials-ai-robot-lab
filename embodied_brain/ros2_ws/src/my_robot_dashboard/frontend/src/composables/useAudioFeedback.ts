@@ -11,10 +11,16 @@ type SoundKind = 'click' | 'navigate' | 'warn' | 'err' | 'success' | 'ping'
 
 let ctx: AudioContext | null = null
 
+type WebkitAudioWindow = Window & {
+  webkitAudioContext?: typeof AudioContext
+}
+
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null
   if (!ctx) {
-    try { ctx = new (window.AudioContext || (window as any).webkitAudioContext)() } catch { return null }
+    const AudioContextCtor = window.AudioContext || (window as WebkitAudioWindow).webkitAudioContext
+    if (!AudioContextCtor) return null
+    try { ctx = new AudioContextCtor() } catch { return null }
   }
   // resume if suspended (browser autoplay policy)
   if (ctx.state === 'suspended') ctx.resume().catch(() => {})

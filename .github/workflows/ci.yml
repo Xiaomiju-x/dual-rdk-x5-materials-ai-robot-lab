@@ -41,7 +41,7 @@ jobs:
       - name: Exercise the deterministic offline demo
         run: python -B examples/offline_demo/run_demo.py > offline-receipt.json
       - name: Upload offline receipt
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: offline-inspection-receipt
           path: offline-receipt.json
@@ -61,6 +61,8 @@ jobs:
           cache: npm
           cache-dependency-path: workstation_frontend_public/package-lock.json
       - run: npm ci
+      - name: Reject vulnerable npm dependencies
+        run: npm audit --audit-level=low
       - run: npm run build
 
   embodied-dashboard-frontend:
@@ -77,4 +79,8 @@ jobs:
       - name: Activate the lockfile-declared pnpm version
         run: corepack enable && corepack prepare pnpm@9.12.3 --activate
       - run: pnpm install --frozen-lockfile
+      - name: Reject vulnerable pnpm dependencies
+        run: pnpm audit --audit-level=low
+      - name: Lint the embodied dashboard frontend
+        run: pnpm run lint
       - run: pnpm run build

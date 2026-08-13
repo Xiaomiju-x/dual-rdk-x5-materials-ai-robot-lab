@@ -209,9 +209,9 @@ defineExpose({ removeSelected, totalDistance })
             stroke-width="2"
             :opacity="selected === w.id ? 1 : 0.92"
             class="wp-handle"
+            style="cursor: grab;"
             @pointerdown.stop="onPointerDown($event, w.id)"
             @click.stop="selected = w.id"
-            style="cursor: grab;"
           />
           <text text-anchor="middle" dy="3.5" font-size="11" font-weight="700" :fill="KIND_COLOR[w.kind] ?? '#475569'" pointer-events="none">
             {{ KIND_GLYPH[w.kind] ?? (i + 1) }}

@@ -39,7 +39,7 @@ const cinematic = ref(true)
     </header>
 
     <div class="topo-stage card-floating">
-      <BorderBeam :duration="16" :size="280" :radius="22" :colorFrom="'rgba(124, 58, 237, 0.85)'" :colorTo="'rgba(34, 211, 238, 0.85)'" />
+      <BorderBeam :duration="16" :size="280" :radius="22" :color-from="'rgba(124, 58, 237, 0.85)'" :color-to="'rgba(34, 211, 238, 0.85)'" />
       <NetworkTopology3D :height="560" :cinematic="cinematic" />
     </div>
 

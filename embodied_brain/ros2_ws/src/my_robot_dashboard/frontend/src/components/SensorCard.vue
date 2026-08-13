@@ -4,7 +4,7 @@ import Sparkline from './charts/Sparkline.vue'
 import { useTelemetryStore } from '@/stores/telemetry'
 import type { Sensor } from '@/types/telemetry'
 
-interface Props {
+export interface Props {
   sensor: Sensor
   /** which colour the spark uses */
   accent?: 'blue' | 'teal' | 'emerald' | 'violet' | 'amber' | 'rose'

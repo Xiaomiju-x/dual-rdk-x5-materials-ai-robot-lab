@@ -127,7 +127,7 @@ const hostSeries = computed(() => [
 
     <!-- Sensor cards -->
     <div class="sensor-detail-grid">
-      <div v-for="s in sensors" :key="s.id" class="card-elevated detail-card" v-tilt="{ max: 3 }">
+      <div v-for="s in sensors" :key="s.id" v-tilt="{ max: 3 }" class="card-elevated detail-card">
         <div class="detail-head">
           <div>
             <div class="detail-label">{{ s.label }}</div>
@@ -155,8 +155,8 @@ const hostSeries = computed(() => [
           />
         </div>
 
-        <div class="detail-stats" v-if="statsOf(bufFor(s.id))">
-          <div class="stat" v-for="st in [statsOf(bufFor(s.id))!]" :key="`min-${s.id}`">
+        <div v-if="statsOf(bufFor(s.id))" class="detail-stats">
+          <div v-for="st in [statsOf(bufFor(s.id))!]" :key="`stats-${s.id}-${st.n}`" class="stat">
             <div><span class="stat-label">min</span><span class="stat-val mono">{{ st.min.toFixed(2) }}</span></div>
             <div><span class="stat-label">avg</span><span class="stat-val mono">{{ st.avg.toFixed(2) }}</span></div>
             <div><span class="stat-label">max</span><span class="stat-val mono">{{ st.max.toFixed(2) }}</span></div>

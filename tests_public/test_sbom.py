@@ -5,8 +5,12 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import shutil
 import sys
+import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 
@@ -92,6 +96,237 @@ class SbomContractTests(unittest.TestCase):
                 ),
                 lock_path,
             )
+
+    def test_every_locked_pnpm_package_has_exact_identity_and_lock_evidence(self) -> None:
+        (
+            _manifest,
+            _root_importer,
+            locked_packages,
+            _snapshots,
+            _overrides,
+        ) = GENERATOR._load_pnpm_lockfile(ROOT)
+        sbom_pnpm = [
+            package
+            for package in self.generated["packages"]
+            if package["SPDXID"].startswith("SPDXRef-PNPM-")
+        ]
+        self.assertEqual(len(locked_packages), len(sbom_pnpm))
+
+        by_package_key = {}
+        for package in sbom_pnpm:
+            prefix = "pnpm package key: "
+            self.assertTrue(package["comment"].startswith(prefix))
+            package_key = package["comment"][len(prefix) :].split(
+                ". Source lockfile:", 1
+            )[0]
+            self.assertNotIn(package_key, by_package_key)
+            by_package_key[package_key] = package
+
+        self.assertEqual(set(locked_packages), set(by_package_key))
+        for package_key, entry in locked_packages.items():
+            name, version = GENERATOR._pnpm_package_identity(package_key)
+            package = by_package_key[package_key]
+            self.assertEqual(name, package["name"])
+            self.assertEqual(version, package["versionInfo"])
+            self.assertEqual(
+                GENERATOR._spdx_license(entry.get("license")),
+                package["licenseDeclared"],
+            )
+            self.assertTrue(
+                any(
+                    reference["referenceType"] == "purl"
+                    and reference["referenceLocator"]
+                    == GENERATOR._npm_purl(name, version)
+                    for reference in package["externalRefs"]
+                ),
+                package_key,
+            )
+            resolution = entry.get("resolution", {})
+            expected_checksums = GENERATOR._sri_checksums(resolution.get("integrity"))
+            if expected_checksums:
+                self.assertEqual(expected_checksums, package.get("checksums"))
+            else:
+                self.assertNotIn("checksums", package)
+
+    def test_pnpm_root_and_transitive_dependency_graph_is_exact_and_closed(self) -> None:
+        (
+            _manifest,
+            root_importer,
+            locked_packages,
+            snapshots,
+            overrides,
+        ) = GENERATOR._load_pnpm_lockfile(ROOT)
+        pnpm_packages = {
+            package["comment"].split(". Source lockfile:", 1)[0].removeprefix(
+                "pnpm package key: "
+            ): package
+            for package in self.generated["packages"]
+            if package["SPDXID"].startswith("SPDXRef-PNPM-")
+        }
+        id_by_key = {
+            package_key: package["SPDXID"]
+            for package_key, package in pnpm_packages.items()
+        }
+        snapshot_package_by_key = {
+            snapshot_key: GENERATOR._pnpm_snapshot_package_key(
+                snapshot_key, locked_packages
+            )
+            for snapshot_key in snapshots
+        }
+        self.assertEqual(
+            set(locked_packages),
+            set(snapshot_package_by_key.values()),
+            "each exact packages entry must own at least one resolved snapshot",
+        )
+        peer_variants = {
+            package_key: sorted(
+                snapshot_key
+                for snapshot_key, owner in snapshot_package_by_key.items()
+                if owner == package_key
+            )
+            for package_key in locked_packages
+        }
+        self.assertTrue(
+            any(len(snapshot_keys) > 1 for snapshot_keys in peer_variants.values()),
+            "fixture must exercise peer-context variants of one exact artifact",
+        )
+        for package_key, snapshot_keys in peer_variants.items():
+            self.assertTrue(
+                all(
+                    snapshot_key == package_key
+                    or snapshot_key.startswith(package_key + "(")
+                    for snapshot_key in snapshot_keys
+                ),
+                package_key,
+            )
+
+        def target_package_key(dependency_name: str, reference: object) -> str:
+            snapshot_key = GENERATOR._pnpm_dependency_snapshot_key(
+                dependency_name, reference, locked_packages, snapshots
+            )
+            return snapshot_package_by_key.get(snapshot_key, snapshot_key)
+
+        expected = set()
+        for group_name in ("dependencies", "devDependencies", "optionalDependencies"):
+            for dependency_name, reference in root_importer.get(group_name, {}).items():
+                expected.add(
+                    (
+                        GENERATOR.EMBODIED_FRONTEND_ID,
+                        id_by_key[target_package_key(dependency_name, reference)],
+                    )
+                )
+        for snapshot_key, snapshot in snapshots.items():
+            source_id = id_by_key[snapshot_package_by_key[snapshot_key]]
+            for group_name in ("dependencies", "optionalDependencies"):
+                for dependency_name, reference in snapshot.get(group_name, {}).items():
+                    expected.add(
+                        (
+                            source_id,
+                            id_by_key[target_package_key(dependency_name, reference)],
+                        )
+                    )
+
+        pnpm_ids = set(id_by_key.values())
+        actual = {
+            (relationship["spdxElementId"], relationship["relatedSpdxElement"])
+            for relationship in self.generated["relationships"]
+            if relationship["relationshipType"] == "DEPENDS_ON"
+            and (
+                relationship["spdxElementId"] == GENERATOR.EMBODIED_FRONTEND_ID
+                or relationship["spdxElementId"] in pnpm_ids
+            )
+        }
+        self.assertEqual(expected, actual)
+        self.assertEqual(
+            pnpm_ids,
+            {target for _source, target in actual},
+            "every exact pnpm package must be reachable through a locked edge",
+        )
+        self.assertIn(
+            (
+                GENERATOR.PROJECT_ID,
+                "CONTAINS",
+                GENERATOR.EMBODIED_FRONTEND_ID,
+            ),
+            {
+                (
+                    relationship["spdxElementId"],
+                    relationship["relationshipType"],
+                    relationship["relatedSpdxElement"],
+                )
+                for relationship in self.generated["relationships"]
+            },
+        )
+        embodied_root = next(
+            package
+            for package in self.generated["packages"]
+            if package["SPDXID"] == GENERATOR.EMBODIED_FRONTEND_ID
+        )
+        for name, version in overrides.items():
+            self.assertIn(f"{name}={version}", embodied_root["comment"])
+        self.assertTrue(
+            self.generated["documentNamespace"].endswith(
+                GENERATOR._input_digest(ROOT)
+            )
+        )
+
+    def test_pnpm_lock_or_workspace_override_change_fails_check(self) -> None:
+        input_files = [
+            GENERATOR.LOCKFILE,
+            GENERATOR.PNPM_LOCKFILE,
+            GENERATOR.PNPM_WORKSPACE,
+            GENERATOR.PNPM_PACKAGE_JSON,
+        ]
+        input_files.extend(
+            path.relative_to(ROOT).as_posix()
+            for path in (ROOT / GENERATOR.REQUIREMENTS_DIR).glob("*.txt")
+        )
+        input_files.extend(
+            relative_path
+            for component in GENERATOR.VENDORED_COMPONENTS
+            for relative_path in component["files"]
+        )
+
+        for mutation_target in (GENERATOR.PNPM_LOCKFILE, GENERATOR.PNPM_WORKSPACE):
+            with self.subTest(mutation_target=mutation_target):
+                with tempfile.TemporaryDirectory() as directory:
+                    temporary_root = Path(directory)
+                    for relative_path in input_files:
+                        destination = temporary_root / relative_path
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copyfile(ROOT / relative_path, destination)
+
+                    output = temporary_root / GENERATOR.DEFAULT_OUTPUT
+                    output.write_text(
+                        GENERATOR.render_sbom(temporary_root),
+                        encoding="utf-8",
+                        newline="\n",
+                    )
+                    with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                        self.assertEqual(
+                            0,
+                            GENERATOR.main(
+                                ["--root", str(temporary_root), "--check"]
+                            ),
+                        )
+
+                    target = temporary_root / mutation_target
+                    original = target.read_text(encoding="utf-8")
+                    if mutation_target == GENERATOR.PNPM_LOCKFILE:
+                        mutated = original + "\n# lock-input-digest-mutation\n"
+                    else:
+                        self.assertIn("fast-uri: 3.1.5", original)
+                        mutated = original.replace(
+                            "fast-uri: 3.1.5", "fast-uri: 3.1.6", 1
+                        )
+                    target.write_text(mutated, encoding="utf-8", newline="\n")
+                    with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                        self.assertEqual(
+                            1,
+                            GENERATOR.main(
+                                ["--root", str(temporary_root), "--check"]
+                            ),
+                        )
 
     def test_python_ranges_are_explicitly_unresolved_not_fake_versions(self) -> None:
         requirements = GENERATOR.load_python_requirements(ROOT)

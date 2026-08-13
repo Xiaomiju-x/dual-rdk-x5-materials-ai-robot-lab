@@ -19,7 +19,7 @@ const parts = computed(() => {
 <template>
   <div class="mc" title="Mission Elapsed Time">
     <span class="mc-tag">MET</span>
-    <span class="mc-seg" v-for="(p, k) in parts" :key="String(k)">{{ p }}</span>
+    <span v-for="(p, k) in parts" :key="String(k)" class="mc-seg">{{ p }}</span>
   </div>
 </template>
 

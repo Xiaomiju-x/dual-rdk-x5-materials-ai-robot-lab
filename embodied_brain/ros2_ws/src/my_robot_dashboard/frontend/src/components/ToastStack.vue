@@ -19,9 +19,9 @@ function glyph(tone: string): string {
       :key="t.id"
       class="toast card-floating"
       :class="`tone-${t.tone}`"
-      @click="toasts.dismiss(t.id)"
       role="status"
       aria-live="polite"
+      @click="toasts.dismiss(t.id)"
     >
       <div class="t-rail"></div>
       <div class="t-glyph">{{ glyph(t.tone) }}</div>
@@ -29,7 +29,7 @@ function glyph(tone: string): string {
         <div class="t-title">{{ t.title }}</div>
         <div v-if="t.detail" class="t-detail">{{ t.detail }}</div>
       </div>
-      <button class="t-close" @click.stop="toasts.dismiss(t.id)" aria-label="dismiss">×</button>
+      <button class="t-close" aria-label="dismiss" @click.stop="toasts.dismiss(t.id)">×</button>
     </div>
   </transition-group>
 </template>

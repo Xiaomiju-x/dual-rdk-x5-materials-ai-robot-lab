@@ -35,8 +35,8 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onDoc))
       ref="anchorRef"
       class="settings-btn"
       :class="{ active: open }"
-      @click="toggle"
       aria-label="settings"
+      @click="toggle"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"></circle>
@@ -111,8 +111,8 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onDoc))
             class="accent-swatch"
             :class="{ active: settings.accent === a }"
             :style="{ background: `linear-gradient(135deg, ${ACCENT_HEX[a].primary}, ${ACCENT_HEX[a].secondary})` } as any"
-            @click="settings.setAccent(a)"
             :title="ACCENT_HEX[a].label"
+            @click="settings.setAccent(a)"
           >
             <span v-if="settings.accent === a">✓</span>
           </button>

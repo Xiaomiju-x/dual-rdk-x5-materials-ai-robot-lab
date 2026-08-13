@@ -42,7 +42,8 @@ const rttBand = computed(() => {
                 <stop offset="100%" stop-color="#7c3aed" />
               </linearGradient>
             </defs>
-            <path d="M24 6 C 14 6 8 14 10 22 C 6 26 8 34 16 36 C 18 42 28 42 30 36 C 38 34 40 26 36 22 C 38 14 32 6 24 6 Z"
+            <path
+d="M24 6 C 14 6 8 14 10 22 C 6 26 8 34 16 36 C 18 42 28 42 30 36 C 38 34 40 26 36 22 C 38 14 32 6 24 6 Z"
                   fill="none" stroke="url(#brainGrad)" stroke-width="2" />
             <circle cx="18" cy="20" r="2" fill="#2563eb" />
             <circle cx="30" cy="20" r="2" fill="#7c3aed" />

@@ -27,7 +27,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(import.meta.dirname, 'src'),
     },
   },
   server: {
@@ -47,10 +47,10 @@ export default defineConfig({
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
       output: {
-        manualChunks: {
-          three: ['three'],
-          echarts: ['echarts', 'vue-echarts'],
-          gsap: ['gsap'],
+        manualChunks(id) {
+          if (id.includes('/node_modules/three/')) return 'three'
+          if (id.includes('/node_modules/echarts/') || id.includes('/node_modules/vue-echarts/')) return 'echarts'
+          if (id.includes('/node_modules/gsap/')) return 'gsap'
         },
       },
     },

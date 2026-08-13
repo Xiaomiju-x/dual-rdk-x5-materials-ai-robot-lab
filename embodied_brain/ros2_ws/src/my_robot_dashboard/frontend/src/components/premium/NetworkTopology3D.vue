@@ -95,10 +95,10 @@ interface Particle {
   sprite: THREE.Mesh
 }
 const particles: Particle[] = []
-let edgeBudget = new Map<EdgeDef, number>()
+const edgeBudget = new Map<EdgeDef, number>()
 
 let raycaster: THREE.Raycaster | null = null
-let pointer = new THREE.Vector2(-10, -10)
+const pointer = new THREE.Vector2(-10, -10)
 
 function init() {
   if (!canvasEl.value || !wrapEl.value) return

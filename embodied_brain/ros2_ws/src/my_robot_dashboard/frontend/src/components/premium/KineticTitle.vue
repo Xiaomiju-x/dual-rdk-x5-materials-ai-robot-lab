@@ -39,7 +39,7 @@ const chars = computed(() => Array.from(props.text))
 </script>
 
 <template>
-  <span class="kt" :class="props.gradient ? `kt-grad-${props.gradient}` : null" :key="props.text">
+  <span :key="props.text" class="kt" :class="props.gradient ? `kt-grad-${props.gradient}` : null">
     <span
       v-for="(c, i) in chars"
       :key="i + c"

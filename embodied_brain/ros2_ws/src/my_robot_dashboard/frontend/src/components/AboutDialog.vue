@@ -45,7 +45,7 @@ function backdropClick(evt: MouseEvent) {
               <div class="ab-sub mono">Premium real-time dashboard for the 具身脑 embodied X5</div>
             </div>
           </div>
-          <button class="ab-close" @click="emit('close')" aria-label="close">×</button>
+          <button class="ab-close" aria-label="close" @click="emit('close')">×</button>
         </div>
 
         <div class="ab-body">

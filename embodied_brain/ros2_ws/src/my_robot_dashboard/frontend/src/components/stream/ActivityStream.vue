@@ -152,10 +152,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             <span class="as-title">Live Stream</span>
             <span class="mono as-hz">{{ telemetry.observedHz.toFixed(1) }} Hz</span>
           </div>
-          <button class="as-x" @click="emit('close')" aria-label="close">×</button>
+          <button class="as-x" aria-label="close" @click="emit('close')">×</button>
         </header>
 
-        <div class="as-spark"><Sparkline :samples="hzSamples" :yRange="[0, 12]" accent="emerald" /></div>
+        <div class="as-spark"><Sparkline :samples="hzSamples" :y-range="[0, 12]" accent="emerald" /></div>
 
         <nav class="as-filters">
           <button

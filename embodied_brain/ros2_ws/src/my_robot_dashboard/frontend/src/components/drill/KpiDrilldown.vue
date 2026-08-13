@@ -161,9 +161,9 @@ const tone = computed(() => {
 <template>
   <Teleport to="body">
     <Transition name="kd">
-      <div v-if="open && def" class="kd-back" @click="backdropClick" role="dialog" aria-label="KPI drill">
+      <div v-if="open && def" class="kd-back" role="dialog" aria-label="KPI drill" @click="backdropClick">
         <div class="kd-card card-floating">
-          <BorderBeam :duration="11" :size="220" :radius="22" :colorFrom="`rgba(37, 99, 235, 0.85)`" :colorTo="`rgba(124, 58, 237, 0.85)`" />
+          <BorderBeam :duration="11" :size="220" :radius="22" :color-from="`rgba(37, 99, 235, 0.85)`" :color-to="`rgba(124, 58, 237, 0.85)`" />
 
           <header class="kd-head">
             <div class="kd-title">
@@ -171,7 +171,7 @@ const tone = computed(() => {
               <h2 class="kd-name">{{ def.label }}</h2>
               <p class="kd-desc">{{ def.description }}</p>
             </div>
-            <button class="kd-x" @click="close" aria-label="close">×</button>
+            <button class="kd-x" aria-label="close" @click="close">×</button>
           </header>
 
           <div class="kd-grid">
@@ -206,22 +206,22 @@ const tone = computed(() => {
               <div class="kd-spark-grid">
                 <div class="kd-spark">
                   <span class="section-label">CPU</span>
-                  <Sparkline :samples="telemetry.hostHistory.cpu" :yRange="[0, 100]" accent="blue" />
+                  <Sparkline :samples="telemetry.hostHistory.cpu" :y-range="[0, 100]" accent="blue" />
                 </div>
                 <div class="kd-spark">
                   <span class="section-label">BPU</span>
-                  <Sparkline :samples="telemetry.hostHistory.bpu" :yRange="[0, 100]" accent="violet" />
+                  <Sparkline :samples="telemetry.hostHistory.bpu" :y-range="[0, 100]" accent="violet" />
                 </div>
                 <div class="kd-spark">
                   <span class="section-label">RAM</span>
-                  <Sparkline :samples="telemetry.hostHistory.ram" :yRange="[0, telemetry.packet?.host.ram_total_gb ?? 8]" accent="emerald" />
+                  <Sparkline :samples="telemetry.hostHistory.ram" :y-range="[0, telemetry.packet?.host.ram_total_gb ?? 8]" accent="emerald" />
                 </div>
               </div>
             </div>
           </div>
 
           <!-- related KPIs -->
-          <footer class="kd-related" v-if="def && pkt">
+          <footer v-if="def && pkt" class="kd-related">
             <span class="section-label">Related</span>
             <div class="kd-related-grid">
               <div v-for="r in def.related" :key="r.label" class="kd-related-cell">

@@ -282,7 +282,8 @@ onMounted(() => {
           <div class="panel-head">
             <span class="section-label">事件时间线</span>
             <div class="seg seg-sm">
-              <button v-for="k in (['all', 'alarm', 'command', 'result', 'mission'] as const)" :key="k"
+              <button
+v-for="k in (['all', 'alarm', 'command', 'result', 'mission'] as const)" :key="k"
                       class="seg-btn" :class="{ active: kindFilter === k }" @click="kindFilter = k">
                 {{ k === 'all' ? '全部' : KIND_META[k]?.label }}
               </button>

@@ -44,7 +44,7 @@ function load(): Persisted {
   try {
     const raw = localStorage.getItem(KEY)
     if (raw) base = { ...defaults, ...JSON.parse(raw) }
-  } catch (_e) { /* ignore */ }
+  } catch { /* ignore */ }
   // Optional URL escape hatch — handy for headless screenshots & sharing
   // permalinks. `?theme=dark` / `?density=compact` / `?cinematic=off` etc.
   if (typeof window !== 'undefined') {
@@ -91,7 +91,7 @@ export const useSettingsStore = defineStore('settings', () => {
         cinematic: cinematic.value,
         accent: accent.value,
       }))
-    } catch (_e) { /* quota exceeded etc. */ }
+    } catch { /* quota exceeded etc. */ }
   }
 
   function applyToDom() {

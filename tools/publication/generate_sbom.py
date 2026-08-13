@@ -2,9 +2,9 @@
 """Generate the repository's deterministic SPDX 2.3 software bill of materials.
 
 The generator is intentionally standard-library-only and offline.  It inventories
-the repository package, the exact npm graph recorded in package-lock.json, the
-declared (but not locked) Python requirements, and the JavaScript assets vendored
-in the two public-site trees.
+the repository package, the exact npm and pnpm graphs recorded in their lockfiles,
+the declared (but not locked) Python requirements, and the JavaScript assets
+vendored in the two public-site trees.
 """
 
 from __future__ import annotations
@@ -25,12 +25,17 @@ DATA_LICENSE = "CC0-1.0"
 CREATED_AT = "2026-08-13T00:00:00Z"
 DEFAULT_OUTPUT = "sbom.spdx.json"
 LOCKFILE = "workstation_frontend_public/package-lock.json"
+PNPM_FRONTEND_DIR = "embodied_brain/ros2_ws/src/my_robot_dashboard/frontend"
+PNPM_LOCKFILE = f"{PNPM_FRONTEND_DIR}/pnpm-lock.yaml"
+PNPM_WORKSPACE = f"{PNPM_FRONTEND_DIR}/pnpm-workspace.yaml"
+PNPM_PACKAGE_JSON = f"{PNPM_FRONTEND_DIR}/package.json"
 REQUIREMENTS_DIR = "requirements"
 
 PROJECT_ID = "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot"
 PROJECT_NAME = "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人"
 PROJECT_VERSION = "1.0.2"
 FRONTEND_ID = "SPDXRef-Package-Workcockpit-Frontend"
+EMBODIED_FRONTEND_ID = "SPDXRef-Package-Navcockpit-Frontend"
 
 VENDORED_COMPONENTS = (
     {
@@ -81,6 +86,191 @@ class SbomError(RuntimeError):
     """Raised for an input that cannot be represented without guessing."""
 
 
+def _strip_yaml_comment(value: str) -> str:
+    """Strip a YAML comment while preserving quoted/hash-bearing scalars."""
+
+    quote_character: str | None = None
+    escaped = False
+    for index, character in enumerate(value):
+        if quote_character == '"':
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == quote_character:
+                quote_character = None
+            continue
+        if quote_character == "'":
+            if character == "'":
+                if index + 1 < len(value) and value[index + 1] == "'":
+                    continue
+                quote_character = None
+            continue
+        if character in {"'", '"'}:
+            quote_character = character
+        elif character == "#" and (index == 0 or value[index - 1].isspace()):
+            return value[:index].rstrip()
+    return value.rstrip()
+
+
+def _yaml_delimiter_index(value: str, delimiter: str) -> int | None:
+    """Find an unquoted flow-level YAML delimiter in a small pnpm subset."""
+
+    quote_character: str | None = None
+    escaped = False
+    depth = 0
+    index = 0
+    while index < len(value):
+        character = value[index]
+        if quote_character == '"':
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == quote_character:
+                quote_character = None
+        elif quote_character == "'":
+            if character == "'":
+                if index + 1 < len(value) and value[index + 1] == "'":
+                    index += 1
+                else:
+                    quote_character = None
+        elif character in {"'", '"'}:
+            quote_character = character
+        elif character in "[{(":
+            depth += 1
+        elif character in "]})":
+            depth -= 1
+            if depth < 0:
+                raise SbomError(f"unbalanced pnpm YAML flow value: {value}")
+        elif character == delimiter and depth == 0:
+            return index
+        index += 1
+    if quote_character is not None or depth != 0:
+        raise SbomError(f"unterminated pnpm YAML value: {value}")
+    return None
+
+
+def _split_yaml_flow(value: str) -> list[str]:
+    items: list[str] = []
+    remaining = value
+    while remaining:
+        delimiter = _yaml_delimiter_index(remaining, ",")
+        if delimiter is None:
+            item = remaining.strip()
+            remaining = ""
+        else:
+            item = remaining[:delimiter].strip()
+            remaining = remaining[delimiter + 1 :]
+        if item:
+            items.append(item)
+    return items
+
+
+def _yaml_scalar(value: str, source: str, line_number: int) -> Any:
+    """Parse the scalar/flow-map forms emitted by pnpm 9 without PyYAML."""
+
+    value = value.strip()
+    if not value:
+        return ""
+    if value.startswith("{"):
+        if not value.endswith("}"):
+            raise SbomError(f"unterminated flow map at {source}:{line_number}")
+        result: dict[str, Any] = {}
+        for item in _split_yaml_flow(value[1:-1].strip()):
+            separator = _yaml_delimiter_index(item, ":")
+            if separator is None:
+                raise SbomError(f"invalid flow map at {source}:{line_number}: {item}")
+            key = _yaml_scalar(item[:separator], source, line_number)
+            if not isinstance(key, str) or not key:
+                raise SbomError(f"invalid flow key at {source}:{line_number}: {item}")
+            if key in result:
+                raise SbomError(f"duplicate YAML key at {source}:{line_number}: {key}")
+            result[key] = _yaml_scalar(item[separator + 1 :], source, line_number)
+        return result
+    if value.startswith("["):
+        if not value.endswith("]"):
+            raise SbomError(f"unterminated flow list at {source}:{line_number}")
+        return [
+            _yaml_scalar(item, source, line_number)
+            for item in _split_yaml_flow(value[1:-1].strip())
+        ]
+    if value.startswith("'"):
+        if not value.endswith("'"):
+            raise SbomError(f"unterminated quoted scalar at {source}:{line_number}")
+        return value[1:-1].replace("''", "'")
+    if value.startswith('"'):
+        try:
+            decoded = json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise SbomError(
+                f"invalid quoted scalar at {source}:{line_number}: {exc}"
+            ) from exc
+        if not isinstance(decoded, str):
+            raise SbomError(f"invalid YAML key/scalar at {source}:{line_number}")
+        return decoded
+    lowered = value.lower()
+    if lowered in {"null", "~"}:
+        return None
+    if lowered == "true":
+        return True
+    if lowered == "false":
+        return False
+    # Keep all numeric-looking values as strings. Package versions such as 2.0
+    # and checksummed references must never be coerced or rounded.
+    return value
+
+
+def _parse_pnpm_yaml(root: Path, relative_path: str) -> dict[str, Any]:
+    """Parse the mapping subset used by pnpm 9 lock/workspace YAML files.
+
+    pnpm's emitted lock data uses nested mappings, inline mappings/lists and a
+    few block lists.  SBOM-relevant data is entirely mapping based; block-list
+    members (for example ``transitivePeerDependencies``) are intentionally
+    skipped because they are constraints, not resolved dependency edges.
+    """
+
+    try:
+        text = _read_bytes(root, relative_path).decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise SbomError(f"cannot decode {relative_path}: {exc}") from exc
+
+    document: dict[str, Any] = {}
+    stack: list[tuple[int, dict[str, Any]]] = [(-1, document)]
+    for line_number, original in enumerate(text.splitlines(), 1):
+        if "\t" in original[: len(original) - len(original.lstrip())]:
+            raise SbomError(f"tabs are not supported at {relative_path}:{line_number}")
+        content = _strip_yaml_comment(original)
+        if not content.strip():
+            continue
+        indent = len(content) - len(content.lstrip(" "))
+        stripped = content.strip()
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        if not stack:
+            raise SbomError(f"invalid indentation at {relative_path}:{line_number}")
+        if stripped.startswith("- ") or stripped == "-":
+            # No SBOM edge is sourced from pnpm's block-list constraint fields.
+            continue
+        separator = _yaml_delimiter_index(stripped, ":")
+        if separator is None:
+            raise SbomError(f"invalid mapping at {relative_path}:{line_number}")
+        key = _yaml_scalar(stripped[:separator], relative_path, line_number)
+        if not isinstance(key, str) or not key:
+            raise SbomError(f"invalid mapping key at {relative_path}:{line_number}")
+        parent = stack[-1][1]
+        if key in parent:
+            raise SbomError(f"duplicate YAML key at {relative_path}:{line_number}: {key}")
+        remainder = stripped[separator + 1 :].strip()
+        if remainder:
+            parent[key] = _yaml_scalar(remainder, relative_path, line_number)
+        else:
+            child: dict[str, Any] = {}
+            parent[key] = child
+            stack.append((indent, child))
+    return document
+
+
 def _read_bytes(root: Path, relative_path: str) -> bytes:
     path = root / relative_path
     if not path.is_file():
@@ -97,7 +287,7 @@ def _sha(path: Path, algorithm: str) -> str:
 
 
 def _input_digest(root: Path) -> str:
-    paths = [LOCKFILE]
+    paths = [LOCKFILE, PNPM_LOCKFILE, PNPM_WORKSPACE, PNPM_PACKAGE_JSON]
     requirements = root / REQUIREMENTS_DIR
     if not requirements.is_dir():
         raise SbomError(f"required SBOM input directory is missing: {REQUIREMENTS_DIR}")
@@ -142,6 +332,11 @@ def _npm_name_from_lock_path(lock_path: str) -> str:
 def _npm_spdx_id(lock_path: str, name: str) -> str:
     discriminator = hashlib.sha256(lock_path.encode("utf-8")).hexdigest()[:12]
     return f"SPDXRef-NPM-{_slug(name)}-{discriminator}"
+
+
+def _pnpm_spdx_id(package_key: str, name: str) -> str:
+    discriminator = hashlib.sha256(package_key.encode("utf-8")).hexdigest()[:12]
+    return f"SPDXRef-PNPM-{_slug(name)}-{discriminator}"
 
 
 def _python_spdx_id(name: str) -> str:
@@ -210,6 +405,115 @@ def _load_lockfile(root: Path) -> tuple[dict[str, Any], dict[str, dict[str, Any]
         if lock_path and not entry.get("version"):
             raise SbomError(f"npm package lacks an exact version: {lock_path}")
     return root_entry, packages
+
+
+def _pnpm_package_identity(package_key: str) -> tuple[str, str]:
+    """Split a pnpm 9 ``packages`` key into its exact package identity."""
+
+    if package_key.startswith("@"):  # @scope/name@version
+        slash = package_key.find("/")
+        separator = package_key.find("@", slash + 1) if slash >= 0 else -1
+    else:  # name@version
+        separator = package_key.find("@")
+    if separator <= 0 or separator == len(package_key) - 1:
+        raise SbomError(f"pnpm package key lacks an exact name/version: {package_key}")
+    name = package_key[:separator]
+    version = package_key[separator + 1 :]
+    if "(" in version or ")" in version:
+        raise SbomError(
+            f"pnpm packages key unexpectedly contains peer context: {package_key}"
+        )
+    return name, version
+
+
+def _load_pnpm_lockfile(
+    root: Path,
+) -> tuple[
+    dict[str, Any],
+    dict[str, Any],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, str],
+]:
+    lock = _parse_pnpm_yaml(root, PNPM_LOCKFILE)
+    if str(lock.get("lockfileVersion")) != "9.0":
+        raise SbomError(f"{PNPM_LOCKFILE} must use pnpm lockfileVersion 9.0")
+    importers = lock.get("importers")
+    packages = lock.get("packages")
+    snapshots = lock.get("snapshots")
+    if not all(isinstance(value, dict) for value in (importers, packages, snapshots)):
+        raise SbomError(
+            f"{PNPM_LOCKFILE} must contain importers, packages, and snapshots maps"
+        )
+    root_importer = importers.get(".")
+    if not isinstance(root_importer, dict):
+        raise SbomError(f"{PNPM_LOCKFILE} does not contain the root importer")
+
+    typed_packages: dict[str, dict[str, Any]] = {}
+    for package_key, entry in packages.items():
+        if not isinstance(package_key, str) or not isinstance(entry, dict):
+            raise SbomError(f"{PNPM_LOCKFILE} contains an invalid package entry")
+        _pnpm_package_identity(package_key)
+        typed_packages[package_key] = entry
+
+    typed_snapshots: dict[str, dict[str, Any]] = {}
+    for snapshot_key, entry in snapshots.items():
+        if not isinstance(snapshot_key, str) or not isinstance(entry, dict):
+            raise SbomError(f"{PNPM_LOCKFILE} contains an invalid snapshot entry")
+        typed_snapshots[snapshot_key] = entry
+
+    workspace = _parse_pnpm_yaml(root, PNPM_WORKSPACE)
+    raw_overrides = workspace.get("overrides", {})
+    if not isinstance(raw_overrides, dict):
+        raise SbomError(f"{PNPM_WORKSPACE} overrides must be a mapping")
+    overrides: dict[str, str] = {}
+    for name, version in raw_overrides.items():
+        if not isinstance(name, str) or not isinstance(version, str) or not version:
+            raise SbomError(f"{PNPM_WORKSPACE} contains a non-exact override: {name}")
+        overrides[name] = version
+
+    try:
+        manifest = json.loads(_read_bytes(root, PNPM_PACKAGE_JSON).decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise SbomError(f"cannot parse {PNPM_PACKAGE_JSON}: {exc}") from exc
+    if not isinstance(manifest, dict):
+        raise SbomError(f"{PNPM_PACKAGE_JSON} must contain a JSON object")
+
+    return manifest, root_importer, typed_packages, typed_snapshots, overrides
+
+
+def _pnpm_snapshot_package_key(
+    snapshot_key: str, package_keys: Iterable[str]
+) -> str:
+    candidates = [
+        package_key
+        for package_key in package_keys
+        if snapshot_key == package_key or snapshot_key.startswith(package_key + "(")
+    ]
+    if not candidates:
+        raise SbomError(f"pnpm snapshot has no exact package entry: {snapshot_key}")
+    return max(candidates, key=len)
+
+
+def _pnpm_dependency_snapshot_key(
+    dependency_name: str,
+    reference: Any,
+    packages: dict[str, dict[str, Any]],
+    snapshots: dict[str, dict[str, Any]],
+) -> str:
+    if isinstance(reference, dict):
+        reference = reference.get("version")
+    if not isinstance(reference, str) or not reference:
+        raise SbomError(f"pnpm dependency lacks an exact resolution: {dependency_name}")
+    if reference.startswith("npm:"):
+        candidate = reference[len("npm:") :]
+    else:
+        candidate = f"{dependency_name}@{reference}"
+    if candidate in snapshots or candidate in packages:
+        return candidate
+    raise SbomError(
+        f"pnpm dependency resolution is missing from snapshots/packages: {candidate}"
+    )
 
 
 def _resolve_lock_dependency(
@@ -395,6 +699,13 @@ def _vendored_inventory(
 def build_sbom(root: Path) -> dict[str, Any]:
     root = root.resolve()
     root_lock, lock_packages = _load_lockfile(root)
+    (
+        pnpm_manifest,
+        pnpm_root_importer,
+        pnpm_lock_packages,
+        pnpm_snapshots,
+        pnpm_overrides,
+    ) = _load_pnpm_lockfile(root)
     python_requirements = load_python_requirements(root)
     vendored_packages, vendored_files, vendored_relationships = _vendored_inventory(root)
     input_digest = _input_digest(root)
@@ -432,6 +743,75 @@ def build_sbom(root: Path) -> dict[str, Any]:
     }
     if frontend_version:
         frontend_package["versionInfo"] = frontend_version
+
+    embodied_frontend_name = pnpm_manifest.get("name")
+    embodied_frontend_version = pnpm_manifest.get("version")
+    if not isinstance(embodied_frontend_name, str) or not embodied_frontend_name:
+        raise SbomError(f"{PNPM_PACKAGE_JSON} lacks a package name")
+    if not isinstance(embodied_frontend_version, str) or not embodied_frontend_version:
+        raise SbomError(f"{PNPM_PACKAGE_JSON} lacks an exact package version")
+    embodied_license = _spdx_license(pnpm_manifest.get("license"))
+    override_summary = "; ".join(
+        f"{name}={pnpm_overrides[name]}" for name in sorted(pnpm_overrides)
+    )
+    embodied_frontend_package: dict[str, Any] = {
+        "name": embodied_frontend_name,
+        "SPDXID": EMBODIED_FRONTEND_ID,
+        "versionInfo": embodied_frontend_version,
+        "downloadLocation": (
+            "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/"
+            f"tree/main/{PNPM_FRONTEND_DIR}"
+        ),
+        "filesAnalyzed": False,
+        "licenseConcluded": "NOASSERTION",
+        "licenseDeclared": embodied_license,
+        "copyrightText": "NOASSERTION",
+        "primaryPackagePurpose": "APPLICATION",
+        "externalRefs": [
+            {
+                "referenceCategory": "PACKAGE-MANAGER",
+                "referenceType": "purl",
+                "referenceLocator": _npm_purl(
+                    embodied_frontend_name, embodied_frontend_version
+                ),
+            }
+        ],
+        "comment": (
+            f"Root pnpm package represented by {PNPM_LOCKFILE}. "
+            f"Workspace overrides recorded by {PNPM_WORKSPACE}: "
+            f"{override_summary or 'none'}."
+        ),
+    }
+
+    for dependency_group in ("dependencies", "devDependencies", "optionalDependencies"):
+        declared = pnpm_manifest.get(dependency_group, {})
+        locked = pnpm_root_importer.get(dependency_group, {})
+        if not isinstance(declared, dict) or not isinstance(locked, dict):
+            raise SbomError(
+                f"pnpm root {dependency_group} must be mappings in manifest and lockfile"
+            )
+        if set(declared) != set(locked):
+            raise SbomError(
+                f"pnpm root {dependency_group} differs between package.json and lockfile"
+            )
+        for dependency_name, declared_specifier in declared.items():
+            locked_resolution = locked[dependency_name]
+            if not isinstance(declared_specifier, str) or not isinstance(
+                locked_resolution, dict
+            ):
+                raise SbomError(
+                    f"pnpm root dependency lacks manifest/lock metadata: {dependency_name}"
+                )
+            if locked_resolution.get("specifier") != declared_specifier:
+                raise SbomError(
+                    f"pnpm root dependency specifier differs from package.json: "
+                    f"{dependency_name}"
+                )
+            locked_version = locked_resolution.get("version")
+            if not isinstance(locked_version, str) or not locked_version:
+                raise SbomError(
+                    f"pnpm root dependency lacks an exact locked version: {dependency_name}"
+                )
 
     python_packages: list[dict[str, Any]] = []
     for requirement in python_requirements:
@@ -501,6 +881,54 @@ def build_sbom(root: Path) -> dict[str, Any]:
             package["checksums"] = checksums
         npm_packages.append(package)
 
+    pnpm_packages: list[dict[str, Any]] = []
+    pnpm_id_by_key: dict[str, str] = {}
+    for package_key in sorted(pnpm_lock_packages):
+        entry = pnpm_lock_packages[package_key]
+        name, version = _pnpm_package_identity(package_key)
+        spdx_id = _pnpm_spdx_id(package_key, name)
+        pnpm_id_by_key[package_key] = spdx_id
+        declared_license = _spdx_license(entry.get("license"))
+        resolution = entry.get("resolution", {})
+        if not isinstance(resolution, dict):
+            raise SbomError(f"pnpm package has invalid resolution metadata: {package_key}")
+        tarball = resolution.get("tarball")
+        if tarball is not None and not isinstance(tarball, str):
+            raise SbomError(f"pnpm package has invalid tarball metadata: {package_key}")
+        raw_license = entry.get("license")
+        license_note = ""
+        if raw_license and declared_license == "NOASSERTION":
+            license_note = (
+                " Lockfile license text is not a valid SPDX expression and is not "
+                f"asserted: {raw_license}"
+            )
+        package = {
+            "name": name,
+            "SPDXID": spdx_id,
+            "versionInfo": version,
+            "downloadLocation": tarball or "NOASSERTION",
+            "filesAnalyzed": False,
+            "licenseConcluded": "NOASSERTION",
+            "licenseDeclared": declared_license,
+            "copyrightText": "NOASSERTION",
+            "primaryPackagePurpose": "LIBRARY",
+            "externalRefs": [
+                {
+                    "referenceCategory": "PACKAGE-MANAGER",
+                    "referenceType": "purl",
+                    "referenceLocator": _npm_purl(name, version),
+                }
+            ],
+            "comment": (
+                f"pnpm package key: {package_key}. Source lockfile: {PNPM_LOCKFILE}."
+                f"{license_note}"
+            ),
+        }
+        checksums = _sri_checksums(resolution.get("integrity"))
+        if checksums:
+            package["checksums"] = checksums
+        pnpm_packages.append(package)
+
     relationships: list[dict[str, str]] = [
         {
             "spdxElementId": "SPDXRef-DOCUMENT",
@@ -511,6 +939,11 @@ def build_sbom(root: Path) -> dict[str, Any]:
             "spdxElementId": PROJECT_ID,
             "relationshipType": "CONTAINS",
             "relatedSpdxElement": FRONTEND_ID,
+        },
+        {
+            "spdxElementId": PROJECT_ID,
+            "relationshipType": "CONTAINS",
+            "relatedSpdxElement": EMBODIED_FRONTEND_ID,
         },
     ]
     relationships.extend(
@@ -561,6 +994,64 @@ def build_sbom(root: Path) -> dict[str, Any]:
                 }
             )
 
+    snapshot_package_by_key = {
+        snapshot_key: _pnpm_snapshot_package_key(
+            snapshot_key, pnpm_lock_packages.keys()
+        )
+        for snapshot_key in pnpm_snapshots
+    }
+
+    def pnpm_package_key_for_resolution(
+        dependency_name: str, reference: Any
+    ) -> str:
+        snapshot_key = _pnpm_dependency_snapshot_key(
+            dependency_name,
+            reference,
+            pnpm_lock_packages,
+            pnpm_snapshots,
+        )
+        if snapshot_key in snapshot_package_by_key:
+            return snapshot_package_by_key[snapshot_key]
+        if snapshot_key in pnpm_lock_packages:
+            return snapshot_key
+        raise SbomError(f"pnpm resolution lacks a package identity: {snapshot_key}")
+
+    pnpm_relationships: set[tuple[str, str]] = set()
+    for dependency_group in ("dependencies", "devDependencies", "optionalDependencies"):
+        group = pnpm_root_importer.get(dependency_group, {})
+        if not isinstance(group, dict):
+            raise SbomError(f"pnpm root {dependency_group} must be a mapping")
+        for dependency_name, reference in group.items():
+            package_key = pnpm_package_key_for_resolution(dependency_name, reference)
+            pnpm_relationships.add(
+                (EMBODIED_FRONTEND_ID, pnpm_id_by_key[package_key])
+            )
+
+    for snapshot_key in sorted(pnpm_snapshots):
+        snapshot = pnpm_snapshots[snapshot_key]
+        source_package_key = snapshot_package_by_key[snapshot_key]
+        source_id = pnpm_id_by_key[source_package_key]
+        for dependency_group in ("dependencies", "optionalDependencies"):
+            group = snapshot.get(dependency_group, {})
+            if not isinstance(group, dict):
+                raise SbomError(
+                    f"pnpm snapshot {snapshot_key} has invalid {dependency_group}"
+                )
+            for dependency_name, reference in group.items():
+                package_key = pnpm_package_key_for_resolution(
+                    dependency_name, reference
+                )
+                pnpm_relationships.add((source_id, pnpm_id_by_key[package_key]))
+
+    relationships.extend(
+        {
+            "spdxElementId": source_id,
+            "relationshipType": "DEPENDS_ON",
+            "relatedSpdxElement": target_id,
+        }
+        for source_id, target_id in sorted(pnpm_relationships)
+    )
+
     relationships.extend(vendored_relationships)
     relationships = sorted(
         relationships,
@@ -571,10 +1062,11 @@ def build_sbom(root: Path) -> dict[str, Any]:
         ),
     )
 
-    all_packages = [project_package, frontend_package]
+    all_packages = [project_package, frontend_package, embodied_frontend_package]
     all_packages.extend(sorted(vendored_packages, key=lambda item: item["SPDXID"]))
     all_packages.extend(sorted(python_packages, key=lambda item: item["SPDXID"]))
     all_packages.extend(npm_packages)
+    all_packages.extend(pnpm_packages)
 
     return {
         "spdxVersion": SPDX_VERSION,
@@ -592,7 +1084,8 @@ def build_sbom(root: Path) -> dict[str, Any]:
             ],
             "comment": (
                 "Generated offline and deterministically. The namespace suffix is a SHA-256 "
-                "digest of dependency manifests and vendored assets; the timestamp is the "
+                "digest of npm/pnpm manifests (including pnpm workspace overrides), Python "
+                "requirements, and vendored assets; the timestamp is the "
                 "public release epoch, not wall-clock generation time."
             ),
         },

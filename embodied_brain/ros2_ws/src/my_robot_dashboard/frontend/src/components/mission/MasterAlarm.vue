@@ -32,12 +32,12 @@ function rearm() {
     :class="[
       mission.masterAlarmActive ? 'ma-on' : mission.masterAlarmSilenced ? 'ma-silenced' : 'ma-off',
     ]"
-    @click="mission.masterAlarmActive ? silence() : rearm()"
     :title="mission.masterAlarmActive
       ? `MASTER ALARM — ${latestErr?.title ?? ''} (click to silence)`
       : mission.masterAlarmSilenced
         ? 'Silenced — click to re-arm'
         : 'Master alarm — all clear'"
+    @click="mission.masterAlarmActive ? silence() : rearm()"
   >
     <span class="ma-lamp">
       <span class="ma-dot"></span>

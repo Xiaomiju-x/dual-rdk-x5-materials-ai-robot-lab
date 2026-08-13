@@ -34,7 +34,14 @@ function world2scene(x: number, y: number): [number, number] {
 
 function rebuildWalls() {
   if (!scene) return
-  if (wallsG) { scene.remove(wallsG); wallsG.traverse((o: any) => { o.geometry?.dispose?.() }) }
+  if (wallsG) {
+    scene.remove(wallsG)
+    wallsG.traverse((object) => {
+      if (object instanceof THREE.Mesh || object instanceof THREE.LineSegments) {
+        object.geometry.dispose()
+      }
+    })
+  }
   wallsG = new THREE.Group()
   const g = props.grid, m = props.meta
   if (!g || !m) { scene.add(wallsG); return }

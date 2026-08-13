@@ -40,16 +40,16 @@ pnpm run build
 | --- | --- | --- |
 | 奖项展示与单一事实源 | `PASS` | 全国总决赛二等奖；`team_confirmed`；renderer check 退出 0 |
 | 仓内 Markdown 链接 | `PASS` | 108 个 Markdown 文件、303 个链接、0 findings |
-| 确定性 SPDX SBOM | `PASS` | SPDX 2.3；579 packages / 6 files / 1108 relationships；顶层包版本 `1.0.2` |
-| 严格公开边界审计 | `PASS` | 2686 files / 211,441,947 bytes / 0 findings |
+| 确定性 SPDX SBOM | `PASS` | SPDX 2.3；1197 packages / 6 files / 2433 relationships；npm 与 pnpm 两套锁图完整纳入；顶层包版本 `1.0.2` |
+| 严格公开边界审计 | `PASS` | 2686 files / 212,377,198 bytes / 0 findings |
 | 媒体完整性与隐私元数据 | `PASS` | 20 个清单条目；6 张最新照片、3 段 MP4、3 个 GIF；0 findings |
-| 零硬件单元测试 | `PASS` | 79 passed / 1 skipped；跳过项仅为 Windows 账户无创建 symlink 权限 |
+| 零硬件单元测试 | `PASS` | 92 passed / 1 skipped；跳过项仅为 Windows 账户无创建 symlink 权限 |
 | Python 源码语法门 | `PASS` | 712 个仓内 Python 文件全部 AST 解析通过 |
 | 确定性离线 demo | `PASS` | `OFFLINE_SYNTHETIC_NO_ACTUATION`；网络、相机、串口、机器人 SDK 与写入均为 `false` |
-| 工作站前端构建 | 待最终云端复核 | npm 锁文件安装、`vue-tsc -b` 与 Vite production build |
-| 具身仪表盘前端构建 | `PASS` | pnpm 11.19.0 离线 frozen install：554/554 本地复用、0 下载；793 modules；Vite/PWA production build |
-| 工作树与可达历史秘密扫描 | 待最终云端复核 | Gitleaks 目录与 Git 历史扫描 |
-| GitHub CodeQL | 待最终云端复核 | Python 与 JavaScript/TypeScript |
+| 工作站前端构建与依赖审计 | `PASS` | Node 20.20.2 / npm 10.8.2；506 packages；类型检查与 Vite 8/PWA 构建通过；完整及生产依赖漏洞均为 0 |
+| 具身仪表盘前端构建与依赖审计 | `PASS` | pnpm 9.12.3 离线 frozen install：565 packages、0 下载；lint 0 error/0 warning；828 modules；完整及生产依赖漏洞均为 0 |
+| 工作树与可达历史秘密扫描 | `PASS` | GitHub Actions Gitleaks：可达 Git 历史与工作树均无泄露发现 |
+| GitHub CodeQL | `PASS` | Python 与 JavaScript/TypeScript 均成功；开放告警 0；本轮剩余 6 条均由代码修复转为 `fixed`，未人工忽略 |
 | `main` 分支保护 | `PASS` | 6 个必需检查；禁止强推/删除；线性历史；对话解决 |
 
 ## 事实专项检查

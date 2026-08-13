@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import VChart from 'vue-echarts'
-import type { EChartsOption } from 'echarts'
+import type { EChartsOption, TooltipComponentFormatterCallbackParams } from 'echarts'
 import { ensureEchartsRegistered } from './echartsRegister'
 import type { HistorySample } from '@/stores/telemetry'
 
@@ -63,9 +63,10 @@ const option = computed<EChartsOption>(() => {
       borderWidth: 0,
       textStyle: { fontSize: 11, color: '#0b1220' },
       padding: [4, 8],
-      formatter: (params: any) => {
+      formatter: (params: TooltipComponentFormatterCallbackParams) => {
         const p = Array.isArray(params) ? params[0] : params
-        return `<span style="font-family: 'JetBrains Mono Variable', monospace">${p.value[1].toFixed(2)}</span>`
+        const values = Array.isArray(p?.value) ? p.value : []
+        return `<span style="font-family: 'JetBrains Mono Variable', monospace">${Number(values[1] ?? 0).toFixed(2)}</span>`
       },
       axisPointer: { type: 'line', lineStyle: { color: 'rgba(15,23,42,0.18)', width: 1 } },
     },

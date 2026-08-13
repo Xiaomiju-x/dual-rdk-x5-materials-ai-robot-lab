@@ -108,7 +108,7 @@ function onKey(evt: KeyboardEvent) {
 
 <template>
   <transition name="hk">
-    <div v-if="open" class="hk-backdrop" @click="backdropClick" @keydown="onKey" tabindex="-1">
+    <div v-if="open" class="hk-backdrop" tabindex="-1" @click="backdropClick" @keydown="onKey">
       <div class="hk-panel glass-strong" role="dialog" aria-label="Help">
         <div class="hk-head">
           <div>
@@ -117,14 +117,14 @@ function onKey(evt: KeyboardEvent) {
           </div>
           <div class="hk-head-actions">
             <div class="mode-seg">
-              <button class="mode-btn" :class="{ active: effectiveMode === 'touch' }" @click="mode = 'touch'" aria-label="touch mode">
+              <button class="mode-btn" :class="{ active: effectiveMode === 'touch' }" aria-label="touch mode" @click="mode = 'touch'">
                 ✋ Touch
               </button>
-              <button class="mode-btn" :class="{ active: effectiveMode === 'keyboard' }" @click="mode = 'keyboard'" aria-label="keyboard mode">
+              <button class="mode-btn" :class="{ active: effectiveMode === 'keyboard' }" aria-label="keyboard mode" @click="mode = 'keyboard'">
                 ⌨ Keyboard
               </button>
             </div>
-            <button class="hk-close" @click="emit('close')" aria-label="close">×</button>
+            <button class="hk-close" aria-label="close" @click="emit('close')">×</button>
           </div>
         </div>
 

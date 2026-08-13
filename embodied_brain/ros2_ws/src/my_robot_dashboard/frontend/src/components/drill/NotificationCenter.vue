@@ -21,10 +21,10 @@ function loadRead() {
   try {
     const raw = localStorage.getItem(READ_KEY)
     if (raw) readIds.value = new Set(JSON.parse(raw))
-  } catch (_e) { /* noop */ }
+  } catch { /* noop */ }
 }
 function persistRead() {
-  try { localStorage.setItem(READ_KEY, JSON.stringify([...readIds.value])) } catch (_e) { /* noop */ }
+  try { localStorage.setItem(READ_KEY, JSON.stringify([...readIds.value])) } catch { /* noop */ }
 }
 loadRead()
 
@@ -77,8 +77,8 @@ function fmt(ts: number) {
       ref="anchor"
       class="nc-btn"
       :class="{ active: ui.notifCenterOpen, hasUnread: unreadCount > 0 }"
-      @click="ui.toggleNotifCenter"
       :title="`Notifications (${unreadCount} unread)`"
+      @click="ui.toggleNotifCenter"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -94,7 +94,7 @@ function fmt(ts: number) {
               <span class="section-label">Notifications</span>
               <span class="chip" :class="unreadCount ? 'chip-warn' : 'chip-idle'">{{ unreadCount }} unread</span>
             </div>
-            <button class="nc-mark" @click="markAllRead" v-if="unreadCount">mark all read</button>
+            <button v-if="unreadCount" class="nc-mark" @click="markAllRead">mark all read</button>
           </header>
           <div class="nc-list">
             <div v-if="!allAlarms.length" class="nc-empty mono">all clear</div>
@@ -113,7 +113,7 @@ function fmt(ts: number) {
                 <div class="nc-detail">{{ a.detail }}</div>
                 <div class="nc-src mono">{{ a.source }}</div>
               </div>
-              <button v-if="!readIds.has(a.id)" class="nc-x" @click="clearOne(a.id)" aria-label="dismiss">✓</button>
+              <button v-if="!readIds.has(a.id)" class="nc-x" aria-label="dismiss" @click="clearOne(a.id)">✓</button>
             </div>
           </div>
         </div>

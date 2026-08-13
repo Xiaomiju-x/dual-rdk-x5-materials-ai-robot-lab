@@ -107,7 +107,7 @@ const totalBpuMb = computed(() => bpuSlots.value.reduce((s, b) => s + b.size_mb,
     <!-- Lower: BPU strip + detection log -->
     <div class="lower-grid">
       <div class="bpu-panel card-elevated">
-        <BorderBeam :duration="14" :size="180" :radius="18" :colorFrom="'rgba(124, 58, 237, 0.85)'" :colorTo="'rgba(34, 211, 238, 0.85)'" />
+        <BorderBeam :duration="14" :size="180" :radius="18" :color-from="'rgba(124, 58, 237, 0.85)'" :color-to="'rgba(34, 211, 238, 0.85)'" />
         <div class="panel-head">
           <span class="section-label">BPU Slot · Bayes-e 10 TOPS</span>
           <span class="chip chip-info mono">{{ bpuSlots.length }} active</span>
@@ -116,7 +116,7 @@ const totalBpuMb = computed(() => bpuSlots.value.reduce((s, b) => s + b.size_mb,
           <BpuSlotCard
             v-for="slot in bpuSlots"
             :key="slot.id"
-            :slot="slot"
+            :bpu-slot="slot"
             :accent="SLOT_ACCENT[slot.id] ?? 'violet'"
           />
         </div>
@@ -144,7 +144,7 @@ const totalBpuMb = computed(() => bpuSlots.value.reduce((s, b) => s + b.size_mb,
     </div>
 
     <!-- Footer: class breakdown -->
-    <div class="card-elevated cls-panel" v-if="stats.classes.length">
+    <div v-if="stats.classes.length" class="card-elevated cls-panel">
       <span class="section-label">Class Histogram · 60s window</span>
       <div class="cls-rows">
         <div v-for="[cls, n] in stats.classes" :key="cls" class="cls-row">

@@ -25,6 +25,7 @@ export interface Detection {
 const props = withDefaults(defineProps<Props>(), {
   mode: 'yolo',
   accent: 'blue',
+  onDetect: undefined,
 })
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)

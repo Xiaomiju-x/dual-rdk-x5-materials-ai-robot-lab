@@ -98,13 +98,13 @@ const traveledKm = computed(() => {
             <div class="vital-label">CPU</div>
             <div class="vital-bar"><div class="vital-fill" :class="'bar-blue'" :style="{ width: `${telemetry.packet?.host.cpu_pct ?? 0}%` }"></div></div>
             <div class="vital-val mono">{{ telemetry.packet?.host.cpu_pct.toFixed(0) ?? '—' }}%</div>
-            <div class="vital-spark"><Sparkline :samples="telemetry.hostHistory.cpu" :yRange="[0, 100]" accent="blue" /></div>
+            <div class="vital-spark"><Sparkline :samples="telemetry.hostHistory.cpu" :y-range="[0, 100]" accent="blue" /></div>
           </div>
           <div class="vital-row">
             <div class="vital-label">BPU</div>
             <div class="vital-bar"><div class="vital-fill" :class="'bar-violet'" :style="{ width: `${telemetry.packet?.host.bpu_pct ?? 0}%` }"></div></div>
             <div class="vital-val mono">{{ telemetry.packet?.host.bpu_pct.toFixed(0) ?? '—' }}%</div>
-            <div class="vital-spark"><Sparkline :samples="telemetry.hostHistory.bpu" :yRange="[0, 100]" accent="violet" /></div>
+            <div class="vital-spark"><Sparkline :samples="telemetry.hostHistory.bpu" :y-range="[0, 100]" accent="violet" /></div>
           </div>
           <div class="vital-row">
             <div class="vital-label">RAM</div>

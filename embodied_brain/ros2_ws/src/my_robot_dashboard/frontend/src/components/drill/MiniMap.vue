@@ -44,8 +44,8 @@ const KIND_COLOR: Record<string, string> = {
       v-if="visible"
       class="mm"
       :style="{ width: `${SIZE}px`, height: `${SIZE}px` } as any"
-      @click="router.push('/twin')"
       :title="`Robot · click for digital twin (${pose.x.toFixed(2)}, ${pose.y.toFixed(2)})`"
+      @click="router.push('/twin')"
     >
       <svg :viewBox="`0 0 ${SIZE} ${SIZE}`" class="mm-svg">
         <!-- range rings -->

@@ -44,8 +44,8 @@ onBeforeUnmount(() => {
   <button
     v-if="deferred && !installed"
     class="pwa-btn"
-    @click="install"
     title="安装为 PWA · 添加到主屏"
+    @click="install"
   >
     <span class="pwa-glyph">⤓</span>
     <span class="pwa-label">Install</span>

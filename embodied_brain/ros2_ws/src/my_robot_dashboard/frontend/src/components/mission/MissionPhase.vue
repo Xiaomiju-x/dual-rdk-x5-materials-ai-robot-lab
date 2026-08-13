@@ -41,8 +41,8 @@ onBeforeUnmount(() => document.removeEventListener('mousedown', onDoc))
       ref="anchor"
       class="mp"
       :class="`mp-${mission.phaseTone}`"
-      @click="open = !open"
       :title="`Phase: ${mission.phaseInferred}${mission.phaseOverride ? ' (manual)' : ' (inferred)'}`"
+      @click="open = !open"
     >
       <span class="mp-tag">PHASE</span>
       <span class="mp-val">{{ mission.phaseInferred }}</span>

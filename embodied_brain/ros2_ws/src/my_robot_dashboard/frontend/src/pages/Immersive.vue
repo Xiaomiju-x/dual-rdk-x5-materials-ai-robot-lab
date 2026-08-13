@@ -62,22 +62,22 @@ async function takeScreenshot() {
         <MagneticBtn :strength="0.30" :radius="100">
           <button class="btn" :class="{ 'btn-primary': mode === 'orbit-auto' }" @click="mode = 'orbit-auto'">↻ Auto-Orbit</button>
         </MagneticBtn>
-        <button class="btn" :class="{ 'btn-primary': photoMode }" @click="photoMode = !photoMode" title="Photo mode (P)">
+        <button class="btn" :class="{ 'btn-primary': photoMode }" title="Photo mode (P)" @click="photoMode = !photoMode">
           📷 Photo
         </button>
       </div>
     </header>
 
     <div class="immersive-stage card-floating" :class="{ photo: photoMode }">
-      <BorderBeam :duration="14" :size="280" :radius="22" :colorFrom="'rgba(34, 211, 238, 0.85)'" :colorTo="'rgba(124, 58, 237, 0.85)'" />
-      <HolographicHUD v-if="!photoMode" :tone="telemetry.isConnected ? 'ok' : 'warn'" :crosshair="true" :scanline="true" :cornerSize="28" :inset="14">
-        <SlamScene ref="sceneRef" :embed="mode === 'orbit-auto'" :mode="mode" :cinematic="cinematic" :holoMode="holoMode" :hdr="true" :cinemaPlus="cinematic" :photoMode="photoMode" :key="`${mode}-${holoMode}-${cinematic}`">
+      <BorderBeam :duration="14" :size="280" :radius="22" :color-from="'rgba(34, 211, 238, 0.85)'" :color-to="'rgba(124, 58, 237, 0.85)'" />
+      <HolographicHUD v-if="!photoMode" :tone="telemetry.isConnected ? 'ok' : 'warn'" :crosshair="true" :scanline="true" :corner-size="28" :inset="14">
+        <SlamScene ref="sceneRef" :key="`${mode}-${holoMode}-${cinematic}`" :embed="mode === 'orbit-auto'" :mode="mode" :cinematic="cinematic" :holo-mode="holoMode" :hdr="true" :cinema-plus="cinematic" :photo-mode="photoMode">
           <template #hud>
             <div class="hud-corner hud-tl">
               <div class="hud-line section-label">SLAM Stage · {{ mode }}{{ holoMode ? ' · holo' : '' }}{{ cinematic ? ' · cinematic' : '' }}</div>
               <div class="hud-line mono">three.js r168 · webgl2 · bloom · HDR PMREM</div>
             </div>
-            <div class="hud-corner hud-tr" v-if="telemetry.packet">
+            <div v-if="telemetry.packet" class="hud-corner hud-tr">
               <div class="hud-line section-label">Robot Pose</div>
               <div class="hud-line mono">
                 x {{ telemetry.packet.pose.x.toFixed(3) }} m ·
@@ -93,7 +93,7 @@ async function takeScreenshot() {
               <div class="hud-line section-label">Sensors</div>
               <div class="hud-line mono">LD14 270° · Astra 30Hz · Lift 1280×720 · IMU 200Hz</div>
             </div>
-            <div class="hud-corner hud-br" v-if="telemetry.packet">
+            <div v-if="telemetry.packet" class="hud-corner hud-br">
               <div class="hud-line section-label">Stream</div>
               <div class="hud-line mono">
                 {{ telemetry.observedHz.toFixed(1) }} Hz · seq {{ telemetry.packet.heartbeat.sequence }} ·
@@ -108,14 +108,14 @@ async function takeScreenshot() {
       <SlamScene
         v-else
         ref="sceneRef"
+        :key="`photo-${holoMode}`"
         :embed="false"
         :mode="'free'"
         :cinematic="true"
-        :holoMode="holoMode"
+        :holo-mode="holoMode"
         :hdr="true"
-        :cinemaPlus="true"
-        :photoMode="true"
-        :key="`photo-${holoMode}`"
+        :cinema-plus="true"
+        :photo-mode="true"
       >
         <template #hud>
           <span></span>
@@ -123,14 +123,14 @@ async function takeScreenshot() {
       </SlamScene>
 
       <!-- preset switcher overlay (bottom-left) -->
-      <div class="preset-bar" v-if="!photoMode">
+      <div v-if="!photoMode" class="preset-bar">
         <button
           v-for="(p, i) in PRESETS"
           :key="p"
           class="preset-btn mono"
           :class="{ active: activePreset === p }"
-          @click="pickPreset(p)"
           :title="`Camera preset · key ${i + 1}`"
+          @click="pickPreset(p)"
         >
           <span class="preset-key">{{ i + 1 }}</span>
           <span>{{ p }}</span>
