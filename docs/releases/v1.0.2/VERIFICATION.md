@@ -41,9 +41,9 @@ pnpm run build
 | 奖项展示与单一事实源 | `PASS` | 全国总决赛二等奖；`team_confirmed`；renderer check 退出 0 |
 | 仓内 Markdown 链接 | `PASS` | 108 个 Markdown 文件、303 个链接、0 findings |
 | 确定性 SPDX SBOM | `PASS` | SPDX 2.3；1197 packages / 6 files / 2433 relationships；npm 与 pnpm 两套锁图完整纳入；顶层包版本 `1.0.2` |
-| 严格公开边界审计 | `PASS` | 2686 files / 212,377,198 bytes / 0 findings |
+| 严格公开边界审计 | `PASS` | GitHub Actions Ubuntu clean checkout 与独立 fresh clone：2686 files / 211,669,671 bytes / 0 findings；本地 CRLF 工作树为 212,377,198 bytes / 0 findings，字节总数受检出换行格式影响 |
 | 媒体完整性与隐私元数据 | `PASS` | 20 个清单条目；6 张最新照片、3 段 MP4、3 个 GIF；0 findings |
-| 零硬件单元测试 | `PASS` | 92 passed / 1 skipped；跳过项仅为 Windows 账户无创建 symlink 权限 |
+| 零硬件单元测试 | `PASS` | Windows 完整运行时：92 passed / 1 skipped（账户无创建 symlink 权限）；GitHub Actions 最小运行时：92 passed / 4 skipped（可选依赖与 symlink 权限） |
 | Python 源码语法门 | `PASS` | 712 个仓内 Python 文件全部 AST 解析通过 |
 | 确定性离线 demo | `PASS` | `OFFLINE_SYNTHETIC_NO_ACTUATION`；网络、相机、串口、机器人 SDK 与写入均为 `false` |
 | 工作站前端构建与依赖审计 | `PASS` | Node 20.20.2 / npm 10.8.2；506 packages；类型检查与 Vite 8/PWA 构建通过；完整及生产依赖漏洞均为 0 |
