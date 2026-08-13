@@ -686,8 +686,11 @@ def flybrain_verdict(payload: dict[str, Any], config: FlyBrainConfig = DEFAULT_C
             result["verdict"] = final["verdict"]
             result["confidence"] = final["confidence"]
             result["verdict_probs"] = final["probs"]
-    except Exception as exc:
-        result["superstack"] = {"ok": False, "error": str(exc)[:200]}
+    except Exception:
+        # The dashboard owns the public error contract.  Never attach exception
+        # text to the result object because that object is returned by an HTTP
+        # endpoint and may otherwise carry a traceback-bearing message with it.
+        result["superstack"] = {"ok": False, "reason": "superstack_unavailable"}
     return result
 
 

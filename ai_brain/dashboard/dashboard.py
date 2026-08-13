@@ -14,6 +14,7 @@ import argparse
 import html
 import json
 import logging
+import math
 import os
 import socket
 import sys
@@ -89,6 +90,36 @@ _PREDICT_RESPONSE_FIELDS = (
     "synthesis", "synthesis_recipe", "timings", "latency_ms",
     "provenance", "runtime", "uncertainty", "confidence",
 )
+
+
+def _public_text(value, default=None, max_length=512):
+    """Return bounded text only; reject containers and arbitrary objects."""
+    if not isinstance(value, str):
+        return default
+    return value[:max_length]
+
+
+def _public_number(value, default=None):
+    """Return a JSON number only (booleans are intentionally not numbers)."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return default
+    return value if math.isfinite(value) else default
+
+
+def _public_choice(value, allowed, default=None):
+    """Return text only when it is one of the endpoint contract's constants."""
+    return value if isinstance(value, str) and value in allowed else default
+
+
+def _public_bool(value):
+    """Return a strict JSON boolean, without truth-testing arbitrary objects."""
+    return value if isinstance(value, bool) else False
+
+
+def _public_number_map(value, keys):
+    """Select fixed numeric fields from a mapping into a new public object."""
+    source = value if isinstance(value, Mapping) else {}
+    return {key: _public_number(source.get(key)) for key in keys}
 
 
 def _record_internal_error(scope):
@@ -5231,19 +5262,138 @@ def api_flybrain_superstack():
     try:
         from predict_engine.flybrain import flybrain_verdict
         out = flybrain_verdict(payload)
+        if not isinstance(out, Mapping):
+            return _internal_error_response("flybrain_superstack_result")
+
+        # This is an endpoint-specific schema, not a recursive pass-through.
+        # In particular, flybrain's optional superstack failure details never
+        # cross the HTTP boundary.
+        v2_core = out.get("v2_core")
+        if not isinstance(v2_core, Mapping):
+            v2_core = {}
+        compartments = out.get("mbon_compartments")
+        if not isinstance(compartments, Mapping):
+            compartments = {}
+        plasticity = out.get("plasticity")
+        if not isinstance(plasticity, Mapping):
+            plasticity = {}
+        profile = out.get("connectome_profile")
+        if not isinstance(profile, Mapping):
+            profile = {}
+        superstack = out.get("superstack")
+        if not isinstance(superstack, Mapping):
+            superstack = {}
+        final = superstack.get("final")
+        if not isinstance(final, Mapping):
+            final = {}
+        bloom = superstack.get("flybloom_ood")
+        if not isinstance(bloom, Mapping):
+            bloom = {}
+        public_superstack = {
+            "ok": superstack.get("ok") is True,
+            "reason": None if superstack.get("ok") is True else "superstack_unavailable",
+            "version": (
+                _public_choice(superstack.get("version"), ("Fly-MB SuperStack v3",))
+                if superstack.get("ok") is True else None
+            ),
+            "honest_boundary": (
+                _public_choice(
+                    superstack.get("honest_boundary"),
+                    (
+                        "This is a connectome-inspired material decision stack, "
+                        "not a fruit-fly consciousness upload.",
+                    ),
+                )
+                if superstack.get("ok") is True else None
+            ),
+            "flybloom_ood": {
+                "score": _public_number(bloom.get("score")),
+                "raw_score": _public_number(bloom.get("raw_score")),
+                "hit_rate": _public_number(bloom.get("hit_rate")),
+                "reference_codes": _public_number(bloom.get("reference_codes")),
+            },
+            "final": {
+                "verdict": _public_choice(
+                    final.get("verdict"), ("GO", "REVISE", "DROP", "UNKNOWN")
+                ),
+                "confidence": _public_number(final.get("confidence")),
+                "probs": _public_number_map(
+                    final.get("probs"), ("GO", "REVISE", "DROP", "UNKNOWN")
+                ),
+            },
+        }
         return jsonify({
             "ok": True,
-            "trace_id": payload.get("trace_id"),
+            "trace_id": _public_text(payload.get("trace_id"), max_length=128),
             "flybrain": {
-                "model": out.get("model"),
-                "method": out.get("method"),
-                "verdict": out.get("verdict"),
-                "confidence": out.get("confidence"),
-                "v2_core": out.get("v2_core"),
-                "mbon_compartments": out.get("mbon_compartments"),
-                "plasticity": out.get("plasticity"),
-                "connectome_profile": out.get("connectome_profile"),
-                "superstack": out.get("superstack"),
+                "model": _public_choice(
+                    out.get("model"),
+                    (
+                        "Fly-MB v2 connectome-calibrated material decision brain",
+                        "Fly-MB SuperStack v3 connectome-constrained material decision brain",
+                    ),
+                ),
+                "method": _public_choice(
+                    out.get("method"),
+                    (
+                        "flyhash_sparse_projection + kc_wta + mbon_compartments + dan_plasticity",
+                        "flyhash_sparse_projection + flybloom_ood + signed_mbon_readout + "
+                        "dan_plasticity + micro_lif_trace",
+                    ),
+                ),
+                "verdict": _public_choice(
+                    out.get("verdict"), ("GO", "REVISE", "DROP", "UNKNOWN")
+                ),
+                "confidence": _public_number(out.get("confidence")),
+                "v2_core": {
+                    "model": _public_choice(
+                        v2_core.get("model"),
+                        ("Fly-MB v2 connectome-calibrated material decision brain",),
+                    ),
+                    "method": _public_choice(
+                        v2_core.get("method"),
+                        (
+                            "flyhash_sparse_projection + kc_wta + mbon_compartments + "
+                            "dan_plasticity",
+                        ),
+                    ),
+                    "verdict": _public_choice(
+                        v2_core.get("verdict"), ("GO", "REVISE", "DROP", "UNKNOWN")
+                    ),
+                    "confidence": _public_number(v2_core.get("confidence")),
+                    "verdict_probs": _public_number_map(
+                        v2_core.get("verdict_probs"),
+                        ("GO", "REVISE", "DROP", "UNKNOWN"),
+                    ),
+                },
+                "mbon_compartments": _public_number_map(
+                    compartments,
+                    (
+                        "novelty", "phase_risk", "pl_memory", "uncertainty",
+                        "action_valence",
+                    ),
+                ),
+                "plasticity": {
+                    "trace_count": _public_number(plasticity.get("trace_count")),
+                    "top_similarity": _public_number(plasticity.get("top_similarity")),
+                    "vote": _public_number_map(
+                        plasticity.get("vote"), ("GO", "REVISE", "DROP", "UNKNOWN")
+                    ),
+                },
+                "connectome_profile": {
+                    "source": _public_choice(
+                        profile.get("source"),
+                        ("FlyWire/hemibrain-inspired compressed profile",),
+                    ),
+                    "honest_boundary": _public_choice(
+                        profile.get("honest_boundary"),
+                        (
+                            "Uses published fly-circuit statistics as architecture priors; "
+                            "not a whole-brain emulation.",
+                        ),
+                    ),
+                },
+                "superstack": public_superstack,
             },
         })
     except Exception:
@@ -5380,14 +5530,75 @@ def api_lab_fsd_vision_objects():
     try:
         from predict_engine.lab_fsd_vision import last_vision_bev
         out = last_vision_bev()
+        if not isinstance(out, Mapping):
+            return _internal_error_response("lab_fsd_vision_objects_result")
+        raw_objects = out.get("objects")
+        public_objects = []
+        if isinstance(raw_objects, (list, tuple)):
+            for item in raw_objects:
+                if not isinstance(item, Mapping):
+                    continue
+                public_objects.append({
+                    "label": _public_text(item.get("label")),
+                    "x_m": _public_number(item.get("x_m")),
+                    "y_m": _public_number(item.get("y_m")),
+                    "w_m": _public_number(item.get("w_m")),
+                    "h_m": _public_number(item.get("h_m")),
+                    "risk": _public_number(item.get("risk")),
+                    "confidence": _public_number(item.get("confidence")),
+                    "source": _public_choice(
+                        item.get("source"),
+                        (
+                            "fixture_prior", "static_prior", "map_prior",
+                            "tower_image_edges", "unknown",
+                        ),
+                        "unknown",
+                    ),
+                })
+        camera = out.get("camera")
+        if not isinstance(camera, Mapping):
+            camera = {}
+        calibration = out.get("calibration")
+        if not isinstance(calibration, Mapping):
+            calibration = {}
         return jsonify({
-            "ok": bool(out.get("ok")),
-            "ts": out.get("ts"),
-            "risk_score": out.get("risk_score"),
-            "objects": out.get("objects", []),
-            "object_count": out.get("object_count", 0),
-            "camera": _redact_private_error_fields(out.get("camera", {})),
-            "calibration": out.get("calibration", {}),
+            "ok": _public_bool(out.get("ok")),
+            "ts": _public_number(out.get("ts")),
+            "risk_score": _public_number(out.get("risk_score")),
+            "objects": public_objects,
+            "object_count": len(public_objects),
+            "camera": {
+                "capture_requested": _public_bool(camera.get("capture_requested")),
+                "image_supplied": _public_bool(camera.get("image_supplied")),
+                "image_b64_requested": _public_bool(camera.get("image_b64_requested")),
+                "image_used": _public_bool(camera.get("image_used")),
+                "source": _public_choice(
+                    camera.get("source"),
+                    ("none", "image_b64", "camera_capture"),
+                    "none",
+                ),
+                "requested_source": _public_choice(
+                    camera.get("requested_source"),
+                    ("none", "image_b64", "camera_capture"),
+                    "none",
+                ),
+                "shape": (
+                    [_public_number(value) for value in camera.get("shape")[:2]]
+                    if isinstance(camera.get("shape"), (list, tuple)) else None
+                ),
+            },
+            "calibration": {
+                "type": _public_choice(
+                    calibration.get("type"),
+                    ("fixture_prior_or_simple_perspective",),
+                ),
+                "boundary": _public_choice(
+                    calibration.get("boundary"),
+                    (
+                        "Semantic far-field hint only; LiDAR/depth/Nav2 remain authoritative.",
+                    ),
+                ),
+            },
         })
     except Exception:
         return _internal_error_response("lab_fsd_vision_objects")
@@ -6538,7 +6749,19 @@ def api_bpu_qwen_verdict():
 def api_bpu_qwen_health():
     try:
         from predict_engine.bpu_qwen import healthcheck
-        return jsonify(_redact_private_error_fields(healthcheck()))
+        status = healthcheck()
+        if not isinstance(status, Mapping) or status.get("ok") is not True:
+            return jsonify({
+                "ok": False,
+                "error": _PUBLIC_SERVICE_UNAVAILABLE,
+                "reason": "model_unavailable",
+            }), 503
+        return jsonify({
+            "ok": True,
+            "part1_bin": "qwen2_part1.bin",
+            "part2_bin": "qwen2_part2.bin",
+            "method": "BPU Bayes-e INT8, Qwen2-0.5B 24-layer chain (12+12) + verdict probe",
+        })
     except Exception:
         return _internal_error_response("bpu_qwen_health")
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import copy
 import io
+import math
 import re
 import unittest
 import uuid
@@ -159,6 +160,57 @@ class StackTraceExposureTests(unittest.TestCase):
                     exec(compile(module, relative, "exec"), namespace)
                     error_id = namespace["_record_internal_error"]("regression_test")
                 self.assertRegex(error_id, re.compile(r"^[0-9a-f]{12}$"))
+
+    def test_remaining_dashboard_sinks_use_primitive_schema_helpers(self) -> None:
+        tree = _parse("ai_brain/dashboard/dashboard.py")
+        target_names = {
+            "api_flybrain_superstack",
+            "api_lab_fsd_vision_objects",
+            "api_bpu_qwen_health",
+        }
+        targets = {
+            node.name: node
+            for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name in target_names
+        }
+        self.assertEqual(target_names, set(targets))
+        forbidden_helpers = {"_redact_private_error_fields"}
+        for name, function in targets.items():
+            with self.subTest(function=name):
+                calls = {
+                    node.func.id
+                    for node in ast.walk(function)
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                }
+                self.assertFalse(calls & forbidden_helpers)
+                if name != "api_bpu_qwen_health":
+                    self.assertTrue(
+                        calls & {"_public_number", "_public_bool", "_public_choice"}
+                    )
+
+    def test_primitive_schema_helpers_reject_containers_and_nonfinite_numbers(self) -> None:
+        tree = _parse("ai_brain/dashboard/dashboard.py")
+        helper_names = {"_public_text", "_public_number", "_public_choice"}
+        helpers = [
+            node for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name in helper_names
+        ]
+        self.assertEqual(helper_names, {node.name for node in helpers})
+        namespace = {"math": math}
+        exec(
+            compile(ast.Module(body=helpers, type_ignores=[]), "dashboard_schema", "exec"),
+            namespace,
+        )
+        self.assertIsNone(namespace["_public_text"]({"traceback": "private"}))
+        self.assertIsNone(namespace["_public_choice"]("private", ("public",)))
+        self.assertIsNone(namespace["_public_number"](float("nan")))
+        self.assertIsNone(namespace["_public_number"](float("inf")))
+        self.assertEqual(1.25, namespace["_public_number"](1.25))
+
+    def test_lab_vision_contract_keeps_live_edge_source(self) -> None:
+        source = (ROOT / "ai_brain/dashboard/dashboard.py").read_text(encoding="utf-8")
+        self.assertIn('"tower_image_edges"', source)
 
 
 if __name__ == "__main__":

@@ -154,9 +154,8 @@ def healthcheck() -> dict:
                 "part1_bin": str(PART1_BIN),
                 "part2_bin": str(PART2_BIN),
                 "method": "BPU Bayes-e INT8, Qwen2-0.5B 24-layer chain (12+12) + verdict probe"}
-    except Exception as e:
-        import traceback; traceback.print_exc()
-        return {"ok": False, "error": str(e)[:300]}
+    except Exception:
+        return {"ok": False, "reason": "model_unavailable"}
 
 
 if __name__ == "__main__":

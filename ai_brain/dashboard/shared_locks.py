@@ -40,8 +40,8 @@ class _DeviceLock:
 
         try:
             self._fd = os.open(self.lock_path, os.O_CREAT | os.O_RDWR, 0o644)
-        except OSError as e:
-            return False, {"error": f"open lock failed: {e}"}
+        except OSError:
+            return False, {"error": "open lock failed"}
 
         try:
             fcntl.flock(self._fd, fcntl.LOCK_EX | fcntl.LOCK_NB)

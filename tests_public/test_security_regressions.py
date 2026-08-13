@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import ast
+import errno
 import importlib.util
 import os
+import stat
 import sys
 import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -124,6 +127,136 @@ class ContainedPathTests(unittest.TestCase):
                 self.path_safety.read_contained_bytes(
                     root, "large.raw", allowed_suffixes={".raw"}, max_bytes=4
                 )
+
+    def test_bounded_reader_accepts_single_regular_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "sample.raw").write_bytes(b"fixture")
+            self.assertEqual(
+                b"fixture",
+                self.path_safety.read_contained_bytes(
+                    root, "sample.raw", allowed_suffixes={".raw"}, max_bytes=16
+                ),
+            )
+
+    def test_reader_rejects_excessive_components_and_component_length(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            hostile = "/".join(["nested"] * 33 + ["sample.raw"])
+            with self.assertRaises(self.path_safety.UnsafePathError):
+                self.path_safety.read_contained_bytes(root, hostile)
+            with self.assertRaises(self.path_safety.UnsafePathError):
+                self.path_safety.read_contained_bytes(root, ("x" * 256) + ".raw")
+
+    def test_opened_descriptor_is_closed_when_verification_raises(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            sample = Path(temporary) / "sample.raw"
+            sample.write_bytes(b"fixture")
+            selected = os.stat(sample, follow_symlinks=False)
+            descriptor = os.open(sample, os.O_RDONLY)
+            with mock.patch.object(
+                self.path_safety.os, "fstat", side_effect=OSError(errno.EIO, "fixture")
+            ):
+                with self.assertRaises(OSError):
+                    self.path_safety._verify_opened_descriptor(
+                        descriptor, selected, require_directory=False
+                    )
+            with self.assertRaises(OSError):
+                os.fstat(descriptor)
+
+    def test_opened_descriptor_is_closed_when_identity_check_raises(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            sample = Path(temporary) / "sample.raw"
+            sample.write_bytes(b"fixture")
+            selected = os.stat(sample, follow_symlinks=False)
+            descriptor = os.open(sample, os.O_RDONLY)
+            with mock.patch.object(
+                self.path_safety.os.path,
+                "samestat",
+                side_effect=RuntimeError("fixture identity failure"),
+            ):
+                with self.assertRaises(RuntimeError):
+                    self.path_safety._verify_opened_descriptor(
+                        descriptor, selected, require_directory=False
+                    )
+            with self.assertRaises(OSError):
+                os.fstat(descriptor)
+
+    def test_windows_fallback_rejects_reparse_attribute(self) -> None:
+        class _Metadata:
+            st_mode = stat.S_IFREG | 0o600
+            st_file_attributes = stat.FILE_ATTRIBUTE_REPARSE_POINT
+
+        self.assertTrue(
+            self.path_safety._is_reparse_or_junction(Path("junction"), _Metadata())
+        )
+
+    def test_windows_entry_fallback_rejects_escape_before_open(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "trusted"
+            root.mkdir()
+            sample = root / "sample.raw"
+            sample.write_bytes(b"fixture")
+            flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
+            realpath = self.path_safety.os.path.realpath
+
+            def _escape_selected(value):
+                if os.fspath(value) == os.fspath(sample):
+                    return os.fspath(root.parent / "outside.raw")
+                return realpath(value)
+
+            with mock.patch.object(self.path_safety.os.path, "realpath", _escape_selected):
+                with self.assertRaises(self.path_safety.UnsafePathError):
+                    self.path_safety._open_regular_file_from_entries(
+                        root, ("sample.raw",), flags
+                    )
+
+    def test_path_reader_uses_scanned_entry_for_filesystem_open(self) -> None:
+        source = (ROOT / "xrd_security/path_safety.py").read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        reader_names = {
+            "_open_regular_file_at",
+            "_open_regular_file_from_entries",
+            "read_contained_bytes",
+        }
+        functions = {
+            node.name: node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name in reader_names
+        }
+        self.assertEqual(reader_names, set(functions))
+        for function in functions.values():
+            for call in (
+                node for node in ast.walk(function) if isinstance(node, ast.Call)
+            ):
+                is_open = (
+                    isinstance(call.func, ast.Attribute)
+                    and isinstance(call.func.value, ast.Name)
+                    and call.func.value.id == "os"
+                    and call.func.attr == "open"
+                )
+                if not is_open or not call.args:
+                    continue
+                first = call.args[0]
+                if isinstance(first, ast.Name):
+                    self.assertNotIn(
+                        first.id,
+                        {"untrusted_path", "requested_key", "parts"},
+                        f"request-derived path reaches os.open at line {call.lineno}",
+                    )
+        descriptor_walker = functions["_open_regular_file_at"]
+        verifier_calls = [
+            node for node in ast.walk(descriptor_walker)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == "_verify_opened_descriptor"
+        ]
+        self.assertEqual(
+            2,
+            len(verifier_calls),
+            "both the final file and every intermediate directory must use the "
+            "close-on-error descriptor verifier",
+        )
 
 
 class BatchParserSecurityTests(unittest.TestCase):

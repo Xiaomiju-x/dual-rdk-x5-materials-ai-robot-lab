@@ -129,8 +129,8 @@ def _capture_frame(camera: str = DEFAULT_CAMERA, warmup: int = 4):
         if not ok or frame is None:
             return None, "read frame failed"
         return frame, ""
-    except Exception as exc:
-        return None, str(exc)[:160]
+    except Exception:
+        return None, "camera capture failed"
     finally:
         if cap is not None:
             cap.release()
@@ -239,8 +239,8 @@ def build_vision_bev(
         if lock.get("ok"):
             try:
                 frame, capture_error = _capture_frame()
-            except Exception as exc:
-                capture_error = f"capture failed: {str(exc)[:120]}"
+            except Exception:
+                capture_error = "camera capture failed"
             finally:
                 release_camera_mode()
         else:
@@ -253,8 +253,8 @@ def build_vision_bev(
             image_objects = _objects_from_image(frame)
             obj_list.extend(image_objects)
             frame_used = True
-        except Exception as exc:
-            capture_error = f"image analysis failed: {str(exc)[:120]}"
+        except Exception:
+            capture_error = "image analysis failed"
     if not obj_list:
         obj_list = _default_lab_objects()
 
