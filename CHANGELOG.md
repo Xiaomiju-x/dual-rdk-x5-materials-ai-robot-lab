@@ -4,10 +4,19 @@
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-08-13
+
 ### Changed
 
 - 将全国总决赛结果更新为“二等奖”，状态标记为 `team_confirmed`；在组委会官方获奖来源补齐前，不升级为 `official_verified`。
 - 同步中英文项目标题、奖项页、证据矩阵、引用元数据与 GitHub 展示信息，并加入全国奖项等级防回退门禁。
+
+### Security
+
+- 将 CodeQL Action 升级到固定提交的 v4.37.6，并修复完整公开 Dashboard 新暴露的异常信息泄露与反射型 XSS 数据流。
+- 收紧文件读取为可信根内受限读取，拒绝目录穿越、跨平台绝对路径、NTFS ADS 和符号链接，并增加打开前后身份校验与大小上限。
+- 将批量紧凑格式从潜在多项式复杂度正则改为 1024 字符上限的线性解析器。
+- 为 `main` 启用六个必需检查、线性历史和对话解决门，禁止强推与删除。
 
 ## [1.0.1] - 2026-08-13
 
@@ -52,6 +61,7 @@
 - 真实硬件路径保持 Tier 4 现场人工授权；公开指挥中心保持只读，不反向控制设备。
 - 受限晶体缓存从 `main` 可达历史中清除；发布前保留离线恢复 bundle，不将其重新分发。
 
-[Unreleased]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/releases/tag/v1.0.0

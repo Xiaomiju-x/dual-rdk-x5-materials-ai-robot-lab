@@ -126,7 +126,7 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertEqual([], findings)
 
     def test_release_checksum_manifest_is_current(self) -> None:
-        checksum_path = REPOSITORY_ROOT / "docs" / "releases" / "v1.0.1" / "SHA256SUMS.txt"
+        checksum_path = REPOSITORY_ROOT / "docs" / "releases" / "v1.0.2" / "SHA256SUMS.txt"
         entries = [line.split("  ", 1) for line in checksum_path.read_text(encoding="utf-8").splitlines()]
         self.assertGreaterEqual(len(entries), 16)
         seen: set[str] = set()

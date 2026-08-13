@@ -104,7 +104,7 @@ python -B -m unittest discover -s tests_public -p "test_*.py" -v
 python -B examples/offline_demo/run_demo.py
 ```
 
-The release passed the publication audit, repository-local link check, award single-source check, deterministic SPDX SBOM check, hardware-free tests, offline demo, workstation-frontend build, and embodied-dashboard frontend build. See the [`v1.0.1` verification record](docs/releases/v1.0.1/VERIFICATION.md) for the final exact scope and commands.
+The release passed the publication audit, repository-local link check, award single-source check, deterministic SPDX SBOM check, hardware-free tests, offline demo, workstation-frontend build, and embodied-dashboard frontend build. See the [`v1.0.2` verification record](docs/releases/v1.0.2/VERIFICATION.md) for the final exact scope and commands.
 
 > [!CAUTION]
 > This repository contains source code capable of interacting with real mobile, lift, arm, pushrod, servo, and electromagnetic hardware. Source availability is not permission to run it. Tier 4 has no generic one-click command; read the [physical safety policy](docs/safety/PHYSICAL_SAFETY.md) first.

@@ -39,7 +39,11 @@ _REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
-from xrd_security.path_safety import UnsafePathError, resolve_contained_path
+from xrd_security.path_safety import (  # noqa: E402
+    UnsafePathError,
+    read_contained_bytes,
+    resolve_contained_path,
+)
 
 sys.path.insert(0, str(_ROOT / "src"))
 sys.path.insert(0, str(_ROOT))   # 让 voice_backend / shared_locks 可导入
@@ -68,7 +72,7 @@ except ImportError:
     clean_llm_output = lambda t: (t or "")
     print("[WARN] voice_backend 未找到, 语音功能禁用")
 
-from parse_pl import parse_pl_csv                    # noqa: E402
+from parse_pl import PLSpectrum, parse_pl_bytes      # noqa: E402
 from extract_peaks_pl import extract_pl_peaks        # noqa: E402
 from build_features_pl import (                       # noqa: E402
     build_features_pl, PLNormalizer, TOTAL_DIM,
@@ -320,9 +324,8 @@ def _execute_tool(name: str, args: dict) -> str:
 
 
 # ============ 推理流水线 ============
-def _infer_spectrum(csv_path: str) -> dict:
+def _infer_spectrum(s: PLSpectrum) -> dict:
     """读 CSV → parse → peak → feature → MLP 分类, 返回给前端的 dict."""
-    s = parse_pl_csv(csv_path)
     if not s.is_valid():
         return {"ok": False, "error": s.skip_reason}
     if s.scan_type != "em":
@@ -351,6 +354,7 @@ def _infer_spectrum(csv_path: str) -> dict:
     pred_id = int(probs.argmax())
 
     # label 从路径推 (供 Agent 参考"真实" + "MLP 预测")
+    csv_path = s.path
     lbl = label_from_path(csv_path)
 
     return {
@@ -533,6 +537,19 @@ def _resolve_public_spectrum(relative_path: str, *, require_file: bool = True) -
     )
 
 
+def _load_public_spectrum(relative_path: str) -> tuple[Path, PLSpectrum]:
+    """Safely read one HTTP-selected spectrum and parse its in-memory bytes."""
+
+    payload = read_contained_bytes(
+        _ROOT,
+        relative_path,
+        allowed_suffixes={".csv", ".txt"},
+        max_bytes=16 * 1024 * 1024,
+    )
+    full = _resolve_public_spectrum(relative_path)
+    return full, parse_pl_bytes(payload, path=str(full))
+
+
 @app.route("/")
 def index():
     return Response(INDEX_HTML, mimetype="text/html")
@@ -570,12 +587,11 @@ def api_file_spectrum():
     if not rel:
         return jsonify({"ok": False, "error": "缺 path 参数"}), 400
     try:
-        full = _resolve_public_spectrum(rel)
+        full, s = _load_public_spectrum(rel)
     except UnsafePathError:
         return jsonify({"ok": False, "error": "非法路径"}), 403
     except FileNotFoundError:
         return jsonify({"ok": False, "error": f"文件不存在: {rel}"}), 404
-    s = parse_pl_csv(str(full))
     if not s.is_valid():
         return jsonify({"ok": False, "error": s.skip_reason})
     peaks = extract_pl_peaks(s.wavelength, s.counts)
@@ -602,14 +618,14 @@ def api_analyze():
     if not rel:
         return jsonify({"ok": False, "error": "缺 path 参数"}), 400
     try:
-        full = _resolve_public_spectrum(rel)
+        full, spectrum = _load_public_spectrum(rel)
     except UnsafePathError:
         return jsonify({"ok": False, "error": "非法路径"}), 403
     except FileNotFoundError:
         return jsonify({"ok": False, "error": f"文件不存在: {rel}"}), 404
 
     try:
-        result = _infer_spectrum(str(full))
+        result = _infer_spectrum(spectrum)
     except Exception:
         error_id = _record_internal_error("pl_num_analyze")
         return jsonify({"ok": False, "error": "推理失败", "error_id": error_id}), 500
@@ -1772,8 +1788,8 @@ def _on_voice_command_pl(text: str):
             with state.lock:
                 p = state.last_path
             if p:
-                validated_path = _resolve_public_spectrum(p)
-                result = _infer_spectrum(str(validated_path))
+                _, spectrum = _load_public_spectrum(p)
+                result = _infer_spectrum(spectrum)
                 with state.lock:
                     state.thinking_buffer = ""
                     state.thinking_done = False

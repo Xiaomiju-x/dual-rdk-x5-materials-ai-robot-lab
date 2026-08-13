@@ -38,7 +38,8 @@
 - [支持范围](../SUPPORT.md)
 - [路线图](../ROADMAP.md)
 - [变更记录](../CHANGELOG.md)
-- [v1.0.1 验证记录](releases/v1.0.1/VERIFICATION.md)
+- [v1.0.2 验证记录](releases/v1.0.2/VERIFICATION.md)
+- [v1.0.1 验证记录（历史）](releases/v1.0.1/VERIFICATION.md)
 - [v1.0.0 验证记录](releases/v1.0.0/VERIFICATION.md)
 - [引用信息](../CITATION.cff)
 

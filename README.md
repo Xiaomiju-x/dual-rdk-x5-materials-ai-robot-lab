@@ -106,7 +106,7 @@ python -B -m unittest discover -s tests_public -p "test_*.py" -v
 python -B examples/offline_demo/run_demo.py
 ```
 
-本次发布已通过公开边界审计、仓内文档链接检查、奖项单一事实源检查、确定性 SPDX SBOM 检查、无硬件单元测试、离线 demo、工作站前端和具身仪表盘前端构建。`v1.0.1` 最终精确复核范围与命令见 [版本验证记录](docs/releases/v1.0.1/VERIFICATION.md)。
+本次发布已通过公开边界审计、仓内文档链接检查、奖项单一事实源检查、确定性 SPDX SBOM 检查、无硬件单元测试、离线 demo、工作站前端和具身仪表盘前端构建。`v1.0.2` 最终精确复核范围与命令见 [版本验证记录](docs/releases/v1.0.2/VERIFICATION.md)。
 
 > [!CAUTION]
 > 仓库包含可能控制真实底盘、升降、机械臂、推杆、舵机和电磁铁的源码。不要把源码存在理解为运行许可。Tier 4 不提供通用一键命令；任何真机操作前必须阅读 [物理安全规范](docs/safety/PHYSICAL_SAFETY.md)。

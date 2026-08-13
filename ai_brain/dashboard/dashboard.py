@@ -11,12 +11,16 @@ Round 5 — NIR 荧光粉智慧实验室 闭环流程总控 Dashboard (v4.1)
 from __future__ import annotations
 
 import argparse
+import html
 import json
+import logging
 import os
 import socket
 import sys
 import threading
 import time
+import uuid
+from collections.abc import Mapping
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -25,9 +29,12 @@ from flask import Flask, Response, jsonify, request
 
 # v4.1 Round 5: 把 repo 根目录 (以及 X5 上的 ~/) 加入 path, 让 predict_engine 可被导入
 _HERE = Path(__file__).resolve().parent
-for _cand in [_HERE, _HERE.parent, Path("/home/rdk")]:
+_REPOSITORY_ROOT = _HERE.parents[1]
+for _cand in [_HERE, _HERE.parent, _REPOSITORY_ROOT, Path("/home/rdk")]:
     if str(_cand) not in sys.path:
         sys.path.insert(0, str(_cand))
+
+from xrd_security.path_safety import UnsafePathError, read_contained_bytes  # noqa: E402
 
 try:
     from rb_voe.contracts.canonical import canonical_sha256, file_sha256
@@ -52,14 +59,169 @@ try:
     from predict_engine import persistence as _pe_pers
     from predict_engine.batch_parser import parse_lines as _pe_batch_parse
     _PRED_OK = True
-    _PRED_ERR = None
-except Exception as _e:
+except Exception:
     _PRED_OK = False
-    _PRED_ERR = str(_e)
+    _import_error_id = uuid.uuid4().hex[:12]
+    logging.getLogger(__name__).exception(
+        "[internal-error] scope=predict_engine_import error_id=%s",
+        _import_error_id,
+    )
 
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 _AGG_EXECUTOR = ThreadPoolExecutor(max_workers=4, thread_name_prefix="dash-agg")
 _PRED_EXECUTOR = ThreadPoolExecutor(max_workers=2, thread_name_prefix="dash-pred")
+
+_PUBLIC_INTERNAL_ERROR = "请求处理失败，请稍后重试"
+_PUBLIC_SERVICE_UNAVAILABLE = "预测服务暂不可用，请稍后重试"
+_PRIVATE_ERROR_FIELDS = frozenset({
+    "error",
+    "exception",
+    "stack_trace",
+    "stacktrace",
+    "stderr",
+    "stdout",
+    "traceback",
+})
+_PREDICT_RESPONSE_FIELDS = (
+    "trace_id", "formula", "dopant", "user", "host_hint", "xrd_method",
+    "virtual_xrd_meta", "virtual_pl_meta", "xrd_analog", "xrd_analogs",
+    "pl_analogs", "stages", "flags", "heuristic_verdict", "rag",
+    "synthesis", "synthesis_recipe", "timings", "latency_ms",
+    "provenance", "runtime", "uncertainty", "confidence",
+)
+
+
+def _record_internal_error(scope):
+    """Log the active exception server-side and return an opaque correlation id."""
+    error_id = uuid.uuid4().hex[:12]
+    if sys.exc_info()[0] is None:
+        app.logger.error("[internal-error] scope=%s error_id=%s", scope, error_id)
+    else:
+        app.logger.exception("[internal-error] scope=%s error_id=%s", scope, error_id)
+    return error_id
+
+
+def _internal_error_response(scope, status=500, message=_PUBLIC_INTERNAL_ERROR):
+    """Build a stable public JSON error without serializing exception details."""
+    error_id = _record_internal_error(scope)
+    return jsonify({"ok": False, "error": message, "error_id": error_id}), status
+
+
+def _internal_error_event(scope, message=_PUBLIC_INTERNAL_ERROR):
+    """Build a stable SSE error event without serializing exception details."""
+    error_id = _record_internal_error(scope)
+    payload = {"type": "error", "error": message, "error_id": error_id}
+    return f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+
+
+def _redact_private_error_fields(value):
+    """Recursively drop untrusted diagnostic fields from an upstream value."""
+    if isinstance(value, Mapping):
+        return {
+            key: _redact_private_error_fields(item)
+            for key, item in value.items()
+            if str(key).lower() not in _PRIVATE_ERROR_FIELDS
+        }
+    if isinstance(value, (list, tuple)):
+        return [_redact_private_error_fields(item) for item in value]
+    return value
+
+
+def _collect_private_error_fields(value, path=""):
+    """Collect diagnostic fields for the server log without returning them."""
+    found = {}
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            item_path = f"{path}.{key}" if path else str(key)
+            if str(key).lower() in _PRIVATE_ERROR_FIELDS:
+                found[item_path] = item
+            else:
+                found.update(_collect_private_error_fields(item, item_path))
+    elif isinstance(value, (list, tuple)):
+        for index, item in enumerate(value):
+            found.update(_collect_private_error_fields(item, f"{path}[{index}]"))
+    return found
+
+
+def _sanitize_shared_state(scope, value):
+    """Remove diagnostics before data enters a cache or other shared UI state."""
+    private = _collect_private_error_fields(value)
+    if private:
+        app.logger.error(
+            "[upstream-state-error] scope=%s error_id=%s diagnostics=%r",
+            scope,
+            uuid.uuid4().hex[:12],
+            private,
+        )
+    return _redact_private_error_fields(value)
+
+
+def _public_upstream_payload(scope, payload, allowed_keys):
+    """Select an explicit response schema and quarantine upstream diagnostics."""
+    if not isinstance(payload, Mapping):
+        error_id = _record_internal_error(scope)
+        return {"ok": False, "error": _PUBLIC_INTERNAL_ERROR, "error_id": error_id}
+
+    private = _collect_private_error_fields(payload)
+    if private:
+        error_id = uuid.uuid4().hex[:12]
+        app.logger.error(
+            "[upstream-error] scope=%s error_id=%s diagnostics=%r",
+            scope,
+            error_id,
+            private,
+        )
+    else:
+        error_id = None
+
+    selected = {
+        key: _redact_private_error_fields(payload[key])
+        for key in allowed_keys
+        if key in payload and key not in _PRIVATE_ERROR_FIELDS
+    }
+    if payload.get("ok") is False:
+        selected["ok"] = False
+        selected["error"] = _PUBLIC_INTERNAL_ERROR
+        selected["error_id"] = error_id or _record_internal_error(scope)
+    return selected
+
+
+def _public_stream_chunk(scope, chunk):
+    """Whitelist stream event fields; convert upstream errors to opaque failures."""
+    allowed_by_type = {
+        "thinking": ("type", "text", "sample_idx"),
+        "delta": ("type", "text"),
+        "progress": (
+            "type", "completed", "total", "note", "vote_counts",
+            "n_valid", "cove_triggered",
+        ),
+        "verdict": ("type", "verdict", "latency_ms"),
+        "done": ("type", "model", "latency_ms"),
+    }
+    if not isinstance(chunk, Mapping):
+        return {"type": "error", "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": _record_internal_error(scope)}
+    diagnostics = _collect_private_error_fields(chunk)
+    if chunk.get("type") == "error" or diagnostics:
+        error_id = uuid.uuid4().hex[:12]
+        app.logger.error(
+            "[upstream-stream-error] scope=%s error_id=%s diagnostics=%r",
+            scope,
+            error_id,
+            diagnostics,
+        )
+        return {"type": "error", "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": error_id}
+    event_type = chunk.get("type")
+    allowed = allowed_by_type.get(event_type)
+    if allowed is None:
+        return {"type": "error", "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": _record_internal_error(scope)}
+    return {
+        key: _redact_private_error_fields(chunk[key])
+        for key in allowed
+        if key in chunk
+    }
 
 # ========== 全局主题 (浅色默认, 深色可切): 通过 @app.after_request 中间件注入所有 HTML 页 ==========
 _THEME_CSS = """<style id="__theme_global">
@@ -528,8 +690,8 @@ if _PRED_OK:
             print(f"[dashboard] predict_engine prewarm: {_info}")
         else:
             print("[dashboard] 跳过 prewarm (set DASHBOARD_PREWARM=1 启用)")
-    except Exception as _e:
-        print(f"[dashboard] prewarm 失败 (非致命): {_e}")
+    except Exception:
+        _record_internal_error("dashboard_prewarm")
 else:
     _PRED_CACHE = None
 
@@ -702,8 +864,8 @@ def api_aggregated_status():
         try:
             lid, data = fut.result(timeout=3)
             out[lid] = data
-        except Exception as e:
-            print(f"[dashboard] status fetch failed: {e}")
+        except Exception:
+            _record_internal_error("aggregated_status_fetch")
     return jsonify({"status": out, "ts": time.time()})
 
 
@@ -1005,7 +1167,7 @@ loadKpi(); reload();
 # ============ M3.1: 优化矩阵 HTML 页面 ============
 _MATRIX_HTML = r"""<!DOCTYPE html><html lang="zh"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🔥 优化矩阵 __MATRIX_ID__</title>
+<title>🔥 优化矩阵</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
@@ -1054,28 +1216,52 @@ h2{color:#67e8f9;font-size:1em;margin:14px 0 8px}
 </div>
 
 <script>
-const PAYLOAD = __PAYLOAD_JSON__;
-function badge(v){const cls = 'badge-' + (v||'unknown').toLowerCase(); return `<span class="badge ${cls}">${v||'?'}</span>`;}
+let PAYLOAD = null;
+function esc(v){
+  return String(v ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function verdictName(v){
+  const value = String(v || 'UNKNOWN').toUpperCase();
+  return ['GO','REVISE','DROP','UNKNOWN'].includes(value) ? value : 'UNKNOWN';
+}
+function reportHref(v){return '/report/' + encodeURIComponent(String(v ?? ''));}
+function finiteNumber(v, fallback=0){
+  const value = Number(v);
+  return Number.isFinite(value) ? value : fallback;
+}
+function badge(v){
+  const verdict = verdictName(v);
+  return `<span class="badge badge-${verdict.toLowerCase()}">${esc(verdict)}</span>`;
+}
 
-(function render(){
+async function render(){
+  const matrixId = decodeURIComponent(window.location.pathname.split('/').pop() || '');
+  const response = await fetch('/api/matrix/' + encodeURIComponent(matrixId));
+  const body = await response.json();
+  if(!response.ok || !body.ok){
+    document.getElementById('heatWrap').textContent = body.error || '矩阵不存在或已过期';
+    return;
+  }
+  PAYLOAD = body.payload;
   const cells = (PAYLOAD.results || []).filter(r => r);
   document.getElementById('hostFormula').textContent = PAYLOAD.formula + ' · ' + cells.length + ' cells';
   document.getElementById('meta').textContent =
     'matrix_id: ' + PAYLOAD.matrix_id + ' · scan: ' + JSON.stringify(PAYLOAD.scan);
 
   // 按 (element x site) 行 × pct 列 排
-  const elements = PAYLOAD.scan.dopant_element || ['?'];
-  const sites = PAYLOAD.scan.dopant_site || ['?'];
-  const pcts = PAYLOAD.scan.dopant_pct || [0.75];
+  const scan = PAYLOAD.scan && typeof PAYLOAD.scan === 'object' ? PAYLOAD.scan : {};
+  const elements = Array.isArray(scan.dopant_element) ? scan.dopant_element : ['?'];
+  const sites = Array.isArray(scan.dopant_site) ? scan.dopant_site : ['?'];
+  const pcts = Array.isArray(scan.dopant_pct) ? scan.dopant_pct : [0.75];
   const rowKeys = []; elements.forEach(e => sites.forEach(s => rowKeys.push(e+'@'+s)));
 
   // 构 heatmap
   const wrap = document.getElementById('heatWrap');
   const colW = pcts.length + 1;
   let html = `<div class="heat" style="grid-template-columns:130px repeat(${pcts.length}, 1fr);">`;
-  html += '<div></div>' + pcts.map(p => `<div class="col-label">${p}%</div>`).join('');
+  html += '<div></div>' + pcts.map(p => `<div class="col-label">${esc(p)}%</div>`).join('');
   rowKeys.forEach(rk => {
-    html += `<div class="row-label">${rk}</div>`;
+    html += `<div class="row-label">${esc(rk)}</div>`;
     pcts.forEach(p => {
       const cell = cells.find(c => {
         const dop = c.dopant || {};
@@ -1083,16 +1269,18 @@ function badge(v){const cls = 'badge-' + (v||'unknown').toLowerCase(); return `<
         return k === rk && Math.abs((dop.pct||0) - p) < 0.001;
       });
       if(!cell){ html += '<div class="cell cell-unknown" style="opacity:0.3">-</div>'; return; }
-      const verd = (cell.heuristic_verdict || {}).verdict || 'UNKNOWN';
-      const conf = ((cell.heuristic_verdict || {}).confidence || 0) * 100;
+      const verd = verdictName((cell.heuristic_verdict || {}).verdict);
+      const conf = finiteNumber((cell.heuristic_verdict || {}).confidence) * 100;
       const cpl = cell.virtual_pl_meta || {};
-      const clam = cpl.predicted_lambda_em_nm || cpl.lambda_em_nm;
-      const ctst = cpl.thermal_stability_pct_423K;
-      const specLine = (clam ? `λ<sub>em</sub>=${Math.round(clam)}` : '') + (ctst!=null ? ` T=${ctst.toFixed(0)}%` : '');
-      const titleSpec = (clam ? ` λ_em=${Math.round(clam)}nm` : '') + (ctst!=null ? ` T_stab=${ctst.toFixed(0)}%` : '');
-      html += `<div class="cell cell-${verd.toLowerCase()}" onclick="window.open('/report/${cell.trace_id}','_blank')"
-              title="${cell.formula} + ${(cell.dopant||{}).symbol}@${(cell.dopant||{}).site} ${(cell.dopant||{}).pct}%${titleSpec}">
-              <div class="verd">${verd}</div>
+      const clam = finiteNumber(cpl.predicted_lambda_em_nm || cpl.lambda_em_nm, NaN);
+      const ctst = finiteNumber(cpl.thermal_stability_pct_423K, NaN);
+      const specLine = (Number.isFinite(clam) ? `λ<sub>em</sub>=${Math.round(clam)}` : '') + (Number.isFinite(ctst) ? ` T=${ctst.toFixed(0)}%` : '');
+      const titleSpec = (Number.isFinite(clam) ? ` λ_em=${Math.round(clam)}nm` : '') + (Number.isFinite(ctst) ? ` T_stab=${ctst.toFixed(0)}%` : '');
+      const cellDopant = cell.dopant || {};
+      const title = `${cell.formula ?? ''} + ${cellDopant.symbol ?? ''}@${cellDopant.site ?? ''} ${cellDopant.pct ?? ''}%${titleSpec}`;
+      html += `<div class="cell cell-${verd.toLowerCase()}" data-report-id="${esc(cell.trace_id)}"
+              title="${esc(title)}">
+              <div class="verd">${esc(verd)}</div>
               <div class="conf">${conf.toFixed(0)}%</div>
               <div style="font-size:0.68em;color:#94a3b8;margin-top:2px">${specLine}</div></div>`;
     });
@@ -1113,20 +1301,32 @@ function badge(v){const cls = 'badge-' + (v||'unknown').toLowerCase(); return `<
     const xrd = c.stages?.bpu_xrd_num || {};
     const pl1 = (c.pl_analogs || [{}])[0];
     const pl = c.virtual_pl_meta || {};
-    const lam = pl.predicted_lambda_em_nm || pl.lambda_em_nm;
-    const tst = pl.thermal_stability_pct_423K;
-    return `<tr onclick="window.open('/report/${c.trace_id}','_blank')">
-      <td>${i+1}</td><td>${dop.symbol||'?'}</td><td>${dop.site||'?'}</td>
-      <td>${dop.pct}</td>
-      <td style="font-weight:600">${lam ? Math.round(lam)+' nm' : '-'}</td>
-      <td style="font-weight:600;color:${tst==null?'#94a3b8':(tst>=75?'#4ade80':(tst>=50?'#fbbf24':'#f87171'))}">${tst!=null ? tst.toFixed(0)+'%' : '-'}</td>
-      <td>${badge(h.verdict)}</td><td>${(h.confidence*100).toFixed(0)}%</td>
-      <td><code>${xrd.label||'-'} ${(xrd.prob*100||0).toFixed(0)}%</code></td>
-      <td><code>${pl1.formula||'-'} sim=${pl1.similarity||0}</code></td>
-      <td><a href="/report/${c.trace_id}" target="_blank" style="color:#22d3ee;">📋</a></td>
+    const lam = finiteNumber(pl.predicted_lambda_em_nm || pl.lambda_em_nm, NaN);
+    const tst = finiteNumber(pl.thermal_stability_pct_423K, NaN);
+    const confidence = finiteNumber(h.confidence) * 100;
+    const xrdProbability = finiteNumber(xrd.prob) * 100;
+    const temperatureColor = !Number.isFinite(tst) ? '#94a3b8' : (tst>=75?'#4ade80':(tst>=50?'#fbbf24':'#f87171'));
+    return `<tr data-report-id="${esc(c.trace_id)}">
+      <td>${i+1}</td><td>${esc(dop.symbol||'?')}</td><td>${esc(dop.site||'?')}</td>
+      <td>${esc(dop.pct)}</td>
+      <td style="font-weight:600">${Number.isFinite(lam) ? Math.round(lam)+' nm' : '-'}</td>
+      <td style="font-weight:600;color:${temperatureColor}">${Number.isFinite(tst) ? tst.toFixed(0)+'%' : '-'}</td>
+      <td>${badge(h.verdict)}</td><td>${confidence.toFixed(0)}%</td>
+      <td><code>${esc(xrd.label||'-')} ${xrdProbability.toFixed(0)}%</code></td>
+      <td><code>${esc(pl1.formula||'-')} sim=${esc(pl1.similarity||0)}</code></td>
+      <td><a href="${esc(reportHref(c.trace_id))}" target="_blank" rel="noopener noreferrer" style="color:#22d3ee;">📋</a></td>
     </tr>`;
   }).join('');
-})();
+  document.querySelectorAll('[data-report-id]').forEach(node => {
+    node.addEventListener('click', event => {
+      if(event.target.closest('a')) return;
+      window.open(reportHref(node.dataset.reportId), '_blank', 'noopener');
+    });
+  });
+}
+render().catch(() => {
+  document.getElementById('heatWrap').textContent = '矩阵加载失败';
+});
 
 function exportCsv(){
   const cells = (PAYLOAD.results||[]).filter(r=>r);
@@ -1137,7 +1337,7 @@ function exportCsv(){
   });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-  a.download = PAYLOAD.matrix_id.replace(':','_') + '.csv';
+  a.download = String(PAYLOAD?.matrix_id || 'matrix').replace(/[^A-Za-z0-9._-]/g, '_') + '.csv';
   a.click();
 }
 function exportMd(){
@@ -1153,6 +1353,30 @@ function exportMd(){
 
 
 # ============ v4.1 Round 5: 单条预测报告页 + M2.3 实测回填表单 ============
+def _html_text(value) -> str:
+    """Encode an untrusted value for HTML text or a quoted HTML attribute."""
+    return html.escape("" if value is None else str(value), quote=True)
+
+
+def _json_pre(value, *, limit: int | None = None) -> str:
+    """Serialize a value for display inside ``<pre>`` without creating markup."""
+    serialized = json.dumps(value, ensure_ascii=False, indent=2, default=str)
+    if limit is not None:
+        serialized = serialized[:limit]
+    return html.escape(serialized, quote=True)
+
+
+def _number_text(value, spec: str, suffix: str = "") -> str:
+    """Return a finite display number, or ``-`` for malformed persisted data."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return "-"
+    if number != number or number in (float("inf"), float("-inf")):
+        return "-"
+    return f"{number:{spec}}{suffix}"
+
+
 def _render_spec_summary(payload: dict) -> str:
     """报告顶部光谱参数摘要 (发射峰/激发峰/FWHM/热稳定性/纯相/合成条件)."""
     pl = payload.get("virtual_pl_meta", {}) or {}
@@ -1194,23 +1418,39 @@ def _render_spec_summary(payload: dict) -> str:
 
     # flags 摘要
     flag_chips = ""
-    for fl in flags:
+    for fl in (item for item in flags if isinstance(item, dict)):
         color = "#dc2626" if fl.get("level") == "error" else "#ca8a04"
         flag_chips += (f'<span style="display:inline-block;background:{color};color:#fff;'
                        f'padding:2px 7px;border-radius:4px;font-size:0.75em;margin:2px 3px 2px 0">'
-                       f'⚠ {fl.get("code","?")}</span>')
+                       f'⚠ {_html_text(fl.get("code", "?"))}</span>')
 
-    ex_str = " + ".join(f"{x:.0f}" for x in ex_peaks) + " nm" if ex_peaks else "-"
-    lam_str = f"{lam_em:.0f} nm" if lam_em else "-"
+    ex_values = [_number_text(value, ".0f") for value in ex_peaks]
+    ex_values = [value for value in ex_values if value != "-"]
+    ex_str = " + ".join(ex_values) + " nm" if ex_values else "-"
+    lam_str = _number_text(lam_em, ".0f", " nm")
     # Phase INN-1: 加 Conformal CI 标签 (90% distribution-free 覆盖)
     ci90 = pl.get("conformal_ci90") or {}
-    if ci90 and ci90.get("confidence_label"):
-        lam_str = (f"<b style='color:#22d3ee'>{ci90['confidence_label']}</b> "
+    if isinstance(ci90, dict) and ci90.get("confidence_label"):
+        lam_str = (f"<b style='color:#22d3ee'>{_html_text(ci90['confidence_label'])}</b> "
                    f"<span style='color:#94a3b8;font-size:0.82em'>"
-                   f"(conformal, n={ci90.get('n_calibration','?')})</span>")
-    fwhm_str = f"{fwhm:.0f} nm" if fwhm else "-"
-    t_stab_str = f"{t_stab:.1f}% (@423K/298K)" if t_stab is not None else "-"
-    ea_str = f"{t_ea:.3f} eV / T50={t50:.0f}K" if t_ea else "-"
+                   f"(conformal, n={_html_text(ci90.get('n_calibration', '?'))})</span>")
+    fwhm_str = _number_text(fwhm, ".0f", " nm")
+    t_stab_value = _number_text(t_stab, ".1f")
+    t_stab_str = f"{t_stab_value}% (@423K/298K)" if t_stab_value != "-" else "-"
+    ea_value = _number_text(t_ea, ".3f")
+    t50_value = _number_text(t50, ".0f")
+    ea_str = f"{ea_value} eV / T50={t50_value}K" if ea_value != "-" else "-"
+
+    analog_em = _html_text(analog_em)
+    analog_f = _html_text(analog_f)
+    analog_tstab = _html_text(analog_tstab)
+    analog_xrd = _html_text(analog_xrd)
+    analog_fwhm = _html_text(pl_top.get("fwhm_nm", "-"))
+    bpu_label = _html_text(bpu_label)
+    bpu_prob = _html_text(bpu_prob or "-")
+    sinter = _html_text(sinter)
+    ts_host = _html_text(ts_host)
+    method = _html_text(method)
 
     return f"""<table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:0.92em">
 <tr style="background:#1e293b"><th style="padding:8px;text-align:left;color:#22d3ee;width:180px">参数</th>
@@ -1224,7 +1464,7 @@ def _render_spec_summary(payload: dict) -> str:
     <td style="padding:7px;color:#cbd5e1">-</td></tr>
 <tr style="border-bottom:1px solid #334155"><td style="padding:7px;color:#94a3b8">半峰宽 FWHM</td>
     <td style="padding:7px;font-weight:600;color:#e2e8f0">{fwhm_str}</td>
-    <td style="padding:7px;color:#cbd5e1">{pl_top.get("fwhm_nm","-")} nm</td></tr>
+    <td style="padding:7px;color:#cbd5e1">{analog_fwhm} nm</td></tr>
 <tr style="border-bottom:1px solid #334155"><td style="padding:7px;color:#94a3b8">热稳定性</td>
     <td style="padding:7px;font-weight:600;color:#e2e8f0">{t_stab_str}</td>
     <td style="padding:7px;color:#cbd5e1">{analog_tstab}%</td></tr>
@@ -1232,7 +1472,7 @@ def _render_spec_summary(payload: dict) -> str:
     <td style="padding:7px;color:#cbd5e1">{ea_str}</td>
     <td style="padding:7px;color:#cbd5e1">-</td></tr>
 <tr style="border-bottom:1px solid #334155"><td style="padding:7px;color:#94a3b8">对相预测</td>
-    <td style="padding:7px">{phase_badge} BPU xrd_num: {bpu_label} ({bpu_prob or '-'})</td>
+    <td style="padding:7px">{phase_badge} BPU xrd_num: {bpu_label} ({bpu_prob})</td>
     <td style="padding:7px;color:#cbd5e1">{analog_xrd}</td></tr>
 <tr style="border-bottom:1px solid #334155"><td style="padding:7px;color:#94a3b8">合成条件</td>
     <td style="padding:7px;color:#cbd5e1">见下方 "🧪 配方表" 按钮</td>
@@ -1261,14 +1501,28 @@ def report_page(trace_id):
     if not payload:
         return Response(
             "<!DOCTYPE html><html><body style='font-family:sans-serif;padding:40px;text-align:center;'>"
-            "<h2>报告不存在或已过期</h2><p>trace_id: " + trace_id + "</p></body></html>",
+            "<h2>报告不存在或已过期</h2><p>请返回 Dashboard 重新打开报告。</p></body></html>",
             content_type="text/html; charset=utf-8", status=404,
         )
+    payload = _public_upstream_payload(
+        "report_payload",
+        payload,
+        _PREDICT_RESPONSE_FIELDS,
+    )
     # 简版报告 (读 _PRED_CACHE 的 partial + 如果已有 r1_verdict 也附上)
-    data = json.dumps(payload, ensure_ascii=False, indent=2)
-    html = f"""<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+    dopant = payload.get("dopant", {}) or {}
+    if not isinstance(dopant, dict):
+        dopant = {}
+    trace_id_html = html.escape(str(trace_id), quote=True)
+    formula_html = html.escape(str(payload.get("formula", "")), quote=True)
+    dopant_symbol_html = html.escape(str(dopant.get("symbol", "")), quote=True)
+    dopant_site_html = html.escape(str(dopant.get("site", "")), quote=True)
+    dopant_pct_html = html.escape(str(dopant.get("pct", "")), quote=True)
+    verdict = str((payload.get("heuristic_verdict", {}) or {}).get("verdict", "")).lower()
+    verdict_class = verdict if verdict in {"go", "revise", "drop", "unknown"} else "unknown"
+    document = f"""<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>合成预测报告 {trace_id}</title>
+<title>合成预测报告 {trace_id_html}</title>
 <style>
 body{{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
      background:#0f172a;color:#e2e8f0;padding:20px;line-height:1.6;max-width:900px;margin:0 auto}}
@@ -1278,14 +1532,14 @@ pre{{background:#1e293b;padding:12px 14px;border-radius:8px;overflow-x:auto;
      font-size:12px;line-height:1.6;color:#cbd5e1;white-space:pre-wrap;word-break:break-all}}
 .back{{display:inline-block;background:#22d3ee;color:#0f172a;padding:8px 14px;border-radius:6px;
        text-decoration:none;font-weight:600;margin-top:20px}}
-.verdict-{(payload.get('heuristic_verdict',{}).get('verdict','').lower())}{{color:#4ade80}}
-</style></head><body>
+.verdict-{verdict_class}{{color:#4ade80}}
+</style></head><body data-trace-id="{trace_id_html}" data-formula="{formula_html}" data-dopant-site="{dopant_site_html}">
 <h1>⚗ 合成预测报告</h1>
-<p style="color:#94a3b8;font-size:0.85em;">trace_id: <code>{trace_id}</code> ·
+<p style="color:#94a3b8;font-size:0.85em;">trace_id: <code>{trace_id_html}</code> ·
 基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人 · 2026 全国大学生嵌入式芯片与系统设计竞赛 · 地瓜机器人赛题</p>
 <h2>📋 输入配方</h2>
-<div><b>化学式:</b> <code>{payload.get('formula','')}</code></div>
-<div><b>掺杂:</b> {payload.get('dopant',{}).get('symbol','')} @ {payload.get('dopant',{}).get('site','')}, {payload.get('dopant',{}).get('pct','')}%</div>
+<div><b>化学式:</b> <code>{formula_html}</code></div>
+<div><b>掺杂:</b> {dopant_symbol_html} @ {dopant_site_html}, {dopant_pct_html}%</div>
 <div style="margin-top:8px"><b>XRD 计算源:</b>
 {
     '<span style="background:#16a34a;color:#fff;padding:3px 9px;border-radius:4px;font-size:0.85em;font-weight:600">'
@@ -1316,25 +1570,25 @@ pre{{background:#1e293b;padding:12px 14px;border-radius:8px;overflow-x:auto;
 {_render_spec_summary(payload)}
 
 <h2>📈 虚拟 PL 谱 (Tanabe-Sugano 激发 + 发射)</h2>
-<img src="/api/pl_spectrum/{trace_id}.png" style="width:100%;max-width:780px;border:1px solid #334155;border-radius:6px;background:#fff;"
+<img id="plSpectrum" style="width:100%;max-width:780px;border:1px solid #334155;border-radius:6px;background:#fff;"
      alt="virtual PL spectrum" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
 <div style="display:none;color:#94a3b8;padding:12px;background:#1e293b;border-radius:6px;font-size:0.9em;">图像渲染失败 (matplotlib 缺失或 trace 过期)</div>
 
 <h2>⭐ 启发式判决</h2>
-<pre>{json.dumps(payload.get('heuristic_verdict',{}), ensure_ascii=False, indent=2)}</pre>
+<pre>{_json_pre(payload.get('heuristic_verdict', {}))}</pre>
 <h2>🔬 4 BPU 输出</h2>
-<pre>{json.dumps(payload.get('stages',{}), ensure_ascii=False, indent=2)}</pre>
+<pre>{_json_pre(payload.get('stages', {}))}</pre>
 <h2>📊 Top-1 XRD 类比 + 虚拟 PL</h2>
-<pre>xrd_analog: {json.dumps(payload.get('xrd_analog'), ensure_ascii=False, indent=2)}
-pl_meta: {json.dumps(payload.get('virtual_pl_meta',{}), ensure_ascii=False, indent=2)}</pre>
+<pre>xrd_analog: {_json_pre(payload.get('xrd_analog'))}
+pl_meta: {_json_pre(payload.get('virtual_pl_meta', {}))}</pre>
 <h2>📋 Top-3 PL 实测类比</h2>
-<pre>{json.dumps(payload.get('pl_analogs',[]), ensure_ascii=False, indent=2)}</pre>
+<pre>{_json_pre(payload.get('pl_analogs', []))}</pre>
 <h2>🚩 失败旗帜</h2>
-<pre>{json.dumps(payload.get('flags',[]), ensure_ascii=False, indent=2)}</pre>
+<pre>{_json_pre(payload.get('flags', []))}</pre>
 <h2>📚 RAG 文献</h2>
-<pre>{json.dumps(payload.get('rag',[])[:4], ensure_ascii=False, indent=2)[:2000]}</pre>
+<pre>{_json_pre(payload.get('rag', [])[:4], limit=2000)}</pre>
 <h2>⏱ 耗时分解 (ms)</h2>
-<pre>{json.dumps(payload.get('timing_ms',{}), ensure_ascii=False, indent=2)}</pre>
+<pre>{_json_pre(payload.get('timing_ms', {}))}</pre>
 
 <h2>🧪 实验落地工具</h2>
 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
@@ -1358,7 +1612,10 @@ __ACTUAL_FORM_BLOCK__
 <a class="back" href="/">↩ 返回 Dashboard</a>
 <a class="back" href="/predictions" style="margin-left:8px;background:#475569;color:#e2e8f0;">📚 历史 + 准确率</a>
 <script>
-const TRACE_ID = '__TRACE_ID__';
+const TRACE_ID = document.body.dataset.traceId || '';
+const REPORT_FORMULA = document.body.dataset.formula || '';
+const REPORT_DOPANT_SITE = document.body.dataset.dopantSite || '';
+document.getElementById('plSpectrum').src = '/api/pl_spectrum/' + encodeURIComponent(TRACE_ID) + '.png';
 let _recipeData = null;
 
 async function loadRecipe(){{
@@ -1367,7 +1624,7 @@ async function loadRecipe(){{
   box.style.display = 'block';
   ct.textContent = '加载中...';
   try{{
-    const r = await fetch('/api/recipe/' + TRACE_ID + '?mass_g=2.0');
+    const r = await fetch('/api/recipe/' + encodeURIComponent(TRACE_ID) + '?mass_g=2.0');
     const d = await r.json();
     if(!d.ok){{ ct.textContent = '✗ ' + (d.error||'failed'); return; }}
     _recipeData = d.recipe;
@@ -1404,7 +1661,7 @@ async function playSonify(){{
   const audio = document.getElementById('sonifyAudio');
   audio.style.display = 'block';
   try{{
-    const r = await fetch('/api/sonify/' + TRACE_ID + '?duration=5');
+    const r = await fetch('/api/sonify/' + encodeURIComponent(TRACE_ID) + '?duration=5');
     const d = await r.json();
     if(!d.ok) return alert('✗ ' + (d.error||'failed'));
     audio.src = 'data:audio/wav;base64,' + d.wav_b64;
@@ -1428,11 +1685,13 @@ async function show3D(){{
   box.style.display = 'block';
   try{{
     await _load3DmolJs();
-    const formula = '__FORMULA__';
+    const formula = REPORT_FORMULA;
     const r = await fetch('/api/crystal/' + encodeURIComponent(formula));
     if(!r.ok){{
-      document.getElementById('viewer3d').innerHTML =
-        '<div style="padding:40px;text-align:center;color:#94a3b8">无 3D CIF (' + formula + ' 未在 crystal_data_shared)</div>';
+      const viewerMessage = document.createElement('div');
+      viewerMessage.style.cssText = 'padding:40px;text-align:center;color:#94a3b8';
+      viewerMessage.textContent = '无 3D CIF (' + formula + ' 未在 crystal_data_shared)';
+      document.getElementById('viewer3d').replaceChildren(viewerMessage);
       return;
     }}
     const cif = await r.text();
@@ -1440,14 +1699,17 @@ async function show3D(){{
     viewer.addModel(cif, 'cif');
     viewer.setStyle({{}}, {{stick:{{}}, sphere:{{scale:0.3}} }});
     // 高亮 dopant site (假设 site 元素), 用红球
-    const dopSite = '__DOPANT_SITE__';
+    const dopSite = REPORT_DOPANT_SITE;
     if(dopSite){{
       viewer.setStyle({{elem: dopSite}}, {{stick:{{}}, sphere:{{scale:0.5, color:'red'}} }});
     }}
     viewer.zoomTo();
     viewer.render();
   }}catch(e){{
-    document.getElementById('viewer3d').innerHTML = '<div style="padding:40px;color:#ef4444">' + e.message + '</div>';
+    const viewerMessage = document.createElement('div');
+    viewerMessage.style.cssText = 'padding:40px;color:#ef4444';
+    viewerMessage.textContent = String(e && e.message || '3D viewer failed');
+    document.getElementById('viewer3d').replaceChildren(viewerMessage);
   }}
 }}
 </script>
@@ -1474,31 +1736,31 @@ async function show3D(){{
 async function submitActual(ev){
   ev.preventDefault();
   const form = document.getElementById('actualForm');
-  const data = {trace_id: '__TRACE_ID__'};
+  const data = {trace_id: TRACE_ID};
+  const msg = document.getElementById('actualMsg');
   for(const el of form.elements){
     if(el.name && el.value !== '') data[el.name] = el.value;
   }
   if(!data.actual_xrd_result && !data.actual_lambda_em_nm){
-    document.getElementById('actualMsg').innerHTML = '<span style="color:#fbbf24;">\u26a0 \u81f3\u5c11\u586b\u4e00\u4e2a\u5b57\u6bb5</span>'; return false;
+    msg.style.color = '#fbbf24';
+    msg.textContent = '\u26a0 \u81f3\u5c11\u586b\u4e00\u4e2a\u5b57\u6bb5';
+    return false;
   }
   try{
     const r = await fetch('/api/actual', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
     const d = await r.json();
-    document.getElementById('actualMsg').innerHTML = d.ok
-      ? '<span style="color:#4ade80;">\u2713 \u5df2\u4fdd\u5b58\u5230 actuals.csv</span>'
-      : '<span style="color:#f87171;">\u2717 ' + (d.error||'failed') + '</span>';
+    msg.style.color = d.ok ? '#4ade80' : '#f87171';
+    msg.textContent = d.ok ? '\u2713 \u5df2\u4fdd\u5b58\u5230 actuals.csv' : '\u2717 ' + (d.error||'failed');
   }catch(e){
-    document.getElementById('actualMsg').innerHTML = '<span style="color:#f87171;">\u2717 ' + e.message + '</span>';
+    msg.style.color = '#f87171';
+    msg.textContent = '\u2717 ' + String(e && e.message || 'failed');
   }
   return false;
 }
 </script>
-""".replace("__TRACE_ID__", trace_id)
-    html = html.replace("__ACTUAL_FORM_BLOCK__", actual_form)
-    # Phase 3.5: 注入 formula + dopant.site for 3D viewer
-    html = html.replace("__FORMULA__", payload.get("formula", ""))
-    html = html.replace("__DOPANT_SITE__", (payload.get("dopant", {}) or {}).get("site", "") or "")
-    return Response(html, content_type="text/html; charset=utf-8")
+"""
+    document = document.replace("__ACTUAL_FORM_BLOCK__", actual_form)
+    return Response(document, content_type="text/html; charset=utf-8")
 
 
 # ============ M2.2: 批量预测 ============
@@ -1509,7 +1771,9 @@ def api_predict_batch():
     R1 不并发 (留给前端按 trace_id 串行调 /api/predict_stream).
     """
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR}), 503
+        return _internal_error_response(
+            "predict_batch_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     data = request.get_json(silent=True) or {}
     text = data.get("lines") or ""
     max_items = int(data.get("max_items", 20))
@@ -1519,8 +1783,16 @@ def api_predict_batch():
                         **{k: parsed[k] for k in ("errors", "n_total", "n_parsed", "n_skipped")}}), 400
     try:
         out = _pe_predict_batch(parsed["items"], max_workers=4)
+        public_results = [
+            _public_upstream_payload(
+                "predict_batch_result",
+                item,
+                _PREDICT_RESPONSE_FIELDS,
+            ) if isinstance(item, Mapping) else {}
+            for item in out["results"]
+        ]
         # 缓存到 PredCache + 持久化已在 predict() 内做
-        for r in out["results"]:
+        for r in public_results:
             if r and r.get("trace_id"):
                 _PRED_CACHE.put(r["trace_id"], r)
         return jsonify({
@@ -1530,19 +1802,19 @@ def api_predict_batch():
             "n_parsed": parsed["n_parsed"],
             "n_skipped": parsed["n_skipped"],
             "errors": parsed["errors"],
-            "results": out["results"],
+            "results": public_results,
         })
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("predict_batch")
 
 
 # ============ M2.3: 实测回填 ============
 @app.route("/api/actual", methods=["POST"])
 def api_actual():
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR}), 503
+        return _internal_error_response(
+            "actual_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     data = request.get_json(silent=True) or {}
     trace_id = (data.get("trace_id") or "").strip()
     if not trace_id:
@@ -1577,25 +1849,29 @@ def api_actual():
             try:
                 from predict_engine.flybrain import append_plasticity_trace
                 flymb_update = append_plasticity_trace(payload, record)
-            except Exception as fly_exc:
-                flymb_update = {"ok": False, "error": str(fly_exc)[:200]}
+            except Exception:
+                flymb_update = {
+                    "ok": False,
+                    "error": _PUBLIC_INTERNAL_ERROR,
+                    "error_id": _record_internal_error("actual_flybrain_update"),
+                }
         return jsonify({
             "ok": True,
             "trace_id": trace_id,
             "stored_path": str(_pe_pers.ACTUALS_CSV_PATH),
             "flymb_plasticity": flymb_update,
         })
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("actual_store")
 
 
 # ============ M2.3: 历史预测 JSON 列表 ============
 @app.route("/api/predictions")
 def api_predictions():
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR}), 503
+        return _internal_error_response(
+            "predictions_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     verdict = request.args.get("verdict")
     since = request.args.get("since")
     until = request.args.get("until")
@@ -1607,15 +1883,17 @@ def api_predictions():
             verdict=verdict, since=since, until=until,
             formula_contains=formula_q, page=page, per_page=per_page,
         )})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+    except Exception:
+        return _internal_error_response("predictions_query")
 
 
 @app.route("/api/predictions/accuracy")
 def api_predictions_accuracy():
     """预测 vs 实测 准确率 KPI (M2.5 简版, 给 /predictions 页面顶部用)."""
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR}), 503
+        return _internal_error_response(
+            "predictions_accuracy_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     try:
         actuals = _pe_pers.load_actuals()
         all_recs = _pe_pers.load_all()
@@ -1657,8 +1935,8 @@ def api_predictions_accuracy():
                 for k, c in verdict_counts.items()
             },
         })
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+    except Exception:
+        return _internal_error_response("predictions_accuracy")
 
 
 @app.route("/predictions")
@@ -1679,7 +1957,9 @@ _BET_HISTORY: list[dict] = []  # 累计统计用
 def api_optimize_matrix():
     """输入: {formula, scan:{dopant_element:[],dopant_site:[],dopant_pct:[]}, max_cells?, host_hint?}"""
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR}), 503
+        return _internal_error_response(
+            "optimize_matrix_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     data = request.get_json(silent=True) or {}
     formula = (data.get("formula") or "").strip()
     scan = data.get("scan") or {}
@@ -1691,35 +1971,65 @@ def api_optimize_matrix():
         out = _pe_predict_matrix(formula, scan, host_hint=host_hint,
                                   max_cells=max_cells, max_workers=4)
         # 缓存所有 cell 的 trace_id 进 _PRED_CACHE 供 /report 用
-        for r in out["results"]:
-            if r and r.get("trace_id"):
+        public_out = _public_upstream_payload(
+            "optimize_matrix_result",
+            out,
+            (
+                "matrix_id", "batch_id", "formula", "scan", "n_total",
+                "n_success", "n_failed", "results", "best", "timings",
+                "created_at", "provenance",
+            ),
+        )
+        for r in public_out.get("results", []):
+            if isinstance(r, Mapping) and r.get("trace_id"):
                 _PRED_CACHE.put(r["trace_id"], r)
-        _MATRIX_CACHE[out["matrix_id"]] = out
-        return jsonify({"ok": True, **out})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        _MATRIX_CACHE[public_out["matrix_id"]] = public_out
+        return jsonify({"ok": True, **public_out})
+    except Exception:
+        return _internal_error_response("optimize_matrix")
 
 
-@app.route("/matrix/<matrix_id>")
-def page_matrix(matrix_id):
+def _load_matrix_payload(matrix_id):
+    prefix, separator, digest = matrix_id.partition(":")
+    if prefix != "matrix" or separator != ":" or len(digest) != 10 \
+            or any(char not in "0123456789abcdef" for char in digest):
+        return None
     payload = _MATRIX_CACHE.get(matrix_id)
     if not payload:
         # 从 batches 文件回查
         try:
             from predict_engine.persistence import BATCHES_DIR
-            p = BATCHES_DIR / f"{matrix_id.replace(':','_')}.json"
-            if p.exists():
-                with open(p, encoding="utf-8") as f:
-                    payload = {"matrix_id": matrix_id, **json.load(f), "results": []}
-        except Exception:
+            filename = f"matrix_{digest}.json"
+            raw = read_contained_bytes(
+                BATCHES_DIR,
+                filename,
+                allowed_suffixes={".json"},
+                max_bytes=4 * 1024 * 1024,
+            )
+            payload = {
+                "matrix_id": matrix_id,
+                **json.loads(raw.decode("utf-8")),
+                "results": [],
+            }
+        except (FileNotFoundError, UnsafePathError, UnicodeDecodeError, json.JSONDecodeError):
             pass
+    return payload
+
+
+@app.route("/api/matrix/<matrix_id>")
+def api_matrix_payload(matrix_id):
+    payload = _load_matrix_payload(matrix_id)
+    if not payload:
+        return jsonify({"ok": False, "error": "矩阵不存在或已过期"}), 404
+    return jsonify({"ok": True, "payload": payload})
+
+
+@app.route("/matrix/<matrix_id>")
+def page_matrix(matrix_id):
+    payload = _load_matrix_payload(matrix_id)
     if not payload:
         return Response("<h2>矩阵不存在或已过期</h2>", content_type="text/html; charset=utf-8", status=404)
-    html = _MATRIX_HTML.replace("__MATRIX_ID__", matrix_id) \
-                       .replace("__PAYLOAD_JSON__", json.dumps(payload, ensure_ascii=False, default=str))
-    return Response(html, content_type="text/html; charset=utf-8")
+    return Response(_MATRIX_HTML, content_type="text/html; charset=utf-8")
 
 
 _BET_HTML = r"""<!DOCTYPE html>
@@ -2954,8 +3264,8 @@ def api_research_landscape():
         d = json.loads(p.read_text(encoding="utf-8"))
         d["ok"] = True
         return jsonify(d)
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("research_landscape")
 
 
 @app.route("/api/bet/random_row")
@@ -3013,8 +3323,8 @@ def api_bet_random_row():
             "source": chosen.get("source", ""),
             "total_pool_size": len(rows_with_truth),
         })
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("bet_random_row")
 
 
 @app.route("/api/bet/reveal/<bet_id>")
@@ -3086,8 +3396,8 @@ def api_bet_reveal(bet_id):
                 "covered_by_ci90": out.get("covered_by_ci90"),
             })
         return jsonify(out)
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("bet_reveal")
 
 
 @app.route("/api/bet/stats")
@@ -3114,11 +3424,23 @@ def bet_page():
 def api_preset_formulas():
     """datalist 预填. 来自 candidate_pool + observed_pl.csv."""
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR, "formulas": []})
+        error_id = _record_internal_error("preset_formulas_unavailable")
+        return jsonify({
+            "ok": False,
+            "error": _PUBLIC_SERVICE_UNAVAILABLE,
+            "error_id": error_id,
+            "formulas": [],
+        }), 503
     try:
         return jsonify({"ok": True, "formulas": _pe_presets()})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e), "formulas": []})
+    except Exception:
+        error_id = _record_internal_error("preset_formulas")
+        return jsonify({
+            "ok": False,
+            "error": _PUBLIC_INTERNAL_ERROR,
+            "error_id": error_id,
+            "formulas": [],
+        }), 500
 
 
 _R2_HTML = r"""<!DOCTYPE html>
@@ -3638,8 +3960,12 @@ def api_r2_status():
             con.close()
             out["p0"]["P0-4_kg"] = {"ready": True, "kb": kg.stat().st_size // 1024,
                                     "triplets": n, "host_dopant_pairs": n_pairs}
-        except Exception as e:
-            out["p0"]["P0-4_kg"] = {"ready": False, "error": str(e)[:100]}
+        except Exception:
+            out["p0"]["P0-4_kg"] = {
+                "ready": False,
+                "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": _record_internal_error("r2_status_kg"),
+            }
     # P0-3 SFT Qwen 1.5B (trained on 5090 remote, presence marker)
     p3m = R / "predict_engine" / "qwen_sft_metrics.json"
     if p3m.exists():
@@ -3697,10 +4023,8 @@ def api_ts_inverse():
                              n_steps=n_steps)
         res["ok"] = True
         return jsonify(res)
-    except Exception as e:
-        import traceback as _tb
-        _tb.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("ts_inverse")
 
 
 @app.route("/api/predict_ts_torch", methods=["POST"])
@@ -3757,10 +4081,8 @@ def api_predict_ts_torch():
             "autograd_supported": True,
             "model": "TSPredictor 24d→MLP→(Dq,B,C,S,ℏω)→TS layer",
         })
-    except Exception as e:
-        import traceback as _tb
-        _tb.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("predict_ts_torch")
 
 
 @app.route("/api/predict_dqb", methods=["POST"])
@@ -3785,12 +4107,10 @@ def api_predict_dqb():
         res = predict_dqb(formula, site, pct)
         res["ok"] = True
         return jsonify(res)
-    except FileNotFoundError as fe:
-        return jsonify({"ok": False, "error": f"ckpt missing: {fe}. Run predict_engine/dqb_regressor.py --train"})
-    except Exception as e:
-        import traceback as _tb
-        _tb.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except FileNotFoundError:
+        return _internal_error_response("predict_dqb_checkpoint")
+    except Exception:
+        return _internal_error_response("predict_dqb")
 
 
 @app.route("/api/kg_query")
@@ -3849,9 +4169,8 @@ def api_kg_query():
                         "lam_min": lam_min, "lam_max": lam_max},
             "rows": [dict(zip(cols, r)) for r in rows],
         })
-    except Exception as e:
-        import traceback as _tb; _tb.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("kg_query")
 
 
 @app.route("/api/kg_aggregate/<by>")
@@ -3889,8 +4208,8 @@ def api_kg_aggregate(by):
         con.close()
         return jsonify({"ok": True, "view": view, "n": len(rows), "columns": cols,
                         "rows": [dict(zip(cols, r)) for r in rows]})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("kg_aggregate")
 
 
 @app.route("/api/graphrag_hop2", methods=["POST", "GET"])
@@ -3955,11 +4274,10 @@ def api_graphrag_hop2():
             "total_paths": len(paths),
             "paths": [p.to_dict() for p in paths],
         })
-    except FileNotFoundError as fe:
-        return jsonify({"ok": False, "error": f"kg.duckdb 未生成: {fe}"}), 500
-    except Exception as e:
-        import traceback as _tb; _tb.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:300]}), 500
+    except FileNotFoundError:
+        return _internal_error_response("graphrag_checkpoint")
+    except Exception:
+        return _internal_error_response("graphrag_hop2")
 
 
 @app.route("/graphrag")
@@ -4368,8 +4686,8 @@ def api_conformal_stats():
             "predictor": (split_section or mc_section or {}).get("predictor"),
             "reference": "Shafer-Vovk 2008 / Angelopoulos-Bates 2023 (split + normalized MC-CP)",
         })
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("conformal_stats")
 
 
 @app.route("/api/conformal_mc_predict", methods=["POST"])
@@ -4404,12 +4722,10 @@ def api_conformal_mc_predict():
         res["formula"] = formula
         res["dopant"] = {"site": site, "pct": pct}
         return jsonify(res)
-    except FileNotFoundError as e:
-        return jsonify({"ok": False, "error": f"ts_torch.pt missing: {str(e)[:200]}"}), 500
-    except Exception as e:
-        import traceback as _tb
-        _tb.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except FileNotFoundError:
+        return _internal_error_response("conformal_mc_checkpoint")
+    except Exception:
+        return _internal_error_response("conformal_mc_predict")
 
 
 @app.route("/api/ml_cache_stats")
@@ -4427,8 +4743,10 @@ def api_ml_cache_stats():
                            key=lambda p: p.stat().st_mtime, reverse=True)[:5]
             recent = [{"hash": f.stem, "mtime": f.stat().st_mtime} for f in files]
         return jsonify({"ok": True, "count": n, "dir": str(ML_CACHE_DIR), "recent": recent})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e), "count": 0})
+    except Exception:
+        error_id = _record_internal_error("ml_cache_stats")
+        return jsonify({"ok": False, "error": _PUBLIC_INTERNAL_ERROR,
+                        "error_id": error_id, "count": 0}), 500
 
 
 _DINOV2_SESSION = None
@@ -4504,10 +4822,8 @@ def api_bpu_image_embed():
             "latency_ms": round((time.perf_counter() - t0) * 1000, 1),
             "model": "DINOv2-small ONNX (CPU, INT8 BPU 待 hb_mapper)",
         })
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("bpu_image_embed")
 
 
 @app.route("/api/crystal/<formula_or_id>")
@@ -4591,10 +4907,8 @@ def api_recipe(trace_id):
         # 同时返回 csv 字符串方便前端下载
         recipe["csv"] = recipe_to_csv(recipe)
         return jsonify({"ok": True, "recipe": recipe})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("recipe")
 
 
 @app.route("/api/sonify/<trace_id>")
@@ -4622,10 +4936,8 @@ def api_sonify(trace_id):
         b64 = sonify_pl_to_b64(wl, counts, duration_s=duration)
         return jsonify({"ok": True, "wav_b64": b64, "duration_s": duration,
                          "peak_lambda_em_nm": lam, "fwhm_nm": fwhm})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("sonify")
 
 
 @app.route("/api/ai_candidates")
@@ -4724,8 +5036,12 @@ def api_ai_candidates():
                     for e in sorted((e for e in out["entries"] if e.get("stability_rank") and e.get("source") == "mattergen_nir_v2"), key=lambda x: x.get("stability_rank") or 999)[:3]
                 ],
             }
-        except Exception as ex:
-            out["error_nir_v2"] = str(ex)
+        except Exception:
+            out["nir_v2_load"] = {
+                "ok": False,
+                "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": _record_internal_error("ai_candidates_nir_v2"),
+            }
 
     # NIR-filtered (chemical_system conditioned)
     nir_manifest = REPO / "crystal_data_shared" / "generated" / "nir_filtered" / "manifest.json"
@@ -4757,8 +5073,12 @@ def api_ai_candidates():
                     ent["trace_id"] = v.get("trace_id")
                 out["entries"].append(ent)
             out["n_nir"] = len(m.get("entries", []))
-        except Exception as ex:
-            out["error_nir"] = str(ex)
+        except Exception:
+            out["nir_load"] = {
+                "ok": False,
+                "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": _record_internal_error("ai_candidates_nir"),
+            }
 
     # Base 3 (unconditional)
     base_manifest = REPO / "crystal_data_shared" / "generated" / "filtered" / "manifest.json"
@@ -4788,8 +5108,12 @@ def api_ai_candidates():
                     ent["trace_id"] = v.get("trace_id")
                 out["entries"].append(ent)
             out["n_base"] = len(m.get("entries", []))
-        except Exception as ex:
-            out["error_base"] = str(ex)
+        except Exception:
+            out["base_load"] = {
+                "ok": False,
+                "error": _PUBLIC_INTERNAL_ERROR,
+                "error_id": _record_internal_error("ai_candidates_base"),
+            }
 
     return jsonify(out)
 
@@ -4803,22 +5127,28 @@ def api_next_experiments():
     """
     try:
         from predict_engine.active_learning import fit_gp_and_recommend
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"active_learning import 失败: {e}"}), 500
+    except Exception:
+        return _internal_error_response("next_experiments_import")
     try:
         k = int(request.args.get("k", 5))
         target = request.args.get("target")
         target_val = float(target) if target else 900.0
         kappa = float(request.args.get("kappa", 2.0))
-    except (TypeError, ValueError) as e:
-        return jsonify({"ok": False, "error": f"参数错误: {e}"}), 400
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "error": "参数格式错误"}), 400
     try:
         result = fit_gp_and_recommend(top_k=k, target_lambda_nm=target_val, kappa=kappa)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
-    return jsonify(result)
+    except Exception:
+        return _internal_error_response("next_experiments")
+    return jsonify(_public_upstream_payload(
+        "next_experiments_result",
+        result,
+        (
+            "ok", "top5", "gp_summary", "acquisition", "diversity",
+            "n_labeled", "n_unlabeled", "target_lambda_nm", "kappa",
+            "seed", "method", "latency_ms",
+        ),
+    ))
 
 
 @app.route("/api/flybrain_verdict", methods=["POST"])
@@ -4835,22 +5165,36 @@ def api_flybrain_verdict():
         if not formula:
             return jsonify({"ok": False, "error": "payload/trace_id/formula required"}), 400
         if not _PRED_OK:
-            return jsonify({"ok": False, "error": f"predict_engine unavailable: {_PRED_ERR}"}), 503
+            return _internal_error_response(
+                "flybrain_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+            )
         payload = _pe_predict(
             formula,
             dopant,
             sinter_temp_C=data.get("sinter_temp_C"),
             host_hint=data.get("host_hint"),
         )
+        payload = _public_upstream_payload(
+            "flybrain_predict_result", payload, _PREDICT_RESPONSE_FIELDS
+        )
         if _PRED_CACHE and payload.get("trace_id"):
             _PRED_CACHE.put(payload["trace_id"], payload)
     try:
         from predict_engine.flybrain import flybrain_verdict
-        return jsonify({"ok": True, "trace_id": payload.get("trace_id"), "flybrain": flybrain_verdict(payload)})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        flybrain = _public_upstream_payload(
+            "flybrain_verdict_result",
+            flybrain_verdict(payload),
+            (
+                "model", "method", "verdict", "confidence", "memory_vote",
+                "plasticity_vote", "novelty", "ood_score", "uncertainty",
+                "v2_core", "mbon_compartments", "plasticity",
+                "connectome_profile", "superstack", "latency_ms",
+            ),
+        )
+        return jsonify({"ok": True, "trace_id": payload.get("trace_id"),
+                        "flybrain": flybrain})
+    except Exception:
+        return _internal_error_response("flybrain_verdict")
 
 
 @app.route("/api/flybrain_superstack", methods=["POST"])
@@ -4867,12 +5211,20 @@ def api_flybrain_superstack():
         if not formula:
             return jsonify({"ok": False, "error": "payload/trace_id/formula required"}), 400
         if not _PRED_OK:
-            return jsonify({"ok": False, "error": f"predict_engine unavailable: {_PRED_ERR}"}), 503
+            return _internal_error_response(
+                "flybrain_superstack_unavailable", 503,
+                _PUBLIC_SERVICE_UNAVAILABLE,
+            )
         payload = _pe_predict(
             formula,
             dopant,
             sinter_temp_C=data.get("sinter_temp_C"),
             host_hint=data.get("host_hint"),
+        )
+        payload = _public_upstream_payload(
+            "flybrain_superstack_predict_result",
+            payload,
+            _PREDICT_RESPONSE_FIELDS,
         )
         if _PRED_CACHE and payload.get("trace_id"):
             _PRED_CACHE.put(payload["trace_id"], payload)
@@ -4894,10 +5246,8 @@ def api_flybrain_superstack():
                 "superstack": out.get("superstack"),
             },
         })
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("flybrain_superstack")
 
 
 @app.route("/api/frontier_bpu_health")
@@ -4905,9 +5255,13 @@ def api_frontier_bpu_health():
     """Second-wave BPU material prior health."""
     try:
         from predict_engine.frontier_bpu import healthcheck
-        return jsonify(healthcheck())
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "frontier_bpu_health_result",
+            healthcheck(),
+            ("ok", "model_dir", "models"),
+        ))
+    except Exception:
+        return _internal_error_response("frontier_bpu_health")
 
 
 @app.route("/api/frontier_bpu_material", methods=["POST"])
@@ -4924,12 +5278,17 @@ def api_frontier_bpu_material():
         if not formula:
             return jsonify({"ok": False, "error": "payload/trace_id/formula required"}), 400
         if not _PRED_OK:
-            return jsonify({"ok": False, "error": f"predict_engine unavailable: {_PRED_ERR}"}), 503
+            return _internal_error_response(
+                "frontier_bpu_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+            )
         payload = _pe_predict(
             formula,
             dopant,
             sinter_temp_C=data.get("sinter_temp_C"),
             host_hint=data.get("host_hint"),
+        )
+        payload = _public_upstream_payload(
+            "frontier_bpu_predict_result", payload, _PREDICT_RESPONSE_FIELDS
         )
         if _PRED_CACHE and payload.get("trace_id"):
             _PRED_CACHE.put(payload["trace_id"], payload)
@@ -4938,12 +5297,17 @@ def api_frontier_bpu_material():
         return jsonify({
             "ok": True,
             "trace_id": payload.get("trace_id"),
-            "frontier_bpu": run_material_priors(payload),
+            "frontier_bpu": _public_upstream_payload(
+                "frontier_bpu_material_result",
+                run_material_priors(payload),
+                (
+                    "ok", "model", "input", "surrogate_scores",
+                    "failure_risks", "hints", "latency_ms", "boundary",
+                ),
+            ),
         })
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("frontier_bpu_material")
 
 
 @app.route("/api/lab_fsd_camera_mode", methods=["GET", "POST", "DELETE"])
@@ -4956,14 +5320,21 @@ def api_lab_fsd_camera_mode():
             release_camera_mode,
         )
         if request.method == "POST":
-            return jsonify(acquire_camera_mode())
-        if request.method == "DELETE":
-            return jsonify(release_camera_mode())
-        return jsonify(camera_mode_status())
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+            result = acquire_camera_mode()
+        elif request.method == "DELETE":
+            result = release_camera_mode()
+        else:
+            result = camera_mode_status()
+        return jsonify(_public_upstream_payload(
+            "lab_fsd_camera_mode_result",
+            result,
+            (
+                "ok", "mode", "held_by_this_process", "external_holder",
+                "policy", "lock", "reason", "holder", "holder_pid",
+            ),
+        ))
+    except Exception:
+        return _internal_error_response("lab_fsd_camera_mode")
 
 
 @app.route("/api/lab_fsd_vision_bev", methods=["GET", "POST"])
@@ -4979,19 +5350,29 @@ def api_lab_fsd_vision_bev():
             refresh = request.args.get("refresh", "0") in ("1", "true", "yes")
             capture = request.args.get("capture", "0") in ("1", "true", "yes")
             if not refresh and not capture:
-                return jsonify(last_vision_bev())
-            return jsonify(build_vision_bev(capture=capture))
-        data = request.get_json(silent=True) or {}
-        return jsonify(build_vision_bev(
-            capture=bool(data.get("capture", False)),
-            image_b64=data.get("image_b64", ""),
-            objects=data.get("objects") or None,
-            include_grid=bool(data.get("include_grid", True)),
+                result = last_vision_bev()
+            else:
+                result = build_vision_bev(capture=capture)
+        else:
+            data = request.get_json(silent=True) or {}
+            result = build_vision_bev(
+                capture=bool(data.get("capture", False)),
+                image_b64=data.get("image_b64", ""),
+                objects=data.get("objects") or None,
+                include_grid=bool(data.get("include_grid", True)),
+            )
+        return jsonify(_public_upstream_payload(
+            "lab_fsd_vision_bev_result",
+            result,
+            (
+                "ok", "model", "mode", "ts", "stale_after_s", "frame_id",
+                "grid_size", "resolution_m", "risk_score", "objects",
+                "object_count", "image_object_count", "camera", "provenance",
+                "calibration", "latency_ms", "grid",
+            ),
         ))
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("lab_fsd_vision_bev")
 
 
 @app.route("/api/lab_fsd_vision_objects", methods=["GET"])
@@ -5005,11 +5386,11 @@ def api_lab_fsd_vision_objects():
             "risk_score": out.get("risk_score"),
             "objects": out.get("objects", []),
             "object_count": out.get("object_count", 0),
-            "camera": out.get("camera", {}),
+            "camera": _redact_private_error_fields(out.get("camera", {})),
             "calibration": out.get("calibration", {}),
         })
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("lab_fsd_vision_objects")
 
 
 @app.route("/api/dqb_scan_map")
@@ -5035,8 +5416,8 @@ def api_dqb_scan_map():
                 }
         return jsonify({"ok": True, "by_formula": by_formula, "n": len(by_formula),
                         "meta": data.get("meta", {})})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]})
+    except Exception:
+        return _internal_error_response("dqb_scan_map")
 
 
 @app.route("/discovery")
@@ -5405,8 +5786,14 @@ def api_pl_spectrum_png(trace_id):
         counts = counts / max(counts.max(), 1e-9)
         b64 = render_pl_png_b64(wl, counts, meta=pl)
         return Response(_b64.b64decode(b64), content_type="image/png")
-    except Exception as e:
-        return Response(f"error: {e}", status=500)
+    except Exception:
+        error_id = _record_internal_error("pl_spectrum_png")
+        return Response(
+            _PUBLIC_INTERNAL_ERROR,
+            status=500,
+            content_type="text/plain; charset=utf-8",
+            headers={"X-Error-ID": error_id},
+        )
 
 
 @app.route("/api/failure_library/refresh", methods=["POST"])
@@ -5421,10 +5808,8 @@ def api_failure_refresh():
                          "n_total_actuals": out["n_total_actuals"],
                          "r1_prompt_segment_len": len(prompt_segment),
                          "r1_injection_active": len(prompt_segment) > 0})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("failure_library_refresh")
 
 
 # ============ P0-5: counterfactual reasoning + sankey ============
@@ -5435,7 +5820,9 @@ def api_counterfactual():
     Used by /counterfactual page d3-sankey: {original, variants[], n_flip, n_bigshift}.
     """
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": f"predict_engine not ready: {_PRED_ERR}"}), 503
+        return _internal_error_response(
+            "counterfactual_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     data = request.get_json(silent=True) or {}
     formula = (data.get("formula") or "").strip()
     dopant = data.get("dopant") or {}
@@ -5450,11 +5837,17 @@ def api_counterfactual():
             formula, dopant, sinter_temp_C=sinter, host_hint=host_hint,
             max_variants=max_variants,
         )
-        return jsonify(out)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "counterfactual_result",
+            out,
+            (
+                "ok", "trace_id", "formula", "dopant", "original",
+                "variants", "n_variants", "n_flip", "n_bigshift",
+                "elapsed_s",
+            ),
+        ))
+    except Exception:
+        return _internal_error_response("counterfactual")
 
 
 @app.route("/counterfactual")
@@ -5800,7 +6193,9 @@ el.run.addEventListener('click', run);
 def api_predict():
     """同步返回 4 BPU + 类比 + flags + rag (~3-6s). R1 verdict 从 /api/predict_stream 取."""
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": f"predict_engine 未就绪: {_PRED_ERR}"}), 503
+        return _internal_error_response(
+            "predict_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     data = request.get_json(silent=True) or {}
     formula = (data.get("formula") or "").strip()
     dopant = data.get("dopant") or {}
@@ -5815,12 +6210,13 @@ def api_predict():
     try:
         result = _pe_predict(formula, dopant, sinter_temp_C=sinter, host_hint=host_hint)
         result["user"] = user   # 新字段, 持久化进 jsonl
-        _PRED_CACHE.put(result["trace_id"], result)
-        return jsonify({"ok": True, **result})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        public_result = _public_upstream_payload(
+            "predict_result", result, _PREDICT_RESPONSE_FIELDS
+        )
+        _PRED_CACHE.put(public_result["trace_id"], public_result)
+        return jsonify({"ok": True, **public_result})
+    except Exception:
+        return _internal_error_response("predict")
 
 
 @app.route("/api/predict_stream")
@@ -5840,11 +6236,14 @@ def api_predict_stream():
 
     def gen():
         if not _PRED_OK:
-            yield f"data: {json.dumps({'type':'error','error':_PRED_ERR})}\n\n"
+            yield _internal_error_event(
+                "predict_stream_unavailable", _PUBLIC_SERVICE_UNAVAILABLE
+            )
             return
         try:
             for chunk in _pe_judge_stream(payload):
-                yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
+                public_chunk = _public_stream_chunk("predict_stream_chunk", chunk)
+                yield f"data: {json.dumps(public_chunk, ensure_ascii=False)}\n\n"
                 # M2.1: R1 verdict 持久化
                 if chunk.get("type") == "verdict" and chunk.get("verdict"):
                     try:
@@ -5854,13 +6253,11 @@ def api_predict_stream():
                             "verdict": chunk["verdict"],
                             "latency_ms": chunk.get("latency_ms"),
                         })
-                    except Exception as _pe:
-                        print(f"[predict_stream] persist r1_verdict 失败: {_pe}")
+                    except Exception:
+                        _record_internal_error("predict_stream_persist")
             yield f"data: {json.dumps({'type':'done'})}\n\n"
-        except Exception as e:
-            import traceback as _tb
-            _tb.print_exc()
-            yield f"data: {json.dumps({'type':'error','error':f'{type(e).__name__}: {e}'}, ensure_ascii=False)}\n\n"
+        except Exception:
+            yield _internal_error_event("predict_stream")
 
     return Response(gen(), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
@@ -6094,10 +6491,12 @@ def api_predict_stream_local():
             except Exception:
                 pass
             yield f"data: {json.dumps({'type':'done'})}\n\n"
-        except (urllib.error.URLError, TimeoutError) as e:
-            yield f"data: {json.dumps({'type':'error','error':f'本地 Qwen 未就绪 ({e}), 请启 llama-server'}, ensure_ascii=False)}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'type':'error','error':f'{type(e).__name__}: {e}'}, ensure_ascii=False)}\n\n"
+        except (urllib.error.URLError, TimeoutError):
+            yield _internal_error_event(
+                "predict_stream_local_unavailable", "本地模型暂不可用，请稍后重试"
+            )
+        except Exception:
+            yield _internal_error_event("predict_stream_local")
 
     return Response(gen(), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
@@ -6123,20 +6522,25 @@ def api_bpu_qwen_verdict():
     try:
         from predict_engine.bpu_qwen import bpu_qwen_verdict
         res = bpu_qwen_verdict(prompt)
-        return jsonify({"ok": True, **res})
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify({"ok": True, **_public_upstream_payload(
+            "bpu_qwen_verdict_result",
+            res,
+            (
+                "ok", "verdict", "confidence", "reasoning", "latency_ms",
+                "bpu_forward_ms", "model", "backend", "slot", "timings",
+            ),
+        )})
+    except Exception:
+        return _internal_error_response("bpu_qwen_verdict")
 
 
 @app.route("/api/bpu_qwen_health")
 def api_bpu_qwen_health():
     try:
         from predict_engine.bpu_qwen import healthcheck
-        return jsonify(healthcheck())
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_redact_private_error_fields(healthcheck()))
+    except Exception:
+        return _internal_error_response("bpu_qwen_health")
 
 
 @app.route("/api/bpu_slot_health")
@@ -6144,9 +6548,9 @@ def api_bpu_slot_health():
     """Round 8 v2: 5-slot BPU swap manager 健康 (各 slot 的 bin/tensor 文件是否齐)."""
     try:
         from predict_engine.bpu_slot_manager import healthcheck
-        return jsonify(healthcheck())
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_redact_private_error_fields(healthcheck()))
+    except Exception:
+        return _internal_error_response("bpu_slot_health")
 
 
 @app.route("/api/bpu_slot_verdict", methods=["POST"])
@@ -6180,13 +6584,23 @@ def api_bpu_slot_verdict():
         try:
             res = _json.loads(proc.stdout.decode("utf-8", "replace").strip().splitlines()[-1])
         except Exception:
-            return jsonify({"ok": False, "error": f"worker output parse fail: {proc.stdout[:200]!r} stderr={proc.stderr[-200:]!r}"}), 500
+            app.logger.error(
+                "[worker-error] scope=bpu_slot_parse error_id=%s stdout=%r stderr=%r",
+                uuid.uuid4().hex[:12], proc.stdout[-200:], proc.stderr[-200:],
+            )
+            return _internal_error_response("bpu_slot_parse")
         res["worker_total_ms"] = round(worker_ms, 1)
-        return jsonify(res)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "bpu_slot_verdict_result",
+            res,
+            (
+                "ok", "slot", "verdict", "confidence", "reasoning",
+                "latency_ms", "worker_total_ms", "switch_ms",
+                "bpu_forward_ms", "model", "backend", "timings",
+            ),
+        ))
+    except Exception:
+        return _internal_error_response("bpu_slot_verdict")
 
 
 @app.route("/api/local_llm_health")
@@ -6201,9 +6615,15 @@ def api_local_llm_health():
                 d = json.loads(resp.read().decode("utf-8"))
             out["models"][k] = {"ok": True, "url": url, "status": d.get("status"),
                                 "label": cfg["label"], "tag": cfg["tag"], "desc": cfg["desc"]}
-        except Exception as e:
-            out["models"][k] = {"ok": False, "url": url, "error": str(e)[:80],
-                                "label": cfg["label"], "tag": cfg["tag"], "desc": cfg["desc"]}
+        except Exception:
+            out["models"][k] = {
+                "ok": False,
+                "error": "模型服务暂不可用",
+                "error_id": _record_internal_error("local_llm_health"),
+                "label": cfg["label"],
+                "tag": cfg["tag"],
+                "desc": cfg["desc"],
+            }
     out["any_ok"] = any(m.get("ok") for m in out["models"].values())
     out["url"] = _LOCAL_LLM_REGISTRY["qwen05b"]["url_default"]
     out["status"] = "ok" if out["any_ok"] else "down"
@@ -6235,12 +6655,15 @@ def api_predict_stream_sc():
 
     def gen():
         if not _PRED_OK:
-            yield f"data: {json.dumps({'type':'error','error':_PRED_ERR})}\n\n"
+            yield _internal_error_event(
+                "predict_stream_sc_unavailable", _PUBLIC_SERVICE_UNAVAILABLE
+            )
             return
         try:
             for chunk in _pe_judge_sc_stream(payload, n_samples=n_samples,
                                              enable_cove=enable_cove):
-                yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
+                public_chunk = _public_stream_chunk("predict_stream_sc_chunk", chunk)
+                yield f"data: {json.dumps(public_chunk, ensure_ascii=False)}\n\n"
                 if chunk.get("type") == "verdict" and chunk.get("verdict"):
                     try:
                         _pe_pers.append_jsonl({
@@ -6251,13 +6674,11 @@ def api_predict_stream_sc():
                             "cove_enabled": enable_cove,
                             "latency_ms": chunk.get("latency_ms"),
                         })
-                    except Exception as _pe:
-                        print(f"[predict_stream_sc] persist failed: {_pe}")
+                    except Exception:
+                        _record_internal_error("predict_stream_sc_persist")
             yield f"data: {json.dumps({'type':'done'})}\n\n"
-        except Exception as e:
-            import traceback as _tb
-            _tb.print_exc()
-            yield f"data: {json.dumps({'type':'error','error':f'{type(e).__name__}: {e}'}, ensure_ascii=False)}\n\n"
+        except Exception:
+            yield _internal_error_event("predict_stream_sc")
 
     return Response(gen(), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
@@ -6274,14 +6695,15 @@ def api_copilot_ask():
     """检索阶段 (同步 ~1-2s): query → hybrid 检索 → 编号 sources + qid."""
     try:
         from predict_engine.copilot import retrieve
-    except Exception as e:
-        return jsonify({"ok": False, "error": f"copilot import 失败: {e}"}), 500
+    except Exception:
+        return _internal_error_response("copilot_import")
     data = request.get_json(silent=True) or {}
     query = (data.get("query") or "").strip()
     if not query:
         return jsonify({"ok": False, "error": "query 为空"}), 400
     k = min(int(data.get("k", 8)), 12)
     sources, method = retrieve(query, k=k)
+    sources = _sanitize_shared_state("copilot_sources", sources)
     qid = f"cp{int(time.time()*1000)%10**10}"
     _COPILOT_CACHE[qid] = {"query": query, "sources": sources,
                            "history": data.get("history") or [],
@@ -6309,9 +6731,10 @@ def api_copilot_stream():
             from predict_engine.copilot import stream_chat
             for chunk in stream_chat(job["query"], job["sources"],
                                      job["history"], job.get("mode", "deep")):
-                yield f"data: {json.dumps(chunk, ensure_ascii=False)}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'type':'error','error':f'{type(e).__name__}: {e}'}, ensure_ascii=False)}\n\n"
+                public_chunk = _public_stream_chunk("copilot_stream_chunk", chunk)
+                yield f"data: {json.dumps(public_chunk, ensure_ascii=False)}\n\n"
+        except Exception:
+            yield _internal_error_event("copilot_stream")
 
     return Response(gen(), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
@@ -6509,9 +6932,13 @@ function finish(q, body, meta){
 def api_campaigns():
     try:
         from predict_engine.campaign import list_campaigns
-        return jsonify({"ok": True, "campaigns": list_campaigns()})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "campaigns_result",
+            {"ok": True, "campaigns": list_campaigns()},
+            ("ok", "campaigns"),
+        ))
+    except Exception:
+        return _internal_error_response("campaigns")
 
 
 @app.route("/api/campaign_create", methods=["POST"])
@@ -6529,9 +6956,13 @@ def api_campaign_create():
             dopant_element=(data.get("dopant_element") or "Cr").strip() or "Cr",
             dopant_pct=float(data.get("dopant_pct") or 1.0),
             notes=data.get("notes") or "")
-        return jsonify({"ok": True, "campaign": camp})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "campaign_create_result",
+            {"ok": True, "campaign": camp},
+            ("ok", "campaign"),
+        ))
+    except Exception:
+        return _internal_error_response("campaign_create")
 
 
 @app.route("/api/campaign/<cid>")
@@ -6541,9 +6972,13 @@ def api_campaign_detail(cid):
         c = get_campaign(cid)
         if not c:
             return jsonify({"ok": False, "error": "不存在"}), 404
-        return jsonify({"ok": True, "campaign": c})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "campaign_detail_result",
+            {"ok": True, "campaign": c},
+            ("ok", "campaign"),
+        ))
+    except Exception:
+        return _internal_error_response("campaign_detail")
 
 
 @app.route("/api/campaign_round", methods=["POST"])
@@ -6554,17 +6989,21 @@ def api_campaign_round():
         from predict_engine.campaign import run_round
         res = run_round(data.get("cid", ""), k=int(data.get("k", 5)),
                         kappa=float(data.get("kappa", 2.0)))
-        return jsonify(res), (200 if res.get("ok") else 400)
-    except Exception as e:
-        import traceback; traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        public_res = _public_upstream_payload(
+            "campaign_round_result", res, ("ok", "cid", "round")
+        )
+        return jsonify(public_res), (200 if public_res.get("ok") else 400)
+    except Exception:
+        return _internal_error_response("campaign_round")
 
 
 @app.route("/api/campaign_predict", methods=["POST"])
 def api_campaign_predict():
     """对单个 pick 跑完整引擎预测 (~3-6s), 挂 conformal σ → EI_conformal (#3)."""
     if not _PRED_OK:
-        return jsonify({"ok": False, "error": _PRED_ERR}), 503
+        return _internal_error_response(
+            "campaign_predict_unavailable", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     data = request.get_json(silent=True) or {}
     cid, round_n = data.get("cid", ""), data.get("round_n")
     formula = (data.get("formula") or "").strip()
@@ -6580,10 +7019,12 @@ def api_campaign_predict():
         from predict_engine.campaign import attach_engine_prediction
         res = attach_engine_prediction(cid, int(round_n), formula, result,
                                        result["trace_id"])
-        return jsonify(res), (200 if res.get("ok") else 400)
-    except Exception as e:
-        import traceback; traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        public_res = _public_upstream_payload(
+            "campaign_predict_result", res, ("ok", "pick")
+        )
+        return jsonify(public_res), (200 if public_res.get("ok") else 400)
+    except Exception:
+        return _internal_error_response("campaign_predict")
 
 
 @app.route("/api/campaign_actual", methods=["POST"])
@@ -6599,9 +7040,12 @@ def api_campaign_actual():
                             (data.get("formula") or "").strip(), actual,
                             notes=data.get("notes") or "",
                             measured_by=data.get("measured_by") or "")
-        return jsonify(res), (200 if res.get("ok") else 400)
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        public_res = _public_upstream_payload(
+            "campaign_actual_result", res, ("ok", "pick", "trace_id", "warn")
+        )
+        return jsonify(public_res), (200 if public_res.get("ok") else 400)
+    except Exception:
+        return _internal_error_response("campaign_actual")
 
 
 @app.route("/api/campaign_status", methods=["POST"])
@@ -6614,8 +7058,8 @@ def api_campaign_status():
         from predict_engine.campaign import set_status
         ok = set_status(data.get("cid", ""), status)
         return jsonify({"ok": ok}), (200 if ok else 404)
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+    except Exception:
+        return _internal_error_response("campaign_status")
 
 
 @app.route("/campaign")
@@ -6845,10 +7289,16 @@ def api_pareto():
         return jsonify({"ok": False, "error": "target/mass 必须是数字"}), 400
     try:
         from predict_engine.pareto import collect_points
-        return jsonify(collect_points(target_nm=target, mass_g=mass))
-    except Exception as e:
-        import traceback; traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "pareto_result",
+            collect_points(target_nm=target, mass_g=mass),
+            (
+                "ok", "target_nm", "mass_g", "n_points", "n_full3d",
+                "n_front", "n_measured", "points",
+            ),
+        ))
+    except Exception:
+        return _internal_error_response("pareto")
 
 
 @app.route("/pareto")
@@ -6868,11 +7318,18 @@ def api_audit_chain():
         return jsonify({"ok": False, "error": "page/per 必须是整数"}), 400
     try:
         from predict_engine.audit import verify_chain
-        return jsonify(verify_chain(page=page, per_page=per,
-                                    type_filter=request.args.get("type") or None))
-    except Exception as e:
-        import traceback; traceback.print_exc()
-        return jsonify({"ok": False, "error": str(e)[:200]}), 500
+        return jsonify(_public_upstream_payload(
+            "audit_chain_result",
+            verify_chain(page=page, per_page=per,
+                         type_filter=request.args.get("type") or None),
+            (
+                "ok", "n_records", "n_valid", "n_segments", "n_tampered",
+                "first_tamper_idx", "chain_intact", "type_counts", "page",
+                "per_page", "total_filtered", "records",
+            ),
+        ))
+    except Exception:
+        return _internal_error_response("audit_chain")
 
 
 @app.route("/audit")
@@ -6882,7 +7339,7 @@ def audit_page():
 
 @app.route("/campaign_report/<cid>")
 def campaign_report_page(cid):
-    return _CAMPAIGN_REPORT_HTML.replace("__CID__", cid)
+    return Response(_CAMPAIGN_REPORT_HTML, content_type="text/html; charset=utf-8")
 
 
 _AUDIT_HTML = r"""<!DOCTYPE html>
@@ -7021,41 +7478,52 @@ svg{border:1px solid #e2e8f0;border-radius:8px}
 <button class="pbtn" onclick="window.print()">🖨 打印 / 存 PDF</button>
 <div id="doc">加载中…</div>
 <script>
-const CID="__CID__";
-function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+const CID=decodeURIComponent(window.location.pathname.split('/').pop() || '');
+function esc(s){
+  return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function num(value, fallback=0){
+  const parsed=Number(value);
+  return Number.isFinite(parsed)?parsed:fallback;
+}
 async function main(){
-  const d=await (await fetch('/api/campaign/'+CID)).json();
+  const d=await (await fetch('/api/campaign/'+encodeURIComponent(CID))).json();
   if(!d.ok){document.getElementById('doc').textContent=d.error;return}
   const c=d.campaign,g=c.goal,p=c.progress;
+  const rounds=Array.isArray(c.rounds)?c.rounds:[];
+  const targetNm=num(g.target_nm), toleranceNm=Math.max(0,num(g.tol_nm));
   let h=`<h1>🎯 Campaign 报告 — ${esc(c.name)}</h1>
-  <div class="sub">双 RDK X5 材料合成 AI 与多机具身实验助理 · 闭环优化 (GP/EI 贝叶斯主动学习) · 生成于 ${new Date().toLocaleString('zh-CN')} · ${c.cid}</div>
-  <div class="goal"><span>目标 <b>${g.target_nm} ± ${g.tol_nm} nm</b></span>
-    <span>掺杂 <b>${esc(g.dopant_element)}3+ @ ${g.dopant_pct}%</b></span>
-    <span>轮数 <b>${c.rounds.length}</b></span><span>已实测 <b>${p.n_measured_total}</b></span>
-    <span>命中 <b>${p.n_hits_total}</b></span>
-    <span>最优 |Δλ| <b>${p.best_abs_err_nm??'—'}${p.best_abs_err_nm!=null?' nm':''}</b></span></div>`;
-  const pts=p.per_round.filter(r=>r.best_so_far_nm!=null);
+  <div class="sub">双 RDK X5 材料合成 AI 与多机具身实验助理 · 闭环优化 (GP/EI 贝叶斯主动学习) · 生成于 ${esc(new Date().toLocaleString('zh-CN'))} · ${esc(c.cid)}</div>
+  <div class="goal"><span>目标 <b>${targetNm} ± ${toleranceNm} nm</b></span>
+    <span>掺杂 <b>${esc(g.dopant_element)}3+ @ ${esc(num(g.dopant_pct))}%</b></span>
+    <span>轮数 <b>${rounds.length}</b></span><span>已实测 <b>${esc(num(p.n_measured_total))}</b></span>
+    <span>命中 <b>${esc(num(p.n_hits_total))}</b></span>
+    <span>最优 |Δλ| <b>${p.best_abs_err_nm==null?'—':esc(num(p.best_abs_err_nm))+' nm'}</b></span></div>`;
+  const perRound=Array.isArray(p.per_round)?p.per_round:[];
+  const pts=perRound.filter(r=>r.best_so_far_nm!=null);
   if(pts.length){
-    const W=820,H=120,pad=34,maxY=Math.max(g.tol_nm*2,...pts.map(x=>x.best_so_far_nm))*1.15;
+    const W=820,H=120,pad=34,maxY=Math.max(1,toleranceNm*2,...pts.map(x=>num(x.best_so_far_nm)))*1.15;
     const X=i=>pad+(W-2*pad)*(pts.length===1?0.5:i/(pts.length-1)), Y=v=>H-18-(H-36)*(v/maxY);
     h+=`<h2>收敛曲线 — 历史最优 |λ实测 − target|</h2><svg width="${W}" height="${H}">
-      <line x1="${pad}" y1="${Y(g.tol_nm)}" x2="${W-pad}" y2="${Y(g.tol_nm)}" stroke="#059669" stroke-dasharray="5 4"/>
-      <text x="${W-pad}" y="${Y(g.tol_nm)-4}" fill="#059669" font-size="10" text-anchor="end">tol ±${g.tol_nm}nm</text>
-      <polyline fill="none" stroke="#ea580c" stroke-width="2" points="${pts.map((x,i)=>X(i)+','+Y(x.best_so_far_nm)).join(' ')}"/>
-      ${pts.map((x,i)=>`<circle cx="${X(i)}" cy="${Y(x.best_so_far_nm)}" r="3.5" fill="#ea580c"/>
-        <text x="${X(i)}" y="${Y(x.best_so_far_nm)-7}" font-size="10" fill="#9a3412" text-anchor="middle">${x.best_so_far_nm}</text>
-        <text x="${X(i)}" y="${H-3}" font-size="10" fill="#666" text-anchor="middle">R${x.round_n}</text>`).join('')}
+      <line x1="${pad}" y1="${Y(toleranceNm)}" x2="${W-pad}" y2="${Y(toleranceNm)}" stroke="#059669" stroke-dasharray="5 4"/>
+      <text x="${W-pad}" y="${Y(toleranceNm)-4}" fill="#059669" font-size="10" text-anchor="end">tol ±${toleranceNm}nm</text>
+      <polyline fill="none" stroke="#ea580c" stroke-width="2" points="${pts.map((x,i)=>X(i)+','+Y(num(x.best_so_far_nm))).join(' ')}"/>
+      ${pts.map((x,i)=>`<circle cx="${X(i)}" cy="${Y(num(x.best_so_far_nm))}" r="3.5" fill="#ea580c"/>
+        <text x="${X(i)}" y="${Y(num(x.best_so_far_nm))-7}" font-size="10" fill="#9a3412" text-anchor="middle">${esc(num(x.best_so_far_nm))}</text>
+        <text x="${X(i)}" y="${H-3}" font-size="10" fill="#666" text-anchor="middle">R${esc(num(x.round_n))}</text>`).join('')}
     </svg>`;
   }
-  for(const r of c.rounds){
-    h+=`<h2>Round ${r.round_n} · ${r.ts}</h2>
-    <div class="sub">GP: ${r.gp.n_labeled} labeled / ${r.gp.n_unlabeled} 候选 · σ̄=${r.gp.sigma_mean_nm}nm · kernel ${esc(r.gp.kernel)}</div>
+  for(const r of rounds){
+    const gp=r.gp&&typeof r.gp==='object'?r.gp:{};
+    const picks=Array.isArray(r.picks)?r.picks:[];
+    h+=`<h2>Round ${esc(num(r.round_n))} · ${esc(r.ts)}</h2>
+    <div class="sub">GP: ${esc(num(gp.n_labeled))} labeled / ${esc(num(gp.n_unlabeled))} 候选 · σ̄=${esc(num(gp.sigma_mean_nm))}nm · kernel ${esc(gp.kernel)}</div>
     <table><tr><th>配方</th><th>GP μ±σ (nm)</th><th>EI</th><th>引擎 λ / verdict</th><th>σ_conf</th><th>EI_conf</th><th>实测 (nm)</th><th>命中</th></tr>
-    ${r.picks.map(k=>`<tr><td><b>${k.formula}</b><br><span style="font-size:11px;color:#666">${esc(k.dopant_element)}@${esc(k.dopant_site)} ${k.dopant_pct}%</span></td>
-      <td>${k.gp_mu_nm}±${k.gp_sigma_nm}</td><td>${k.EI}</td>
-      <td>${k.engine_lambda_nm!=null?k.engine_lambda_nm+' / ':''}<span class="vb">${esc(k.engine_verdict||'—')}</span></td>
-      <td>${k.conformal_sigma_nm??'—'}</td><td>${k.EI_conformal??'—'}</td>
-      <td>${k.actual_nm??'—'}</td>
+    ${picks.map(k=>`<tr><td><b>${esc(k.formula)}</b><br><span style="font-size:11px;color:#666">${esc(k.dopant_element)}@${esc(k.dopant_site)} ${esc(num(k.dopant_pct))}%</span></td>
+      <td>${esc(num(k.gp_mu_nm))}±${esc(num(k.gp_sigma_nm))}</td><td>${esc(num(k.EI))}</td>
+      <td>${k.engine_lambda_nm!=null?esc(num(k.engine_lambda_nm))+' / ':''}<span class="vb">${esc(k.engine_verdict||'—')}</span></td>
+      <td>${k.conformal_sigma_nm==null?'—':esc(num(k.conformal_sigma_nm))}</td><td>${k.EI_conformal==null?'—':esc(num(k.EI_conformal))}</td>
+      <td>${k.actual_nm==null?'—':esc(num(k.actual_nm))}</td>
       <td>${k.hit==null?'—':k.hit?'<span class="hit1">✓</span>':'<span class="hit0">✗</span>'}</td></tr>`).join('')}
     </table>`;
   }
@@ -7063,7 +7531,7 @@ async function main(){
   try{
     const a=await (await fetch('/api/audit_chain?per=1')).json();
     h+=`<div class="foot">数据完整性: predictions.jsonl SHA-256 审计链 ${a.chain_intact?'<b style="color:#059669">✓ 完整</b>':'<b style="color:#dc2626">✗ 断裂</b>'}
-      (${a.n_valid}/${a.n_records} 条验证通过, 实时重算) · 回填实测同步写入 <code>actuals.csv</code> 供下一轮 GP 训练 ·
+      (${esc(num(a.n_valid))}/${esc(num(a.n_records))} 条验证通过, 实时重算) · 回填实测同步写入 <code>actuals.csv</code> 供下一轮 GP 训练 ·
       贝叶斯主动学习: GP(RBF+White) 24 维配方描述符 · EI 目标接近型采集函数 · Conformal CI90 高斯等效 σ (z=1.645)</div>`;
   }catch(e){}
   document.getElementById('doc').innerHTML=h;
@@ -9116,7 +9584,21 @@ async function runPredict(){
       body: JSON.stringify({formula, dopant, host_hint: hostHint || null})});
     const d = await r.json();
     if(!d.ok){
-      container.innerHTML = `<div class="verdict-card drop"><b style="color:#f87171;">✗ 预测失败:</b> ${d.error}<pre style="font-size:0.7em;color:#94a3b8;margin-top:6px;overflow:auto;">${d.traceback||''}</pre></div>`;
+      const card = document.createElement('div');
+      card.className = 'verdict-card drop';
+      const title = document.createElement('b');
+      title.style.color = '#f87171';
+      title.textContent = '✗ 预测失败: ';
+      const message = document.createElement('span');
+      message.textContent = d.error || '请求处理失败，请稍后重试';
+      card.append(title, message);
+      if(d.error_id){
+        const ref = document.createElement('div');
+        ref.style.cssText = 'font-size:0.7em;color:#94a3b8;margin-top:6px;';
+        ref.textContent = '错误编号: ' + d.error_id;
+        card.appendChild(ref);
+      }
+      container.replaceChildren(card);
       btn.disabled = false; btn.textContent = '⚡ 预测';
       return;
     }
@@ -9510,8 +9992,10 @@ def api_ts_diagram():
     """
     try:
         from predict_engine.crystal_field import d3_ts_eigenvalues
-    except Exception as e:  # pragma: no cover
-        return jsonify({"ok": False, "error": f"crystal_field 不可用: {e}"}), 503
+    except Exception:  # pragma: no cover
+        return _internal_error_response(
+            "ts_diagram_import", 503, _PUBLIC_SERVICE_UNAVAILABLE
+        )
     try:
         dq = float(request.args.get("dq", 1640))
         b = float(request.args.get("b", 650))

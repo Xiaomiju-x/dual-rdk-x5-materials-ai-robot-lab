@@ -11,10 +11,8 @@
 from __future__ import annotations
 
 import re
-from typing import Any
 
-# 元素符号正则: 大写字母 + 可选小写字母
-_ELEM_RE = re.compile(r"\b([A-Z][a-z]?)(\d*)\+?\b")
+_MAX_BATCH_LINE_CHARS = 1024
 
 
 def _try_parse_dopant_token(tok: str) -> dict | None:
@@ -40,9 +38,58 @@ def _try_parse_pct(tok: str) -> float | None:
         return None
 
 
+def _is_element_symbol(value: str) -> bool:
+    return len(value) in (1, 2) and value[0].isupper() and (
+        len(value) == 1 or value[1].islower()
+    )
+
+
+def _parse_compact_line(line: str) -> tuple[str, str, str, str] | None:
+    """Parse ``Formula + Dopant-pct%@site`` using bounded linear scans.
+
+    This replaces the previous whitespace-heavy regular expression.  Every
+    split/search traverses the input at most once and all tokens have an
+    explicit grammar, so adversarial whitespace cannot cause regex backtracking.
+    """
+
+    if len(line) > _MAX_BATCH_LINE_CHARS:
+        return None
+    separator = line.find("+")
+    if separator < 0:
+        return None
+    formula_text, compact = line[:separator].strip(), line[separator + 1:].strip()
+    if not formula_text or not all(character.isalnum() or character in "_()" for character in formula_text):
+        return None
+
+    if compact.count("@") != 1:
+        return None
+    dopant_and_pct, site = (part.strip() for part in compact.rsplit("@", 1))
+    if not _is_element_symbol(site) or dopant_and_pct.count("-") != 1:
+        return None
+    dopant_text, pct_text = (part.strip() for part in dopant_and_pct.split("-", 1))
+    if pct_text.endswith("%"):
+        pct_text = pct_text[:-1].strip()
+    if not pct_text or any(character not in "0123456789." for character in pct_text):
+        return None
+
+    element_length = 2 if len(dopant_text) >= 2 and dopant_text[1].islower() else 1
+    element = dopant_text[:element_length]
+    charge = dopant_text[element_length:]
+    if not _is_element_symbol(element):
+        return None
+    if charge.endswith("+"):
+        charge = charge[:-1]
+    if charge and not charge.isdigit():
+        return None
+    return formula_text, element, pct_text, site
+
+
 def parse_line(line: str) -> tuple[dict | None, str | None]:
     """返回 (item, error_msg).  item=None 表示无法解析."""
-    line = (line or "").strip()
+    line = line or ""
+    if len(line) > _MAX_BATCH_LINE_CHARS:
+        return None, f"单行超过 {_MAX_BATCH_LINE_CHARS} 字符上限"
+    line = line.strip()
     if not line or line.startswith("#"):
         return None, None        # 空行/注释忽略, 不算错
     raw = line
@@ -64,9 +111,9 @@ def parse_line(line: str) -> tuple[dict | None, str | None]:
                         "sinter_temp_C": sinter, "host_hint": None}, None)
 
     # ---- 格式 2 紧凑: "Formula + Dopant-pct%@site"  ----
-    m = re.match(r"^([\w()]+)\s*\+\s*([A-Z][a-z]?)\d*\+?\s*[-]\s*([\d.]+)\s*%?\s*@\s*([A-Z][a-z]?)$", line)
-    if m:
-        formula, el, pct_s, site = m.groups()
+    compact_fields = _parse_compact_line(line)
+    if compact_fields:
+        formula, el, pct_s, site = compact_fields
         pct = _try_parse_pct(pct_s)
         if pct is not None:
             return ({"formula": formula,

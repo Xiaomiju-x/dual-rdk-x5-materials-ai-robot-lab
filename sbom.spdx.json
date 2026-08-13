@@ -3,7 +3,7 @@
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
   "name": "Dual-RDK-X5-Materials-AI-Multi-Robot-SBOM",
-  "documentNamespace": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/sbom/spdx-2.3/65beffe703cfbd82356283a7ab05ca02ad393be184ccf68e9a151edb38cf83af",
+  "documentNamespace": "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/sbom/spdx-2.3/077a97f06d9c29e83610bc4b1507b0537cb4cc062cf0f0f35d360bc28a704507",
   "creationInfo": {
     "created": "2026-08-13T00:00:00Z",
     "creators": [
@@ -26,7 +26,7 @@
       "licenseDeclared": "Apache-2.0",
       "copyrightText": "NOASSERTION",
       "primaryPackagePurpose": "APPLICATION",
-      "versionInfo": "1.0.1",
+      "versionInfo": "1.0.2",
       "comment": "Top-level project package for this source snapshot. Models, datasets, credentials, private evidence, and generated build outputs are outside this repository SBOM boundary."
     },
     {

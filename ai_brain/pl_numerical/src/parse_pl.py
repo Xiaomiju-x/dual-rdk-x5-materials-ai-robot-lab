@@ -57,16 +57,29 @@ class PLSpectrum:
 
 
 # ============ 核心函数 ============
-def _read_text(path: str | Path) -> list[str]:
-    """读已由调用方授权的文件, 自动 fallback UTF-8 → GBK → latin1."""
-    source = Path(path)
+_MAX_PL_FILE_BYTES = 16 * 1024 * 1024
+
+
+def _decode_text(payload: bytes) -> list[str]:
+    """Decode one bounded PL export with the instrument's known encodings."""
+
     for enc in ("utf-8-sig", "utf-8", "gbk", "gb18030", "latin1"):
         try:
-            with source.open("r", encoding=enc) as f:
-                return f.read().splitlines()
+            return payload.decode(enc).splitlines()
         except (UnicodeDecodeError, UnicodeError):
             continue
-    raise RuntimeError(f"无法解码 {path}")
+    raise RuntimeError("无法解码 PL 光谱")
+
+
+def _read_text(path: str | Path) -> list[str]:
+    """Read an offline/trusted file with a strict size bound."""
+
+    source = Path(path)
+    with source.open("rb") as stream:
+        payload = stream.read(_MAX_PL_FILE_BYTES + 1)
+    if len(payload) > _MAX_PL_FILE_BYTES:
+        raise ValueError("PL 光谱文件超过 16 MiB 上限")
+    return _decode_text(payload)
 
 
 def _is_data_row(row: str) -> bool:
@@ -142,24 +155,12 @@ def _is_qy_or_special(lines: list[str], filename: str) -> Optional[str]:
     return None
 
 
-def parse_pl_csv(path: str) -> PLSpectrum:
-    """
-    解析 Fluoromax PL CSV.
+def _parse_pl_lines(lines: list[str], path: str) -> PLSpectrum:
+    """Parse already-decoded lines without performing filesystem access."""
 
-    总是返回 PLSpectrum, 解析失败时 is_valid() == False, skip_reason 说明原因.
-    """
     source = Path(path)
     path = str(source)
     fname = source.name
-
-    try:
-        lines = _read_text(source)
-    except Exception as e:
-        return PLSpectrum(
-            wavelength=None, counts=None, scan_type="unknown",
-            start=0, stop=0, step=0, fixed_offset=0, path=path,
-            skip_reason=f"读文件失败: {e}",
-        )
 
     # 检查是否为 QY / 特殊格式
     special_reason = _is_qy_or_special(lines, fname)
@@ -236,6 +237,50 @@ def parse_pl_csv(path: str) -> PLSpectrum:
         path=path,
         meta=meta,
     )
+
+
+def _read_failure(path: str, error: Exception) -> PLSpectrum:
+    return PLSpectrum(
+        wavelength=None,
+        counts=None,
+        scan_type="unknown",
+        start=0,
+        stop=0,
+        step=0,
+        fixed_offset=0,
+        path=path,
+        skip_reason=f"读文件失败: {error}",
+    )
+
+
+def parse_pl_bytes(payload: bytes, *, path: str = "uploaded-spectrum.csv") -> PLSpectrum:
+    """Parse bytes supplied by a caller that already performed safe I/O."""
+
+    if not isinstance(payload, bytes):
+        return _read_failure(path, TypeError("payload must be bytes"))
+    if len(payload) > _MAX_PL_FILE_BYTES:
+        return _read_failure(path, ValueError("PL 光谱文件超过 16 MiB 上限"))
+    try:
+        lines = _decode_text(payload)
+    except Exception as error:
+        return _read_failure(path, error)
+    return _parse_pl_lines(lines, path)
+
+
+def parse_pl_csv(path: str | Path) -> PLSpectrum:
+    """Parse an offline/trusted Fluoromax PL CSV path.
+
+    HTTP handlers must read through ``read_contained_bytes`` and call
+    :func:`parse_pl_bytes`, keeping request-derived path text away from this
+    filesystem API.
+    """
+
+    path_text = str(Path(path))
+    try:
+        lines = _read_text(path)
+    except Exception as error:
+        return _read_failure(path_text, error)
+    return _parse_pl_lines(lines, path_text)
 
 
 # ============ CLI 自测 ============

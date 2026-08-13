@@ -29,7 +29,7 @@ REQUIREMENTS_DIR = "requirements"
 
 PROJECT_ID = "SPDXRef-Package-Dual-RDK-X5-Materials-AI-Robot"
 PROJECT_NAME = "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人"
-PROJECT_VERSION = "1.0.1"
+PROJECT_VERSION = "1.0.2"
 FRONTEND_ID = "SPDXRef-Package-Workcockpit-Frontend"
 
 VENDORED_COMPONENTS = (
