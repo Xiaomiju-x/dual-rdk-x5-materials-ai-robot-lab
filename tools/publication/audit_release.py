@@ -63,6 +63,7 @@ CANONICAL_AWARD_PATH = Path("docs/competition/award_status.yaml")
 PENDING_AWARD_STATUS = "pending_" + "official_announcement"
 ANNOUNCED_AWARD_STATUS = "official_" + "verified"
 TEAM_CONFIRMED_AWARD_STATUS = "team_" + "confirmed"
+CERTIFICATE_VERIFIED_AWARD_STATUS = "certificate_" + "verified"
 
 PRIVATE_V4_NETWORKS = tuple(
     ipaddress.ip_network(value)
@@ -570,24 +571,31 @@ def _is_yaml_null(value: str | None) -> bool:
     return value is None or value.strip().lower() in {"", "null", "~"}
 
 
-def _check_official_award_evidence(
+def _check_award_evidence(
     root: Path,
-    national: dict[str, str],
+    award: dict[str, str],
     canonical_rel: str,
     collector: _FindingCollector,
+    *,
+    require_source_url: bool,
+    require_announcement_date: bool,
 ) -> None:
-    required = ("result", "source_url", "evidence_path", "evidence_sha256", "announced_at")
-    if any(_is_yaml_null(national.get(key)) for key in required):
+    required = ["result", "evidence_path", "evidence_sha256"]
+    if require_source_url:
+        required.append("source_url")
+    if require_announcement_date:
+        required.append("announced_at")
+    if any(_is_yaml_null(award.get(key)) for key in required):
         collector.add(
             "BLOCKER",
             "award_announced_incomplete",
             canonical_rel,
-            "An official result requires result, source, evidence, hash, and announcement date.",
+            "A verified award requires the declared source fields, evidence, and hash.",
         )
         return
 
-    source_url = national["source_url"]
-    if not source_url.startswith("https://"):
+    source_url = award.get("source_url")
+    if not _is_yaml_null(source_url) and not source_url.startswith("https://"):
         collector.add(
             "BLOCKER",
             "award_source_invalid",
@@ -595,7 +603,7 @@ def _check_official_award_evidence(
             "The official award source must use HTTPS.",
         )
 
-    evidence_path = national["evidence_path"]
+    evidence_path = award["evidence_path"]
     candidate = (root / evidence_path).resolve()
     try:
         candidate.relative_to(root)
@@ -616,7 +624,7 @@ def _check_official_award_evidence(
         )
         return
 
-    expected_hash = national["evidence_sha256"]
+    expected_hash = award["evidence_sha256"]
     if re.fullmatch(r"[0-9a-f]{64}", expected_hash) is None:
         collector.add(
             "BLOCKER",
@@ -641,6 +649,23 @@ def _check_official_award_evidence(
             "award_evidence_hash_mismatch",
             canonical_rel,
             "Award evidence SHA-256 does not match the declared digest.",
+        )
+
+
+def _check_certificate_metadata(
+    award: dict[str, str],
+    canonical_rel: str,
+    collector: _FindingCollector,
+) -> None:
+    if any(
+        _is_yaml_null(award.get(key))
+        for key in ("issuer", "certificate_id", "issued_at", "verified_at")
+    ):
+        collector.add(
+            "BLOCKER",
+            "award_certificate_metadata_incomplete",
+            canonical_rel,
+            "Certificate evidence requires issuer, certificate ID, issue date, and verification date.",
         )
 
 
@@ -685,11 +710,52 @@ def _check_award_boundary(
         )
         return
 
+    regional = _parse_simple_yaml_section(text, "regional")
     national = _parse_simple_yaml_section(text, "national")
+    regional_status = regional.get("status")
+    if regional_status not in {
+        TEAM_CONFIRMED_AWARD_STATUS,
+        CERTIFICATE_VERIFIED_AWARD_STATUS,
+        ANNOUNCED_AWARD_STATUS,
+    }:
+        collector.add(
+            "BLOCKER",
+            "award_regional_status_invalid",
+            canonical_rel,
+            "Regional status is not one of the permitted publication states.",
+        )
+    elif regional.get("result") != "一等奖":
+        collector.add(
+            "BLOCKER",
+            "award_regional_result",
+            canonical_rel,
+            "The regional result must remain 西南赛区一等奖.",
+        )
+    elif regional_status == CERTIFICATE_VERIFIED_AWARD_STATUS:
+        _check_certificate_metadata(regional, canonical_rel, collector)
+        _check_award_evidence(
+            root,
+            regional,
+            canonical_rel,
+            collector,
+            require_source_url=False,
+            require_announcement_date=False,
+        )
+    elif regional_status == ANNOUNCED_AWARD_STATUS:
+        _check_award_evidence(
+            root,
+            regional,
+            canonical_rel,
+            collector,
+            require_source_url=True,
+            require_announcement_date=False,
+        )
+
     status = national.get("status")
     if status not in {
         PENDING_AWARD_STATUS,
         TEAM_CONFIRMED_AWARD_STATUS,
+        CERTIFICATE_VERIFIED_AWARD_STATUS,
         ANNOUNCED_AWARD_STATUS,
     }:
         collector.add(
@@ -757,6 +823,30 @@ def _check_award_boundary(
                     "A team-confirmed result cannot claim official evidence.",
                 )
                 break
+    elif status == CERTIFICATE_VERIFIED_AWARD_STATUS:
+        if pending_count_in_canonical or outside_pending:
+            collector.add(
+                "BLOCKER",
+                "award_announced_has_pending",
+                canonical_rel,
+                "A certificate-verified award cannot retain a pending marker.",
+            )
+        if national.get("result") != "二等奖":
+            collector.add(
+                "BLOCKER",
+                "award_certificate_result",
+                canonical_rel,
+                "The certificate-verified national result must remain 二等奖.",
+            )
+        _check_certificate_metadata(national, canonical_rel, collector)
+        _check_award_evidence(
+            root,
+            national,
+            canonical_rel,
+            collector,
+            require_source_url=False,
+            require_announcement_date=False,
+        )
     else:
         if pending_count_in_canonical or outside_pending:
             collector.add(
@@ -765,7 +855,14 @@ def _check_award_boundary(
                 canonical_rel,
                 "An officially announced award cannot retain a pending marker.",
             )
-        _check_official_award_evidence(root, national, canonical_rel, collector)
+        _check_award_evidence(
+            root,
+            national,
+            canonical_rel,
+            collector,
+            require_source_url=True,
+            require_announcement_date=True,
+        )
 
 
 def scan_tree(root: Path | str, max_file_bytes: int = DEFAULT_MAX_FILE_BYTES) -> AuditResult:

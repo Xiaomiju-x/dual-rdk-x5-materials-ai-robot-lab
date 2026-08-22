@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite this repository and its archived release."
 title: "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人"
 type: software
-version: "1.0.2"
-date-released: "2026-08-13"
+version: "1.0.3"
+date-released: "2026-08-22"
 authors:
   - name: "荧光具身智研团队"
 repository-code: "https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab"

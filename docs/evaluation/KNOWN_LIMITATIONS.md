@@ -42,5 +42,5 @@
 
 ## 竞赛成绩
 
-- 西南赛区一等奖目前在机器可读状态中标为 `team_confirmed`；官方获奖证据链接尚待补充。
-- 全国总决赛二等奖目前由队伍确认并标为 `team_confirmed`；组委会官方获奖页面或证书公开件尚待补充，因此不能写成 `official_verified`。
+- 西南赛区一等奖与全国总决赛二等奖均已有中国电子教育学会颁发的公开证书，并在机器可读状态中标为 `certificate_verified`；证书文件、证书编号和 SHA-256 可核验。
+- 当前没有声明独立的组委会 HTTPS 成绩页；`certificate_verified` 只表示官方证书公开件已核验，不等同于网页来源的 `official_verified`。

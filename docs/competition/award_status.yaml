@@ -1,5 +1,5 @@
-schema_version: 1
-last_updated: "2026-08-13"
+schema_version: 2
+last_updated: "2026-08-22"
 competition:
   name_zh: "2026 全国大学生嵌入式芯片与系统设计竞赛"
   division: "芯片应用赛道"
@@ -9,20 +9,28 @@ team:
 regional:
   region: "西南赛区"
   result: "一等奖"
-  status: "team_confirmed"
+  status: "certificate_verified"
   source_url: null
-  evidence_path: null
-  evidence_sha256: null
+  evidence_path: "assets/media/certificates/southwest-regional-first-prize-certificate.png"
+  evidence_sha256: "0b759534da24109491eef9fe270546e0f37fccb5f9cf1c7fd061bbd40f140f04"
+  issuer: "中国电子教育学会"
+  certificate_id: "SOC-01022626838"
+  issued_at: "2026-08"
+  verified_at: "2026-08-22"
 national:
   stage: "全国总决赛"
-  status: "team_confirmed"
+  status: "certificate_verified"
   result: "二等奖"
   source_url: null
-  evidence_path: null
-  evidence_sha256: null
+  evidence_path: "assets/media/certificates/national-final-second-prize-certificate.png"
+  evidence_sha256: "dd6ccf0504f54bef8e23ac0d49eb83ba224aefefcb4d79e577729dd0f18c74b7"
+  issuer: "中国电子教育学会"
+  certificate_id: "SOC-01012626838"
+  issued_at: "2026-08"
+  verified_at: "2026-08-22"
   announced_at: null
 publication_rules:
-  regional_text_zh: "西南赛区一等奖（队伍确认，官方获奖来源待补）"
+  regional_text_zh: "西南赛区一等奖（官方获奖证书已公开并校验）"
   national_pending_text_zh: "奖项待组委会正式公布"
-  require_official_source_for_national_result: true
+  require_https_source_for_official_verified: true
   forbid_predicted_award: true

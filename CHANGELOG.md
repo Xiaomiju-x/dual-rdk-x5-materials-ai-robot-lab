@@ -4,6 +4,18 @@
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-08-22
+
+### Added
+
+- 公开西南赛区一等奖与全国总决赛二等奖两张中国电子教育学会官方获奖证书，并在 README、英文首页、媒体画廊、奖项页与证据索引中直接展示。
+- 新增 `certificate_verified` 可审计状态：证书路径、颁发机构、证书编号、签发月份、核验日期和 SHA-256 统一绑定到奖项唯一事实源。
+
+### Changed
+
+- 奖项渲染器和发布审计支持“官方证书公开件”与“官方 HTTPS 成绩页”两条独立证据路径，不再为了本地证书伪造网页来源。
+- 媒体清单扩展到 22 项；两张 PNG 公开件与用户提供文件逐字节一致，且已确认不含 EXIF、GPS、XMP、ICC 或文本元数据。
+
 ## [1.0.2] - 2026-08-13
 
 ### Changed
@@ -62,7 +74,8 @@
 - 真实硬件路径保持 Tier 4 现场人工授权；公开指挥中心保持只读，不反向控制设备。
 - 受限晶体缓存从 `main` 可达历史中清除；发布前保留离线恢复 bundle，不将其重新分发。
 
-[Unreleased]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Xiaomiju-x/dual-rdk-x5-materials-ai-robot-lab/releases/tag/v1.0.0

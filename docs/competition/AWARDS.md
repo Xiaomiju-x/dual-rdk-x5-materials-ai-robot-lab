@@ -5,14 +5,18 @@
 <!-- AWARD_STATUS:START -->
 | 阶段 | 当前状态 | 证据边界 |
 | --- | --- | --- |
-| 西南赛区 | 一等奖 | `team_confirmed`：队伍确认，官方获奖来源待补 |
-| 全国总决赛 | 二等奖 | `team_confirmed`：队伍确认，组委会官方获奖来源待补 |
+| 西南赛区 | 一等奖 | [`certificate_verified`：官方获奖证书](../../assets/media/certificates/southwest-regional-first-prize-certificate.png) |
+| 全国总决赛 | 二等奖 | [`certificate_verified`：官方获奖证书](../../assets/media/certificates/national-final-second-prize-certificate.png) |
 <!-- AWARD_STATUS:END -->
 
-## 官方来源补齐规则
+## 官方获奖证书
 
-全国总决赛二等奖现由队伍确认，状态为 `team_confirmed`。取得组委会官方获奖页面或证书公开件后，只编辑 `award_status.yaml` 中 `national` 的 `status`、`source_url`、`evidence_path`、`evidence_sha256` 和 `announced_at`，把状态升级为 `official_verified`；不要直接改 README 的奖项文案。随后从仓库根目录运行 `python tools/publication/render_award_status.py` 生成三个展示块，并以 `python tools/publication/render_award_status.py --check` 核对。脚本会验证本地证据文件及其 SHA-256。公开结果必须与官方称谓逐字一致。
+| 西南赛区一等奖 | 全国总决赛二等奖 |
+| --- | --- |
+| [![西南赛区一等奖官方获奖证书](../../assets/media/certificates/southwest-regional-first-prize-certificate.png)](../../assets/media/certificates/southwest-regional-first-prize-certificate.png) | [![全国总决赛二等奖官方获奖证书](../../assets/media/certificates/national-final-second-prize-certificate.png)](../../assets/media/certificates/national-final-second-prize-certificate.png) |
 
-在 `source_url` 与可核查证据缺失时，只允许依据队伍确认写入 `team_confirmed`，并保持所有官方证据字段为空；不能伪称 `official_verified`，也不能继续预测更高等级。
+两张证书由中国电子教育学会颁发，比赛名称、芯片应用赛道、阶段、奖项、重庆邮电大学、完整作品名、参赛成员和指导教师均可直接核对。公开 PNG 与收到的原文件逐字节一致，不做裁切、打码、调色或内容编辑；两张图均只含 PNG 的 `IHDR`、`IDAT`、`IEND` 数据块，不携带 EXIF、GPS、XMP、ICC 或文本元数据。
 
-西南赛区一等奖目前是队伍确认的事实。找到官方获奖页或证书公开件后，应在同一权威文件中把 `regional.status` 改为 `official_verified` 并补齐来源；在此之前不把公开晋级名单误写成获奖证明。
+`certificate_verified` 表示仓库已保存颁奖机构出具的官方证书公开件，并核验文件路径、SHA-256、颁发机构、证书编号、签发月份和核验日期；它不虚构一个不存在的组委会网页 URL。未来若获得可长期访问的官方成绩页面，可把状态升级为 `official_verified` 并增加 HTTPS 来源，但不得替换或重写当前证书证据。
+
+奖项展示只由 `python tools/publication/render_award_status.py` 从本页上方的唯一事实源生成。`python tools/publication/render_award_status.py --check`、发布审计和媒体完整性检查都会校验证书文件与声明哈希；任何错配或篡改都会使发布门失败。

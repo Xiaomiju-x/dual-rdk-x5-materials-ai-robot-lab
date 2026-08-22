@@ -62,7 +62,7 @@ class SbomContractTests(unittest.TestCase):
         )
         self.assertEqual(GENERATOR.PROJECT_NAME, project["name"])
         self.assertEqual(GENERATOR.PROJECT_VERSION, project["versionInfo"])
-        self.assertEqual("1.0.2", project["versionInfo"])
+        self.assertEqual("1.0.3", project["versionInfo"])
         self.assertEqual("Apache-2.0", project["licenseDeclared"])
 
     def test_every_locked_npm_package_has_its_exact_version_and_integrity(self) -> None:

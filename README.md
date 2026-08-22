@@ -2,7 +2,7 @@
 
 > **2026 全国大学生嵌入式芯片与系统设计竞赛 · 芯片应用赛道 · 地瓜机器人赛题 · 西南赛区一等奖 · 全国总决赛二等奖**
 >
-> 参赛队伍：**荧光具身智研**。西南赛区一等奖、全国总决赛二等奖均为队伍确认结果；组委会官方获奖来源待补。
+> 参赛队伍：**荧光具身智研**。西南赛区一等奖、全国总决赛二等奖的官方获奖证书已公开，并以 SHA-256 绑定到奖项唯一事实源。
 
 [![项目最新硬件：移动实验助理与双机械臂工作站](assets/media/hero/project-hardware-hero.webp)](docs/gallery.md)
 
@@ -29,16 +29,22 @@
 
 ## 竞赛与奖项
 
-项目参加 **2026 全国大学生嵌入式芯片与系统设计竞赛 · 芯片应用赛道 · 地瓜机器人赛题**，队伍“荧光具身智研”。奖项唯一权威数据源是 [`docs/competition/award_status.yaml`](docs/competition/award_status.yaml)；官方来源补齐时只更新这一处，再由脚本生成展示文本。
+项目参加 **2026 全国大学生嵌入式芯片与系统设计竞赛 · 芯片应用赛道 · 地瓜机器人赛题**，队伍“荧光具身智研”。奖项唯一权威数据源是 [`docs/competition/award_status.yaml`](docs/competition/award_status.yaml)；两张官方获奖证书均保留完整画面、公开证书编号并通过文件哈希校验。
 
 <!-- AWARD_STATUS:START -->
 | 阶段 | 当前状态 | 事实边界 |
 | --- | --- | --- |
-| 西南赛区 | 一等奖 | `team_confirmed`：队伍确认，官方获奖来源待补 |
-| 全国总决赛 | 二等奖 | `team_confirmed`：队伍确认，组委会官方获奖来源待补 |
+| 西南赛区 | 一等奖 | [`certificate_verified`：官方获奖证书](assets/media/certificates/southwest-regional-first-prize-certificate.png) |
+| 全国总决赛 | 二等奖 | [`certificate_verified`：官方获奖证书](assets/media/certificates/national-final-second-prize-certificate.png) |
 <!-- AWARD_STATUS:END -->
 
 [竞赛说明与更新规则](docs/competition/AWARDS.md) · [官方与公开来源](docs/competition/OFFICIAL_SOURCES.md)
+
+| 西南赛区一等奖证书 | 全国总决赛二等奖证书 |
+| --- | --- |
+| [![西南赛区一等奖官方获奖证书](assets/media/certificates/southwest-regional-first-prize-certificate.png)](assets/media/certificates/southwest-regional-first-prize-certificate.png) | [![全国总决赛二等奖官方获奖证书](assets/media/certificates/national-final-second-prize-certificate.png)](assets/media/certificates/national-final-second-prize-certificate.png) |
+
+证书由中国电子教育学会颁发；公开件与用户提供原文件逐字节一致，PNG 不含 EXIF、GPS、XMP、ICC 或文本元数据。证书编号、签发月份、文件 SHA-256 与核验日期见[奖项事实源](docs/competition/award_status.yaml)。
 
 ## 项目全景
 
@@ -106,7 +112,7 @@ python -B -m unittest discover -s tests_public -p "test_*.py" -v
 python -B examples/offline_demo/run_demo.py
 ```
 
-本次发布已通过公开边界审计、仓内文档链接检查、奖项单一事实源检查、确定性 SPDX SBOM 检查、无硬件单元测试、离线 demo、工作站前端和具身仪表盘前端构建。`v1.0.2` 最终精确复核范围与命令见 [版本验证记录](docs/releases/v1.0.2/VERIFICATION.md)。
+本次发布已通过公开边界审计、仓内文档链接检查、奖项单一事实源与证书哈希检查、确定性 SPDX SBOM 检查、无硬件单元测试、离线 demo、工作站前端和具身仪表盘前端构建。`v1.0.3` 最终精确复核范围与命令见 [版本验证记录](docs/releases/v1.0.3/VERIFICATION.md)。
 
 > [!CAUTION]
 > 仓库包含可能控制真实底盘、升降、机械臂、推杆、舵机和电磁铁的源码。不要把源码存在理解为运行许可。Tier 4 不提供通用一键命令；任何真机操作前必须阅读 [物理安全规范](docs/safety/PHYSICAL_SAFETY.md)。

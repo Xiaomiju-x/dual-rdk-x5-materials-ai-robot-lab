@@ -52,8 +52,32 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertIn("| Southwest Regional Contest | First Prize |", en)
         self.assertIn("| 全国总决赛 | 二等奖 |", zh)
         self.assertIn("| National final | Second Prize |", en)
-        self.assertEqual("team_confirmed", self.status["national"]["status"])
+        self.assertEqual("certificate_verified", self.status["regional"]["status"])
+        self.assertEqual("certificate_verified", self.status["national"]["status"])
         self.assertEqual("二等奖", self.status["national"]["result"])
+        self.assertIn("official award certificate", en)
+
+    def test_award_certificate_files_are_hash_bound_and_public(self) -> None:
+        for stage in ("regional", "national"):
+            entry = self.status[stage]
+            certificate = REPOSITORY_ROOT / entry["evidence_path"]
+            self.assertTrue(certificate.is_file())
+            self.assertEqual(
+                entry["evidence_sha256"],
+                hashlib.sha256(certificate.read_bytes()).hexdigest(),
+            )
+            self.assertEqual("中国电子教育学会", entry["issuer"])
+
+        for readme_name in ("README.md", "README_en.md"):
+            text = (REPOSITORY_ROOT / readme_name).read_text(encoding="utf-8")
+            self.assertIn(
+                "assets/media/certificates/southwest-regional-first-prize-certificate.png",
+                text,
+            )
+            self.assertIn(
+                "assets/media/certificates/national-final-second-prize-certificate.png",
+                text,
+            )
 
     def test_readme_titles_use_the_formal_project_name(self) -> None:
         readme_zh = (REPOSITORY_ROOT / "README.md").read_text(encoding="utf-8")
@@ -126,7 +150,7 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertEqual([], findings)
 
     def test_release_checksum_manifest_is_current(self) -> None:
-        checksum_path = REPOSITORY_ROOT / "docs" / "releases" / "v1.0.2" / "SHA256SUMS.txt"
+        checksum_path = REPOSITORY_ROOT / "docs" / "releases" / "v1.0.3" / "SHA256SUMS.txt"
         entries = [line.split("  ", 1) for line in checksum_path.read_text(encoding="utf-8").splitlines()]
         self.assertGreaterEqual(len(entries), 16)
         seen: set[str] = set()

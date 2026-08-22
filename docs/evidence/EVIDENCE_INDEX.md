@@ -42,7 +42,8 @@ PC acceptance 内的板端字段保留上电前值；板端结果只记录在独
 
 - [`award_status.yaml`](../competition/award_status.yaml) 是唯一权威状态源。
 - [官方来源列表](../competition/OFFICIAL_SOURCES.md) 区分“证明竞赛/赛题存在”和“证明具体名次”。
-- 西南赛区一等奖、全国总决赛二等奖当前均为队伍确认；组委会官方获奖证据待补。
+- [西南赛区一等奖证书](../../assets/media/certificates/southwest-regional-first-prize-certificate.png)与[全国总决赛二等奖证书](../../assets/media/certificates/national-final-second-prize-certificate.png)均由中国电子教育学会颁发，状态为 `certificate_verified`。
+- 两张证书的路径、证书编号、颁发机构、签发月份和 SHA-256 均绑定在奖项唯一事实源；发布审计会验证文件存在性与哈希一致性。
 
 ## 逐项矩阵
 

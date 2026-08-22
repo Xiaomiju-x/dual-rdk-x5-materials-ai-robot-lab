@@ -61,10 +61,21 @@ def load_status(path: Path) -> dict:
     return data
 
 
-def validate_evidence(root: Path, section: dict, label: str) -> None:
+def validate_evidence(
+    root: Path,
+    section: dict,
+    label: str,
+    *,
+    require_source_url: bool,
+) -> None:
     source_url = section.get("source_url")
-    if not isinstance(source_url, str) or not source_url.startswith("https://"):
-        raise ValueError(f"{label} official source must be an HTTPS URL")
+    if require_source_url:
+        if not isinstance(source_url, str) or not source_url.startswith("https://"):
+            raise ValueError(f"{label} official source must be an HTTPS URL")
+    elif source_url is not None and (
+        not isinstance(source_url, str) or not source_url.startswith("https://")
+    ):
+        raise ValueError(f"{label} optional source must be an HTTPS URL")
     evidence_path = section.get("evidence_path")
     if not isinstance(evidence_path, str) or not evidence_path:
         raise ValueError(f"{label} official evidence path is required")
@@ -81,6 +92,13 @@ def validate_evidence(root: Path, section: dict, label: str) -> None:
     actual_sha256 = hashlib.sha256(candidate.read_bytes()).hexdigest()
     if actual_sha256 != expected_sha256:
         raise ValueError(f"{label} evidence SHA-256 mismatch")
+
+
+def validate_certificate(root: Path, section: dict, label: str) -> None:
+    for key in ("issuer", "certificate_id", "issued_at", "verified_at"):
+        if not isinstance(section.get(key), str) or not section[key].strip():
+            raise ValueError(f"{label} certificate evidence is missing {key}")
+    validate_evidence(root, section, label, require_source_url=False)
 
 
 def validate(data: dict, root: Path) -> None:
@@ -102,10 +120,18 @@ def validate(data: dict, root: Path) -> None:
     regional = data["regional"]
     if regional.get("region") != "西南赛区" or regional.get("result") != "一等奖":
         raise ValueError("regional award must remain 西南赛区一等奖")
-    if regional.get("status") not in {"team_confirmed", "official_verified"}:
-        raise ValueError("regional status must be team_confirmed or official_verified")
+    if regional.get("status") not in {
+        "team_confirmed",
+        "certificate_verified",
+        "official_verified",
+    }:
+        raise ValueError(
+            "regional status must be team_confirmed, certificate_verified, or official_verified"
+        )
+    if regional.get("status") == "certificate_verified":
+        validate_certificate(root, regional, "regional")
     if regional.get("status") == "official_verified":
-        validate_evidence(root, regional, "regional")
+        validate_evidence(root, regional, "regional", require_source_url=True)
 
     national = data["national"]
     pending = national.get("status") == PENDING_STATUS
@@ -127,29 +153,44 @@ def validate(data: dict, root: Path) -> None:
             raise ValueError("team-confirmed national status cannot claim official evidence")
         return
 
+    if national.get("status") == "certificate_verified":
+        if national.get("result") != "二等奖":
+            raise ValueError("the certificate-verified national result must remain 二等奖")
+        validate_certificate(root, national, "national")
+        return
+
     if national.get("status") != "official_verified":
         raise ValueError(
-            "a published national result must use status=team_confirmed or official_verified"
+            "a published national result must use status=team_confirmed, "
+            "certificate_verified, or official_verified"
         )
-    if data["publication_rules"].get("require_official_source_for_national_result"):
+    if data["publication_rules"].get("require_https_source_for_official_verified"):
         required = ("result", "source_url", "evidence_path", "evidence_sha256", "announced_at")
         missing = [key for key in required if not national.get(key)]
         if missing:
             raise ValueError(f"official national result is missing: {', '.join(missing)}")
-    validate_evidence(root, national, "national")
+    validate_evidence(root, national, "national", require_source_url=True)
 
 
 def source_link(label: str, url: str | None) -> str:
     return f"[{label}]({url})" if url else label
 
 
-def zh_block(data: dict, boundary_header: str) -> str:
+def evidence_link(label: str, section: dict, path_prefix: str) -> str:
+    return f"[{label}]({path_prefix}{section['evidence_path']})"
+
+
+def zh_block(data: dict, boundary_header: str, path_prefix: str = "") -> str:
     regional = data["regional"]
     national = data["national"]
     rules = data["publication_rules"]
 
     regional_result = regional["result"]
-    if regional.get("status") == "official_verified":
+    if regional.get("status") == "certificate_verified":
+        regional_boundary = evidence_link(
+            "`certificate_verified`：官方获奖证书", regional, path_prefix
+        )
+    elif regional.get("status") == "official_verified":
         regional_boundary = source_link("`official_verified`：官方来源", regional.get("source_url"))
     else:
         regional_boundary = "`team_confirmed`：队伍确认，官方获奖来源待补"
@@ -160,6 +201,11 @@ def zh_block(data: dict, boundary_header: str) -> str:
     elif national.get("status") == "team_confirmed":
         national_result = national["result"]
         national_boundary = "`team_confirmed`：队伍确认，组委会官方获奖来源待补"
+    elif national.get("status") == "certificate_verified":
+        national_result = national["result"]
+        national_boundary = evidence_link(
+            "`certificate_verified`：官方获奖证书", national, path_prefix
+        )
     else:
         national_result = national["result"]
         national_boundary = source_link("`official_verified`：组委会官方来源", national.get("source_url"))
@@ -176,11 +222,15 @@ def zh_block(data: dict, boundary_header: str) -> str:
     )
 
 
-def en_block(data: dict) -> str:
+def en_block(data: dict, path_prefix: str = "") -> str:
     regional = data["regional"]
     national = data["national"]
     regional_result = "First Prize" if regional.get("result") == "一等奖" else regional["result"]
-    if regional.get("status") == "official_verified":
+    if regional.get("status") == "certificate_verified":
+        regional_boundary = evidence_link(
+            "`certificate_verified`; official award certificate", regional, path_prefix
+        )
+    elif regional.get("status") == "official_verified":
         regional_boundary = source_link("`official_verified`; official source", regional.get("source_url"))
     else:
         regional_boundary = "`team_confirmed`; official award source pending"
@@ -191,6 +241,11 @@ def en_block(data: dict) -> str:
     elif national.get("status") == "team_confirmed":
         national_result = "Second Prize"
         national_boundary = "`team_confirmed`; official organizing-committee source pending"
+    elif national.get("status") == "certificate_verified":
+        national_result = "Second Prize"
+        national_boundary = evidence_link(
+            "`certificate_verified`; official award certificate", national, path_prefix
+        )
     else:
         national_result = "Second Prize" if national.get("result") == "二等奖" else national["result"]
         national_boundary = source_link("`official_verified`; official source", national.get("source_url"))
@@ -228,7 +283,9 @@ def main() -> int:
     targets = {
         root / "README.md": zh_block(data, "事实边界"),
         root / "README_en.md": en_block(data),
-        root / "docs" / "competition" / "AWARDS.md": zh_block(data, "证据边界"),
+        root / "docs" / "competition" / "AWARDS.md": zh_block(
+            data, "证据边界", "../../"
+        ),
     }
     stale: list[str] = []
     for path, block in targets.items():

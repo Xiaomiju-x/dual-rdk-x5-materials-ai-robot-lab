@@ -1,5 +1,5 @@
-schema_version: 2
-manifest_date: "2026-08-13"
+schema_version: 3
+manifest_date: "2026-08-22"
 status: public_release_candidate
 project: "基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人"
 team: "荧光具身智研"
@@ -14,6 +14,14 @@ publication_request:
   originals_in_repository: false
 
 source_files:
+  - file: "26838_1787381967383.png"
+    sha256: "0b759534da24109491eef9fe270546e0f37fccb5f9cf1c7fd061bbd40f140f04"
+    derivative: "certificates/southwest-regional-first-prize-certificate.png"
+    note: "Official Southwest Regional First Prize certificate; byte-identical descriptive copy. PNG contains only IHDR/IDAT/IEND chunks and no EXIF, GPS, XMP, ICC or text metadata."
+  - file: "26838.png"
+    sha256: "dd6ccf0504f54bef8e23ac0d49eb83ba224aefefcb4d79e577729dd0f18c74b7"
+    derivative: "certificates/national-final-second-prize-certificate.png"
+    note: "Official National Final Second Prize certificate; byte-identical descriptive copy. PNG contains only IHDR/IDAT/IEND chunks and no EXIF, GPS, XMP, ICC or text metadata."
   - file: "1786549518111.jpg"
     sha256: "5e4698ec5da49bf320e6eeb3da7451b202d36d31f699758b05fa1823aa0d7dca"
     derivative: "photos/project-overview-poster.webp"
@@ -52,6 +60,10 @@ source_files:
     source_interval: "00:00:10-00:02:45"
 
 derived_sets:
+  certificates:
+    count: 2
+    transform: "No pixel or byte transformation; descriptive filename only. Source PNGs were already metadata-free."
+    evidence_boundary: "Official award certificate images issued by 中国电子教育学会; public copies are SHA-256-bound in docs/competition/award_status.yaml."
   photos:
     count: 6
     transform: "Fresh RGB pixel copy; scale only; WebP quality 86 (poster quality 88); no EXIF, GPS, XMP, ICC, MakerNote, device model, or capture time."
@@ -89,7 +101,7 @@ report_photo_replacements:
 
 validation:
   machine_manifest: "MEDIA_MANIFEST.json"
-  manifest_entries: 20
+  manifest_entries: 22
   images_metadata_stripped: true
   video_audio_streams: 0
   phone_or_location_metadata_found: false

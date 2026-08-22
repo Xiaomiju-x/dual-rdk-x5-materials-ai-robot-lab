@@ -5,6 +5,14 @@
 > [!IMPORTANT]
 > 这些媒体记录特定工装、固定任务和一次真机演示。人工准备、安全员入镜、屏幕读数与物理动作均按原画面保留；不能据此推导完全自主、无人值守、学习策略泛化或跨数据集性能。
 
+## 获奖证书
+
+| 西南赛区一等奖 | 全国总决赛二等奖 |
+| --- | --- |
+| [![西南赛区一等奖官方获奖证书](../assets/media/certificates/southwest-regional-first-prize-certificate.png)](../assets/media/certificates/southwest-regional-first-prize-certificate.png) | [![全国总决赛二等奖官方获奖证书](../assets/media/certificates/national-final-second-prize-certificate.png)](../assets/media/certificates/national-final-second-prize-certificate.png) |
+
+两张证书由中国电子教育学会颁发，完整项目名称为“基于双 RDK X5 异构协同的材料合成 AI 预测与多机具身实验助理机器人”。公开文件与收到的 PNG 逐字节一致；证书编号和 SHA-256 见 [`award_status.yaml`](competition/award_status.yaml)，元数据检查与来源映射见 [`MEDIA_PROVENANCE.yml`](../assets/media/MEDIA_PROVENANCE.yml)。
+
 ## 一图看懂项目
 
 ![移动具身平台与双机械臂工作站最新实拍拼图](../assets/media/hero/project-hardware-hero.webp)

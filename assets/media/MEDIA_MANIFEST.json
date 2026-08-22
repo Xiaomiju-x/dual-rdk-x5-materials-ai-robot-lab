@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-08-13",
-  "repository_release": "v1.0.2",
+  "generated_on": "2026-08-22",
+  "repository_release": "v1.0.3",
   "source_of_truth": "assets/media/MEDIA_PROVENANCE.yml",
   "entries": [
     {
@@ -38,6 +38,24 @@
       "kind": "jpg",
       "width": 2000,
       "height": 1200,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/certificates/national-final-second-prize-certificate.png",
+      "bytes": 2034811,
+      "sha256": "dd6ccf0504f54bef8e23ac0d49eb83ba224aefefcb4d79e577729dd0f18c74b7",
+      "kind": "png",
+      "width": 2483,
+      "height": 3511,
+      "frames": 1
+    },
+    {
+      "path": "assets/media/certificates/southwest-regional-first-prize-certificate.png",
+      "bytes": 2070224,
+      "sha256": "0b759534da24109491eef9fe270546e0f37fccb5f9cf1c7fd061bbd40f140f04",
+      "kind": "png",
+      "width": 2483,
+      "height": 3511,
       "frames": 1
     },
     {

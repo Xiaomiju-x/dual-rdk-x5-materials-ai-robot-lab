@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import shutil
 import sys
@@ -29,6 +30,13 @@ def _write_award_status(root: Path, *, duplicate_marker: bool = False) -> None:
     suffix = "\n# " + _pending_status() if duplicate_marker else ""
     target.write_text(
         "schema_version: 1\n"
+        "regional:\n"
+        "  region: 西南赛区\n"
+        "  result: 一等奖\n"
+        "  status: team_confirmed\n"
+        "  source_url: null\n"
+        "  evidence_path: null\n"
+        "  evidence_sha256: null\n"
         "national:\n"
         "  stage: national_final\n"
         f"  status: {_pending_status()}\n"
@@ -234,6 +242,36 @@ class PublicationAuditTests(unittest.TestCase):
         result = audit_release.scan_tree(self.root)
         self.assertIn("award_team_confirmed_result", self.rules(result))
         self.assertIn("award_team_confirmed_boundary", self.rules(result))
+
+    def test_certificate_verified_award_accepts_hash_bound_local_certificate(self) -> None:
+        certificate = self.root / "assets/media/certificates/national.png"
+        certificate.parent.mkdir(parents=True)
+        certificate.write_bytes(b"public-award-certificate")
+        digest = hashlib.sha256(certificate.read_bytes()).hexdigest()
+        target = self.root / "docs" / "competition" / "award_status.yaml"
+        target.write_text(
+            "national:\n"
+            "  status: certificate_verified\n"
+            "  result: 二等奖\n"
+            "  source_url: null\n"
+            "  evidence_path: assets/media/certificates/national.png\n"
+            f"  evidence_sha256: {digest}\n"
+            "  issuer: 中国电子教育学会\n"
+            "  certificate_id: SOC-TEST\n"
+            "  issued_at: 2026-08\n"
+            "  verified_at: 2026-08-22\n"
+            "  announced_at: null\n",
+            encoding="utf-8",
+        )
+        result = audit_release.scan_tree(self.root)
+        self.assertNotIn("award_status_invalid", self.rules(result))
+        self.assertNotIn("award_announced_incomplete", self.rules(result))
+        self.assertNotIn("award_certificate_metadata_incomplete", self.rules(result))
+        self.assertNotIn("award_evidence_hash_mismatch", self.rules(result))
+
+        certificate.write_bytes(b"tampered")
+        result = audit_release.scan_tree(self.root)
+        self.assertIn("award_evidence_hash_mismatch", self.rules(result))
 
     def test_ci_compatibility_arguments_are_accepted(self) -> None:
         args = audit_release._build_parser().parse_args(
